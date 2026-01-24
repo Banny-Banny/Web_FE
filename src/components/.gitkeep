@@ -1,0 +1,7 @@
+# Feature Slice Architecture - Business Logic & Smart Containers
+# 각 feature는 다음 구조를 따라야 합니다:
+# components/{feature}/
+#   ├── index.tsx        # Feature Container
+#   ├── types.ts         # Feature-wide Definitions
+#   ├── hooks/           # Business Logic
+#   └── components/      # Feature-specific Sub-components

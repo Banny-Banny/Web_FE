@@ -1,0 +1,138 @@
+---
+description: Project folder structure, Architecture rules, and Feature Slice pattern. Reference this for all file creation and refactoring.
+globs: *
+alwaysApply: true
+---
+
+# Project Architecture & Folder Structure Rules
+
+You are an expert React Native (Expo) developer. You must strictly follow the **Feature Slice Architecture** defined below.
+
+## 1. 📁 Global Folder Structure (Top-Level)
+
+The project is divided into 4 distinct layers. Dependencies must flow **one way**: `app` -> `components` -> `commons/utils`.
+
+```text
+root
+├── app/                  # [Routing Layer] URL & Navigation ONLY.
+├── utils/                # [Pure Functions] Helper functions (Formatting, Math).
+├── commons/              # [Design System] Reusable "Dumb" UI components.
+└── components/           # [Features] Business Logic & "Smart" Containers.
+```
+
+## 2. 🧱 Detailed Layer Rules
+
+### 1) `app/` (Routing Layer)
+
+- **Role**: Manages URLs (Expo Router) and Layouts.
+- **✅ DO**: Import Feature Containers from `components/` and render them.
+- **❌ DON'T**: Write any business logic, `useEffect`, or API calls here.
+- **❌ DON'T**: Define styles here (except for basic layout containers).
+
+### 2) `commons/` (Design System)
+
+- **Role**: Pure UI components that know NOTHING about the app's business.
+- **Structure**:
+  - `layout/`: Global layouts (Tabs, Providers).
+  - `components/`: Atomic UI (Buttons, Cards, Inputs).
+  - `constants/`: Design tokens (Colors, Fonts).
+- **✅ DO**: Use Props to receive data and actions.
+- **❌ DON'T**: Import from `components/` or `app/`.
+
+### 3) `utils/` (Pure Functions)
+
+- **Role**: Logic that is independent of React/App state.
+- **✅ DO**: Create pure functions (Input -> Output).
+- **❌ DON'T**: Use React hooks or JSX.
+
+### 4) `components/` (Feature Slice - CORE RULE)
+
+Every feature inside `components/` **MUST** follow this strict slice pattern.
+
+#### 📂 Feature Directory Structure
+
+Example: Creating a `map` feature.
+
+```text
+components/map/
+├── index.tsx              # [Entry] Feature Container
+├── types.ts               # [Types] Feature-wide Definitions
+├── hooks/                 # [Logic] Business Logic (Custom Hooks)
+│   └── useMapFeature.ts
+└── components/            # [UI] Feature-specific Sub-components
+    ├── map-view/
+    │   ├── index.tsx      # View Component
+    │   ├── styles.ts      # StyleSheet
+    │   └── types.ts       # Props
+    └── fab-btn/
+        ├── index.tsx
+        └── ...
+```
+
+#### 📝 Feature Implementation Rules
+
+1.  **Container (`index.tsx`)**:
+
+    - Acts as the "Controller".
+    - Imports logic from `hooks/useFeature.ts`.
+    - Passes data/handlers to Sub-Components (`components/`).
+    - **No direct rendering logic** (HTML/View) inside, mostly composition.
+
+2.  **Logic (`hooks/`)**:
+
+    - Handles API calls, `useState`, `useEffect`, Permissions.
+    - Returns data and functions needed by the view.
+
+3.  **Sub-Components (`components/`)**:
+    - Must be separated into folders if they are complex.
+    - Styles must be in `styles.ts`.
+
+## 3. ✅ Few-Shot Examples (Best Practices)
+
+### Example: Creating a Feature Container (`components/map/index.tsx`)
+
+```tsx
+// ✅ GOOD: Separation of Concerns
+import React from 'react';
+import { View } from 'react-native';
+import { useMapFeature } from './hooks/useMapFeature';
+import { MapView } from './components/map-view';
+import { FabButton } from './components/fab-btn';
+
+export default function MapFeature() {
+  // Logic is completely isolated in the hook
+  const { location, handlePress } = useMapFeature();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <MapView coordinate={location} />
+      <FabButton onPress={handlePress} />
+    </View>
+  );
+}
+```
+
+```tsx
+// ❌ BAD: Logic mixed in View
+export default function MapFeature() {
+  const [location, setLocation] = useState(...); // ❌ Logic in container
+
+  useEffect(() => { ... }, []); // ❌ Side effects in container
+
+  return (
+    <View>
+       {/* ❌ Inline Styles, Raw Components */}
+       <WebView source={{...}} style={{ width: 100 }} />
+    </View>
+  );
+}
+```
+
+## 4. 🚨 Final Checklist
+
+Before finishing a task, ask yourself:
+
+1. Is business logic isolated in `hooks/`?
+2. Are styles separated in `styles.ts`?
+3. Is `app/` free of logic?
+4. Are pure UI components in `commons/`?
