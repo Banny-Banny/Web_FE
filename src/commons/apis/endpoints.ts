@@ -4,18 +4,15 @@
  */
 
 /**
- * API 버전
- */
-export const API_VERSION = 'v1';
-
-/**
  * 기본 API 경로
  */
 export const BASE_PATHS = {
-  API: `/api/${API_VERSION}`,
-  AUTH: `/api/${API_VERSION}/auth`,
-  USER: `/api/${API_VERSION}/users`,
-  ADMIN: `/api/${API_VERSION}/admin`,
+  API: `/api`,
+  AUTH: `/api/auth`,
+  USER: `/api/users`,
+  ADMIN: `/api/admin`,
+  // 기본 API 경로 (별칭)
+  BASE_API: `/api`,
 } as const;
 
 /**
@@ -153,6 +150,16 @@ export const EXTERNAL_ENDPOINTS = {
 } as const;
 
 /**
+ * Health Check 관련 엔드포인트
+ */
+export const HEALTH_ENDPOINTS = {
+  // 기본 API 엔드포인트
+  BASE: BASE_PATHS.BASE_API,
+  // 서버 상태 확인
+  HEALTH: `${BASE_PATHS.BASE_API}/health`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -162,6 +169,7 @@ export const ENDPOINTS = {
   ADMIN: ADMIN_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
+  HEALTH: HEALTH_ENDPOINTS,
 } as const;
 
 /**
