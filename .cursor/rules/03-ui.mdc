@@ -44,13 +44,15 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
 1) 파일 제한: 명시된 2개 파일 외 절대 수정 금지.
 2) 라이브러리: 설치되지 않은 라이브러리 직접 설치 금지. 제공 버전만 사용.
 3) 구조: 추후 수정 쉬운 독립 컴포넌트 조립형으로 구현.
-4) 하드코딩 금지(색상): commons/constants/index.ts의 색상 토큰만 사용. 비슷한 색상 대체/하드코딩 금지.
+4) 하드코딩 금지(색상): 디자인 토큰은 `src/commons/styles/`에서 정의되며, CSS 변수로 변환되어 `:root`에 주입됨. CSS 변수만 사용하고 하드코딩된 색상값 사용 금지.
 5) 스타일 규칙:
 
    - 인라인 스타일 금지 (style={...}, <tag style="..."> 금지).
-   - nativewind는 오직 토큰 참조에만 사용(유틸리티 클래스로 토큰 호출).
-   - 모든 스타일 선언은 styles.module.css에서만. 클래스명으로 연결.
-   - index.tsx에는 HTML/JSX 구조만 배치하고, 클래스는 styles.module.css의 셀렉터와 연결.
+   - **CSS Module 사용**: 모든 스타일은 `styles.module.css`에서 CSS Module로 작성.
+   - **CSS 변수 사용**: `styles.module.css`에서 디자인 토큰은 CSS 변수(`var(--color-*)`, `var(--spacing-*)`, `var(--font-*)` 등)로 참조.
+   - 디자인 토큰 소스: `src/commons/styles/color.ts`, `spacing.ts`, `fonts.ts`, `typography.ts`에 TypeScript 객체로 정의됨.
+   - CSS 변수 생성: `src/app/layout.tsx`에서 `generateColorCSSVariables()`, `generateSpacingCSSVariables()`, `generateTypographyCSSVariables()` 함수로 CSS 변수 생성 후 `:root`에 주입.
+   - index.tsx에는 HTML/JSX 구조만 배치하고, 클래스는 `styles.module.css`의 셀렉터와 연결.
    - **소수점 값 반올림 필수**: 모든 스타일 속성의 소수점 값은 반올림하여 정수로 변환. 예: borderWidth: 1.111 → borderWidth: 1, height: 26.198 → height: 26
 
 6) 접근성/반응형: 시맨틱 태그, 키보드 포커스, 명시적 상태 클래스, min 탭타겟 44px.
@@ -60,7 +62,7 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
 
 2. 사전 분석 (Step-by-Step)
 
-1) package.json 분석: 사용 가능한 라이브러리/버전 요약 → nativewind/tailwind 사용 가능 여부 확인.
+1) package.json 분석: 사용 가능한 라이브러리/버전 요약 → CSS Module 사용 가능 여부 확인.
 2) 피그마 제공 시: 전체 구조(IA, 컴포넌트, 타입스케일, 그리드)를 페이지 → 섹션 → 컴포넌트 순으로 목록화.
 3) 폴더/라우터 가정: 단일 엔트리(index.tsx) 기준의 레이아웃 뼈대 정의(헤더/메인/푸터, 컨테이너, 그리드 컬럼).
 4) HTML 스켈레톤 먼저, 이후 styles.module.css 작성 → 클래스 연결 검증.
@@ -72,19 +74,23 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
 1) index.tsx
 
    - 시맨틱 레이아웃: <header>, <main>, <footer>.
-   - 토큰 클래스는 nativewind 유틸리티로만 사용(예: className="bg-token-..."). 직접 색상값 금지.
-   - 모든 시각 표현은 클래스명으로만 연결(실제 선언은 styles.css).
+   - CSS Module 클래스만 사용: `import styles from './styles.module.css'` 후 `className={styles.className}` 형태로 사용.
+   - 모든 시각 표현은 클래스명으로만 연결(실제 선언은 styles.module.css).
 
 2) styles.module.css
 
-   - tailwind 토큰 변수를 기반으로 유틸리티/컴포넌트 클래스 정의.
+   - **CSS 변수 사용**: 모든 디자인 토큰은 CSS 변수로 참조.
+     - 색상: `var(--color-*)` (예: `var(--color-black-500)`, `var(--color-white-500)`)
+     - 간격: `var(--spacing-*)` (예: `var(--spacing-sm)`, `var(--spacing-xl)`)
+     - 반경: `var(--radius-*)` (예: `var(--radius-xl)`, `var(--radius-2xl)`)
+     - 폰트: `var(--font-*)`, `var(--font-size-*)`, `var(--font-weight-*)` 등
    - 반응형 규칙(@media)과 상태(hover/focus/aria-pressed) 정의.
-   - 가독성: 섹션 주석 /_ layout _/, /_ components _/, /_ utilities _/로 분리.
+   - 가독성: 섹션 주석으로 구조화 (/* layout */, /* components */, /* utilities */).
 
 3) 토큰 사용 원칙
 
-   - 배경/텍스트/보더/상태색: 반드시 tailwind.config.js의 토큰 참조.
-   - 그림자/간격/타이포도 토큰/스케일 우선. 임의 px 최소화.
+   - 배경/텍스트/보더/상태색: 반드시 CSS 변수(`var(--color-*)`)로 참조. 하드코딩된 색상값(#FFFFFF, rgb() 등) 사용 금지.
+   - 간격/반경/타이포그래피: CSS 변수(`var(--spacing-*)`, `var(--radius-*)`, `var(--font-*)`) 사용. 임의 px 값 최소화.
 
 4) 금지사항
 
@@ -103,10 +109,11 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
 5. 자체 점검 체크리스트 (마지막에 필수 수행)
 
 - [ ] tailwind.config.js 수정 안 함 확인.
-- [ ] 색상값 직접 입력 0건(hex/rgb/hsl 사용 0건).
+- [ ] 색상값 직접 입력 0건(hex/rgb/hsl 사용 0건). CSS 변수(`var(--color-*)`)만 사용.
 - [ ] 인라인 스타일 0건.
 - [ ] index.tsx → 구조만 / styles.module.css → 스타일만 분리 유지.
-- [ ] nativewind 토큰 참조만 사용했는지 확인.
+- [ ] CSS Module 사용 확인: `import styles from './styles.module.css'` 및 `className={styles.className}` 형태 사용.
+- [ ] CSS 변수 사용 확인: 모든 디자인 토큰이 CSS 변수(`var(--color-*)`, `var(--spacing-*)` 등)로 참조됨.
 - [ ] 피그마 구조 대비 누락 섹션 없음.
 - [ ] 접근성: 시맨틱/포커스/명도 대비/탭타겟 통과.
 - [ ] **소수점 값 반올림 확인**: 모든 스타일 속성의 소수점 값이 정수로 반올림되었는지 확인.
@@ -115,8 +122,9 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
 
 6. 완료 정의 (Definition of Done)
 
-- 레이아웃/컴포넌트가 토큰 100% 사용으로 렌더링.
+- 레이아웃/컴포넌트가 CSS 변수 기반 디자인 토큰 100% 사용으로 렌더링.
 - 하드코딩 색상/인라인 스타일/파일 범위 위반 0건.
+- CSS Module 사용 및 CSS 변수 참조 확인.
 - 피그마와 IA 일치, 반응형/상태 인터랙션 정상.
 - index.tsx, styles.module.css 외 변경사항 없음.
 

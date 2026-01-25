@@ -140,10 +140,37 @@ components/{feature}/
 
 ### 스타일링 규칙
 
-- Tailwind CSS v4를 사용합니다
-- `tailwind.config.js`에서 호스트의 색상 토큰을 임포트하여 사용합니다
-- 인라인 스타일과 하드코딩된 색상값 사용을 금지합니다
-- 디자인 토큰은 `src/commons/styles/`에서 관리합니다
+프로젝트는 **CSS Module**을 사용하여 컴포넌트별 스타일을 관리합니다.
+
+#### 디자인 토큰 시스템
+
+1. **디자인 토큰 정의**: `src/commons/styles/` 디렉토리에 TypeScript 객체로 정의
+   - `color.ts`: 색상 팔레트
+   - `spacing.ts`: 간격 및 반경 토큰
+   - `fonts.ts`: 폰트 패밀리, 크기, 웨이트
+   - `typography.ts`: 타이포그래피 스타일
+
+2. **CSS 변수 생성**: `src/app/layout.tsx`에서 디자인 토큰을 CSS 변수로 변환하여 `:root`에 주입
+   - `generateColorCSSVariables()`: 색상 토큰 → `--color-*` 변수
+   - `generateSpacingCSSVariables()`: 간격/반경 토큰 → `--spacing-*`, `--radius-*` 변수
+   - `generateTypographyCSSVariables()`: 타이포그래피 토큰 → `--font-*` 변수
+
+3. **컴포넌트 스타일링**: `styles.module.css`에서 CSS 변수 사용
+   ```css
+   .button {
+     background-color: var(--color-black-500);
+     padding: 0 var(--spacing-xl);
+     border-radius: var(--radius-xl);
+   }
+   ```
+
+#### 주요 규칙
+
+- ✅ **CSS Module 사용**: 모든 컴포넌트 스타일은 `styles.module.css`에 작성
+- ✅ **CSS 변수 사용**: 디자인 토큰은 CSS 변수(`var(--color-*)`, `var(--spacing-*)` 등)로 참조
+- ❌ **인라인 스타일 금지**: `style={...}` 사용 금지
+- ❌ **하드코딩 색상값 금지**: hex/rgb/hsl 직접 입력 금지, CSS 변수만 사용
+- ❌ **중복 선언 금지**: 디자인 토큰은 `src/commons/styles/`에서만 정의
 
 자세한 스타일링 규칙은 `.cursor/rules/03-ui.mdc`를 참고하세요.
 

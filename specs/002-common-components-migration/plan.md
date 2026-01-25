@@ -292,21 +292,26 @@ src/
 
 **작업**:
 1. Figma MCP를 통해 각 컴포넌트의 디자인 스펙 재확인
-2. `src/commons/styles`에서 디자인 토큰 import
-   - `Colors` (색상 팔레트)
-   - `Spacing`, `BorderRadius` (간격 및 반경)
-   - `Typography` (타이포그래피 스타일)
-   - `FontFamily`, `FontWeight` (폰트 관련)
-3. CSS Module로 컴포넌트별 스타일 구현
+2. **CSS Module로 컴포넌트별 스타일 구현**
+   - 각 컴포넌트의 `styles.module.css` 파일에 스타일 작성
+   - CSS 변수를 사용하여 디자인 토큰 참조
+     - 색상: `var(--color-*)` (예: `var(--color-black-500)`)
+     - 간격: `var(--spacing-*)` (예: `var(--spacing-xl)`)
+     - 반경: `var(--radius-*)` (예: `var(--radius-xl)`)
+     - 폰트: `var(--font-*)`, `var(--font-size-*)`, `var(--font-weight-*)` 등
+   - 디자인 토큰은 `src/commons/styles/`에 TypeScript 객체로 정의되어 있으며, `src/app/layout.tsx`에서 CSS 변수로 변환되어 `:root`에 주입됨
    - Figma에서 추출한 수치 값 반올림 적용
    - 375px 기준 고정 레이아웃
-4. 애니메이션 구현
+   - 하드코딩된 색상값(hex/rgb/hsl) 사용 금지
+   - 인라인 스타일(`style={...}`) 사용 금지
+3. 애니메이션 구현
    - 모달, 바텀시트 열기/닫기 애니메이션 (300ms 이하)
    - 스피너 회전 애니메이션 (60fps)
 
 **결과물**:
 - Figma 디자인과 정확히 일치하는 스타일
-- 디자인 토큰 기반 일관된 스타일링
+- CSS Module 기반 컴포넌트별 스타일 격리
+- CSS 변수를 통한 디자인 토큰 기반 일관된 스타일링
 
 ---
 

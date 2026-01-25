@@ -488,26 +488,45 @@ module.exports = {
 
 ### 2. CSS Modules (필수)
 
-**컴포넌트별 스타일 격리**
+**컴포넌트별 스타일 격리 및 디자인 토큰 사용**
+
+프로젝트는 CSS Module을 사용하며, 모든 디자인 토큰은 CSS 변수로 참조합니다.
+
+#### 디자인 토큰 시스템
+
+디자인 토큰은 `src/commons/styles/`에 TypeScript 객체로 정의되며, `src/app/layout.tsx`에서 CSS 변수로 변환되어 `:root`에 주입됩니다.
 
 ```css
 /* Button.module.css */
 .button {
-  @apply px-4 py-2 rounded font-medium transition-colors;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-black-500);
+  color: var(--color-white-500);
+  padding: 0 var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  transition: all 0.2s ease-in-out;
 }
 
-.primary {
-  @apply bg-primary-500 text-white hover:bg-primary-600;
+.button:hover:not(:disabled) {
+  background-color: var(--color-black-600);
 }
 
-.secondary {
-  @apply bg-gray-200 text-gray-900 hover:bg-gray-300;
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 ```
 
 ```tsx
 // Button.tsx
-import styles from './Button.module.css';
+import styles from './styles.module.css';
 import clsx from 'clsx';
 
 interface ButtonProps {
@@ -523,6 +542,16 @@ export function Button({ variant = 'primary', children }: ButtonProps) {
   );
 }
 ```
+
+#### CSS 변수 사용 규칙
+
+- ✅ **CSS 변수 사용**: 모든 디자인 토큰은 CSS 변수로 참조
+  - 색상: `var(--color-*)` (예: `var(--color-black-500)`)
+  - 간격: `var(--spacing-*)` (예: `var(--spacing-xl)`)
+  - 반경: `var(--radius-*)` (예: `var(--radius-xl)`)
+  - 폰트: `var(--font-*)`, `var(--font-size-*)`, `var(--font-weight-*)`
+- ❌ **하드코딩 금지**: hex/rgb/hsl 직접 입력 금지
+- ❌ **인라인 스타일 금지**: `style={...}` 사용 금지
 
 ---
 

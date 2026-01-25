@@ -521,8 +521,14 @@
 - **소수점 값 처리**: Figma에서 추출한 모든 소수점이 포함된 수치 값은 반올림하여 정수로 변환합니다
 
 ### 컴포넌트 스타일
+- **CSS Module 사용**: 모든 컴포넌트 스타일은 `styles.module.css` 파일에 CSS Module로 작성
 - **디자인 토큰 준수**: 모든 컴포넌트가 프로젝트의 디자인 토큰 시스템을 준수해야 함
-- **토큰 import 규칙**: `tailwind.config.js`에 먼저 선언된 색상 토큰값 변수로 import하여 스타일을 적용합니다 (중복 선언 금지)
+- **CSS 변수 사용**: 디자인 토큰은 CSS 변수로 참조
+  - 디자인 토큰 정의: `src/commons/styles/` 디렉토리에 TypeScript 객체로 정의 (`color.ts`, `spacing.ts`, `fonts.ts`, `typography.ts`)
+  - CSS 변수 생성: `src/app/layout.tsx`에서 `generateColorCSSVariables()`, `generateSpacingCSSVariables()`, `generateTypographyCSSVariables()` 함수로 CSS 변수 생성 후 `:root`에 주입
+  - 컴포넌트에서 사용: `styles.module.css`에서 `var(--color-*)`, `var(--spacing-*)`, `var(--radius-*)`, `var(--font-*)` 등 CSS 변수로 참조
+- **하드코딩 금지**: hex/rgb/hsl 직접 입력 금지, CSS 변수만 사용
+- **인라인 스타일 금지**: `style={...}` 사용 금지
 - **일관성**: 기존 디자인 시스템과 일관된 스타일 적용
 - **반응형**: 모바일 환경을 기준으로 한 고정 레이아웃 (375px 기준)
 
