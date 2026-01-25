@@ -1,8 +1,13 @@
 /**
  * Button 컴포넌트 스타일
- * CSS 변수와 CSS 모듈을 활용한 스타일 정의
+ * 디자인 토큰: src/commons/styles
+ * - Colors: 색상 팔레트
+ * - Spacing: 간격 토큰
+ * - BorderRadius: 반경 토큰
+ * - Typography: 타이포그래피 스타일
  */
 
+/* 버튼 기본 스타일 */
 .button {
   display: inline-flex;
   align-items: center;
@@ -10,122 +15,118 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  font-family: var(--font-pretendard);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
   outline: none;
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  padding: 0 var(--spacing-xl); /* Spacing.xl = 2rem = 32px */
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--color-blue-500);
+  outline: 2px solid var(--color-blue-500); /* Colors.blue[500] */
   outline-offset: 2px;
 }
 
 .button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* Variants */
-.primary {
-  background-color: var(--color-red-500);
-  color: white;
+/* 버튼 내부 컨텐츠 (아이콘 + 텍스트) */
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm); /* Spacing.sm = 0.5rem = 8px */
 }
 
-.primary:hover:not(:disabled) {
-  background-color: var(--color-red-600);
+/* 버튼 텍스트 */
+.text {
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 18px; /* Typography.body.body1.fontSize */
+  line-height: 28px; /* Typography.body.body1.lineHeight */
+  font-weight: 700; /* FontWeight.bold */
+  letter-spacing: -0.44px; /* 소수점 반올림 */
 }
 
-.primary:active:not(:disabled) {
-  background-color: var(--color-red-700);
+/* ============================================================================
+ * Variant별 스타일
+ * ============================================================================ */
+
+/* Disabled Variant */
+.variantDisabled {
+  background-color: var(--color-grey-500); /* Colors.grey[500] */
+  color: var(--color-white-500); /* Colors.white[500] */
 }
 
-.secondary {
-  background-color: var(--color-blue-500);
-  color: white;
+/* Primary Variant */
+.variantPrimary {
+  background-color: var(--color-black-500); /* Colors.black[500] */
+  color: var(--color-white-500); /* Colors.white[500] */
 }
 
-.secondary:hover:not(:disabled) {
-  background-color: var(--color-blue-600);
+.variantPrimary:hover:not(:disabled) {
+  background-color: var(--color-black-600); /* Colors.black[600] */
 }
 
-.secondary:active:not(:disabled) {
-  background-color: var(--color-blue-700);
+.variantPrimary:active:not(:disabled) {
+  background-color: var(--color-black-700); /* Colors.black[700] */
 }
 
-.outline {
-  background-color: transparent;
-  border: 2px solid var(--color-black-500);
-  color: var(--color-black-500);
+/* Outline Variant */
+.variantOutline {
+  background-color: var(--color-white-500); /* Colors.white[500] */
+  color: var(--color-black-500); /* Colors.black[500] */
+  border: 1px solid var(--color-white-grey-500); /* Colors.whiteGrey[500] */
 }
 
-.outline:hover:not(:disabled) {
-  background-color: var(--color-grey-50);
+.variantOutline:hover:not(:disabled) {
+  background-color: var(--color-white-100); /* Colors.white[100] */
 }
 
-.outline:active:not(:disabled) {
-  background-color: var(--color-grey-100);
+.variantOutline:active:not(:disabled) {
+  background-color: var(--color-white-200); /* Colors.white[200] */
 }
 
-.ghost {
-  background-color: transparent;
-  color: var(--color-dark-grey-700);
+/* Danger Variant */
+.variantDanger {
+  background-color: var(--color-red-500); /* Colors.red[500] */
+  color: var(--color-white-500); /* Colors.white[500] */
 }
 
-.ghost:hover:not(:disabled) {
-  background-color: var(--color-grey-100);
+.variantDanger:hover:not(:disabled) {
+  background-color: var(--color-red-600); /* Colors.red[600] */
 }
 
-.ghost:active:not(:disabled) {
-  background-color: var(--color-grey-200);
+.variantDanger:active:not(:disabled) {
+  background-color: var(--color-red-700); /* Colors.red[700] */
 }
 
-/* Sizes */
-.sm {
-  padding: var(--spacing-xs) var(--spacing-md);
-  font-size: var(--font-size-sm);
-  min-height: 2rem;
+/* ============================================================================
+ * Size별 스타일
+ * ============================================================================ */
+
+/* Size L (Large) - 64px */
+.sizeL {
+  height: 64px;
+  border-radius: var(--radius-2xl); /* BorderRadius: 1.5rem = 24px (Figma 디자인) */
 }
 
-.md {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: var(--font-size-base);
-  min-height: 2.5rem;
+/* Size M (Medium) - 56px */
+.sizeM {
+  height: 56px;
+  border-radius: var(--radius-3xl); /* BorderRadius: 1.25rem = 20px (Figma 디자인) */
 }
 
-.lg {
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: var(--font-size-lg);
-  min-height: 3rem;
+/* Size S (Small) - 48px */
+.sizeS {
+  height: 48px;
+  border-radius: var(--radius-xl); /* BorderRadius.xl = 1rem = 16px */
 }
 
-/* Modifiers */
+/* ============================================================================
+ * Modifier 스타일
+ * ============================================================================ */
+
 .fullWidth {
   width: 100%;
-}
-
-.loading {
-  position: relative;
-  color: transparent;
-}
-
-.loading::after {
-  content: '';
-  position: absolute;
-  width: 1rem;
-  height: 1rem;
-  top: 50%;
-  left: 50%;
-  margin-left: -0.5rem;
-  margin-top: -0.5rem;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 0.6s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }

@@ -68,15 +68,13 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {/* 액션 버튼 */}
         <div className="flex gap-3">
-          <Button variant="primary" onClick={reset}>
-            다시 시도
-          </Button>
+          <Button label="다시 시도" variant="primary" size="L" onPress={reset} />
           <Button
+            label="홈으로 이동"
             variant="outline"
-            onClick={() => (window.location.href = '/')}
-          >
-            홈으로 이동
-          </Button>
+            size="L"
+            onPress={() => (window.location.href = '/')}
+          />
         </div>
       </div>
     </div>

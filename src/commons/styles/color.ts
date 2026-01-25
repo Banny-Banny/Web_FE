@@ -166,3 +166,24 @@ export const Colors = {
 
 export type ColorPalette = typeof Colors;
 export type ColorKey = keyof typeof Colors;
+
+/**
+ * Colors 객체를 CSS Variables 문자열로 변환하는 함수
+ * @returns CSS Variables 문자열 (예: "--color-white-500: #FAFAFA;")
+ */
+export function generateColorCSSVariables(): string {
+  const variables: string[] = [];
+
+  Object.entries(Colors).forEach(([colorName, colorPalette]) => {
+    if (typeof colorPalette === 'object' && colorPalette !== null) {
+      Object.entries(colorPalette).forEach(([shade, value]) => {
+        // colorName을 kebab-case로 변환 (whiteGrey -> white-grey)
+        const kebabColorName = colorName.replace(/([A-Z])/g, '-$1').toLowerCase();
+        const variableName = `--color-${kebabColorName}-${shade}`;
+        variables.push(`  ${variableName}: ${value};`);
+      });
+    }
+  });
+
+  return variables.join('\n');
+}

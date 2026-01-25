@@ -34,6 +34,8 @@ export const BorderRadius = {
   md: '0.5rem',     // 8px
   lg: '0.75rem',    // 12px
   xl: '1rem',       // 16px
+  '2xl': '1.5rem',   // 24px
+  '3xl': '1.25rem',  // 20px
   full: '9999px',
 } as const;
 
@@ -45,6 +47,8 @@ export const CSSBorderRadius = {
   md: 'var(--radius-md)',
   lg: 'var(--radius-lg)',
   xl: 'var(--radius-xl)',
+  '2xl': 'var(--radius-2xl)',
+  '3xl': 'var(--radius-3xl)',
   full: 'var(--radius-full)',
 } as const;
 
@@ -52,3 +56,23 @@ export type SpacingScale = typeof Spacing;
 export type SpacingKey = keyof typeof Spacing;
 export type BorderRadiusScale = typeof BorderRadius;
 export type BorderRadiusKey = keyof typeof BorderRadius;
+
+/**
+ * Spacing과 BorderRadius를 CSS Variables 문자열로 변환하는 함수
+ * @returns CSS Variables 문자열
+ */
+export function generateSpacingCSSVariables(): string {
+  const variables: string[] = [];
+
+  // Spacing variables
+  Object.entries(Spacing).forEach(([key, value]) => {
+    variables.push(`  --spacing-${key}: ${value};`);
+  });
+
+  // BorderRadius variables
+  Object.entries(BorderRadius).forEach(([key, value]) => {
+    variables.push(`  --radius-${key}: ${value};`);
+  });
+
+  return variables.join('\n');
+}

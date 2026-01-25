@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview 홈페이지
  * @description TimeEgg 웹 애플리케이션의 메인 페이지
@@ -32,12 +34,8 @@ export default function Home() {
 
         {/* 액션 버튼 예시 */}
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Button variant="primary" size="lg">
-            시작하기
-          </Button>
-          <Button variant="secondary" size="lg">
-            더 알아보기
-          </Button>
+          <Button label="시작하기" variant="primary" size="L" onPress={() => {}} />
+          <Button label="더 알아보기" variant="outline" size="L" onPress={() => {}} />
         </div>
 
         {/* 기술 스택 정보 */}

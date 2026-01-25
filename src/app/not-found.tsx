@@ -5,7 +5,6 @@
  * @description 존재하지 않는 페이지 접근 시 표시
  */
 
-import Link from 'next/link';
 import { Button } from '@/commons/components';
 
 export default function NotFound() {
@@ -42,12 +41,8 @@ export default function NotFound() {
 
         {/* 액션 버튼 */}
         <div className="flex gap-3">
-          <Link href="/">
-            <Button variant="primary">홈으로 이동</Button>
-          </Link>
-          <Button variant="outline" onClick={() => window.history.back()}>
-            이전 페이지
-          </Button>
+          <Button label="홈으로 이동" variant="primary" size="L" onPress={() => (window.location.href = '/')} />
+          <Button label="이전 페이지" variant="outline" size="L" onPress={() => window.history.back()} />
         </div>
       </div>
     </div>
