@@ -2,6 +2,8 @@
  * @fileoverview Button 컴포넌트 타입 정의
  */
 
+import type React from 'react';
+
 /**
  * 버튼 Variant 타입
  * - disabled: 진한 회색 배경 (비활성화 상태)
@@ -30,7 +32,7 @@ export type IconPosition = 'left' | 'right' | 'only';
 /**
  * Button 컴포넌트 Props
  */
-export interface ButtonProps {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'onPress'> {
   /**
    * 버튼 텍스트 (필수)
    */

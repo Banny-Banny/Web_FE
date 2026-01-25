@@ -32,7 +32,7 @@ import type { DualButtonProps } from './types';
  * />
  * ```
  */
-export function DualButton({
+export const DualButton = React.memo(function DualButton({
   cancelLabel,
   confirmLabel,
   size = 'L',
@@ -57,7 +57,7 @@ export function DualButton({
   const containerClasses = [styles.container, className].filter(Boolean).join(' ');
 
   return (
-    <div className={containerClasses} style={containerWidth}>
+    <div className={containerClasses} style={containerWidth} role="group" aria-label="이중 버튼">
       {/* 취소 버튼 (왼쪽) - 항상 활성화 */}
       <Button
         label={cancelLabel}
@@ -67,6 +67,7 @@ export function DualButton({
         onPress={onCancelPress}
         fullWidth={true}
         className={styles.button}
+        aria-label={`${cancelLabel} 버튼`}
       />
 
       {/* 확인 버튼 (오른쪽) */}
@@ -79,9 +80,10 @@ export function DualButton({
         onPress={onConfirmPress}
         fullWidth={true}
         className={styles.button}
+        aria-label={`${confirmLabel} 버튼`}
       />
     </div>
   );
-}
+});
 
 export default DualButton;

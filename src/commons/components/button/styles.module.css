@@ -18,6 +18,8 @@
   outline: none;
   font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   padding: 0 var(--spacing-xl); /* Spacing.xl = 2rem = 32px */
+  min-height: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
+  min-width: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
 }
 
 .button:focus-visible {

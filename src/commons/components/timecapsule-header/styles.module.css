@@ -31,8 +31,10 @@
 
 /* 왼쪽 영역 (뒤로가기 버튼) */
 .backButton {
-  width: 24px;
-  height: 24px;
+  min-width: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
+  min-height: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
+  width: 44px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,8 +103,10 @@
 }
 
 .iconButton {
-  width: 40px;
-  height: 40px;
+  min-width: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
+  min-height: 44px; /* 최소 터치 타겟 크기 WCAG AA 기준 */
+  width: 44px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;

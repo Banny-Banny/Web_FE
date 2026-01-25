@@ -5,7 +5,7 @@
  * @description Modal 전역 상태 관리 및 렌더링
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ModalProvider as ModalContextProvider, useModalContext } from './modal-context';
 import { Modal } from '@/commons/components/modal';
 
@@ -16,16 +16,21 @@ import { Modal } from '@/commons/components/modal';
 function ModalRenderer() {
   const { modals, closeModal } = useModalContext();
 
+  const handleClose = useCallback((modalId: string) => {
+    const modal = modals.find((m) => m.id === modalId);
+    if (modal) {
+      modal.config.onClose?.();
+      closeModal(modalId);
+    }
+  }, [modals, closeModal]);
+
   return (
     <>
       {modals.map((modal) => (
         <Modal
           key={modal.id}
           visible={true}
-          onClose={() => {
-            modal.config.onClose?.();
-            closeModal(modal.id);
-          }}
+          onClose={() => handleClose(modal.id)}
           width={modal.config.width}
           height={modal.config.height}
           padding={modal.config.padding}

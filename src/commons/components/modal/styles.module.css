@@ -72,35 +72,21 @@
   }
 }
 
-@keyframes slideInUp {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutDown {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-}
-
 /* 애니메이션 클래스 */
 .animateEnter {
-  animation: fadeIn 0.1s ease-in-out, slideInUp 0.15s ease-out;
+  animation: fadeIn 0.2s ease-in-out;
+  will-change: opacity; /* GPU 가속 */
 }
 
 .animateExit {
-  animation: fadeOut 0.1s ease-in-out, slideOutDown 0.1s ease-in;
+  animation: fadeOut 0.15s ease-in-out;
+  will-change: opacity; /* GPU 가속 */
+}
+
+.animateEnter .modalContainer,
+.animateExit .modalContainer {
+  transform: translateZ(0); /* GPU 가속 강제 */
+  backface-visibility: hidden; /* 렌더링 최적화 */
 }
 
 /* 애니메이션 비활성화 */

@@ -21,7 +21,7 @@ import type { SpinnerProps } from './types';
  * <Spinner size="small" fullScreen={true} />
  * ```
  */
-export function Spinner({ 
+export const Spinner = React.memo(function Spinner({ 
   size = 'large', 
   color, 
   fullScreen = false,
@@ -45,11 +45,11 @@ export function Spinner({
   };
 
   return (
-    <div className={containerClasses}>
-      <div className={spinnerClasses} style={spinnerStyle} />
+    <div className={containerClasses} role="status" aria-label="로딩 중">
+      <div className={spinnerClasses} style={spinnerStyle} aria-hidden="true" />
     </div>
   );
-}
+});
 
 Spinner.displayName = 'Spinner';
 

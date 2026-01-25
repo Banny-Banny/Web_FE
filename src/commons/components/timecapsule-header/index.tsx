@@ -41,7 +41,7 @@ import type { TimeCapsuleHeaderProps, HeaderIconName } from './types';
 /**
  * TimeCapsuleHeader 컴포넌트
  */
-export function TimeCapsuleHeader({
+export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
   title,
   onBack,
   rightIcons,
@@ -67,6 +67,12 @@ export function TimeCapsuleHeader({
             className={styles.backButton}
             onClick={onBack}
             aria-label="뒤로가기"
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && onBack) {
+                e.preventDefault();
+                onBack();
+              }
+            }}
           >
             <ArrowLeft size={24} color={Colors.black[500]} />
           </button>
@@ -111,9 +117,20 @@ export function TimeCapsuleHeader({
                     key={index}
                     type="button"
                     className={styles.iconButton}
-                    style={{ width: iconSize, height: iconSize }}
+                    style={{ 
+                      width: Math.max(iconSize, 44), 
+                      height: Math.max(iconSize, 44),
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
                     onClick={rightIcon.onPress}
                     aria-label={accessibilityLabel}
+                    onKeyDown={(e) => {
+                      if ((e.key === 'Enter' || e.key === ' ') && rightIcon.onPress) {
+                        e.preventDefault();
+                        rightIcon.onPress();
+                      }
+                    }}
                   >
                     <Icon
                       name={rightIcon.icon as IconName}
@@ -139,9 +156,20 @@ export function TimeCapsuleHeader({
                     key={index}
                     type="button"
                     className={styles.iconButton}
-                    style={{ width: iconSize, height: iconSize }}
+                    style={{ 
+                      width: Math.max(iconSize, 44), 
+                      height: Math.max(iconSize, 44),
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
                     onClick={rightIcon.onPress}
                     aria-label={accessibilityLabel}
+                    onKeyDown={(e) => {
+                      if ((e.key === 'Enter' || e.key === ' ') && rightIcon.onPress) {
+                        e.preventDefault();
+                        rightIcon.onPress();
+                      }
+                    }}
                   >
                     <Image
                       src={rightIcon.imageSource}
@@ -165,9 +193,20 @@ export function TimeCapsuleHeader({
                     key={index}
                     type="button"
                     className={styles.iconButton}
-                    style={{ width: iconSize, height: iconSize }}
+                    style={{ 
+                      width: Math.max(iconSize, 44), 
+                      height: Math.max(iconSize, 44),
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
                     onClick={rightIcon.onPress}
                     aria-label={accessibilityLabel}
+                    onKeyDown={(e) => {
+                      if ((e.key === 'Enter' || e.key === ' ') && rightIcon.onPress) {
+                        e.preventDefault();
+                        rightIcon.onPress();
+                      }
+                    }}
                   >
                     <LucideIcon size={iconSize} color={iconColor} />
                   </button>
@@ -186,6 +225,8 @@ export function TimeCapsuleHeader({
       {showBorder && <div className={styles.border} />}
     </div>
   );
-}
+});
+
+TimeCapsuleHeader.displayName = 'TimeCapsuleHeader';
 
 export default TimeCapsuleHeader;

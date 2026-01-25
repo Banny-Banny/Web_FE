@@ -103,16 +103,27 @@ export function Modal({
     const lastElement = focusableElements[focusableElements.length - 1];
 
     // 첫 번째 포커스 가능한 요소로 포커스 이동
-    if (firstElement) {
-      firstElement.focus();
-    }
+    // 약간의 지연을 두어 모달이 완전히 렌더링된 후 포커스 이동
+    const focusTimer = setTimeout(() => {
+      if (firstElement) {
+        firstElement.focus();
+      } else {
+        // 포커스 가능한 요소가 없으면 모달 컨테이너에 포커스
+        modal.focus();
+      }
+    }, 0);
 
     // 키보드 이벤트 핸들러
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Tab') {
+        if (focusableElements.length === 0) {
+          e.preventDefault();
+          return;
+        }
+
         if (e.shiftKey) {
           // Shift + Tab
-          if (document.activeElement === firstElement) {
+          if (document.activeElement === firstElement || document.activeElement === modal) {
             e.preventDefault();
             lastElement?.focus();
           }
@@ -124,6 +135,7 @@ export function Modal({
           }
         }
       } else if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
       }
     };
@@ -131,6 +143,7 @@ export function Modal({
     modal.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      clearTimeout(focusTimer);
       modal.removeEventListener('keydown', handleKeyDown);
     };
   }, [visible, onClose]);
@@ -204,7 +217,9 @@ export function Modal({
         style={modalContainerStyle}
         role="dialog"
         aria-modal="true"
+        aria-label="모달"
         onClick={(e) => e.stopPropagation()}
+        tabIndex={-1}
       >
         {/* Modal Content - children을 그대로 렌더링 */}
         {children}

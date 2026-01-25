@@ -34,6 +34,8 @@
   animation: spin 0.8s linear infinite;
   /* GPU 가속을 위한 transform 활용 */
   will-change: transform;
+  transform: translateZ(0); /* GPU 가속 강제 */
+  backface-visibility: hidden; /* 렌더링 최적화 */
 }
 
 /* Size Small */

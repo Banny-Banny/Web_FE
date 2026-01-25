@@ -104,4 +104,7 @@
 
 .animateEnter .bottomSheetContainer {
   animation: slideUp 0.3s ease-out;
+  will-change: transform; /* GPU 가속 */
+  transform: translateZ(0); /* GPU 가속 강제 */
+  backface-visibility: hidden; /* 렌더링 최적화 */
 }

@@ -110,7 +110,14 @@ export function BottomSheet({
         className={styles.bottomSheetContainer}
         role="dialog"
         aria-modal="true"
+        aria-label="바텀시트"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            onClose();
+          }
+        }}
+        tabIndex={-1}
       >
         {/* 드래그 핸들 */}
         {showHandle && (

@@ -17,7 +17,7 @@ import type { ButtonProps, ButtonVariant } from './types';
  * <Button label="클릭하세요" variant="primary" size="L" onPress={handleClick} />
  * ```
  */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonComponent = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       label,
@@ -67,7 +67,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={buttonClasses}
         disabled={disabled}
         onClick={disabled ? undefined : onPress}
+        onKeyDown={(e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && !disabled && onPress) {
+            e.preventDefault();
+            onPress();
+          }
+          props.onKeyDown?.(e);
+        }}
         style={widthStyle}
+        aria-label={props['aria-label'] || label}
+        aria-disabled={disabled}
         {...props}
       >
         <span className={styles.content}>
@@ -93,6 +102,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
+ButtonComponent.displayName = 'Button';
+
+export const Button = React.memo(ButtonComponent);
 
 export default Button;

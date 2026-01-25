@@ -29,7 +29,7 @@ import type { ToastProps, ToastType } from './types';
 /**
  * Toast 컴포넌트
  */
-export function Toast({
+export const Toast = React.memo(function Toast({
   message,
   visible,
   onHide,
@@ -101,16 +101,28 @@ export function Toast({
 
   const typeClass = typeClassMap[type] || typeClassMap.default;
 
+  // 타입별 aria-label 매핑
+  const typeAriaLabelMap: Record<ToastType, string> = {
+    success: '성공 메시지',
+    error: '오류 메시지',
+    info: '정보 메시지',
+    warning: '경고 메시지',
+  };
+
   return (
     <div
       className={`${styles.container} ${
         position === 'top' ? styles.containerTop : styles.containerBottom
       } ${className}`}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
     >
       <div
         className={`${styles.toast} ${typeClass} ${
           isAnimating ? styles.animateEnter : styles.animateExit
         }`}
+        aria-label={typeAriaLabelMap[type]}
       >
         <p
           className={styles.message}
@@ -121,6 +133,8 @@ export function Toast({
       </div>
     </div>
   );
-}
+});
+
+Toast.displayName = 'Toast';
 
 export default Toast;

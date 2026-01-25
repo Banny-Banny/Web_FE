@@ -113,8 +113,14 @@
 /* 애니메이션 클래스 */
 .animateEnter {
   animation: fadeIn 0.3s ease-in-out, slideUp 0.3s ease-in-out;
+  will-change: transform, opacity; /* GPU 가속 */
+  transform: translateZ(0); /* GPU 가속 강제 */
+  backface-visibility: hidden; /* 렌더링 최적화 */
 }
 
 .animateExit {
   animation: fadeOut 0.3s ease-in-out, slideDown 0.3s ease-in-out;
+  will-change: transform, opacity; /* GPU 가속 */
+  transform: translateZ(0); /* GPU 가속 강제 */
+  backface-visibility: hidden; /* 렌더링 최적화 */
 }
