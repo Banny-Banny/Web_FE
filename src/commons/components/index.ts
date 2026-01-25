@@ -19,6 +19,22 @@ export type { SpinnerProps, SpinnerSize } from './spinner/types';
 export { Icon } from './icon';
 export type { IconProps, IconName, IconSize } from './icon/types';
 
+// TimeCapsuleHeader 컴포넌트
+export { TimeCapsuleHeader } from './timecapsule-header';
+export type { TimeCapsuleHeaderProps, RightIcon, HeaderIconName } from './timecapsule-header/types';
+
+// Toast 컴포넌트
+export { Toast } from './toast';
+export type { ToastProps, ToastType } from './toast/types';
+
+// Modal 컴포넌트
+export { Modal } from './modal';
+export type { ModalProps, ModalConfig, ModalState } from './modal/types';
+
+// BottomSheet 컴포넌트
+export { BottomSheet } from './bottom-sheet';
+export type { BottomSheetProps } from './bottom-sheet/types';
+
 // 향후 추가될 컴포넌트들
 // 예: export { Input } from './Input';
 // 예: export { Card } from './Card';

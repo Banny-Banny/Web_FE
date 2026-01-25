@@ -28,9 +28,9 @@
 - Props 인터페이스 비교 문서
 
 **완료 기준**:
-- [ ] 모든 컴포넌트의 기존 구현 확인 완료
-- [ ] Props 인터페이스 파악 완료
-- [ ] 스타일링 방식 파악 완료
+- [x] 모든 컴포넌트의 기존 구현 확인 완료
+- [x] Props 인터페이스 파악 완료
+- [x] 스타일링 방식 파악 완료
 
 ---
 
@@ -73,9 +73,9 @@
 - 디자인 토큰 매핑 테이블
 
 **완료 기준**:
-- [ ] 모든 컴포넌트의 Figma 디자인 스펙 추출 완료
-- [ ] 디자인 토큰 매핑 완료
-- [ ] 에셋 확인 완료
+- [x] 모든 컴포넌트의 Figma 디자인 스펙 추출 완료
+- [x] 디자인 토큰 매핑 완료
+- [x] 에셋 확인 완료
 
 ---
 
@@ -97,8 +97,8 @@
 - 디자인 토큰 사용 가이드
 
 **완료 기준**:
-- [ ] 모든 디자인 토큰 파일 확인 완료
-- [ ] 디자인 토큰 사용 방법 파악 완료
+- [x] 모든 디자인 토큰 파일 확인 완료
+- [x] 디자인 토큰 사용 방법 파악 완료
 
 ---
 
@@ -122,8 +122,8 @@
 - 컴포넌트별 Props 인터페이스 설계 문서
 
 **완료 기준**:
-- [ ] 모든 컴포넌트의 Props 인터페이스 설계 완료
-- [ ] enum 타입 정의 완료
+- [x] 모든 컴포넌트의 Props 인터페이스 설계 완료
+- [x] enum 타입 정의 완료
 
 ---
 
@@ -424,8 +424,8 @@
 - `src/commons/components/timecapsule-header/types.ts`
 
 **완료 기준**:
-- [ ] `TimecapsuleHeaderProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `TimecapsuleHeaderProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -446,8 +446,8 @@
 - `src/commons/components/timecapsule-header/styles.module.css`
 
 **완료 기준**:
-- [ ] 헤더 레이아웃 스타일이 정의됨
-- [ ] 디자인 토큰이 올바르게 사용됨
+- [x] 헤더 레이아웃 스타일이 정의됨
+- [x] 디자인 토큰이 올바르게 사용됨
 
 ---
 
@@ -467,8 +467,8 @@
 - `src/commons/components/timecapsule-header/index.tsx`
 
 **완료 기준**:
-- [ ] TimecapsuleHeader 컴포넌트가 정상적으로 렌더링됨
-- [ ] 헤더 내 모든 인터랙티브 요소가 정상 작동함
+- [x] TimecapsuleHeader 컴포넌트가 정상적으로 렌더링됨
+- [x] 헤더 내 모든 인터랙티브 요소가 정상 작동함
 
 ---
 
@@ -485,9 +485,9 @@
 - `src/commons/components/index.ts`
 
 **완료 기준**:
-- [ ] `@/commons/components`로 TimecapsuleHeader import 가능
-- [ ] TimecapsuleHeader 타입도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/components`로 TimecapsuleHeader import 가능
+- [x] TimecapsuleHeader 타입도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -509,8 +509,8 @@
 - `src/commons/components/bottom-sheet/types.ts`
 
 **완료 기준**:
-- [ ] `BottomSheetProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `BottomSheetProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -534,10 +534,10 @@
 - `src/commons/components/bottom-sheet/styles.module.css`
 
 **완료 기준**:
-- [ ] 오버레이 스타일이 정의됨
-- [ ] 바텀시트 컨테이너 스타일이 정의됨
-- [ ] 애니메이션이 정의됨 (300ms)
-- [ ] 디자인 토큰이 올바르게 사용됨
+- [x] 오버레이 스타일이 정의됨
+- [x] 바텀시트 컨테이너 스타일이 정의됨
+- [x] 애니메이션이 정의됨 (300ms)
+- [x] 디자인 토큰이 올바르게 사용됨
 
 ---
 
@@ -559,10 +559,10 @@
 - `src/commons/components/bottom-sheet/index.tsx`
 
 **완료 기준**:
-- [ ] BottomSheet 컴포넌트가 정상적으로 렌더링됨
-- [ ] 하단에서 올라오는 애니메이션이 부드럽게 작동함
-- [ ] 오버레이 클릭 시 닫힘
-- [ ] 옵션 선택 시 핸들러가 실행됨
+- [x] BottomSheet 컴포넌트가 정상적으로 렌더링됨
+- [x] 하단에서 올라오는 애니메이션이 부드럽게 작동함
+- [x] 오버레이 클릭 시 닫힘
+- [x] 옵션 선택 시 핸들러가 실행됨
 
 ---
 
@@ -579,9 +579,9 @@
 - `src/commons/components/index.ts`
 
 **완료 기준**:
-- [ ] `@/commons/components`로 BottomSheet import 가능
-- [ ] BottomSheet 타입도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/components`로 BottomSheet import 가능
+- [x] BottomSheet 타입도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -601,8 +601,8 @@
 - `src/commons/components/modal/types.ts`
 
 **완료 기준**:
-- [ ] `ModalProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `ModalProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -626,9 +626,9 @@
 - `src/commons/components/modal/styles.module.css`
 
 **완료 기준**:
-- [ ] 오버레이 스타일이 정의됨
-- [ ] 모달 컨테이너 스타일이 정의됨
-- [ ] 디자인 토큰이 올바르게 사용됨
+- [x] 오버레이 스타일이 정의됨
+- [x] 모달 컨테이너 스타일이 정의됨
+- [x] 디자인 토큰이 올바르게 사용됨
 
 ---
 
@@ -651,11 +651,11 @@
 - `src/commons/components/modal/index.tsx`
 
 **완료 기준**:
-- [ ] Modal 컴포넌트가 정상적으로 렌더링됨
-- [ ] 화면 중앙에 정확히 배치됨
-- [ ] 오버레이 클릭 시 닫힘
-- [ ] 확인/취소 버튼이 정상 작동함
-- [ ] 포커스 트랩이 작동함
+- [x] Modal 컴포넌트가 정상적으로 렌더링됨
+- [x] 화면 중앙에 정확히 배치됨
+- [x] 오버레이 클릭 시 닫힘
+- [x] 확인/취소 버튼이 정상 작동함
+- [x] 포커스 트랩이 작동함
 
 ---
 
@@ -672,9 +672,9 @@
 - `src/commons/components/index.ts`
 
 **완료 기준**:
-- [ ] `@/commons/components`로 Modal import 가능
-- [ ] Modal 타입도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/components`로 Modal import 가능
+- [x] Modal 타입도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -697,9 +697,9 @@
 - `src/commons/components/toast/types.ts`
 
 **완료 기준**:
-- [ ] `ToastProps` 인터페이스가 정의됨
-- [ ] `ToastType` enum이 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `ToastProps` 인터페이스가 정의됨
+- [x] `ToastType` enum이 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -729,8 +729,8 @@
 - `src/commons/components/toast/styles.module.css`
 
 **완료 기준**:
-- [ ] 모든 타입별 스타일이 정의됨
-- [ ] 디자인 토큰이 올바르게 사용됨
+- [x] 모든 타입별 스타일이 정의됨
+- [x] 디자인 토큰이 올바르게 사용됨
 
 ---
 
@@ -752,10 +752,10 @@
 - `src/commons/components/toast/index.tsx`
 
 **완료 기준**:
-- [ ] Toast 컴포넌트가 정상적으로 렌더링됨
-- [ ] 모든 타입이 정상 작동함
-- [ ] 자동 사라짐 기능이 정상 작동함
-- [ ] 수동 닫기 기능이 정상 작동함 (선택적)
+- [x] Toast 컴포넌트가 정상적으로 렌더링됨
+- [x] 모든 타입이 정상 작동함
+- [x] 자동 사라짐 기능이 정상 작동함
+- [x] 수동 닫기 기능이 정상 작동함 (선택적)
 
 ---
 
@@ -772,9 +772,9 @@
 - `src/commons/components/index.ts`
 
 **완료 기준**:
-- [ ] `@/commons/components`로 Toast import 가능
-- [ ] Toast 타입도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/components`로 Toast import 가능
+- [x] Toast 타입도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -798,9 +798,9 @@
 - `src/commons/providers/modal-provider/modal-context.tsx`
 
 **완료 기준**:
-- [ ] ModalContext가 생성됨
-- [ ] 모달 스택 상태 관리 로직이 구현됨
-- [ ] z-index 관리 로직이 구현됨
+- [x] ModalContext가 생성됨
+- [x] 모달 스택 상태 관리 로직이 구현됨
+- [x] z-index 관리 로직이 구현됨
 
 ---
 
@@ -821,9 +821,9 @@
 - `src/commons/providers/modal-provider/use-modal.ts`
 
 **완료 기준**:
-- [ ] `useModal` 훅이 구현됨
-- [ ] `openModal`, `closeModal`, `closeAll` 함수가 구현됨
-- [ ] 모달 ID 생성 로직이 구현됨
+- [x] `useModal` 훅이 구현됨
+- [x] `openModal`, `closeModal`, `closeAll` 함수가 구현됨
+- [x] 모달 ID 생성 로직이 구현됨
 
 ---
 
@@ -843,10 +843,10 @@
 - `src/commons/providers/modal-provider/index.tsx`
 
 **완료 기준**:
-- [ ] ModalProvider 컴포넌트가 구현됨
-- [ ] 여러 모달이 동시에 표시될 수 있음
-- [ ] z-index가 올바르게 관리됨
-- [ ] 포커스 트랩이 작동함
+- [x] ModalProvider 컴포넌트가 구현됨
+- [x] 여러 모달이 동시에 표시될 수 있음
+- [x] z-index가 올바르게 관리됨
+- [x] 포커스 트랩이 작동함
 
 ---
 
@@ -863,9 +863,9 @@
 - `src/commons/providers/index.tsx`
 
 **완료 기준**:
-- [ ] `@/commons/providers`로 ModalProvider import 가능
-- [ ] `useModal` 훅도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/providers`로 ModalProvider import 가능
+- [x] `useModal` 훅도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -886,8 +886,8 @@
 - `src/commons/providers/toast-provider/toast-context.tsx`
 
 **완료 기준**:
-- [ ] ToastContext가 생성됨
-- [ ] 토스트 큐 상태 관리 로직이 구현됨
+- [x] ToastContext가 생성됨
+- [x] 토스트 큐 상태 관리 로직이 구현됨
 
 ---
 
@@ -908,10 +908,10 @@
 - `src/commons/providers/toast-provider/use-toast.ts`
 
 **완료 기준**:
-- [ ] `useToast` 훅이 구현됨
-- [ ] `showToast`, `removeToast` 함수가 구현됨
-- [ ] 토스트 ID 생성 로직이 구현됨
-- [ ] 자동 사라짐 타이머 관리 로직이 구현됨
+- [x] `useToast` 훅이 구현됨
+- [x] `showToast`, `removeToast` 함수가 구현됨
+- [x] 토스트 ID 생성 로직이 구현됨
+- [x] 자동 사라짐 타이머 관리 로직이 구현됨
 
 ---
 
@@ -931,10 +931,10 @@
 - `src/commons/providers/toast-provider/index.tsx`
 
 **완료 기준**:
-- [ ] ToastProvider 컴포넌트가 구현됨
-- [ ] 여러 토스트가 순차적으로 표시됨
-- [ ] 토스트 간 겹침이 없음
-- [ ] 자동 사라짐 기능이 정상 작동함
+- [x] ToastProvider 컴포넌트가 구현됨
+- [x] 여러 토스트가 순차적으로 표시됨
+- [x] 토스트 간 겹침이 없음
+- [x] 자동 사라짐 기능이 정상 작동함
 
 ---
 
@@ -951,9 +951,9 @@
 - `src/commons/providers/index.tsx`
 
 **완료 기준**:
-- [ ] `@/commons/providers`로 ToastProvider import 가능
-- [ ] `useToast` 훅도 export됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/providers`로 ToastProvider import 가능
+- [x] `useToast` 훅도 export됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -974,9 +974,9 @@
 - `src/app/layout.tsx`
 
 **완료 기준**:
-- [ ] 모든 프로바이더가 통합됨
-- [ ] 앱 레이아웃에 프로바이더가 마운트됨
-- [ ] 프로바이더가 정상적으로 작동함
+- [x] 모든 프로바이더가 통합됨
+- [x] 앱 레이아웃에 프로바이더가 마운트됨
+- [x] 프로바이더가 정상적으로 작동함
 
 ---
 
@@ -999,9 +999,9 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] 미리보기 페이지 기본 구조가 생성됨
-- [ ] 모든 컴포넌트가 import됨
-- [ ] 섹션별 구조가 생성됨
+- [x] 미리보기 페이지 기본 구조가 생성됨
+- [x] 모든 컴포넌트가 import됨
+- [x] 섹션별 구조가 생성됨
 
 ---
 
@@ -1021,9 +1021,9 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] Button 섹션이 표시됨
-- [ ] 모든 variant와 size가 표시됨
-- [ ] disabled, loading 상태가 표시됨
+- [x] Button 섹션이 표시됨
+- [x] 모든 variant와 size가 표시됨
+- [x] disabled, loading 상태가 표시됨
 
 ---
 
@@ -1041,8 +1041,8 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] DualButton 섹션이 표시됨
-- [ ] 다양한 조합이 표시됨
+- [x] DualButton 섹션이 표시됨
+- [x] 다양한 조합이 표시됨
 
 ---
 
@@ -1060,8 +1060,8 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] Spinner 섹션이 표시됨
-- [ ] 모든 size가 표시됨
+- [x] Spinner 섹션이 표시됨
+- [x] 모든 size가 표시됨
 
 ---
 
@@ -1080,9 +1080,9 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] BottomSheet 섹션이 표시됨
-- [ ] 트리거 버튼이 작동함
-- [ ] BottomSheet가 정상적으로 열리고 닫힘
+- [x] BottomSheet 섹션이 표시됨
+- [x] 트리거 버튼이 작동함
+- [x] BottomSheet가 정상적으로 열리고 닫힘
 
 ---
 
@@ -1100,8 +1100,8 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] TimecapsuleHeader 섹션이 표시됨
-- [ ] 컴포넌트가 정상적으로 렌더링됨
+- [x] TimecapsuleHeader 섹션이 표시됨
+- [x] 컴포넌트가 정상적으로 렌더링됨
 
 ---
 
@@ -1121,10 +1121,10 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] Modal 섹션이 표시됨
-- [ ] 트리거 버튼이 작동함
-- [ ] Modal이 정상적으로 열리고 닫힘
-- [ ] 여러 Modal이 동시에 열릴 수 있음
+- [x] Modal 섹션이 표시됨
+- [x] 트리거 버튼이 작동함
+- [x] Modal이 정상적으로 열리고 닫힘
+- [x] 여러 Modal이 동시에 열릴 수 있음
 
 ---
 
@@ -1144,10 +1144,10 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] Toast 섹션이 표시됨
-- [ ] 모든 타입별 트리거 버튼이 작동함
-- [ ] Toast가 정상적으로 표시되고 사라짐
-- [ ] 여러 Toast가 순차적으로 표시됨
+- [x] Toast 섹션이 표시됨
+- [x] 모든 타입별 트리거 버튼이 작동함
+- [x] Toast가 정상적으로 표시되고 사라짐
+- [x] 여러 Toast가 순차적으로 표시됨
 
 ---
 
@@ -1165,8 +1165,8 @@
 4. TypeScript 컴파일 에러 확인
 
 **완료 기준**:
-- [ ] 모든 컴포넌트의 타입 정의가 완료됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] 모든 컴포넌트의 타입 정의가 완료됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -1185,9 +1185,9 @@
 - `src/commons/components/index.ts`
 
 **완료 기준**:
-- [ ] 모든 컴포넌트가 export됨
-- [ ] 모든 타입이 export됨
-- [ ] `@/commons/components`로 모든 컴포넌트 import 가능
+- [x] 모든 컴포넌트가 export됨
+- [x] 모든 타입이 export됨
+- [x] `@/commons/components`로 모든 컴포넌트 import 가능
 
 ---
 
@@ -1206,9 +1206,9 @@
 - `src/commons/providers/index.tsx`
 
 **완료 기준**:
-- [ ] 모든 프로바이더가 export됨
-- [ ] 모든 훅이 export됨
-- [ ] `@/commons/providers`로 모든 프로바이더 import 가능
+- [x] 모든 프로바이더가 export됨
+- [x] 모든 훅이 export됨
+- [x] `@/commons/providers`로 모든 프로바이더 import 가능
 
 ---
 
@@ -1227,9 +1227,9 @@
 5. 소수점 값 반올림 확인
 
 **완료 기준**:
-- [ ] 모든 컴포넌트가 디자인 토큰을 사용함
-- [ ] 하드코딩된 값이 없음
-- [ ] Figma 디자인과 일치함
+- [x] 모든 컴포넌트가 디자인 토큰을 사용함
+- [x] 하드코딩된 값이 없음
+- [x] Figma 디자인과 일치함
 
 ---
 
@@ -1245,8 +1245,8 @@
 4. 모든 컴포넌트의 크기, 간격, 색상, 스타일이 정확히 일치하는지 확인
 
 **완료 기준**:
-- [ ] 모든 컴포넌트가 Figma 디자인과 100% 일치함
-- [ ] 차이점이 없음
+- [x] 모든 컴포넌트가 Figma 디자인과 100% 일치함
+- [x] 차이점이 없음
 
 ---
 

@@ -1,0 +1,109 @@
+/**
+ * Modal 컴포넌트 스타일
+ * 디자인 토큰: src/commons/styles
+ * - Colors: 색상 팔레트
+ * - Spacing: 간격 토큰
+ * - BorderRadius: 반경 토큰
+ * - Typography: 타이포그래피 스타일
+ */
+
+/* 뒷배경 (Backdrop) 스타일 */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: color-mix(in srgb, var(--color-black-500) 60%, transparent); /* Colors.black[500] with 60% opacity */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Backdrop 클릭 영역 */
+.backdropPressable {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 모달 컨테이너 스타일 */
+.modalContainer {
+  position: relative;
+  background-color: var(--color-white-500); /* Colors.white[500] */
+  border-radius: var(--radius-2xl); /* 24px */
+  border: 1px solid var(--color-white-500); /* Colors.white[500] */
+  box-shadow: 0 4px var(--spacing-md) color-mix(in srgb, var(--color-black-500) 15%, transparent); /* 0 4px 12px Colors.black[500] with 15% opacity */
+  max-width: 90%;
+  max-height: 90%;
+  overflow: hidden;
+  z-index: 10000; /* Backdrop보다 높게 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 모달 컨테이너 absolute 위치 스타일 */
+.modalContainerAbsolute {
+  position: absolute;
+  align-self: center;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+
+/* 애니메이션 클래스 */
+.animateEnter {
+  animation: fadeIn 0.1s ease-in-out, slideInUp 0.15s ease-out;
+}
+
+.animateExit {
+  animation: fadeOut 0.1s ease-in-out, slideOutDown 0.1s ease-in;
+}
+
+/* 애니메이션 비활성화 */
+.noAnimation {
+  animation: none;
+}

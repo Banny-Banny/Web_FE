@@ -7,7 +7,7 @@
 .container {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-md); /* Spacing.md = 1rem = 16px */
+  gap: var(--spacing-md); /* Spacing.md = 0.75rem = 12px */
 }
 
 .button {

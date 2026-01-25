@@ -42,10 +42,10 @@
 /* 버튼 텍스트 */
 .text {
   font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  font-size: 18px; /* Typography.body.body1.fontSize */
-  line-height: 28px; /* Typography.body.body1.lineHeight */
-  font-weight: 700; /* FontWeight.bold */
-  letter-spacing: -0.44px; /* 소수점 반올림 */
+  font-size: var(--font-size-lg); /* Typography.caption.button.fontSize = 18px */
+  line-height: 28px; /* Typography.caption.button.lineHeight (CSS 변수 없음) */
+  font-weight: var(--font-weight-bold); /* Typography.caption.button.fontWeight */
+  letter-spacing: -0.44px; /* Typography.caption.button.letterSpacing 소수점 반올림 (CSS 변수 없음) */
 }
 
 /* ============================================================================

@@ -1,0 +1,120 @@
+/**
+ * Toast 컴포넌트 스타일
+ * 디자인 토큰: src/commons/styles
+ * - Colors: 색상 팔레트
+ * - Spacing: 간격 토큰
+ * - BorderRadius: 반경 토큰
+ * - Typography: 타이포그래피 스타일
+ */
+
+/* Toast 컨테이너 (외부) */
+.container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: none;
+  padding: 0 var(--spacing-lg); /* 24px */
+}
+
+/* 하단 위치 */
+.containerBottom {
+  bottom: 60px;
+}
+
+/* 상단 위치 */
+.containerTop {
+  top: 60px;
+}
+
+/* Toast 메시지 박스 */
+.toast {
+  padding-left: var(--spacing-lg); /* 20px */
+  padding-right: var(--spacing-lg); /* 20px */
+  padding-top: var(--spacing-md); /* Spacing.md = 0.75rem = 12px */
+  padding-bottom: var(--spacing-md); /* Spacing.md = 0.75rem = 12px */
+  border-radius: var(--radius-md); /* 8px */
+  max-width: 90%;
+  min-width: 200px;
+  box-shadow: 0 4px var(--spacing-md) color-mix(in srgb, var(--color-black-500) 15%, transparent); /* 0 4px 12px Colors.black[500] with 15% opacity */
+}
+
+/* 타입별 배경색 */
+.typeSuccess {
+  background-color: var(--color-green-500); /* Colors.green[500] */
+}
+
+.typeError {
+  background-color: var(--color-red-500); /* Colors.red[500] */
+}
+
+.typeInfo {
+  background-color: var(--color-blue-500); /* Colors.blue[500] */
+}
+
+.typeWarning {
+  background-color: var(--color-yellow-500); /* Colors.yellow[500] */
+}
+
+/* 기본 타입 (info와 동일) */
+.typeDefault {
+  background-color: var(--color-black-500); /* Colors.black[500] */
+}
+
+/* 메시지 텍스트 */
+.message {
+  color: var(--color-white-500); /* Colors.white[500] */
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  word-break: break-word;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(50px);
+  }
+}
+
+/* 애니메이션 클래스 */
+.animateEnter {
+  animation: fadeIn 0.3s ease-in-out, slideUp 0.3s ease-in-out;
+}
+
+.animateExit {
+  animation: fadeOut 0.3s ease-in-out, slideDown 0.3s ease-in-out;
+}
