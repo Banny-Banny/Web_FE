@@ -1,0 +1,211 @@
+/**
+ * API 엔드포인트 상수 관리
+ * 모든 API 엔드포인트를 중앙에서 관리합니다.
+ */
+
+/**
+ * API 버전
+ */
+export const API_VERSION = 'v1';
+
+/**
+ * 기본 API 경로
+ */
+export const BASE_PATHS = {
+  API: `/api/${API_VERSION}`,
+  AUTH: `/api/${API_VERSION}/auth`,
+  USER: `/api/${API_VERSION}/users`,
+  ADMIN: `/api/${API_VERSION}/admin`,
+} as const;
+
+/**
+ * 인증 관련 엔드포인트
+ */
+export const AUTH_ENDPOINTS = {
+  // 로그인/로그아웃
+  LOGIN: `${BASE_PATHS.AUTH}/login`,
+  LOGOUT: `${BASE_PATHS.AUTH}/logout`,
+  REFRESH: `${BASE_PATHS.AUTH}/refresh`,
+  
+  // 회원가입
+  SIGNUP: `${BASE_PATHS.AUTH}/signup`,
+  VERIFY_EMAIL: `${BASE_PATHS.AUTH}/verify-email`,
+  RESEND_VERIFICATION: `${BASE_PATHS.AUTH}/resend-verification`,
+  
+  // 비밀번호 관리
+  FORGOT_PASSWORD: `${BASE_PATHS.AUTH}/forgot-password`,
+  RESET_PASSWORD: `${BASE_PATHS.AUTH}/reset-password`,
+  CHANGE_PASSWORD: `${BASE_PATHS.AUTH}/change-password`,
+  
+  // 프로필 관리
+  PROFILE: `${BASE_PATHS.AUTH}/profile`,
+  UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
+  DELETE_ACCOUNT: `${BASE_PATHS.AUTH}/delete-account`,
+} as const;
+
+/**
+ * 사용자 관련 엔드포인트
+ */
+export const USER_ENDPOINTS = {
+  // 사용자 목록 및 상세
+  LIST: BASE_PATHS.USER,
+  DETAIL: (id: string) => `${BASE_PATHS.USER}/${id}`,
+  
+  // 사용자 관리
+  CREATE: BASE_PATHS.USER,
+  UPDATE: (id: string) => `${BASE_PATHS.USER}/${id}`,
+  DELETE: (id: string) => `${BASE_PATHS.USER}/${id}`,
+  
+  // 사용자 검색
+  SEARCH: `${BASE_PATHS.USER}/search`,
+  
+  // 프로필 이미지
+  UPLOAD_AVATAR: (id: string) => `${BASE_PATHS.USER}/${id}/avatar`,
+  DELETE_AVATAR: (id: string) => `${BASE_PATHS.USER}/${id}/avatar`,
+} as const;
+
+/**
+ * TimeEgg 관련 엔드포인트 (추후 구체적인 기능에 따라 확장)
+ */
+export const TIMEEGG_ENDPOINTS = {
+  // 타임캡슐 관련
+  CAPSULES: `${BASE_PATHS.API}/capsules`,
+  CAPSULE_DETAIL: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  CREATE_CAPSULE: `${BASE_PATHS.API}/capsules`,
+  UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  
+  // 위치 관련
+  LOCATIONS: `${BASE_PATHS.API}/locations`,
+  NEARBY_LOCATIONS: `${BASE_PATHS.API}/locations/nearby`,
+  
+  // 친구 관련
+  FRIENDS: `${BASE_PATHS.API}/friends`,
+  FRIEND_REQUESTS: `${BASE_PATHS.API}/friends/requests`,
+  SEND_FRIEND_REQUEST: `${BASE_PATHS.API}/friends/request`,
+  ACCEPT_FRIEND_REQUEST: (id: string) => `${BASE_PATHS.API}/friends/requests/${id}/accept`,
+  REJECT_FRIEND_REQUEST: (id: string) => `${BASE_PATHS.API}/friends/requests/${id}/reject`,
+  
+  // 알림 관련
+  NOTIFICATIONS: `${BASE_PATHS.API}/notifications`,
+  MARK_NOTIFICATION_READ: (id: string) => `${BASE_PATHS.API}/notifications/${id}/read`,
+  MARK_ALL_READ: `${BASE_PATHS.API}/notifications/read-all`,
+} as const;
+
+/**
+ * 관리자 관련 엔드포인트
+ */
+export const ADMIN_ENDPOINTS = {
+  // 대시보드
+  DASHBOARD: `${BASE_PATHS.ADMIN}/dashboard`,
+  STATISTICS: `${BASE_PATHS.ADMIN}/statistics`,
+  
+  // 사용자 관리
+  USERS: `${BASE_PATHS.ADMIN}/users`,
+  USER_DETAIL: (id: string) => `${BASE_PATHS.ADMIN}/users/${id}`,
+  SUSPEND_USER: (id: string) => `${BASE_PATHS.ADMIN}/users/${id}/suspend`,
+  ACTIVATE_USER: (id: string) => `${BASE_PATHS.ADMIN}/users/${id}/activate`,
+  
+  // 컨텐츠 관리
+  CONTENT_MODERATION: `${BASE_PATHS.ADMIN}/content`,
+  REPORTED_CONTENT: `${BASE_PATHS.ADMIN}/content/reported`,
+  
+  // 시스템 설정
+  SETTINGS: `${BASE_PATHS.ADMIN}/settings`,
+  UPDATE_SETTINGS: `${BASE_PATHS.ADMIN}/settings`,
+} as const;
+
+/**
+ * 파일 업로드 관련 엔드포인트
+ */
+export const UPLOAD_ENDPOINTS = {
+  // 이미지 업로드
+  IMAGE: `${BASE_PATHS.API}/upload/image`,
+  IMAGES: `${BASE_PATHS.API}/upload/images`,
+  
+  // 파일 업로드
+  FILE: `${BASE_PATHS.API}/upload/file`,
+  FILES: `${BASE_PATHS.API}/upload/files`,
+  
+  // 프로필 이미지
+  AVATAR: `${BASE_PATHS.API}/upload/avatar`,
+  
+  // 임시 업로드 (미리보기용)
+  TEMP: `${BASE_PATHS.API}/upload/temp`,
+} as const;
+
+/**
+ * 외부 서비스 연동 엔드포인트
+ */
+export const EXTERNAL_ENDPOINTS = {
+  // 소셜 로그인
+  GOOGLE_LOGIN: `${BASE_PATHS.AUTH}/google`,
+  KAKAO_LOGIN: `${BASE_PATHS.AUTH}/kakao`,
+  NAVER_LOGIN: `${BASE_PATHS.AUTH}/naver`,
+  
+  // 지도 서비스
+  GEOCODING: `${BASE_PATHS.API}/external/geocoding`,
+  REVERSE_GEOCODING: `${BASE_PATHS.API}/external/reverse-geocoding`,
+  
+  // 푸시 알림
+  REGISTER_PUSH_TOKEN: `${BASE_PATHS.API}/push/register`,
+  UNREGISTER_PUSH_TOKEN: `${BASE_PATHS.API}/push/unregister`,
+} as const;
+
+/**
+ * 모든 엔드포인트를 통합한 객체
+ */
+export const ENDPOINTS = {
+  AUTH: AUTH_ENDPOINTS,
+  USER: USER_ENDPOINTS,
+  TIMEEGG: TIMEEGG_ENDPOINTS,
+  ADMIN: ADMIN_ENDPOINTS,
+  UPLOAD: UPLOAD_ENDPOINTS,
+  EXTERNAL: EXTERNAL_ENDPOINTS,
+} as const;
+
+/**
+ * 엔드포인트 타입
+ */
+export type EndpointType = typeof ENDPOINTS;
+
+/**
+ * 동적 경로 생성 헬퍼 함수
+ */
+export const createEndpoint = {
+  /**
+   * 쿼리 파라미터를 포함한 URL 생성
+   */
+  withQuery: (endpoint: string, params: Record<string, string | number | boolean>) => {
+    const queryString = new URLSearchParams(
+      Object.entries(params).reduce((acc, [key, value]) => {
+        acc[key] = String(value);
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString();
+    
+    return `${endpoint}${queryString ? `?${queryString}` : ''}`;
+  },
+  
+  /**
+   * 페이지네이션 파라미터를 포함한 URL 생성
+   */
+  withPagination: (endpoint: string, page: number = 1, limit: number = 20) => {
+    return createEndpoint.withQuery(endpoint, { page, limit });
+  },
+  
+  /**
+   * 정렬 파라미터를 포함한 URL 생성
+   */
+  withSort: (endpoint: string, sortBy: string, order: 'asc' | 'desc' = 'desc') => {
+    return createEndpoint.withQuery(endpoint, { sortBy, order });
+  },
+  
+  /**
+   * 검색 파라미터를 포함한 URL 생성
+   */
+  withSearch: (endpoint: string, query: string, filters?: Record<string, any>) => {
+    const params = { q: query, ...filters };
+    return createEndpoint.withQuery(endpoint, params);
+  },
+};

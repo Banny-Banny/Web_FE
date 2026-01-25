@@ -1,26 +1,205 @@
 @import "tailwindcss";
 
 :root {
+  /* Base Colors */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0A0A0A;
+
+  /* White 팔레트 */
+  --color-white-50: #FFFFFF;
+  --color-white-100: #FDFDFD;
+  --color-white-200: #FDFDFD;
+  --color-white-300: #FCFCFC;
+  --color-white-400: #FBFBFB;
+  --color-white-500: #FAFAFA;
+  --color-white-600: #E4E4E4;
+  --color-white-700: #B2B2B2;
+  --color-white-800: #8A8A8A;
+  --color-white-900: #696969;
+  --color-white-950: #696969;
+
+  /* White Grey 팔레트 */
+  --color-white-grey-50: #FCFCFC;
+  --color-white-grey-100: #F7F7F7;
+  --color-white-grey-200: #F3F3F3;
+  --color-white-grey-300: #EDEDED;
+  --color-white-grey-400: #E9E9E9;
+  --color-white-grey-500: #E4E4E4;
+  --color-white-grey-600: #CFCFCF;
+  --color-white-grey-700: #A2A2A2;
+  --color-white-grey-800: #7D7D7D;
+  --color-white-grey-900: #606060;
+  --color-white-grey-950: #606060;
+
+  /* Grey 팔레트 */
+  --color-grey-50: #F7F7F7;
+  --color-grey-100: #E7E7E7;
+  --color-grey-200: #DCDCDC;
+  --color-grey-300: #CBCBCB;
+  --color-grey-400: #C1C1C1;
+  --color-grey-500: #B2B2B2;
+  --color-grey-600: #A2A2A2;
+  --color-grey-700: #7E7E7E;
+  --color-grey-800: #626262;
+  --color-grey-900: #4B4B4B;
+  --color-grey-950: #4B4B4B;
+
+  /* Dark Grey 팔레트 */
+  --color-dark-grey-50: #F0F0F0;
+  --color-dark-grey-100: #D1D1D1;
+  --color-dark-grey-200: #BABABA;
+  --color-dark-grey-300: #9B9B9B;
+  --color-dark-grey-400: #878787;
+  --color-dark-grey-500: #696969;
+  --color-dark-grey-600: #606060;
+  --color-dark-grey-700: #4B4B4B;
+  --color-dark-grey-800: #3A3A3A;
+  --color-dark-grey-900: #2C2C2C;
+  --color-dark-grey-950: #2C2C2C;
+
+  /* Light Black 팔레트 */
+  --color-light-black-50: #EBEBEB;
+  --color-light-black-100: #C2C2C2;
+  --color-light-black-200: #A4A4A4;
+  --color-light-black-300: #7B7B7B;
+  --color-light-black-400: #616161;
+  --color-light-black-500: #3A3A3A;
+  --color-light-black-600: #353535;
+  --color-light-black-700: #292929;
+  --color-light-black-800: #202020;
+  --color-light-black-900: #181818;
+  --color-light-black-950: #181818;
+
+  /* Black 팔레트 */
+  --color-black-50: #E7E7E7;
+  --color-black-100: #B3B3B3;
+  --color-black-200: #8E8E8E;
+  --color-black-300: #5B5B5B;
+  --color-black-400: #3B3B3B;
+  --color-black-500: #0A0A0A;
+  --color-black-600: #090909;
+  --color-black-700: #070707;
+  --color-black-800: #060606;
+  --color-black-900: #040404;
+  --color-black-950: #040404;
+
+  /* Red 팔레트 (포인트 색상) */
+  --color-red-50: #FFEEEF;
+  --color-red-100: #FFE5E6;
+  --color-red-200: #FFC9CC;
+  --color-red-500: #FF515A;
+  --color-red-600: #E64951;
+  --color-red-700: #CC4148;
+  --color-red-800: #BF3D44;
+  --color-red-900: #993136;
+  --color-red-950: #732428;
+
+  /* Green 팔레트 (포인트 색상) */
+  --color-green-50: #E6F6EC;
+  --color-green-100: #D9F2E2;
+  --color-green-200: #B1E3C3;
+  --color-green-500: #02A63E;
+  --color-green-600: #029538;
+  --color-green-700: #028532;
+  --color-green-800: #027D2F;
+  --color-green-900: #016425;
+  --color-green-950: #014B1C;
+
+  /* Blue 팔레트 (포인트 색상) */
+  --color-blue-50: #E9EEFB;
+  --color-blue-100: #DDE6FA;
+  --color-blue-200: #BACCF4;
+  --color-blue-500: #1F59DB;
+  --color-blue-600: #1C50C5;
+  --color-blue-700: #1947AF;
+  --color-blue-800: #1743A4;
+  --color-blue-900: #133583;
+  --color-blue-950: #0E2863;
+
+  /* Yellow 팔레트 (진행중 상태) */
+  --color-yellow-50: #FFF9E6;
+  --color-yellow-100: #FFF4D9;
+  --color-yellow-200: #FFE9B3;
+  --color-yellow-500: #FFC107;
+  --color-yellow-600: #E6AE06;
+  --color-yellow-700: #CC9B05;
+  --color-yellow-800: #BF9205;
+  --color-yellow-900: #997504;
+  --color-yellow-950: #735803;
+
+  /* Border Colors */
+  --color-border-light: rgba(10, 10, 10, 0.08);
+  --color-border-lighter: rgba(10, 10, 10, 0.06);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  --spacing-3xl: 4rem;     /* 64px */
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+
+  --font-weight-thin: 100;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-pretendard);
+  --font-mono: var(--font-dunggeunmo);
+  --font-display: var(--font-thin-dunggeunmo);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Dark mode color adjustments */
+    --color-gray-50: #111827;
+    --color-gray-100: #1f2937;
+    --color-gray-200: #374151;
+    --color-gray-300: #4b5563;
+    --color-gray-400: #6b7280;
+    --color-gray-500: #9ca3af;
+    --color-gray-600: #d1d5db;
+    --color-gray-700: #e5e7eb;
+    --color-gray-800: #f3f4f6;
+    --color-gray-900: #f9fafb;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }

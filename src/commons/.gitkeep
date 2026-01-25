@@ -1,6 +1,0 @@
-# Design System - Reusable "Dumb" UI components
-# 구조:
-# commons/
-#   ├── layout/          # Global layouts (Tabs, Providers)
-#   ├── components/      # Atomic UI (Buttons, Cards, Inputs)
-#   └── constants/       # Design tokens (Colors, Fonts)

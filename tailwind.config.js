@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-// TODO: 호스트에서 선언된 색상 토큰값 변수를 임포트하여 사용해야 합니다.
-// 규칙: FE/tailwind.config.js 반드시 호스트에서 먼저 선언된 색상 토큰값 변수로 임포트하여 스타일을 적용할 것. 중복선언금지.
+/**
+ * Tailwind CSS 설정
+ * 규칙: globals.css에서 먼저 선언된 CSS 변수를 참조하여 사용
+ * 중복 선언 금지 - 모든 색상은 CSS 변수로 정의되어 있음
+ */
 
 module.exports = {
   content: [
@@ -11,10 +14,184 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // TODO: 호스트의 색상 토큰을 임포트하여 사용
-      // colors: {
-      //   // 호스트에서 선언된 색상 토큰 임포트 필요
-      // },
+      // CSS 변수를 참조하는 색상 설정 (Figma 디자인 시스템)
+      colors: {
+        white: {
+          50: 'var(--color-white-50)',
+          100: 'var(--color-white-100)',
+          200: 'var(--color-white-200)',
+          300: 'var(--color-white-300)',
+          400: 'var(--color-white-400)',
+          500: 'var(--color-white-500)',
+          600: 'var(--color-white-600)',
+          700: 'var(--color-white-700)',
+          800: 'var(--color-white-800)',
+          900: 'var(--color-white-900)',
+          950: 'var(--color-white-950)',
+        },
+        whiteGrey: {
+          50: 'var(--color-white-grey-50)',
+          100: 'var(--color-white-grey-100)',
+          200: 'var(--color-white-grey-200)',
+          300: 'var(--color-white-grey-300)',
+          400: 'var(--color-white-grey-400)',
+          500: 'var(--color-white-grey-500)',
+          600: 'var(--color-white-grey-600)',
+          700: 'var(--color-white-grey-700)',
+          800: 'var(--color-white-grey-800)',
+          900: 'var(--color-white-grey-900)',
+          950: 'var(--color-white-grey-950)',
+        },
+        grey: {
+          50: 'var(--color-grey-50)',
+          100: 'var(--color-grey-100)',
+          200: 'var(--color-grey-200)',
+          300: 'var(--color-grey-300)',
+          400: 'var(--color-grey-400)',
+          500: 'var(--color-grey-500)',
+          600: 'var(--color-grey-600)',
+          700: 'var(--color-grey-700)',
+          800: 'var(--color-grey-800)',
+          900: 'var(--color-grey-900)',
+          950: 'var(--color-grey-950)',
+        },
+        darkGrey: {
+          50: 'var(--color-dark-grey-50)',
+          100: 'var(--color-dark-grey-100)',
+          200: 'var(--color-dark-grey-200)',
+          300: 'var(--color-dark-grey-300)',
+          400: 'var(--color-dark-grey-400)',
+          500: 'var(--color-dark-grey-500)',
+          600: 'var(--color-dark-grey-600)',
+          700: 'var(--color-dark-grey-700)',
+          800: 'var(--color-dark-grey-800)',
+          900: 'var(--color-dark-grey-900)',
+          950: 'var(--color-dark-grey-950)',
+        },
+        lightBlack: {
+          50: 'var(--color-light-black-50)',
+          100: 'var(--color-light-black-100)',
+          200: 'var(--color-light-black-200)',
+          300: 'var(--color-light-black-300)',
+          400: 'var(--color-light-black-400)',
+          500: 'var(--color-light-black-500)',
+          600: 'var(--color-light-black-600)',
+          700: 'var(--color-light-black-700)',
+          800: 'var(--color-light-black-800)',
+          900: 'var(--color-light-black-900)',
+          950: 'var(--color-light-black-950)',
+        },
+        black: {
+          50: 'var(--color-black-50)',
+          100: 'var(--color-black-100)',
+          200: 'var(--color-black-200)',
+          300: 'var(--color-black-300)',
+          400: 'var(--color-black-400)',
+          500: 'var(--color-black-500)',
+          600: 'var(--color-black-600)',
+          700: 'var(--color-black-700)',
+          800: 'var(--color-black-800)',
+          900: 'var(--color-black-900)',
+          950: 'var(--color-black-950)',
+        },
+        red: {
+          50: 'var(--color-red-50)',
+          100: 'var(--color-red-100)',
+          200: 'var(--color-red-200)',
+          500: 'var(--color-red-500)',
+          600: 'var(--color-red-600)',
+          700: 'var(--color-red-700)',
+          800: 'var(--color-red-800)',
+          900: 'var(--color-red-900)',
+          950: 'var(--color-red-950)',
+        },
+        green: {
+          50: 'var(--color-green-50)',
+          100: 'var(--color-green-100)',
+          200: 'var(--color-green-200)',
+          500: 'var(--color-green-500)',
+          600: 'var(--color-green-600)',
+          700: 'var(--color-green-700)',
+          800: 'var(--color-green-800)',
+          900: 'var(--color-green-900)',
+          950: 'var(--color-green-950)',
+        },
+        blue: {
+          50: 'var(--color-blue-50)',
+          100: 'var(--color-blue-100)',
+          200: 'var(--color-blue-200)',
+          500: 'var(--color-blue-500)',
+          600: 'var(--color-blue-600)',
+          700: 'var(--color-blue-700)',
+          800: 'var(--color-blue-800)',
+          900: 'var(--color-blue-900)',
+          950: 'var(--color-blue-950)',
+        },
+        yellow: {
+          50: 'var(--color-yellow-50)',
+          100: 'var(--color-yellow-100)',
+          200: 'var(--color-yellow-200)',
+          500: 'var(--color-yellow-500)',
+          600: 'var(--color-yellow-600)',
+          700: 'var(--color-yellow-700)',
+          800: 'var(--color-yellow-800)',
+          900: 'var(--color-yellow-900)',
+          950: 'var(--color-yellow-950)',
+        },
+        border: {
+          light: 'var(--color-border-light)',
+          lighter: 'var(--color-border-lighter)',
+        },
+      },
+      // CSS 변수를 참조하는 간격 설정
+      spacing: {
+        xs: 'var(--spacing-xs)',
+        sm: 'var(--spacing-sm)',
+        md: 'var(--spacing-md)',
+        lg: 'var(--spacing-lg)',
+        xl: 'var(--spacing-xl)',
+        '2xl': 'var(--spacing-2xl)',
+        '3xl': 'var(--spacing-3xl)',
+      },
+      // CSS 변수를 참조하는 border radius 설정
+      borderRadius: {
+        sm: 'var(--radius-sm)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)',
+        full: 'var(--radius-full)',
+      },
+      // CSS 변수를 참조하는 폰트 설정
+      fontFamily: {
+        pretendard: 'var(--font-pretendard)',
+        dunggeunmo: 'var(--font-dunggeunmo)',
+        'thin-dunggeunmo': 'var(--font-thin-dunggeunmo)',
+      },
+      fontSize: {
+        xs: 'var(--font-size-xs)',
+        sm: 'var(--font-size-sm)',
+        base: 'var(--font-size-base)',
+        lg: 'var(--font-size-lg)',
+        xl: 'var(--font-size-xl)',
+        '2xl': 'var(--font-size-2xl)',
+        '3xl': 'var(--font-size-3xl)',
+        '4xl': 'var(--font-size-4xl)',
+      },
+      fontWeight: {
+        thin: 'var(--font-weight-thin)',
+        light: 'var(--font-weight-light)',
+        normal: 'var(--font-weight-normal)',
+        medium: 'var(--font-weight-medium)',
+        semibold: 'var(--font-weight-semibold)',
+        bold: 'var(--font-weight-bold)',
+        extrabold: 'var(--font-weight-extrabold)',
+        black: 'var(--font-weight-black)',
+      },
+      lineHeight: {
+        tight: 'var(--line-height-tight)',
+        normal: 'var(--line-height-normal)',
+        relaxed: 'var(--line-height-relaxed)',
+      },
     },
   },
   plugins: [],
