@@ -15,10 +15,27 @@ import type { SpinnerProps } from './types';
 /**
  * Spinner 컴포넌트
  * 
+ * 로딩 상태를 표시하는 스피너 컴포넌트입니다.
+ * 
+ * @param {SpinnerProps} props - Spinner 컴포넌트의 props
+ * @param {'small' | 'large'} [props.size='large'] - 스피너 크기
+ * @param {string} [props.color] - 스피너 색상 (기본값: blue-500)
+ * @param {boolean} [props.fullScreen=false] - 전체 화면 오버레이 표시 여부
+ * @param {string} [props.className] - 추가 CSS 클래스명
+ * 
  * @example
  * ```tsx
- * <Spinner size="large" color="#007AFF" />
- * <Spinner size="small" fullScreen={true} />
+ * // 기본 사용
+ * <Spinner size="large" />
+ * 
+ * // 작은 스피너
+ * <Spinner size="small" />
+ * 
+ * // 커스텀 색상
+ * <Spinner size="large" color="#FF0000" />
+ * 
+ * // 전체 화면 오버레이
+ * {isLoading && <Spinner size="large" fullScreen={true} />}
  * ```
  */
 export const Spinner = React.memo(function Spinner({ 

@@ -29,6 +29,40 @@ import type { BottomSheetProps } from './types';
 
 /**
  * BottomSheet 컴포넌트
+ * 
+ * 하단에서 올라오는 바텀시트 컴포넌트입니다.
+ * 모바일 UI 패턴에 적합하며, 선택지나 추가 정보를 표시할 때 사용됩니다.
+ * 
+ * @param {BottomSheetProps} props - BottomSheet 컴포넌트의 props
+ * @param {boolean} props.isOpen - 바텀시트 표시 여부
+ * @param {() => void} props.onClose - 바텀시트 닫기 핸들러
+ * @param {ReactNode} props.children - 바텀시트 내부 컨텐츠
+ * @param {ReactNode} [props.footer] - 하단 고정 영역 (주로 버튼)
+ * @param {boolean} [props.showHandle=true] - 드래그 핸들 표시 여부
+ * @param {boolean} [props.closeOnBackdropPress=true] - 오버레이 클릭 시 닫기 여부
+ * 
+ * @example
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false);
+ * 
+ * <BottomSheet
+ *   isOpen={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ *   footer={
+ *     <DualButton
+ *       cancelLabel="취소"
+ *       confirmLabel="확인"
+ *       onCancelPress={() => setIsOpen(false)}
+ *       onConfirmPress={handleConfirm}
+ *     />
+ *   }
+ * >
+ *   <div>
+ *     <h3>바텀시트 제목</h3>
+ *     <p>바텀시트 내용</p>
+ *   </div>
+ * </BottomSheet>
+ * ```
  */
 export function BottomSheet({
   isOpen,

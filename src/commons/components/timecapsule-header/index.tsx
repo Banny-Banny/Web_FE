@@ -40,6 +40,47 @@ import type { TimeCapsuleHeaderProps, HeaderIconName } from './types';
 
 /**
  * TimeCapsuleHeader 컴포넌트
+ * 
+ * 타임캡슐 관련 페이지에서 사용하는 공통 헤더 컴포넌트입니다.
+ * 뒤로가기 버튼, 제목, 오른쪽 아이콘 버튼들을 포함할 수 있습니다.
+ * 
+ * @param {TimeCapsuleHeaderProps} props - TimeCapsuleHeader 컴포넌트의 props
+ * @param {string} props.title - 헤더 제목 (필수)
+ * @param {() => void} [props.onBack] - 뒤로가기 버튼 클릭 핸들러
+ * @param {HeaderIcon[]} [props.rightIcons] - 오른쪽 아이콘 버튼 배열
+ * @param {boolean} [props.showBorder=true] - 하단 보더 표시 여부
+ * @param {string} [props.backgroundColor] - 배경색 (기본값: white-500)
+ * @param {'center' | 'left'} [props.titleAlign='center'] - 제목 정렬 방식
+ * @param {string} [props.className] - 추가 CSS 클래스명
+ * 
+ * @example
+ * ```tsx
+ * // 기본 헤더 (뒤로가기 + 제목)
+ * <TimeCapsuleHeader
+ *   title="타임캡슐 만들기"
+ *   onBack={() => router.back()}
+ * />
+ * 
+ * // 확장 헤더 (뒤로가기 + 제목 + 아이콘)
+ * <TimeCapsuleHeader
+ *   title="캡슐 대기실"
+ *   onBack={() => router.back()}
+ *   rightIcons={[
+ *     {
+ *       icon: 'more',
+ *       onPress: handleMore,
+ *       accessibilityLabel: '더보기',
+ *     },
+ *   ]}
+ * />
+ * 
+ * // 왼쪽 정렬 제목
+ * <TimeCapsuleHeader
+ *   title="타임캡슐"
+ *   titleAlign="left"
+ *   onBack={() => router.back()}
+ * />
+ * ```
  */
 export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
   title,

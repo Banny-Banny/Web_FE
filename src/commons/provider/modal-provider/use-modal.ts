@@ -12,23 +12,39 @@ import type { ModalConfig } from '@/commons/components/modal/types';
 /**
  * useModal 훅
  * 
+ * Modal Provider를 통해 모달을 쉽게 열고 닫을 수 있는 커스텀 훅입니다.
+ * 
+ * @returns {Object} 모달 제어 함수들
+ * @returns {function} returns.openModal - 모달을 여는 함수
+ * @returns {function} returns.closeModal - 특정 모달을 닫는 함수
+ * @returns {function} returns.closeAll - 모든 모달을 닫는 함수
+ * 
  * @example
- * ```typescript
- * const { openModal, closeModal, closeAll } = useModal();
+ * ```tsx
+ * import { useModal } from '@/commons/provider';
  * 
- * // 모달 열기
- * openModal({
- *   children: <div>모달 내용</div>,
- *   width: 300,
- *   onClose: () => closeModal(id),
- * });
+ * function MyComponent() {
+ *   const { openModal, closeModal } = useModal();
  * 
- * // 모달 닫기
- * closeModal(modalId);
+ *   const handleOpen = () => {
+ *     const modalId = openModal({
+ *       children: (
+ *         <div>
+ *           <h2>모달 제목</h2>
+ *           <p>모달 내용</p>
+ *           <button onClick={() => closeModal(modalId)}>닫기</button>
+ *         </div>
+ *       ),
+ *       width: 400,
+ *       padding: 24,
+ *     });
+ *   };
  * 
- * // 모든 모달 닫기
- * closeAll();
+ *   return <button onClick={handleOpen}>모달 열기</button>;
+ * }
  * ```
+ * 
+ * @see {@link ModalConfig} - 모달 설정 타입
  */
 export function useModal() {
   const { openModal, closeModal, closeAll } = useModalContext();

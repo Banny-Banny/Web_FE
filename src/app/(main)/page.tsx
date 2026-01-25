@@ -168,7 +168,6 @@ export default function ComponentPreview() {
           <h2 className="text-2xl font-semibold text-black-500">TimeCapsuleHeader</h2>
           
           <div className="space-y-4">
-            <div className="rounded-lg border border-border-light bg-white-100 p-4">
               <TimeCapsuleHeader
                 title="타임캡슐 헤더"
                 onBack={() => {}}
@@ -180,27 +179,11 @@ export default function ComponentPreview() {
                   },
                 ]}
               />
-            </div>
-            
-            <div className="rounded-lg border border-border-light bg-white-100 p-4">
               <TimeCapsuleHeader
                 title="뒤로가기만 있는 헤더"
                 onBack={() => {}}
               />
-            </div>
-            
-            <div className="rounded-lg border border-border-light bg-white-100 p-4">
-              <TimeCapsuleHeader
-                title="아이콘만 있는 헤더"
-                rightIcons={[
-                  {
-                    icon: 'more',
-                    onPress: () => {},
-                    accessibilityLabel: '더보기',
-                  },
-                ]}
-              />
-            </div>
+              <TimeCapsuleHeader title="아이콘만 있는 헤더" />
           </div>
         </section>
 

@@ -24,16 +24,39 @@ export interface ToastOptions {
 /**
  * useToast 훅
  * 
+ * Toast Provider를 통해 토스트 메시지를 쉽게 표시할 수 있는 커스텀 훅입니다.
+ * 
+ * @returns {Object} 토스트 제어 함수들
+ * @returns {function} returns.showToast - 토스트를 표시하는 함수
+ * @returns {function} returns.showSuccess - 성공 토스트를 표시하는 함수
+ * @returns {function} returns.showError - 에러 토스트를 표시하는 함수
+ * @returns {function} returns.showInfo - 정보 토스트를 표시하는 함수
+ * @returns {function} returns.showWarning - 경고 토스트를 표시하는 함수
+ * @returns {function} returns.removeToast - 특정 토스트를 제거하는 함수
+ * @returns {function} returns.clearAll - 모든 토스트를 제거하는 함수
+ * 
  * @example
- * ```typescript
- * const { showToast, removeToast, clearAll } = useToast();
+ * ```tsx
+ * import { useToast } from '@/commons/provider';
  * 
- * // 성공 메시지 표시
- * showToast('저장되었습니다', { type: 'success' });
+ * function MyComponent() {
+ *   const { showToast, showSuccess, showError } = useToast();
  * 
- * // 에러 메시지 표시
- * showToast('오류가 발생했습니다', { type: 'error', duration: 5000 });
+ *   const handleSave = async () => {
+ *     try {
+ *       await saveData();
+ *       showSuccess('저장되었습니다');
+ *     } catch (error) {
+ *       showError('저장에 실패했습니다');
+ *     }
+ *   };
+ * 
+ *   return <button onClick={handleSave}>저장</button>;
+ * }
  * ```
+ * 
+ * @see {@link ToastOptions} - 토스트 옵션 타입
+ * @see {@link ToastType} - 토스트 타입
  */
 export function useToast() {
   const { addToast, removeToast, clearAll } = useToastContext();

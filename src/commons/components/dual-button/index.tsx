@@ -21,14 +21,52 @@ import type { DualButtonProps } from './types';
 /**
  * DualButton 컴포넌트
  * 
+ * 취소와 확인 버튼을 나란히 배치한 듀얼 버튼 컴포넌트입니다.
+ * 주로 모달이나 바텀시트의 하단 버튼 영역에 사용됩니다.
+ * 
+ * @param {DualButtonProps} props - DualButton 컴포넌트의 props
+ * @param {string} props.cancelLabel - 취소 버튼 텍스트 (필수)
+ * @param {string} props.confirmLabel - 확인 버튼 텍스트 (필수)
+ * @param {ButtonSize} [props.size='L'] - 버튼 크기 ('L' | 'M' | 'S')
+ * @param {ButtonVariant} [props.cancelVariant='outline'] - 취소 버튼 variant
+ * @param {ButtonVariant} [props.confirmVariant='primary'] - 확인 버튼 variant
+ * @param {boolean} [props.fullWidth=true] - 전체 너비 사용 여부
+ * @param {string | number} [props.width] - 커스텀 너비
+ * @param {boolean} [props.confirmDisabled=false] - 확인 버튼 비활성화 여부
+ * @param {() => void} [props.onCancelPress] - 취소 버튼 클릭 핸들러
+ * @param {() => void} [props.onConfirmPress] - 확인 버튼 클릭 핸들러
+ * @param {string} [props.className] - 추가 CSS 클래스명
+ * 
  * @example
  * ```tsx
+ * // 기본 사용 (모달/바텀시트)
  * <DualButton
  *   cancelLabel="취소"
  *   confirmLabel="확인"
  *   size="L"
+ *   onCancelPress={() => closeModal()}
+ *   onConfirmPress={() => handleConfirm()}
+ * />
+ * 
+ * // 삭제 확인 모달
+ * <DualButton
+ *   cancelLabel="취소"
+ *   confirmLabel="삭제"
+ *   size="L"
+ *   cancelVariant="outline"
+ *   confirmVariant="danger"
  *   onCancelPress={handleCancel}
- *   onConfirmPress={handleConfirm}
+ *   onConfirmPress={handleDelete}
+ * />
+ * 
+ * // 확인 버튼 비활성화
+ * <DualButton
+ *   cancelLabel="취소"
+ *   confirmLabel="제출"
+ *   size="L"
+ *   confirmDisabled={!isValid}
+ *   onCancelPress={handleCancel}
+ *   onConfirmPress={handleSubmit}
  * />
  * ```
  */
