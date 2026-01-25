@@ -8,4 +8,5 @@
 // 예: export { useAuth } from './useAuth';
 // 예: export { useLocalStorage } from './useLocalStorage';
 
-export {};
+export { useGNB } from './useGNB';
+export type { UseGNBReturn } from './useGNB';

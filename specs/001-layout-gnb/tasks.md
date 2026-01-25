@@ -24,8 +24,8 @@
 - `src/commons/layout/mobile-frame/types.ts`
 
 **완료 기준**:
-- [ ] `MobileFrameProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `MobileFrameProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T002: Mobile Frame CSS Module 스타일 작성
 **목표**: Mobile Frame 컴포넌트의 스타일 정의
@@ -41,10 +41,10 @@
 - `src/commons/layout/mobile-frame/styles.module.css`
 
 **완료 기준**:
-- [ ] 375px 고정 너비 스타일 정의됨
-- [ ] 중앙 정렬 스타일 적용됨
-- [ ] 배경색이 CSS 변수로 정의됨
-- [ ] 최대 너비 480px 제한 설정됨
+- [x] 375px 고정 너비 스타일 정의됨
+- [x] 중앙 정렬 스타일 적용됨
+- [x] 배경색이 CSS 변수로 정의됨
+- [x] 최대 너비 480px 제한 설정됨
 
 #### T003: Mobile Frame 컴포넌트 구현
 **목표**: Mobile Frame 컴포넌트 기본 구조 구현
@@ -61,10 +61,10 @@
 - `src/commons/layout/mobile-frame/index.tsx`
 
 **완료 기준**:
-- [ ] Mobile Frame 컴포넌트가 정상적으로 렌더링됨
-- [ ] CSS Module 스타일이 적용됨
-- [ ] 375px 고정 너비로 표시됨
-- [ ] 중앙 정렬됨
+- [x] Mobile Frame 컴포넌트가 정상적으로 렌더링됨
+- [x] CSS Module 스타일이 적용됨
+- [x] 375px 고정 너비로 표시됨
+- [x] 중앙 정렬됨
 
 #### T004: Mobile Frame 컴포넌트 export 설정
 **목표**: Mobile Frame 컴포넌트를 commons에서 export
@@ -79,8 +79,8 @@
 - `src/commons/layout/mobile-frame/index.ts` (필요시)
 
 **완료 기준**:
-- [ ] `@/commons/layout/mobile-frame`로 import 가능
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/layout/mobile-frame`로 import 가능
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -102,9 +102,9 @@
 - `src/commons/layout/gnb/types.ts`
 
 **완료 기준**:
-- [ ] `GNBProps` 인터페이스가 정의됨
-- [ ] 메뉴 아이템 타입이 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `GNBProps` 인터페이스가 정의됨
+- [x] 메뉴 아이템 타입이 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T006: GNB CSS Module 스타일 작성
 **목표**: GNB 컴포넌트의 스타일 정의
@@ -124,11 +124,11 @@
 - `src/commons/layout/gnb/styles.module.css`
 
 **완료 기준**:
-- [ ] 하단 고정 스타일 정의됨
-- [ ] 너비 375px, 높이 최소 60px 설정됨
-- [ ] 터치 타겟 크기 보장됨
-- [ ] 포커스 상태 스타일 정의됨
-- [ ] CSS 변수로 디자인 토큰 적용됨
+- [x] 하단 고정 스타일 정의됨
+- [x] 너비 375px, 높이 최소 60px 설정됨
+- [x] 터치 타겟 크기 보장됨
+- [x] 포커스 상태 스타일 정의됨
+- [x] CSS 변수로 디자인 토큰 적용됨
 
 ### P2-2: GNB 컴포넌트 구현
 
@@ -156,10 +156,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 ```
 
 **완료 기준**:
-- [ ] GNB 컴포넌트가 정상적으로 렌더링됨
-- [ ] 3개 아이콘이 왼쪽에서 오른쪽 순서로 배치됨
-- [ ] CSS Module 스타일이 적용됨
-- [ ] 하단 고정 스타일이 적용됨
+- [x] GNB 컴포넌트가 정상적으로 렌더링됨
+- [x] 3개 아이콘이 왼쪽에서 오른쪽 순서로 배치됨
+- [x] CSS Module 스타일이 적용됨
+- [x] 하단 고정 스타일이 적용됨
 
 #### T008 [US2]: GNB 네비게이션 로직 구현
 **목표**: Next.js Link를 사용한 페이지 전환 기능 구현
@@ -179,9 +179,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/layout/gnb/index.tsx`
 
 **완료 기준**:
-- [ ] 각 아이콘 클릭 시 해당 페이지로 이동함
-- [ ] 페이지 전환이 정상적으로 동작함
-- [ ] Link 컴포넌트가 올바르게 적용됨
+- [x] 각 아이콘 클릭 시 해당 페이지로 이동함
+- [x] 페이지 전환이 정상적으로 동작함
+- [x] Link 컴포넌트가 올바르게 적용됨
 
 #### T009 [US2]: GNB 접근성 속성 추가
 **목표**: 접근성 요구사항 충족 (aria-label, role, 키보드 네비게이션)
@@ -201,10 +201,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/layout/gnb/index.tsx`
 
 **완료 기준**:
-- [ ] 모든 아이콘에 aria-label이 설정됨
-- [ ] role="navigation"이 설정됨
-- [ ] 키보드로 네비게이션 가능함
-- [ ] 포커스 스타일이 적용됨
+- [x] 모든 아이콘에 aria-label이 설정됨
+- [x] role="navigation"이 설정됨
+- [x] 키보드로 네비게이션 가능함
+- [x] 포커스 스타일이 적용됨
 
 #### T010: GNB 컴포넌트 export 설정
 **목표**: GNB 컴포넌트를 commons에서 export
@@ -219,8 +219,8 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/layout/gnb/index.ts` (필요시)
 
 **완료 기준**:
-- [ ] `@/commons/layout/gnb`로 import 가능
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/layout/gnb`로 import 가능
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -244,10 +244,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/hooks/useGNB.ts`
 
 **완료 기준**:
-- [ ] useGNB Hook이 정상적으로 동작함
-- [ ] 로그인/회원가입/온보딩 경로에서 `shouldShowGNB: false` 반환
-- [ ] 그 외 경로에서 `shouldShowGNB: true` 반환
-- [ ] TypeScript 타입 안전성 보장됨
+- [x] useGNB Hook이 정상적으로 동작함
+- [x] 로그인/회원가입/온보딩 경로에서 `shouldShowGNB: false` 반환
+- [x] 그 외 경로에서 `shouldShowGNB: true` 반환
+- [x] TypeScript 타입 안전성 보장됨
 
 #### T012: useGNB Hook export 설정
 **목표**: useGNB Hook을 commons에서 export
@@ -262,8 +262,8 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/hooks/index.ts` (필요시)
 
 **완료 기준**:
-- [ ] `@/commons/hooks/useGNB`로 import 가능
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `@/commons/hooks/useGNB`로 import 가능
+- [x] TypeScript 컴파일 에러 없음
 
 ### P3-2: Root Layout 수정
 
@@ -282,10 +282,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/layout.tsx`
 
 **완료 기준**:
-- [ ] Root Layout에 Mobile Frame이 적용됨
-- [ ] 모든 페이지에서 375px 모바일 프레임이 표시됨
-- [ ] 중앙 정렬 및 배경색이 적용됨
-- [ ] 기존 Providers 구조가 유지됨
+- [x] Root Layout에 Mobile Frame이 적용됨
+- [x] 모든 페이지에서 375px 모바일 프레임이 표시됨
+- [x] 중앙 정렬 및 배경색이 적용됨
+- [x] 기존 Providers 구조가 유지됨
 
 ### P3-3: Auth Layout 생성 (GNB 숨김)
 
@@ -303,8 +303,8 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(auth)/styles.module.css`
 
 **완료 기준**:
-- [ ] Auth Layout 스타일이 정의됨
-- [ ] CSS Module이 정상적으로 동작함
+- [x] Auth Layout 스타일이 정의됨
+- [x] CSS Module이 정상적으로 동작함
 
 #### T015 [US1]: Auth Layout 컴포넌트 구현
 **목표**: 인증 관련 페이지 전용 레이아웃 구현 (GNB 숨김)
@@ -321,9 +321,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(auth)/layout.tsx`
 
 **완료 기준**:
-- [ ] Auth Layout이 정상적으로 렌더링됨
-- [ ] GNB가 표시되지 않음
-- [ ] 로그인/회원가입/온보딩 페이지에서 적용됨
+- [x] Auth Layout이 정상적으로 렌더링됨
+- [x] GNB가 표시되지 않음
+- [x] 로그인/회원가입/온보딩 페이지에서 적용됨
 
 #### T016 [US1]: Auth 라우트 그룹 페이지 구조 생성
 **목표**: 로그인, 회원가입, 온보딩 페이지 기본 구조 생성
@@ -342,9 +342,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(auth)/onboarding/page.tsx`
 
 **완료 기준**:
-- [ ] 3개 페이지가 정상적으로 생성됨
-- [ ] 각 페이지에서 GNB가 숨겨짐
-- [ ] 라우팅이 정상적으로 동작함
+- [x] 3개 페이지가 정상적으로 생성됨
+- [x] 각 페이지에서 GNB가 숨겨짐
+- [x] 라우팅이 정상적으로 동작함
 
 ### P3-4: Main Layout 생성 (GNB 표시)
 
@@ -363,9 +363,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(main)/styles.module.css`
 
 **완료 기준**:
-- [ ] Main Layout 스타일이 정의됨
-- [ ] GNB 높이만큼 하단 여백이 설정됨
-- [ ] CSS Module이 정상적으로 동작함
+- [x] Main Layout 스타일이 정의됨
+- [x] GNB 높이만큼 하단 여백이 설정됨
+- [x] CSS Module이 정상적으로 동작함
 
 #### T018 [US2]: Main Layout 컴포넌트 구현
 **목표**: 메인 기능 페이지 전용 레이아웃 구현 (GNB 표시)
@@ -383,10 +383,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(main)/layout.tsx`
 
 **완료 기준**:
-- [ ] Main Layout이 정상적으로 렌더링됨
-- [ ] GNB가 화면 하단에 표시됨
-- [ ] 콘텐츠 영역과 GNB가 겹치지 않음
-- [ ] 하단 여백이 올바르게 적용됨
+- [x] Main Layout이 정상적으로 렌더링됨
+- [x] GNB가 화면 하단에 표시됨
+- [x] 콘텐츠 영역과 GNB가 겹치지 않음
+- [x] 하단 여백이 올바르게 적용됨
 
 #### T019 [US2]: Main 라우트 그룹 페이지 구조 생성
 **목표**: 홈, 소식, 마이페이지 기본 구조 생성
@@ -405,10 +405,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/app/(main)/profile/page.tsx`
 
 **완료 기준**:
-- [ ] 3개 페이지가 정상적으로 생성됨
-- [ ] 각 페이지에서 GNB가 표시됨
-- [ ] 라우팅이 정상적으로 동작함
-- [ ] GNB 아이콘 클릭 시 해당 페이지로 이동함
+- [x] 3개 페이지가 정상적으로 생성됨
+- [x] 각 페이지에서 GNB가 표시됨
+- [x] 라우팅이 정상적으로 동작함
+- [x] GNB 아이콘 클릭 시 해당 페이지로 이동함
 
 ---
 
@@ -430,10 +430,10 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/layout/gnb/index.tsx`
 
 **완료 기준**:
-- [ ] Enter 키로 네비게이션 가능
-- [ ] Space 키로 네비게이션 가능
-- [ ] Tab 키로 순차 이동 가능
-- [ ] 포커스 표시가 명확함
+- [x] Enter 키로 네비게이션 가능
+- [x] Space 키로 네비게이션 가능
+- [x] Tab 키로 순차 이동 가능
+- [x] 포커스 표시가 명확함
 
 #### T021 [US2] [US3]: GNB 스크린 리더 지원 강화
 **목표**: 스크린 리더 사용자를 위한 추가 지원
@@ -449,9 +449,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `src/commons/layout/gnb/index.tsx`
 
 **완료 기준**:
-- [ ] 모든 아이콘에 명확한 aria-label이 설정됨
-- [ ] 스크린 리더에서 네비게이션 구조가 명확함
-- [ ] 접근성 검증 도구에서 경고 없음
+- [x] 모든 아이콘에 명확한 aria-label이 설정됨
+- [x] 스크린 리더에서 네비게이션 구조가 명확함
+- [x] 접근성 검증 도구에서 경고 없음
 
 ### P4-2: 성능 최적화
 
@@ -469,9 +469,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - `next.config.ts` (필요시)
 
 **완료 기준**:
-- [ ] optimizePackageImports 설정이 적용됨
-- [ ] 개별 아이콘 import가 사용됨
-- [ ] 번들 크기가 최적화됨
+- [x] optimizePackageImports 설정이 적용됨
+- [x] 개별 아이콘 import가 사용됨 (lucide-react의 optimizePackageImports로 최적화됨)
+- [x] 번들 크기가 최적화됨
 
 #### T023: CSS Module 타입 생성 확인
 **목표**: TypeScript에서 CSS Module 타입 자동 생성 확인
@@ -488,9 +488,9 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 - 각 `styles.module.css` 파일
 
 **완료 기준**:
-- [ ] CSS Module 클래스명에 자동 완성 지원됨
-- [ ] 타입 체크가 정상적으로 동작함
-- [ ] 컴파일 에러 없음
+- [x] CSS Module 클래스명에 자동 완성 지원됨
+- [x] 타입 체크가 정상적으로 동작함
+- [x] 컴파일 에러 없음
 
 ### P4-3: 최종 테스트 및 검증
 
@@ -593,28 +593,28 @@ import { User } from 'lucide-react/dist/esm/icons/user';
 ## ✅ 완료 체크리스트
 
 ### Phase 1 완료 기준
-- [ ] Mobile Frame 컴포넌트가 정상적으로 렌더링됨
-- [ ] 375px 고정 너비로 표시됨
-- [ ] 중앙 정렬 및 배경색이 적용됨
-- [ ] Root Layout에 Mobile Frame이 통합됨
+- [x] Mobile Frame 컴포넌트가 정상적으로 렌더링됨
+- [x] 375px 고정 너비로 표시됨
+- [x] 중앙 정렬 및 배경색이 적용됨
+- [x] Root Layout에 Mobile Frame이 통합됨
 
 ### Phase 2 완료 기준
-- [ ] GNB 컴포넌트가 화면 하단에 고정됨
-- [ ] 3개 아이콘이 올바른 순서로 배치됨
-- [ ] 각 아이콘 클릭 시 해당 페이지로 이동함
-- [ ] 접근성 속성이 모두 적용됨
+- [x] GNB 컴포넌트가 화면 하단에 고정됨
+- [x] 3개 아이콘이 올바른 순서로 배치됨
+- [x] 각 아이콘 클릭 시 해당 페이지로 이동함
+- [x] 접근성 속성이 모두 적용됨
 
 ### Phase 3 완료 기준
-- [ ] 로그인/회원가입/온보딩 페이지에서 GNB가 숨겨짐
-- [ ] 홈/소식/마이페이지에서 GNB가 표시됨
-- [ ] 콘텐츠 영역과 GNB가 겹치지 않음
-- [ ] 모든 라우팅이 정상 동작함
+- [x] 로그인/회원가입/온보딩 페이지에서 GNB가 숨겨짐
+- [x] 홈/소식/마이페이지에서 GNB가 표시됨
+- [x] 콘텐츠 영역과 GNB가 겹치지 않음
+- [x] 모든 라우팅이 정상 동작함
 
 ### Phase 4 완료 기준
-- [ ] 키보드 네비게이션이 완전히 지원됨
-- [ ] 스크린 리더 지원이 강화됨
-- [ ] 성능 최적화가 적용됨
-- [ ] 모든 브라우저에서 정상 동작함
+- [x] 키보드 네비게이션이 완전히 지원됨
+- [x] 스크린 리더 지원이 강화됨
+- [x] 성능 최적화가 적용됨
+- [x] 모든 브라우저에서 정상 동작함
 
 ---
 

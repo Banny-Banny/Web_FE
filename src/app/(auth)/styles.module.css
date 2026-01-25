@@ -1,0 +1,11 @@
+/**
+ * Auth Layout 스타일
+ * CSS 변수를 활용한 스타일 정의
+ */
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

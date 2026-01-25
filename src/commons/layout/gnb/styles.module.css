@@ -1,0 +1,55 @@
+/**
+ * GNB 컴포넌트 스타일
+ * CSS 변수를 활용한 스타일 정의
+ */
+
+.gnb {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 375px;
+  max-width: 480px;
+  min-height: 60px;
+  background-color: var(--color-white-50);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: var(--spacing-sm) 0;
+  box-shadow: 0 -2px 8px rgba(10, 10, 10, 0.08);
+  z-index: 1000;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s ease-in-out;
+  outline: none;
+}
+
+.menuItem:hover {
+  background-color: var(--color-grey-50);
+}
+
+.menuItem:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.menuItem:active {
+  background-color: var(--color-grey-100);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-dark-grey-700);
+}

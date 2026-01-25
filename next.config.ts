@@ -1,14 +1,13 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   // 실험적 기능 설정
   experimental: {
     // 최적화된 패키지 임포트
-    optimizePackageImports: ['@tanstack/react-query'],
+    // lucide-react는 Next.js 16에서 기본적으로 최적화됨
+    optimizePackageImports: ['@tanstack/react-query'] as string[],
   },
-
-  // Turbopack 설정 (경고 제거용)
-  turbopack: {},
 
   // 이미지 최적화 설정
   images: {
@@ -118,7 +117,7 @@ const nextConfig: NextConfig = {
   },
 
   // 웹팩 설정 커스터마이징
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, { buildId: _buildId, dev: _dev, isServer: _isServer, defaultLoaders: _defaultLoaders, webpack: _webpack }) => {
     // SVG 파일을 React 컴포넌트로 처리
     config.module.rules.push({
       test: /\.svg$/i,
@@ -128,6 +127,7 @@ const nextConfig: NextConfig = {
 
     // 번들 분석기 설정 (환경 변수로 활성화)
     if (process.env.ANALYZE === 'true') {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
       config.plugins.push(
         new BundleAnalyzerPlugin({
@@ -147,6 +147,9 @@ const nextConfig: NextConfig = {
 
   // 출력 설정
   output: 'standalone',
+  
+  // Workspace root 명시 (lockfile 경고 제거)
+  outputFileTracingRoot: path.join(__dirname),
 
   // 전력 소비 최적화
   poweredByHeader: false,

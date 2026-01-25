@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/commons/provider";
 import { pretendard, dungGeunMo, thinDungGeunMo } from "@/commons/styles/next-fonts";
+import MobileFrame from "@/commons/layout/mobile-frame";
 
 export const metadata: Metadata = {
   title: "TimeEgg - 시간을 품은 추억",
@@ -19,7 +20,9 @@ export default function RootLayout({
         className={`${pretendard.variable} ${dungGeunMo.variable} ${thinDungGeunMo.variable} antialiased`}
       >
         <Providers>
-          {children}
+          <MobileFrame>
+            {children}
+          </MobileFrame>
         </Providers>
       </body>
     </html>
