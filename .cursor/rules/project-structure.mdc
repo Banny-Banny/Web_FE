@@ -6,126 +6,146 @@ alwaysApply: true
 
 # Project Architecture & Folder Structure Rules
 
-You are an expert React Native (Expo) developer. You must strictly follow the **Feature Slice Architecture** defined below.
+You are an expert Next.js developer. You must strictly follow the **Feature Slice Architecture** defined below.
 
 ## 1. 📁 Global Folder Structure (Top-Level)
 
-The project is divided into 4 distinct layers. Dependencies must flow **one way**: `app` -> `components` -> `commons/utils`.
+The project is divided into 3 distinct layers. Dependencies must flow **one way**: `app` -> `components` -> `commons`.
 
 ```text
-root
-├── app/                  # [Routing Layer] URL & Navigation ONLY.
-├── utils/                # [Pure Functions] Helper functions (Formatting, Math).
-├── commons/              # [Design System] Reusable "Dumb" UI components.
-└── components/           # [Features] Business Logic & "Smart" Containers.
+src/
+├── app/              # [Routing] Next.js 페이지 및 전체 레이아웃 (폰 프레임)
+├── components/       # [Features] 각 화면별(Home, Login 등) 스마트 컴포넌트
+└── commons/          # [Shared Core] 프로젝트의 모든 공용 자산 통합
+    ├── apis/         # API 함수 + 데이터 타입 (Axios 활용)
+    ├── providers/    # QueryProvider, Axios 인스턴스
+    ├── hooks/        # React Query, Zustand 훅 (데이터 바인딩)
+    ├── components/   # 디자인 시스템 (공용 버튼, 인풋 등)
+    ├── utils/        # 순수 함수 (날짜 포맷터, 금액 콤마 처리 등)
+    └── styles/       # Tailwind CSS 및 글로벌 스타일
 ```
 
 ## 2. 🧱 Detailed Layer Rules
 
 ### 1) `app/` (Routing Layer)
 
-- **Role**: Manages URLs (Expo Router) and Layouts.
+- **Role**: Manages URLs (Next.js App Router) and Layouts.
 - **✅ DO**: Import Feature Containers from `components/` and render them.
 - **❌ DON'T**: Write any business logic, `useEffect`, or API calls here.
 - **❌ DON'T**: Define styles here (except for basic layout containers).
 
-### 2) `commons/` (Design System)
+### 2) `commons/` (Shared Core)
 
-- **Role**: Pure UI components that know NOTHING about the app's business.
+- **Role**: 모든 공용 자산을 통합 관리하는 레이어.
 - **Structure**:
-  - `layout/`: Global layouts (Tabs, Providers).
-  - `components/`: Atomic UI (Buttons, Cards, Inputs).
-  - `constants/`: Design tokens (Colors, Fonts).
-- **✅ DO**: Use Props to receive data and actions.
+  - `apis/`: API 함수 + 데이터 타입 (Axios 활용)
+  - `providers/`: QueryProvider, Axios 인스턴스 등 전역 Provider
+  - `hooks/`: React Query, Zustand 등 데이터 바인딩 훅
+  - `components/`: 디자인 시스템 (공용 버튼, 인풋 등 순수 UI 컴포넌트)
+  - `utils/`: 순수 함수 (날짜 포맷터, 금액 콤마 처리 등)
+  - `styles/`: Tailwind CSS 설정 및 글로벌 스타일
+- **✅ DO**: 
+  - Use Props to receive data and actions in components.
+  - Create pure functions in utils (Input -> Output).
+  - Define API types and functions in apis.
 - **❌ DON'T**: Import from `components/` or `app/`.
 
-### 3) `utils/` (Pure Functions)
-
-- **Role**: Logic that is independent of React/App state.
-- **✅ DO**: Create pure functions (Input -> Output).
-- **❌ DON'T**: Use React hooks or JSX.
-
-### 4) `components/` (Feature Slice - CORE RULE)
+### 3) `components/` (Feature Slice - CORE RULE)
 
 Every feature inside `components/` **MUST** follow this strict slice pattern.
 
 #### 📂 Feature Directory Structure
 
-Example: Creating a `map` feature.
+Example: Creating a `home` feature.
 
 ```text
-components/map/
+components/home/
 ├── index.tsx              # [Entry] Feature Container
 ├── types.ts               # [Types] Feature-wide Definitions
 ├── hooks/                 # [Logic] Business Logic (Custom Hooks)
-│   └── useMapFeature.ts
+│   └── useHomeFeature.ts
 └── components/            # [UI] Feature-specific Sub-components
-    ├── map-view/
+    ├── home-view/
     │   ├── index.tsx      # View Component
-    │   ├── styles.ts      # StyleSheet
+    │   ├── styles.ts      # StyleSheet or Tailwind classes
     │   └── types.ts       # Props
-    └── fab-btn/
+    └── home-card/
         ├── index.tsx
         └── ...
 ```
 
 #### 📝 Feature Implementation Rules
 
-1.  **Container (`index.tsx`)**:
+1. **Container (`index.tsx`)**:
 
-    - Acts as the "Controller".
-    - Imports logic from `hooks/useFeature.ts`.
-    - Passes data/handlers to Sub-Components (`components/`).
-    - **No direct rendering logic** (HTML/View) inside, mostly composition.
+   - Acts as the "Controller".
+   - Imports logic from `hooks/useFeature.ts`.
+   - Passes data/handlers to Sub-Components (`components/`).
+   - **No direct rendering logic** (HTML/JSX) inside, mostly composition.
 
-2.  **Logic (`hooks/`)**:
+2. **Logic (`hooks/`)**:
 
-    - Handles API calls, `useState`, `useEffect`, Permissions.
-    - Returns data and functions needed by the view.
+   - Handles API calls, `useState`, `useEffect`, data fetching.
+   - Returns data and functions needed by the view.
+   - Uses hooks from `commons/hooks/` for data binding.
 
-3.  **Sub-Components (`components/`)**:
-    - Must be separated into folders if they are complex.
-    - Styles must be in `styles.ts`.
+3. **Sub-Components (`components/`)**:
+   - Must be separated into folders if they are complex.
+   - Styles must be in `styles.ts` or use Tailwind classes.
+   - Can use components from `commons/components/`.
 
 ## 3. ✅ Few-Shot Examples (Best Practices)
 
-### Example: Creating a Feature Container (`components/map/index.tsx`)
+### Example: Creating a Feature Container (`components/home/index.tsx`)
 
 ```tsx
 // ✅ GOOD: Separation of Concerns
 import React from 'react';
-import { View } from 'react-native';
-import { useMapFeature } from './hooks/useMapFeature';
-import { MapView } from './components/map-view';
-import { FabButton } from './components/fab-btn';
+import { useHomeFeature } from './hooks/useHomeFeature';
+import { HomeView } from './components/home-view';
+import { HomeCard } from './components/home-card';
 
-export default function MapFeature() {
+export default function HomeFeature() {
   // Logic is completely isolated in the hook
-  const { location, handlePress } = useMapFeature();
+  const { data, handleClick } = useHomeFeature();
 
   return (
-    <View style={{ flex: 1 }}>
-      <MapView coordinate={location} />
-      <FabButton onPress={handlePress} />
-    </View>
+    <div className="flex flex-col">
+      <HomeView data={data} />
+      <HomeCard onClick={handleClick} />
+    </div>
   );
 }
 ```
 
 ```tsx
 // ❌ BAD: Logic mixed in View
-export default function MapFeature() {
-  const [location, setLocation] = useState(...); // ❌ Logic in container
+export default function HomeFeature() {
+  const [data, setData] = useState(...); // ❌ Logic in container
 
   useEffect(() => { ... }, []); // ❌ Side effects in container
 
   return (
-    <View>
-       {/* ❌ Inline Styles, Raw Components */}
-       <WebView source={{...}} style={{ width: 100 }} />
-    </View>
+    <div>
+      {/* ❌ Inline Styles, Raw Components */}
+      <div style={{ width: '100px' }}>...</div>
+    </div>
   );
 }
+```
+
+### Example: Using Commons
+
+```tsx
+// ✅ GOOD: Using commons components and hooks
+import { Button } from '@/commons/components/button';
+import { useQuery } from '@/commons/hooks/useQuery';
+import { formatDate } from '@/commons/utils/dateFormatter';
+import { fetchUserData } from '@/commons/apis/user';
+
+// ❌ BAD: Direct API calls or inline logic
+import axios from 'axios'; // ❌ Should use commons/apis
+const data = await axios.get(...); // ❌ Should use commons/apis
 ```
 
 ## 4. 🚨 Final Checklist
@@ -133,6 +153,8 @@ export default function MapFeature() {
 Before finishing a task, ask yourself:
 
 1. Is business logic isolated in `hooks/`?
-2. Are styles separated in `styles.ts`?
+2. Are styles separated in `styles.ts` or using Tailwind classes?
 3. Is `app/` free of logic?
-4. Are pure UI components in `commons/`?
+4. Are pure UI components in `commons/components/`?
+5. Are API calls using `commons/apis/`?
+6. Are utility functions in `commons/utils/`?

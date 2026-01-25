@@ -1,258 +1,145 @@
 ---
-description: Create or update the feature specification from a natural language feature description.
+description: 자연어 기능 설명으로부터 기능 명세서를 생성하거나 업데이트합니다
 handoffs: 
-  - label: Build Technical Plan
+  - label: 기술 계획 수립
     agent: speckit.plan
-    prompt: Create a plan for the spec. I am building with...
-  - label: Clarify Spec Requirements
+    prompt: 명세서를 위한 계획을 생성합니다. 다음 기술로 구축합니다...
+  - label: 명세 요구사항 명확화
     agent: speckit.clarify
-    prompt: Clarify specification requirements
+    prompt: 명세 요구사항을 명확히 합니다
     send: true
 ---
 
-## User Input
+## 사용자 입력
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+진행하기 전에 사용자 입력을 **반드시** 고려해야 합니다 (비어있지 않은 경우).
 
-## Outline
+## 개요
 
-The text the user typed after `/speckit.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `$ARGUMENTS` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+TimeEgg Web Frontend 프로젝트를 위한 기능 명세서 생성 가이드입니다.
 
-Given that feature description, do this:
+### 1. 기능 명세서 작성 원칙
 
-1. **Generate a concise short name** (2-4 words) for the branch:
-   - Analyze the feature description and extract the most meaningful keywords
-   - Create a 2-4 word short name that captures the essence of the feature
-   - Use action-noun format when possible (e.g., "add-user-auth", "fix-payment-bug")
-   - Preserve technical terms and acronyms (OAuth2, API, JWT, etc.)
-   - Keep it concise but descriptive enough to understand the feature at a glance
-   - Examples:
-     - "I want to add user authentication" → "user-auth"
-     - "Implement OAuth2 integration for the API" → "oauth2-api-integration"
-     - "Create a dashboard for analytics" → "analytics-dashboard"
-     - "Fix payment processing timeout bug" → "fix-payment-timeout"
+**사용자 중심 접근**:
+- **무엇을** 사용자가 필요로 하는지
+- **왜** 이 기능이 필요한지에 집중
+- **어떻게** 구현할지는 제외 (기술 스택, API, 코드 구조 등)
 
-2. **Check for existing branches before creating new one**:
+**비즈니스 이해관계자를 위한 문서**:
+- 개발자가 아닌 사람도 이해할 수 있도록 작성
+- 기술적 세부사항 배제
+- 사용자 가치와 비즈니스 요구사항에 집중
 
-   a. First, fetch all remote branches to ensure we have the latest information:
+### 2. 명세서 구조
 
-      ```bash
-      git fetch --all --prune
-      ```
+#### 필수 섹션
+- **개요**: 기능의 목적과 배경
+- **기능 요구사항**: 구체적이고 테스트 가능한 요구사항
+- **사용자 시나리오**: 주요 사용자 플로우
+- **성공 기준**: 측정 가능한 성과 지표
+- **핵심 엔티티**: 관련 데이터 객체 (해당하는 경우)
 
-   b. Find the highest feature number across all sources for the short-name:
-      - Remote branches: `git ls-remote --heads origin | grep -E 'refs/heads/[0-9]+-<short-name>$'`
-      - Local branches: `git branch | grep -E '^[* ]*[0-9]+-<short-name>$'`
-      - Specs directories: Check for directories matching `specs/[0-9]+-<short-name>`
+#### 선택적 섹션
+- **비기능 요구사항**: 성능, 보안, 접근성 등
+- **제약사항**: 기술적/비즈니스적 제한사항
+- **가정사항**: 명세 작성 시 가정한 내용
+- **엣지 케이스**: 예외 상황 처리
 
-   c. Determine the next available number:
-      - Extract all numbers from all three sources
-      - Find the highest number N
-      - Use N+1 for the new branch number
+### 3. 작성 가이드라인
 
-   d. Run the script `.specify/scripts/bash/create-new-feature.sh --json "$ARGUMENTS"` with the calculated number and short-name:
-      - Pass `--number N+1` and `--short-name "your-short-name"` along with the feature description
-      - Bash example: `.specify/scripts/bash/create-new-feature.sh --json "$ARGUMENTS" --json --number 5 --short-name "user-auth" "Add user authentication"`
-      - PowerShell example: `.specify/scripts/bash/create-new-feature.sh --json "$ARGUMENTS" -Json -Number 5 -ShortName "user-auth" "Add user authentication"`
+**명확하고 테스트 가능한 요구사항**:
+- 모호한 형용사 피하기 (빠른, 확장 가능한, 안전한, 직관적인)
+- 측정 가능한 기준 제시
+- 각 요구사항이 독립적으로 검증 가능해야 함
 
-   **IMPORTANT**:
-   - Check all three sources (remote branches, local branches, specs directories) to find the highest number
-   - Only match branches/directories with the exact short-name pattern
-   - If no existing branches/directories found with this short-name, start with number 1
-   - You must only ever run this script once per feature
-   - The JSON is provided in the terminal as output - always refer to it to get the actual content you're looking for
-   - The JSON output will contain BRANCH_NAME and SPEC_FILE paths
-   - For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot")
+**좋은 예시**:
+- "사용자는 3분 이내에 체크아웃을 완료할 수 있다"
+- "시스템은 동시 사용자 10,000명을 지원한다"
+- "검색 결과의 95%가 1초 이내에 표시된다"
 
-3. Load `.specify/templates/spec-template.md` to understand required sections.
+**나쁜 예시** (구현 중심):
+- "API 응답 시간이 200ms 이하다" → "사용자가 즉시 결과를 확인한다"
+- "데이터베이스가 1000 TPS를 처리한다" → 사용자 중심 지표 사용
+- "React 컴포넌트가 효율적으로 렌더링된다" → 프레임워크별 내용
 
-4. Follow this execution flow:
+### 4. 성공 기준 작성법
 
-    1. Parse user description from Input
-       If empty: ERROR "No feature description provided"
-    2. Extract key concepts from description
-       Identify: actors, actions, data, constraints
-    3. For unclear aspects:
-       - Make informed guesses based on context and industry standards
-       - Only mark with [NEEDS CLARIFICATION: specific question] if:
-         - The choice significantly impacts feature scope or user experience
-         - Multiple reasonable interpretations exist with different implications
-         - No reasonable default exists
-       - **LIMIT: Maximum 3 [NEEDS CLARIFICATION] markers total**
-       - Prioritize clarifications by impact: scope > security/privacy > user experience > technical details
-    4. Fill User Scenarios & Testing section
-       If no clear user flow: ERROR "Cannot determine user scenarios"
-    5. Generate Functional Requirements
-       Each requirement must be testable
-       Use reasonable defaults for unspecified details (document assumptions in Assumptions section)
-    6. Define Success Criteria
-       Create measurable, technology-agnostic outcomes
-       Include both quantitative metrics (time, performance, volume) and qualitative measures (user satisfaction, task completion)
-       Each criterion must be verifiable without implementation details
-    7. Identify Key Entities (if data involved)
-    8. Return: SUCCESS (spec ready for planning)
+성공 기준은 다음 조건을 만족해야 합니다:
 
-5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
+1. **측정 가능**: 구체적인 지표 포함 (시간, 백분율, 수량, 비율)
+2. **기술 독립적**: 프레임워크, 언어, 데이터베이스, 도구 언급 금지
+3. **사용자 중심**: 사용자/비즈니스 관점의 결과 설명
+4. **검증 가능**: 구현 세부사항 없이도 테스트/검증 가능
 
-6. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+### 5. 명확화 프로세스
 
-   a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
+**정보 부족 시 처리**:
+- 업계 표준과 컨텍스트를 바탕으로 합리적 추측
+- 가정사항 섹션에 기본값 문서화
+- **최대 3개**의 `[명확화 필요: 구체적 질문]` 마커만 사용
 
-      ```markdown
-      # Specification Quality Checklist: [FEATURE NAME]
-      
-      **Purpose**: Validate specification completeness and quality before proceeding to planning
-      **Created**: [DATE]
-      **Feature**: [Link to spec.md]
-      
-      ## Content Quality
-      
-      - [ ] No implementation details (languages, frameworks, APIs)
-      - [ ] Focused on user value and business needs
-      - [ ] Written for non-technical stakeholders
-      - [ ] All mandatory sections completed
-      
-      ## Requirement Completeness
-      
-      - [ ] No [NEEDS CLARIFICATION] markers remain
-      - [ ] Requirements are testable and unambiguous
-      - [ ] Success criteria are measurable
-      - [ ] Success criteria are technology-agnostic (no implementation details)
-      - [ ] All acceptance scenarios are defined
-      - [ ] Edge cases are identified
-      - [ ] Scope is clearly bounded
-      - [ ] Dependencies and assumptions identified
-      
-      ## Feature Readiness
-      
-      - [ ] All functional requirements have clear acceptance criteria
-      - [ ] User scenarios cover primary flows
-      - [ ] Feature meets measurable outcomes defined in Success Criteria
-      - [ ] No implementation details leak into specification
-      
-      ## Notes
-      
-      - Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
-      ```
+**명확화가 필요한 경우**:
+- 기능 범위나 사용자 경험에 중대한 영향
+- 여러 해석이 가능하고 각각 다른 의미를 가짐
+- 합리적인 기본값이 존재하지 않음
 
-   b. **Run Validation Check**: Review the spec against each checklist item:
-      - For each item, determine if it passes or fails
-      - Document specific issues found (quote relevant spec sections)
+**우선순위**: 범위 > 보안/개인정보 > 사용자 경험 > 기술적 세부사항
 
-   c. **Handle Validation Results**:
+### 6. 합리적 기본값 예시
 
-      - **If all items pass**: Mark checklist complete and proceed to step 6
+다음 항목들은 명확화를 요청하지 않고 기본값 사용:
 
-      - **If items fail (excluding [NEEDS CLARIFICATION])**:
-        1. List the failing items and specific issues
-        2. Update the spec to address each issue
-        3. Re-run validation until all items pass (max 3 iterations)
-        4. If still failing after 3 iterations, document remaining issues in checklist notes and warn user
+- **데이터 보존**: 해당 도메인의 업계 표준 관행
+- **성능 목표**: 표준 웹/모바일 앱 기대치 (별도 명시 없는 경우)
+- **오류 처리**: 적절한 대안과 함께 사용자 친화적 메시지
+- **인증 방식**: 웹 앱의 표준 세션 기반 또는 OAuth2
+- **통합 패턴**: 별도 명시 없으면 RESTful API
 
-      - **If [NEEDS CLARIFICATION] markers remain**:
-        1. Extract all [NEEDS CLARIFICATION: ...] markers from the spec
-        2. **LIMIT CHECK**: If more than 3 markers exist, keep only the 3 most critical (by scope/security/UX impact) and make informed guesses for the rest
-        3. For each clarification needed (max 3), present options to user in this format:
+### 7. 실행 흐름
 
-           ```markdown
-           ## Question [N]: [Topic]
-           
-           **Context**: [Quote relevant spec section]
-           
-           **What we need to know**: [Specific question from NEEDS CLARIFICATION marker]
-           
-           **Suggested Answers**:
-           
-           | Option | Answer | Implications |
-           |--------|--------|--------------|
-           | A      | [First suggested answer] | [What this means for the feature] |
-           | B      | [Second suggested answer] | [What this means for the feature] |
-           | C      | [Third suggested answer] | [What this means for the feature] |
-           | Custom | Provide your own answer | [Explain how to provide custom input] |
-           
-           **Your choice**: _[Wait for user response]_
-           ```
+1. **기능 설명 분석**: 사용자 입력에서 핵심 개념 추출
+2. **핵심 개념 식별**: 액터, 액션, 데이터, 제약사항
+3. **불명확한 부분 처리**: 컨텍스트 기반 합리적 추측 또는 명확화 요청
+4. **사용자 시나리오 작성**: 명확한 사용자 플로우 없으면 오류
+5. **기능 요구사항 생성**: 각 요구사항이 테스트 가능해야 함
+6. **성공 기준 정의**: 측정 가능하고 기술 독립적인 결과
+7. **핵심 엔티티 식별**: 데이터 관련 기능인 경우
 
-        4. **CRITICAL - Table Formatting**: Ensure markdown tables are properly formatted:
-           - Use consistent spacing with pipes aligned
-           - Each cell should have spaces around content: `| Content |` not `|Content|`
-           - Header separator must have at least 3 dashes: `|--------|`
-           - Test that the table renders correctly in markdown preview
-        5. Number questions sequentially (Q1, Q2, Q3 - max 3 total)
-        6. Present all questions together before waiting for responses
-        7. Wait for user to respond with their choices for all questions (e.g., "Q1: A, Q2: Custom - [details], Q3: B")
-        8. Update the spec by replacing each [NEEDS CLARIFICATION] marker with the user's selected or provided answer
-        9. Re-run validation after all clarifications are resolved
+### 8. 품질 검증
 
-   d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
+명세서 작성 후 다음 항목을 확인:
 
-7. Report completion with branch name, spec file path, checklist results, and readiness for the next phase (`/speckit.clarify` or `/speckit.plan`).
+**내용 품질**:
+- [ ] 구현 세부사항 없음 (언어, 프레임워크, API)
+- [ ] 사용자 가치와 비즈니스 요구사항에 집중
+- [ ] 비기술 이해관계자가 이해 가능
+- [ ] 모든 필수 섹션 완료
 
-**NOTE:** The script creates and checks out the new branch and initializes the spec file before writing.
+**요구사항 완성도**:
+- [ ] `[명확화 필요]` 마커 없음
+- [ ] 요구사항이 테스트 가능하고 명확함
+- [ ] 성공 기준이 측정 가능함
+- [ ] 모든 수락 시나리오 정의됨
 
-## General Guidelines
+### 9. 브랜치 및 파일 관리
 
-## Quick Guidelines
+**브랜치 명명 규칙**:
+- 기능 설명에서 2-4단어 추출
+- 동작-명사 형식 선호 (예: "add-user-auth", "fix-payment-bug")
+- 기술 용어와 약어 보존 (OAuth2, API, JWT 등)
 
-- Focus on **WHAT** users need and **WHY**.
-- Avoid HOW to implement (no tech stack, APIs, code structure).
-- Written for business stakeholders, not developers.
-- DO NOT create any checklists that are embedded in the spec. That will be a separate command.
+**파일 구조**:
+```text
+specs/[번호]-[기능명]/
+├── spec.md              # 기능 명세서
+├── plan.md              # 기술 계획 (다음 단계)
+└── tasks.md             # 작업 목록 (최종 단계)
+```
 
-### Section Requirements
+---
 
-- **Mandatory sections**: Must be completed for every feature
-- **Optional sections**: Include only when relevant to the feature
-- When a section doesn't apply, remove it entirely (don't leave as "N/A")
-
-### For AI Generation
-
-When creating this spec from a user prompt:
-
-1. **Make informed guesses**: Use context, industry standards, and common patterns to fill gaps
-2. **Document assumptions**: Record reasonable defaults in the Assumptions section
-3. **Limit clarifications**: Maximum 3 [NEEDS CLARIFICATION] markers - use only for critical decisions that:
-   - Significantly impact feature scope or user experience
-   - Have multiple reasonable interpretations with different implications
-   - Lack any reasonable default
-4. **Prioritize clarifications**: scope > security/privacy > user experience > technical details
-5. **Think like a tester**: Every vague requirement should fail the "testable and unambiguous" checklist item
-6. **Common areas needing clarification** (only if no reasonable default exists):
-   - Feature scope and boundaries (include/exclude specific use cases)
-   - User types and permissions (if multiple conflicting interpretations possible)
-   - Security/compliance requirements (when legally/financially significant)
-
-**Examples of reasonable defaults** (don't ask about these):
-
-- Data retention: Industry-standard practices for the domain
-- Performance targets: Standard web/mobile app expectations unless specified
-- Error handling: User-friendly messages with appropriate fallbacks
-- Authentication method: Standard session-based or OAuth2 for web apps
-- Integration patterns: RESTful APIs unless specified otherwise
-
-### Success Criteria Guidelines
-
-Success criteria must be:
-
-1. **Measurable**: Include specific metrics (time, percentage, count, rate)
-2. **Technology-agnostic**: No mention of frameworks, languages, databases, or tools
-3. **User-focused**: Describe outcomes from user/business perspective, not system internals
-4. **Verifiable**: Can be tested/validated without knowing implementation details
-
-**Good examples**:
-
-- "Users can complete checkout in under 3 minutes"
-- "System supports 10,000 concurrent users"
-- "95% of searches return results in under 1 second"
-- "Task completion rate improves by 40%"
-
-**Bad examples** (implementation-focused):
-
-- "API response time is under 200ms" (too technical, use "Users see results instantly")
-- "Database can handle 1000 TPS" (implementation detail, use user-facing metric)
-- "React components render efficiently" (framework-specific)
-- "Redis cache hit rate above 80%" (technology-specific)
+**다음 단계**: `/speckit.plan`을 실행하여 기술적 구현 계획을 수립합니다.
