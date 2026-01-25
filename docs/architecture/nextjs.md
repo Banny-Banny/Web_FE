@@ -449,7 +449,7 @@ export function LoginForm() {
 
 ## 🎨 스타일링 및 CSS
 
-### 1. Tailwind CSS 활용
+### 1. Tailwind CSS 활용 (필요시)
 
 **CSS 변수와 Tailwind 조합**
 
@@ -486,7 +486,7 @@ module.exports = {
 };
 ```
 
-### 2. CSS Modules (필요시)
+### 2. CSS Modules (필수)
 
 **컴포넌트별 스타일 격리**
 
