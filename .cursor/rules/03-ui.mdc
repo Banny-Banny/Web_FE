@@ -1,6 +1,6 @@
 ---
-description: FE UI 작업 시 Cursor 에게 주는 엄격 지침 프롬프트 (tailwind 토큰 사용·nativewind·stylesheet 전용·파일 변경 범위 제한)
-globs: ['index.tsx', 'styles.ts']
+description: FE UI 작업 시 Cursor 에게 주는 엄격 지침 프롬프트 (tailwind 토큰 사용·module css 사용, 전용·파일 변경 범위 제한)
+globs: ['index.tsx', 'styles.module.css']
 alwaysApply: false
 ---
 
@@ -32,9 +32,9 @@ alwaysApply: false
 
 ==============================================
 
-OS 경로: /Users/jiho/Desktop/TimeEgg/FE
-토큰 소스: /Users/jiho/Desktop/TimeEgg/FE/tailwind.config.js (이미 선언됨. 절대 수정 금지)
-작업 가능 파일: index.tsx, styles.ts 두 파일만 수정/생성.
+OS 경로: /Users/jiho/Desktop/TimeEgg/Web_FE
+토큰 소스: /Users/jiho/Desktop/TimeEgg/Web_FE/tailwind.config.js (이미 선언됨. 절대 수정 금지)
+작업 가능 파일: index.tsx, styles.module.css 두 파일만 수정/생성.
 패키지 설치 금지: 새 라이브러리 설치 금지(Jest 포함). package.json 범위 내 라이브러리만 사용.
 
 ==============================================
@@ -49,8 +49,8 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
 
    - 인라인 스타일 금지 (style={...}, <tag style="..."> 금지).
    - nativewind는 오직 토큰 참조에만 사용(유틸리티 클래스로 토큰 호출).
-   - 모든 스타일 선언은 styles.ts에서만 (stylesheet 전용). 클래스명으로 연결.
-   - index.tsx에는 HTML/JSX 구조만 배치하고, 클래스는 styles.ts의 셀렉터와 연결.
+   - 모든 스타일 선언은 styles.module.css에서만. 클래스명으로 연결.
+   - index.tsx에는 HTML/JSX 구조만 배치하고, 클래스는 styles.module.css의 셀렉터와 연결.
    - **소수점 값 반올림 필수**: 모든 스타일 속성의 소수점 값은 반올림하여 정수로 변환. 예: borderWidth: 1.111 → borderWidth: 1, height: 26.198 → height: 26
 
 6) 접근성/반응형: 시맨틱 태그, 키보드 포커스, 명시적 상태 클래스, min 탭타겟 44px.
@@ -63,7 +63,7 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
 1) package.json 분석: 사용 가능한 라이브러리/버전 요약 → nativewind/tailwind 사용 가능 여부 확인.
 2) 피그마 제공 시: 전체 구조(IA, 컴포넌트, 타입스케일, 그리드)를 페이지 → 섹션 → 컴포넌트 순으로 목록화.
 3) 폴더/라우터 가정: 단일 엔트리(index.tsx) 기준의 레이아웃 뼈대 정의(헤더/메인/푸터, 컨테이너, 그리드 컬럼).
-4) HTML 스켈레톤 먼저, 이후 styles.ts 작성 → 클래스 연결 검증.
+4) HTML 스켈레톤 먼저, 이후 styles.module.css 작성 → 클래스 연결 검증.
 
 ==============================================
 
@@ -75,7 +75,7 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
    - 토큰 클래스는 nativewind 유틸리티로만 사용(예: className="bg-token-..."). 직접 색상값 금지.
    - 모든 시각 표현은 클래스명으로만 연결(실제 선언은 styles.css).
 
-2) styles.ts
+2) styles.module.css
 
    - tailwind 토큰 변수를 기반으로 유틸리티/컴포넌트 클래스 정의.
    - 반응형 규칙(@media)과 상태(hover/focus/aria-pressed) 정의.
@@ -95,7 +95,7 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
 4. 산출물 포맷
 
 - index.tsx: HTML/JSX 뼈대 + 클래스 바인딩 + 접근성 속성.
-- styles.ts: 실제 스타일 선언(토큰 기반) + 반응형/상태 규칙.
+- styles.module.css: 실제 스타일 선언(토큰 기반) + 반응형/상태 규칙.
 - 두 파일 상단에 주석 블록으로: 버전, 생성 시각, 규칙 준수 체크리스트 간단 기재.
 
 ==============================================
@@ -105,7 +105,7 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
 - [ ] tailwind.config.js 수정 안 함 확인.
 - [ ] 색상값 직접 입력 0건(hex/rgb/hsl 사용 0건).
 - [ ] 인라인 스타일 0건.
-- [ ] index.tsx → 구조만 / styles.ts → 스타일만 분리 유지.
+- [ ] index.tsx → 구조만 / styles.module.css → 스타일만 분리 유지.
 - [ ] nativewind 토큰 참조만 사용했는지 확인.
 - [ ] 피그마 구조 대비 누락 섹션 없음.
 - [ ] 접근성: 시맨틱/포커스/명도 대비/탭타겟 통과.
@@ -118,12 +118,12 @@ OS 경로: /Users/jiho/Desktop/TimeEgg/FE
 - 레이아웃/컴포넌트가 토큰 100% 사용으로 렌더링.
 - 하드코딩 색상/인라인 스타일/파일 범위 위반 0건.
 - 피그마와 IA 일치, 반응형/상태 인터랙션 정상.
-- index.tsx, styles.ts 외 변경사항 없음.
+- index.tsx, styles.module.css 외 변경사항 없음.
 
 ==============================================
 
 7. 출력 지시
 
-- 코드만 제출: index.tsx, styles.ts 두 파일의 전체 내용.
+- 코드만 제출: index.tsx, styles.module.css 두 파일의 전체 내용.
 - 제출 전 체크리스트 통과 결과를 주석으로 각 파일 상단에 첨부.
 - 위 규칙을 한 항목이라도 위반하면 오류 보고와 함께 중단.

@@ -102,7 +102,7 @@ components/[feature]/
 └── components/        # UI 컴포넌트
     └── [component]/
         ├── index.tsx
-        ├── styles.ts  # 스타일 정의
+        ├── styles.module.css  # 스타일 정의
         └── types.ts   # Props 타입
 ```
 

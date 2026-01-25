@@ -157,7 +157,7 @@ components/[feature]/
 ├── T0XX [US1] types.ts 생성 - 컴포넌트 타입 정의
 ├── T0XX [US1] mocks/data.ts 생성 - Mock 데이터
 ├── T0XX [P] [US1] components/[sub-component]/index.tsx - UI 컴포넌트
-├── T0XX [P] [US1] components/[sub-component]/styles.ts - 스타일
+├── T0XX [P] [US1] components/[sub-component]/styles.module.css - 스타일
 ├── T0XX [US1] index.tsx 생성 - 컨테이너 (Mock 데이터 사용)
 └── T0XX [US1] app/[route]/page.tsx에 통합 - 라우팅
 ```
