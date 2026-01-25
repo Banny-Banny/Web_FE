@@ -5,8 +5,13 @@
 ## 기술 스택
 
 - **Framework**: Next.js 16.1.4
-- **Language**: TypeScript
+- **Language**: TypeScript 5
+- **UI Library**: React 19.2.3
 - **Styling**: Tailwind CSS v4
+- **State Management**: TanStack React Query v5
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
+- **Bundler**: Webpack (Next.js 16 기본값은 Turbopack이지만 Webpack 사용)
 - **Testing**: Playwright
 - **Linting**: ESLint
 
@@ -16,18 +21,34 @@
 
 ```
 src/
-├── app/          # [Routing Layer] URL & Navigation ONLY
-├── components/   # [Features] Business Logic & "Smart" Containers
-├── commons/      # [Design System] Reusable "Dumb" UI components
-└── utils/        # [Pure Functions] Helper functions
+├── app/              # [Routing Layer] Next.js 페이지 및 레이아웃
+│   ├── (auth)/       # 인증 관련 라우트 그룹
+│   └── (main)/       # 메인 앱 라우트 그룹
+├── components/       # [Features] Feature별 스마트 컴포넌트
+└── commons/          # [Shared Core] 프로젝트의 모든 공용 자산
+    ├── apis/         # API 함수 + 데이터 타입 (Axios 활용)
+    ├── providers/    # QueryProvider, Axios 인스턴스 등 전역 Provider
+    ├── hooks/        # React Query, Zustand 등 데이터 바인딩 훅
+    ├── components/   # 디자인 시스템 (공용 버튼, 인풋 등)
+    ├── layout/       # 공용 레이아웃 컴포넌트 (GNB, MobileFrame 등)
+    ├── styles/       # Tailwind CSS 설정 및 디자인 토큰
+    ├── types/        # 공용 타입 정의
+    └── utils/        # 순수 함수 (날짜 포맷터, 성능 측정 등)
 ```
 
 ### 아키텍처 규칙
 
 - **app/**: 라우팅과 레이아웃만 관리. 비즈니스 로직 금지
 - **components/**: Feature별 비즈니스 로직과 스마트 컨테이너
-- **commons/**: 순수 UI 컴포넌트 (디자인 시스템)
-- **utils/**: React와 무관한 순수 함수
+- **commons/**: 모든 공용 자산 통합 관리
+  - `apis/`: API 함수 및 타입
+  - `providers/`: 전역 Provider (React Query, Axios 등)
+  - `hooks/`: 데이터 바인딩 훅
+  - `components/`: 순수 UI 컴포넌트 (디자인 시스템)
+  - `layout/`: 공용 레이아웃 컴포넌트
+  - `styles/`: 디자인 토큰 및 글로벌 스타일
+  - `types/`: 공용 타입 정의
+  - `utils/`: React와 무관한 순수 함수
 
 자세한 구조 규칙은 `.cursor/rules/project-structure.mdc`를 참고하세요.
 
@@ -60,22 +81,44 @@ pnpm dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
+> **참고**: Next.js 16은 기본적으로 Turbopack을 사용하지만, 이 프로젝트는 Webpack을 사용합니다 (`--webpack` 플래그 사용).
+
 ### 빌드
 
 ```bash
+# 린트 체크 후 빌드
 npm run build
+
+# 프로덕션 서버 실행
 npm run start
 ```
 
-### 테스트
+### 번들 분석
 
 ```bash
-npm run test
+# 전체 번들 분석
+npm run analyze
+
+# 서버 번들만 분석
+npm run analyze:server
+
+# 브라우저 번들만 분석
+npm run analyze:browser
+```
+
+### 린트
+
+```bash
+npm run lint
 ```
 
 ## 환경 변수 설정
 
 `.env.example` 파일을 참고하여 `.env.local` 파일을 생성하고 필요한 환경 변수를 설정하세요.
+
+주요 환경 변수:
+- `NEXT_PUBLIC_API_BASE_URL`: API 서버 기본 URL (기본값: `https://be-production-8aa2.up.railway.app`)
+- `CDN_URL`: 프로덕션 환경의 CDN URL (선택사항)
 
 ## 개발 가이드
 
@@ -97,11 +140,19 @@ components/{feature}/
 
 ### 스타일링 규칙
 
-- Tailwind CSS 토큰을 사용하여 스타일을 적용합니다
+- Tailwind CSS v4를 사용합니다
 - `tailwind.config.js`에서 호스트의 색상 토큰을 임포트하여 사용합니다
 - 인라인 스타일과 하드코딩된 색상값 사용을 금지합니다
+- 디자인 토큰은 `src/commons/styles/`에서 관리합니다
 
 자세한 스타일링 규칙은 `.cursor/rules/03-ui.mdc`를 참고하세요.
+
+### API 클라이언트
+
+- Axios 기반 API 클라이언트를 사용합니다
+- API 함수는 `src/commons/apis/`에 정의합니다
+- React Query를 통한 서버 상태 관리를 권장합니다
+- API Provider는 `src/commons/provider/api-provider/`에서 관리합니다
 
 ## 라이브러리 관리
 
