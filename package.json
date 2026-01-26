@@ -19,6 +19,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.91.2",
+    "@tosspayments/payment-widget-sdk": "^0.12.1",
     "axios": "^1.13.2",
     "lucide-react": "^0.563.0",
     "next": "16.1.4",
