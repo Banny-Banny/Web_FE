@@ -28,8 +28,8 @@ export function OpenDatePicker({}: Omit<OpenDatePickerProps, 'register' | 'error
     watch,
   } = useFormContext<TimecapsuleFormData>();
 
-  const error = errors.openDate;
-  const openDate = watch('openDate');
+  const error = errors.customOpenDate;
+  const customOpenDate = watch('customOpenDate');
 
   // 오늘 이후 날짜만 선택 가능하도록 min 속성 설정
   const today = new Date();
@@ -38,27 +38,27 @@ export function OpenDatePicker({}: Omit<OpenDatePickerProps, 'register' | 'error
 
   // 날짜 변경 시 유효성 검사
   useEffect(() => {
-    if (openDate) {
-      const selectedDate = new Date(openDate);
+    if (customOpenDate) {
+      const selectedDate = new Date(customOpenDate);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
       selectedDate.setHours(0, 0, 0, 0);
 
       if (selectedDate <= todayDate) {
-        setValue('openDate', '', { shouldValidate: true });
+        setValue('customOpenDate', '', { shouldValidate: true });
       }
     }
-  }, [openDate, setValue]);
+  }, [customOpenDate, setValue]);
 
   return (
     <div className={styles.container}>
-      <label htmlFor="openDate" className={styles.label}>
+      <label htmlFor="customOpenDate" className={styles.label}>
         오픈 예정일
       </label>
       <input
-        id="openDate"
+        id="customOpenDate"
         type="date"
-        {...register('openDate')}
+        {...register('customOpenDate')}
         min={minDate}
         className={`${styles.input} ${error ? styles.inputError : ''}`}
         aria-label="오픈 예정일"

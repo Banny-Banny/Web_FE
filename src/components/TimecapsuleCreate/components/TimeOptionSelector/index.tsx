@@ -85,7 +85,6 @@ export function TimeOptionSelector({}: Omit<TimeOptionSelectorProps, 'register' 
       >
         {TIME_OPTIONS.map((option: TimeOptionInfo, index: number) => {
           const optionId = `timeOption-${option.value}-${index}`;
-          const customOpenDate = watch('customOpenDate');
           
           // 선택 상태 확인
           let isSelected = false;

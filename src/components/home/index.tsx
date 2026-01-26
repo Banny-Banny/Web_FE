@@ -14,15 +14,15 @@ import { MapControls } from './components/map-controls';
 import { LocationDisplay } from './components/location-display';
 import { FabButton } from './components/fab-button';
 import { EggSlot } from './components/egg-slot';
-import { Modal } from '@/commons/components/modal';
+import { MyEggsModal } from './components/my-eggs-modal';
 import type { HomeFeatureProps } from './types';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const [notificationModalOpen, setNotificationModalOpen] = useState(false);
-  const [notificationCount] = useState<number>(3); // 임시 Mock 데이터 (향후 API 연동 시 실제 데이터로 변경)
+  const [myEggsModalOpen, setMyEggsModalOpen] = useState(false);
+  const [eggCount] = useState<number>(2); // 임시 Mock 데이터 (향후 API 연동 시 실제 데이터로 변경)
   const geolocation = useGeolocation();
   
   // Geolocation 값을 useKakaoMap에 전달
@@ -52,14 +52,14 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     // 예시: router.push('/time-capsule/create');
   };
 
-  // 알림 슬롯 클릭 핸들러
+  // 알 슬롯 클릭 핸들러 (MY EGGS 모달 열기)
   const handleEggSlotClick = () => {
-    setNotificationModalOpen(true);
+    setMyEggsModalOpen(true);
   };
 
-  // 알림 모달 닫기 핸들러
-  const handleNotificationModalClose = () => {
-    setNotificationModalOpen(false);
+  // MY EGGS 모달 닫기 핸들러
+  const handleMyEggsModalClose = () => {
+    setMyEggsModalOpen(false);
   };
 
   // 카카오 지도 스크립트 로딩
@@ -204,81 +204,18 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
           />
           {/* 알 슬롯 (우측 상단) */}
           <EggSlot
-            count={notificationCount}
+            count={eggCount}
             onClick={handleEggSlotClick}
           />
         </>
       )}
 
-      {/* 알림 모달 */}
-      <Modal
-        visible={notificationModalOpen}
-        onClose={handleNotificationModalClose}
-        height="auto"
-        padding={24}
-      >
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '16px',
-          minHeight: '200px'
-        }}>
-          <h2 style={{ 
-            fontSize: '18px', 
-            fontWeight: '600', 
-            margin: 0,
-            color: '#0A0A0A'
-          }}>
-            알림
-          </h2>
-          {notificationCount === 0 ? (
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              minHeight: '150px',
-              color: '#696969',
-              fontSize: '14px'
-            }}>
-              알림이 없습니다
-            </div>
-          ) : (
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '12px' 
-            }}>
-              {/* 임시 Mock 알림 데이터 */}
-              {Array.from({ length: notificationCount }).map((_, index) => (
-                <div 
-                  key={index}
-                  style={{
-                    padding: '12px',
-                    backgroundColor: '#FAFAFA',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(10, 10, 10, 0.08)'
-                  }}
-                >
-                  <div style={{ 
-                    fontSize: '14px', 
-                    fontWeight: '600',
-                    marginBottom: '4px',
-                    color: '#0A0A0A'
-                  }}>
-                    알림 {index + 1}
-                  </div>
-                  <div style={{ 
-                    fontSize: '12px',
-                    color: '#696969'
-                  }}>
-                    새로운 이스터에그가 도착했습니다!
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </Modal>
+      {/* MY EGGS 모달 */}
+      <MyEggsModal
+        visible={myEggsModalOpen}
+        eggCount={eggCount}
+        onClose={handleMyEggsModalClose}
+      />
     </div>
   );
 }
