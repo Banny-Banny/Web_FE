@@ -74,8 +74,16 @@ export function useLoginMutation() {
         queryClient.setQueryData(['auth', 'user'], data.user);
       }
 
-      // 홈 페이지로 리다이렉트
-      router.push('/');
+      // 온보딩 완료 여부 확인
+      const onboardingStatus = queryClient.getQueryData<{ completed: boolean }>(['onboarding', 'status']);
+      const isOnboardingCompleted = onboardingStatus?.completed === true;
+
+      // 온보딩이 완료되지 않았다면 온보딩 페이지로, 완료되었다면 홈으로 리다이렉트
+      if (!isOnboardingCompleted) {
+        router.push('/onboarding');
+      } else {
+        router.push('/');
+      }
     },
     onError: (error) => {
       // 에러는 컴포넌트에서 처리

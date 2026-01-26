@@ -73,12 +73,18 @@ export function useSignupMutation() {
         queryClient.setQueryData(['auth', 'user'], data.user);
       }
 
-      // 홈 페이지로 리다이렉트
-      router.push('/');
+      // 로그인 페이지로 리다이렉트
+      router.push('/login');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       // 에러는 컴포넌트에서 처리
-      console.error('회원가입 실패:', error);
+      const errorInfo = {
+        message: error?.message || '알 수 없는 오류',
+        status: error?.status,
+        code: error?.code,
+        details: error?.details,
+      };
+      console.error('회원가입 실패:', JSON.stringify(errorInfo, null, 2));
     },
   });
 }

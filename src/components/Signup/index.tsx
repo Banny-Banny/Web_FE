@@ -28,7 +28,13 @@ export function SignupContainer() {
       // 성공 시 리다이렉트는 useSignupMutation에서 처리
     } catch (error: any) {
       // 에러는 SignupForm에 전달됨 (error prop)
-      console.error('회원가입 실패:', error);
+      const errorInfo = {
+        message: error?.message || '알 수 없는 오류',
+        status: error?.status,
+        code: error?.code,
+        details: error?.details,
+      };
+      console.error('회원가입 실패:', JSON.stringify(errorInfo, null, 2));
     }
   };
 
