@@ -5,11 +5,11 @@
 
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import type { MapViewProps } from './types';
 import styles from './styles.module.css';
 
-export function MapView({
+export const MapView = memo(function MapView({
   onMapInit,
   map,
   isLoading = false,
@@ -32,7 +32,7 @@ export function MapView({
   if (error) {
     return (
       <div className={`${styles.container} ${className}`}>
-        <div className={styles.errorContainer} role="alert">
+        <div className={styles.errorContainer} role="alert" aria-live="assertive">
           <p className={styles.errorText}>{error}</p>
         </div>
       </div>
@@ -59,7 +59,15 @@ export function MapView({
         className={styles.mapContainer}
         role="application"
         aria-label="카카오 지도"
+        aria-busy={isLoading}
       />
+      {/* 로딩 중 조작 방지 오버레이 */}
+      {isLoading && (
+        <div 
+          className={styles.loadingOverlay}
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
-}
+});

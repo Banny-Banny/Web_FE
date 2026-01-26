@@ -39,8 +39,13 @@
 }
 
 .button:focus {
-  outline: 2px solid var(--color-primary);
+  outline: none;
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--color-primary-500, #3b82f6);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .button:disabled {

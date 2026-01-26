@@ -4,6 +4,7 @@
 
 'use client';
 
+import { memo } from 'react';
 import { useMapControl } from '../../hooks/useMapControl';
 import type { MapControlsProps } from './types';
 import styles from './styles.module.css';
@@ -11,7 +12,7 @@ import styles from './styles.module.css';
 /**
  * Map Controls 컴포넌트
  */
-export function MapControls({ map, className }: MapControlsProps) {
+export const MapControls = memo(function MapControls({ map, className }: MapControlsProps) {
   const { canReset, resetMap } = useMapControl({ map });
 
   const handleReset = () => {
@@ -55,4 +56,4 @@ export function MapControls({ map, className }: MapControlsProps) {
       </button>
     </div>
   );
-}
+});

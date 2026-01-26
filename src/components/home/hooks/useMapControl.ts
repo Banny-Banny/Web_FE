@@ -49,6 +49,8 @@ export function useMapControl({ map }: UseMapControlProps): UseMapControlReturn 
       console.error('지도 상태 확인 실패:', err);
       return false;
     }
+    // updateTrigger는 의도적으로 의존성에 포함하여 지도 상태 변경 시 재계산
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, updateTrigger]);
 
   // canReset을 계산된 값으로 사용

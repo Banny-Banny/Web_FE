@@ -36,16 +36,30 @@ export function useKakaoMap(): UseKakaoMapReturn {
       setIsLoading(true);
       setError(null);
 
-      // kakao 객체 확인
-      if (!window.kakao?.maps) {
-        throw new Error('카카오 지도 API가 로드되지 않았습니다.');
+      // 컨테이너 유효성 검사
+      if (!container) {
+        throw new Error('지도 컨테이너가 유효하지 않습니다.');
       }
 
-      // 지도 옵션 설정
-      const center = new window.kakao.maps.LatLng(
-        DEFAULT_CENTER.lat,
-        DEFAULT_CENTER.lng
-      );
+      // kakao 객체 확인
+      if (!window.kakao) {
+        throw new Error('카카오 지도 API가 로드되지 않았습니다. 페이지를 새로고침해주세요.');
+      }
+
+      if (!window.kakao.maps) {
+        throw new Error('카카오 지도 라이브러리를 사용할 수 없습니다. 잠시 후 다시 시도해주세요.');
+      }
+
+      // LatLng 생성 시도
+      let center;
+      try {
+        center = new window.kakao.maps.LatLng(
+          DEFAULT_CENTER.lat,
+          DEFAULT_CENTER.lng
+        );
+      } catch {
+        throw new Error('지도 좌표를 생성하는데 실패했습니다.');
+      }
 
       const options = {
         center,
@@ -53,11 +67,21 @@ export function useKakaoMap(): UseKakaoMapReturn {
       };
 
       // 지도 인스턴스 생성
-      const mapInstance = new window.kakao.maps.Map(container, options);
+      let mapInstance;
+      try {
+        mapInstance = new window.kakao.maps.Map(container, options);
+      } catch {
+        throw new Error('지도를 생성하는데 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
       
       // 지도 조작 기능 활성화
-      mapInstance.setDraggable(true); // 드래그 이동 활성화
-      mapInstance.setZoomable(true);  // 확대/축소 활성화
+      try {
+        mapInstance.setDraggable(true); // 드래그 이동 활성화
+        mapInstance.setZoomable(true);  // 확대/축소 활성화
+      } catch (controlErr) {
+        console.warn('지도 조작 기능 설정 실패:', controlErr);
+        // 조작 기능 설정 실패는 치명적이지 않으므로 계속 진행
+      }
       
       mapRef.current = mapInstance;
       setMap(mapInstance);
@@ -66,6 +90,7 @@ export function useKakaoMap(): UseKakaoMapReturn {
       const errorMessage = err instanceof Error ? err.message : '지도를 초기화하는데 실패했습니다.';
       setError(errorMessage);
       setIsLoading(false);
+      console.error('지도 초기화 실패:', err);
     }
   }, []);
 
@@ -85,8 +110,8 @@ export function useKakaoMap(): UseKakaoMapReturn {
       
       mapRef.current.setCenter(center);
       mapRef.current.setLevel(DEFAULT_LEVEL);
-    } catch (err) {
-      console.error('지도 리셋 실패:', err);
+    } catch (resetErr) {
+      console.error('지도 리셋 실패:', resetErr);
     }
   }, []);
 
