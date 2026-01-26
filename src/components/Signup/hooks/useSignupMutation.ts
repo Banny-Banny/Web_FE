@@ -5,7 +5,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { localSignup } from '@/commons/apis/auth/signup';
-import { saveTokens } from '@/commons/utils/auth';
 import type { LocalSignupRequest } from '@/commons/apis/auth/types';
 import type { SignupFormData } from '../types';
 
@@ -114,30 +113,27 @@ export function useSignupMutation() {
       // 백엔드 버그로 인해 데이터는 저장되지만 응답에서 500 에러 발생
       return localSignup(request);
     },
-    onSuccess: (data) => {
-      // 토큰 저장
-      if (data.accessToken) {
-        saveTokens({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken || '',
-        });
+    onSuccess: (data, variables) => {
+      // 회원가입 성공 시 토큰을 저장하지 않고, 사용자 정보만 세션 스토리지에 임시 저장
+      // 로그인 페이지에서 이 정보를 사용하여 폼에 미리 채울 수 있도록 함
+      if (typeof window !== 'undefined') {
+        try {
+          const signupInfo = {
+            email: variables.email,
+            phoneNumber: variables.phoneNumber,
+            timestamp: Date.now(),
+          };
+          sessionStorage.setItem('signup_info', JSON.stringify(signupInfo));
+        } catch (error) {
+          console.error('회원가입 정보 저장 실패:', error);
+        }
       }
 
-      // 인증 상태 업데이트 (사용자 정보가 있는 경우)
-      if (data.user) {
-        queryClient.setQueryData(['auth', 'user'], data.user);
-      }
+      // 토큰 저장하지 않음 (사용자가 직접 로그인해야 함)
+      // 인증 상태도 업데이트하지 않음
 
-      // 온보딩 완료 여부 확인
-      const onboardingStatus = queryClient.getQueryData<{ completed: boolean }>(['onboarding', 'status']);
-      const isOnboardingCompleted = onboardingStatus?.completed === true;
-
-      // 온보딩이 완료되지 않았다면 온보딩 페이지로, 완료되었다면 홈으로 리다이렉트
-      if (!isOnboardingCompleted) {
-        router.push('/onboarding');
-      } else {
-        router.push('/');
-      }
+      // 로그인 페이지로 리다이렉트 (사용자가 직접 로그인하도록)
+      router.push('/login?from=signup');
     },
     onError: (error: any) => {
       const errorStatus = error?.status || error?.response?.status;

@@ -4,7 +4,7 @@
  * 로그인 폼 컴포넌트
  */
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/commons/components/button';
 import type { LoginFormProps, LoginFormData, LoginFormErrors } from './types';
@@ -33,6 +33,32 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   
   // 비밀번호 보이기/숨기기 상태
   const [showPassword, setShowPassword] = useState(false);
+
+  /**
+   * 회원가입에서 넘어온 경우 세션 스토리지에서 정보 가져오기
+   */
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const signupInfoStr = sessionStorage.getItem('signup_info');
+        if (signupInfoStr) {
+          const signupInfo = JSON.parse(signupInfoStr);
+          
+          // 회원가입 정보가 있으면 폼에 미리 채우기
+          if (signupInfo.email || signupInfo.phoneNumber) {
+            setFormData((prev) => ({
+              ...prev,
+              loginType: signupInfo.email ? 'email' : 'phone',
+              email: signupInfo.email || '',
+              phoneNumber: signupInfo.phoneNumber || '',
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('회원가입 정보 불러오기 실패:', error);
+      }
+    }
+  }, []);
 
   /**
    * 로그인 타입 변경 핸들러
