@@ -36,6 +36,10 @@ export interface KakaoMap {
   getLevel(): number;
   /** 지도를 다시 그립니다 */
   relayout(): void;
+  /** 지도 드래그 기능을 설정합니다 */
+  setDraggable(draggable: boolean): void;
+  /** 지도 확대/축소 기능을 설정합니다 */
+  setZoomable(zoomable: boolean): void;
 }
 
 /**

@@ -55,6 +55,10 @@ export function useKakaoMap(): UseKakaoMapReturn {
       // 지도 인스턴스 생성
       const mapInstance = new window.kakao.maps.Map(container, options);
       
+      // 지도 조작 기능 활성화
+      mapInstance.setDraggable(true); // 드래그 이동 활성화
+      mapInstance.setZoomable(true);  // 확대/축소 활성화
+      
       mapRef.current = mapInstance;
       setMap(mapInstance);
       setIsLoading(false);
