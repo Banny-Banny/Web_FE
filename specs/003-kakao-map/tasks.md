@@ -83,11 +83,11 @@
 
 ### FAB 버튼 컴포넌트
 
-- [ ] T026 [US4] `src/components/home/components/fab-button/types.ts`에 FabButton 컴포넌트 타입 정의 생성
-- [ ] T027 [P] [US4] `src/components/home/components/fab-button/styles.module.css`에 FabButton 스타일 작성 (우측 하단 고정, 아이콘 전환 애니메이션, 오버레이 배경)
-- [ ] T028 [US4] `src/components/home/components/fab-button/index.tsx`에 FabButton 컴포넌트 구현 (아이콘 전환, 선택 옵션 표시/숨김)
-- [ ] T029 [US4] `src/components/home/index.tsx`에 FabButton 컴포넌트 통합
-- [ ] T030 [US4] `src/components/home/components/fab-button/index.tsx`에 이스터에그/타임캡슐 선택 핸들러 연결 (임시 라우팅 또는 콜백)
+- [x] T026 [US4] `src/components/home/components/fab-button/types.ts`에 FabButton 컴포넌트 타입 정의 생성
+- [x] T027 [P] [US4] `src/components/home/components/fab-button/styles.module.css`에 FabButton 스타일 작성 (우측 하단 고정, 아이콘 전환 애니메이션, 오버레이 배경)
+- [x] T028 [US4] `src/components/home/components/fab-button/index.tsx`에 FabButton 컴포넌트 구현 (아이콘 전환, 선택 옵션 표시/숨김)
+- [x] T029 [US4] `src/components/home/index.tsx`에 FabButton 컴포넌트 통합
+- [x] T030 [US4] `src/components/home/components/fab-button/index.tsx`에 이스터에그/타임캡슐 선택 핸들러 연결 (임시 라우팅 또는 콜백)
 
 ---
 

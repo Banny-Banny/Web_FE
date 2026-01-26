@@ -12,6 +12,7 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { MapView } from './components/map-view';
 import { MapControls } from './components/map-controls';
 import { LocationDisplay } from './components/location-display';
+import { FabButton } from './components/fab-button';
 import type { HomeFeatureProps } from './types';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
@@ -31,6 +32,20 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     setRetryCount(prev => prev + 1);
     setScriptError(null);
     setScriptLoaded(false);
+  };
+
+  // 이스터에그 선택 핸들러 (임시)
+  const handleEasterEggClick = () => {
+    // TODO: 향후 이스터에그 생성 페이지로 라우팅
+    console.log('이스터에그 생성 선택');
+    // 예시: router.push('/easter-egg/create');
+  };
+
+  // 타임캡슐 선택 핸들러 (임시)
+  const handleTimeCapsuleClick = () => {
+    // TODO: 향후 타임캡슐 생성 페이지로 라우팅
+    console.log('타임캡슐 생성 선택');
+    // 예시: router.push('/time-capsule/create');
   };
 
   // 카카오 지도 스크립트 로딩
@@ -168,8 +183,14 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
             userLat={geolocation.latitude}
             userLng={geolocation.longitude}
           />
+                {/* FAB 버튼은 항상 표시 (GNB 위에 위치) */}
+      <FabButton
+        onEasterEggClick={handleEasterEggClick}
+        onTimeCapsuleClick={handleTimeCapsuleClick}
+      />
         </>
       )}
+
     </div>
   );
 }

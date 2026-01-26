@@ -1,0 +1,238 @@
+/**
+ * FAB Button 컴포넌트 스타일
+ * 우측 하단 고정, 아이콘 전환 애니메이션, 오버레이 배경
+ */
+
+/* 오버레이 배경 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-in-out;
+  pointer-events: auto;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 컨테이너 */
+.container {
+  position: absolute;
+  bottom: 24px; /* 지도 컨테이너 내부 하단에서 24px 위 */
+  right: 16px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+/* FAB 메인 버튼 */
+.fabButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  background-color: var(--color-primary-500, #3b82f6);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10001;
+}
+
+.fabButton:hover {
+  background-color: var(--color-primary-600, #2563eb);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.fabButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.fabButton:focus {
+  outline: none;
+}
+
+.fabButton:focus-visible {
+  outline: 3px solid var(--color-primary-300, #93c5fd);
+  outline-offset: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* 아이콘 컨테이너 */
+.iconContainer {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Plus 아이콘 */
+.plusIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-white, #ffffff);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+.fabButton.isOpen .plusIcon {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+
+/* Close 아이콘 */
+.closeIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-white, #ffffff);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+  transform: rotate(-90deg);
+  opacity: 0;
+}
+
+.fabButton.isOpen .closeIcon {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+/* 선택 옵션 컨테이너 */
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+}
+
+.optionsContainer.hidden {
+  display: none;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 선택 옵션 아이템 컨테이너 */
+.optionItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 선택 옵션 버튼 */
+.optionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+.optionButton:hover {
+  background-color: var(--color-gray-50, #f9fafb);
+  border-color: var(--color-gray-300, #d1d5db);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+}
+
+.optionButton:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.optionButton:focus {
+  outline: none;
+}
+
+.optionButton:focus-visible {
+  outline: 3px solid var(--color-primary-300, #93c5fd);
+  outline-offset: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* 옵션 아이콘 */
+.optionIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-gray-700, #374151);
+}
+
+/* 옵션 라벨 */
+.optionLabel {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 12px;
+  background-color: var(--color-gray-900, #111827);
+  color: var(--color-white, #ffffff);
+  border-radius: 24px;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.optionItem:hover .optionLabel {
+  opacity: 1;
+}
+
+/* 접근성 */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
