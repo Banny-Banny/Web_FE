@@ -46,11 +46,11 @@ export function isValidPassword(password: string): boolean {
 export function validateSignupForm(data: SignupFormData): SignupFormErrors {
   const errors: SignupFormErrors = {};
   
-  // 닉네임 필수
-  if (!data.nickname) {
-    errors.nickname = '닉네임을 입력해주세요.';
-  } else if (data.nickname.length < 2) {
-    errors.nickname = '닉네임은 2자 이상이어야 합니다.';
+  // 이름 필수
+  if (!data.name) {
+    errors.name = '이름을 입력해주세요.';
+  } else if (data.name.length < 2) {
+    errors.name = '이름은 2자 이상이어야 합니다.';
   }
   
   // 전화번호 필수 및 형식 검증
@@ -70,8 +70,8 @@ export function validateSignupForm(data: SignupFormData): SignupFormErrors {
   // 비밀번호 필수 및 강도 검증
   if (!data.password) {
     errors.password = '비밀번호를 입력해주세요.';
-  } else if (!isValidPassword(data.password)) {
-    errors.password = '비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.';
+  } else if (data.password.length < 8) {
+    errors.password = '비밀번호는 8자 이상이어야 합니다.';
   }
   
   // 비밀번호 확인

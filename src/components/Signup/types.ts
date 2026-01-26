@@ -6,7 +6,7 @@
  * 회원가입 폼 데이터 타입
  */
 export interface SignupFormData {
-  nickname: string;
+  name: string;  // 이름 (닉네임 대신 사용)
   phoneNumber: string;
   email: string;
   password: string;
@@ -19,7 +19,7 @@ export interface SignupFormData {
  * 회원가입 폼 에러 타입
  */
 export interface SignupFormErrors {
-  nickname?: string;
+  name?: string;
   phoneNumber?: string;
   email?: string;
   password?: string;

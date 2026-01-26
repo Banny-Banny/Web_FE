@@ -14,8 +14,8 @@ import type { SignupFormData } from '../types';
  */
 function prepareSignupRequest(formData: SignupFormData): LocalSignupRequest {
   const request: LocalSignupRequest = {
-    nickname: formData.nickname,
-    phoneNumber: formData.phoneNumber,
+    nickname: formData.name,  // 프론트엔드의 name을 API의 nickname으로 매핑
+    phoneNumber: formData.phoneNumber.replace(/-/g, ''),  // 하이픈 제거
     email: formData.email,
     password: formData.password,
   };
