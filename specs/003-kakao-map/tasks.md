@@ -317,10 +317,10 @@
 - `src/components/home/hooks/useMapControl.ts`
 
 **완료 기준**:
-- [ ] `useMapControl` 훅이 정상 동작함
-- [ ] `resetMap` 함수가 지도를 기본 상태로 복원함
-- [ ] `canReset` 상태가 정확히 관리됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `useMapControl` 훅이 정상 동작함
+- [x] `resetMap` 함수가 지도를 기본 상태로 복원함
+- [x] `canReset` 상태가 정확히 관리됨
+- [x] TypeScript 컴파일 에러 없음
 
 ### P4-2: 지도 관리 컨트롤 컴포넌트 구현
 
@@ -338,8 +338,8 @@
 - `src/components/home/components/map-controls/types.ts`
 
 **완료 기준**:
-- [ ] `MapControlsProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `MapControlsProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T016: [P] [US3] Map Controls CSS Module 스타일 작성
 **목표**: Map Controls 컴포넌트의 스타일 정의
@@ -358,10 +358,10 @@
 - `src/components/home/components/map-controls/styles.module.css`
 
 **완료 기준**:
-- [ ] 컨트롤 버튼 스타일이 정의됨
-- [ ] 터치 타겟 크기가 44px × 44px 이상임
-- [ ] CSS 변수가 사용됨
-- [ ] 포커스 상태 스타일이 정의됨
+- [x] 컨트롤 버튼 스타일이 정의됨
+- [x] 터치 타겟 크기가 44px × 44px 이상임
+- [x] CSS 변수가 사용됨
+- [x] 포커스 상태 스타일이 정의됨
 
 #### T017: [US3] Map Controls 컴포넌트 구현
 **목표**: 지도 관리 기능을 제공하는 Map Controls 컴포넌트 구현
@@ -380,12 +380,12 @@
 - `src/components/home/components/map-controls/index.tsx`
 
 **완료 기준**:
-- [ ] Map Controls 컴포넌트가 정상적으로 렌더링됨
-- [ ] 지도 초기화 버튼이 표시됨
-- [ ] CSS Module 스타일이 적용됨
-- [ ] 접근성 속성이 추가됨
-- [ ] 키보드 네비게이션이 동작함
-- [ ] TypeScript 컴파일 에러 없음
+- [x] Map Controls 컴포넌트가 정상적으로 렌더링됨
+- [x] 지도 초기화 버튼이 표시됨
+- [x] CSS Module 스타일이 적용됨
+- [x] 접근성 속성이 추가됨
+- [x] 키보드 네비게이션이 동작함
+- [x] TypeScript 컴파일 에러 없음
 
 #### T018: [US3] Home Feature에 Map Controls 통합
 **목표**: Home Feature Container에 Map Controls 컴포넌트 통합
@@ -402,9 +402,9 @@
 - `src/components/home/index.tsx`
 
 **완료 기준**:
-- [ ] Map Controls가 Home Feature에 통합됨
-- [ ] 지도 초기화 기능이 정상 동작함
-- [ ] TypeScript 컴파일 에러 없음
+- [x] Map Controls가 Home Feature에 통합됨
+- [x] 지도 초기화 기능이 정상 동작함
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -686,11 +686,11 @@ Phase 5 (최적화)
 - [x] T013: 확대/축소 기능
 
 ### Phase 4: US3 - 지도 관리 기능
-- [ ] T014: useMapControl 훅 구현
-- [ ] T015: Map Controls 타입 정의
-- [ ] T016: Map Controls CSS Module 스타일
-- [ ] T017: Map Controls 컴포넌트 구현
-- [ ] T018: Home Feature에 통합
+- [x] T014: useMapControl 훅 구현
+- [x] T015: Map Controls 타입 정의
+- [x] T016: Map Controls CSS Module 스타일
+- [x] T017: Map Controls 컴포넌트 구현
+- [x] T018: Home Feature에 통합
 
 ### Phase 5: 에러 처리 및 최적화
 - [ ] T019: 환경 변수 에러 처리

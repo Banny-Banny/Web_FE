@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
 import { MapView } from './components/map-view';
+import { MapControls } from './components/map-controls';
 import type { HomeFeatureProps } from './types';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
@@ -56,13 +57,14 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
 
   // 지도 렌더링
   return (
-    <div className={`h-full w-full ${className}`}>
+    <div className={`h-full w-full relative ${className}`}>
       <MapView
         onMapInit={initializeMap}
         map={map}
         isLoading={isLoading}
         error={error}
       />
+      {map && <MapControls map={map} />}
     </div>
   );
 }

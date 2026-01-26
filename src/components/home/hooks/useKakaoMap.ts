@@ -4,7 +4,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { KakaoMap } from '@/commons/utils/kakao-map/types';
-import { DEFAULT_CENTER, DEFAULT_LEVEL } from '../config/map-config';
+import { DEFAULT_CENTER, DEFAULT_LEVEL } from '../constants';
 
 export interface UseKakaoMapReturn {
   /** 지도 인스턴스 */

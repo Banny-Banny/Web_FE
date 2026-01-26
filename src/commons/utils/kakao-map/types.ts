@@ -6,10 +6,10 @@
  * 위도/경도 좌표
  */
 export interface LatLng {
-  /** 위도 */
-  lat: number;
-  /** 경도 */
-  lng: number;
+  /** 위도를 반환합니다 */
+  getLat(): number;
+  /** 경도를 반환합니다 */
+  getLng(): number;
 }
 
 /**
@@ -57,11 +57,22 @@ export interface KakaoLatLngConstructor {
 }
 
 /**
+ * 카카오 지도 이벤트 네임스페이스
+ */
+export interface KakaoMapsEvent {
+  /** 이벤트 리스너를 추가합니다 */
+  addListener(target: unknown, type: string, handler: () => void): void;
+  /** 이벤트 리스너를 제거합니다 */
+  removeListener(target: unknown, type: string, handler: () => void): void;
+}
+
+/**
  * 카카오 지도 API 네임스페이스
  */
 export interface KakaoMaps {
   Map: KakaoMapConstructor;
   LatLng: KakaoLatLngConstructor;
+  event: KakaoMapsEvent;
   /** 지도 API를 로드합니다 */
   load(callback: () => void): void;
 }
