@@ -61,6 +61,11 @@
   background-color: var(--color-gray-100);
 }
 
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* 컨텐츠 */
 .content {
   min-height: 266px;
@@ -96,6 +101,11 @@
 .uploadButton:hover {
   background-color: var(--color-gray-50);
   border-color: var(--color-gray-300);
+}
+
+.uploadButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .uploadButtonTitle {
@@ -166,6 +176,12 @@
   opacity: 0.7;
 }
 
+.playButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
 .timeContainer {
   height: 24px;
   display: flex;
@@ -213,6 +229,11 @@
   background-color: var(--color-gray-200);
 }
 
+.resetButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .confirmButton {
   background-color: var(--color-gray-900);
   border: none;
@@ -221,6 +242,11 @@
 
 .confirmButton:hover {
   background-color: var(--color-gray-800);
+}
+
+.confirmButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .confirmButton:disabled {

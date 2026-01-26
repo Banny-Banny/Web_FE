@@ -28,9 +28,10 @@
 - **React Hooks** (useState, useCallback, useEffect)
 - **Context API** (필요 시 전역 상태)
 
-### 드래그 인터랙션
-- **react-use-gesture** 또는 **네이티브 터치 이벤트**
-- **framer-motion** (부드러운 애니메이션, 선택적)
+### 미디어 처리
+- **File API** (파일 선택 및 미리보기)
+- **MediaRecorder API** (음원 녹음, 선택적)
+- **HTML5 Audio/Video** (미디어 재생)
 
 ### 접근성
 - **ARIA 속성** (role, aria-label, aria-expanded 등)
@@ -59,14 +60,14 @@ src/
 │       │       ├── hooks/
 │       │       │   └── useEasterEggSheet.ts   # 바텀시트 상태 관리
 │       │       └── components/
-│       │           ├── option-button/         # 옵션 버튼
-│       │           │   ├── index.tsx
-│       │           │   ├── types.ts
-│       │           │   └── styles.module.css
-│       │           └── sheet-content/         # 바텀시트 컨텐츠
-│       │               ├── index.tsx
-│       │               ├── types.ts
-│       │               └── styles.module.css
+│       │           ├── title-input/           # 제목 입력
+│       │           ├── message-input/          # 메시지 입력
+│       │           ├── attachment-buttons/     # 첨부파일 버튼
+│       │           ├── image-preview/          # 이미지 미리보기
+│       │           ├── audio-modal/            # 음원 모달
+│       │           ├── audio-preview/          # 음원 미리보기
+│       │           ├── video-preview/          # 비디오 미리보기
+│       │           └── info-box/               # 안내 정보 박스
 │       └── hooks/
 │           └── useEasterEggOptions.ts         # 🆕 옵션 데이터 관리
 │
@@ -92,14 +93,18 @@ HomeFeature (src/components/home/index.tsx)
 └── EasterEggBottomSheet (신규)
     └── BottomSheet (공통 컴포넌트)
         ├── SheetContent (컨텐츠 영역)
-        │   ├── 제목
-        │   ├── 설명
-        │   └── OptionButton[] (옵션 버튼들)
-        │       └── onClick → setSelectedOption(id)
+        │   ├── 제목/설명
+        │   ├── TitleInput (제목 입력)
+        │   ├── MessageInput (메시지 입력)
+        │   ├── AttachmentButtons (첨부파일 버튼)
+        │   ├── ImagePreview (이미지 미리보기, 조건부)
+        │   ├── AudioPreview (음원 미리보기, 조건부)
+        │   ├── VideoPreview (비디오 미리보기, 조건부)
+        │   └── InfoBox (안내 정보)
         │
         └── DualButton (공통 컴포넌트, footer)
             ├── 취소 버튼 → onClose()
-            └── 확인 버튼 → onConfirm(selectedOption)
+            └── 작성 완료 버튼 → onConfirm(formData)
 ```
 
 ---
@@ -112,33 +117,13 @@ HomeFeature (src/components/home/index.tsx)
 
 ```typescript
 /**
- * 이스터에그 옵션 타입
- */
-export interface EasterEggOption {
-  /** 옵션 고유 식별자 */
-  id: string;
-  /** 옵션 표시 텍스트 */
-  label: string;
-  /** 옵션 설명 */
-  description: string;
-  /** @remixicon/react 아이콘 이름 (예: 'RiFlashlightLine') */
-  icon: string;
-  /** 활성화 여부 (향후 확장용) */
-  enabled?: boolean;
-}
-
-/**
  * 바텀시트 상태 타입
  */
 export interface EasterEggSheetState {
   /** 바텀시트 표시 여부 */
   isOpen: boolean;
-  /** 선택된 옵션 ID */
-  selectedOption: string | null;
-  /** 현재 바텀시트 높이 (드래그용) */
+  /** 현재 바텀시트 높이 (컨텐츠에 맞게 자동 조정) */
   height: number;
-  /** 드래그 중인지 여부 */
-  isDragging: boolean;
 }
 
 /**
@@ -149,89 +134,79 @@ export interface EasterEggBottomSheetProps {
   isOpen: boolean;
   /** 바텀시트 닫기 핸들러 */
   onClose: () => void;
-  /** 확인 버튼 클릭 핸들러 (선택된 옵션 ID 전달) */
-  onConfirm: (optionId: string) => void;
+  /** 작성 완료 버튼 클릭 핸들러 (폼 데이터 전달) */
+  onConfirm: (formData: EasterEggFormData) => void;
   /** 추가 CSS 클래스 */
   className?: string;
 }
 
 /**
- * 옵션 버튼 Props
+ * 이스터에그 폼 데이터 타입
  */
-export interface OptionButtonProps {
-  /** 옵션 데이터 */
-  option: EasterEggOption;
-  /** 선택 여부 */
-  isSelected: boolean;
-  /** 클릭 핸들러 */
-  onClick: (optionId: string) => void;
-  /** 추가 CSS 클래스 */
-  className?: string;
-}
-
-/**
- * 바텀시트 컨텐츠 Props
- */
-export interface SheetContentProps {
-  /** 옵션 목록 */
-  options: EasterEggOption[];
-  /** 선택된 옵션 ID */
-  selectedOption: string | null;
-  /** 옵션 선택 핸들러 */
-  onSelectOption: (optionId: string) => void;
+export interface EasterEggFormData {
+  /** 제목 (필수, 최대 30자) */
+  title: string;
+  /** 메시지 (선택, 최대 500자) */
+  message?: string;
+  /** 첨부파일 목록 */
+  attachments: {
+    /** 이미지 파일 */
+    images?: File[];
+    /** 음원 파일 */
+    audio?: File;
+    /** 비디오 파일 */
+    video?: File;
+  };
+  /** 위치 정보 (자동 수집) */
+  location?: Location;
 }
 ```
 
-### 3.2 Mock 데이터
+### 3.2 미리보기 컴포넌트 타입
 
-**파일 위치**: `src/components/home/hooks/useEasterEggOptions.ts`
+**파일 위치**: `src/components/home/components/easter-egg-bottom-sheet/components/*/types.ts`
 
 ```typescript
-import { EasterEggOption } from '../components/easter-egg-bottom-sheet/types';
+/**
+ * 이미지 미리보기 Props
+ */
+export interface ImagePreviewProps {
+  /** 이미지 파일 목록 */
+  images: File[];
+  /** 이미지 삭제 핸들러 */
+  onRemove: (index: number) => void;
+}
 
 /**
- * 이스터에그 옵션 Mock 데이터
- * TODO: 향후 API 연동 시 실제 데이터로 교체
- * 
- * 아이콘은 @remixicon/react 사용
- * - 아이콘 이름은 컴포넌트 이름 (예: 'RiFlashlightLine')
- * - 실제 렌더링 시 동적 import 사용
+ * 음원 모달 Props
  */
-export const EASTER_EGG_OPTIONS: EasterEggOption[] = [
-  {
-    id: 'quick-create',
-    label: '빠른 생성',
-    description: '기본 설정으로 빠르게 이스터에그를 생성합니다',
-    icon: 'RiFlashlightLine', // @remixicon/react
-    enabled: true,
-  },
-  {
-    id: 'custom-create',
-    label: '커스텀 생성',
-    description: '상세 설정을 통해 나만의 이스터에그를 만듭니다',
-    icon: 'RiSettings3Line', // @remixicon/react
-    enabled: true,
-  },
-  {
-    id: 'template-create',
-    label: '템플릿 사용',
-    description: '미리 만들어진 템플릿으로 쉽게 생성합니다',
-    icon: 'RiLayoutGridLine', // @remixicon/react
-    enabled: false, // 향후 기능
-  },
-];
+export interface AudioModalProps {
+  /** 모달 표시 여부 */
+  isOpen: boolean;
+  /** 모달 닫기 핸들러 */
+  onClose: () => void;
+  /** 음원 선택/녹음 완료 핸들러 */
+  onComplete: (audioFile: File) => void;
+}
 
 /**
- * 이스터에그 옵션 데이터를 반환하는 Hook
+ * 음원 미리보기 Props
  */
-export function useEasterEggOptions() {
-  // 현재는 Mock 데이터 반환
-  // TODO: 향후 API 연동 시 React Query 사용
-  return {
-    options: EASTER_EGG_OPTIONS.filter(opt => opt.enabled !== false),
-    isLoading: false,
-    error: null,
-  };
+export interface AudioPreviewProps {
+  /** 음원 파일 */
+  audio: File;
+  /** 음원 삭제 핸들러 */
+  onRemove: () => void;
+}
+
+/**
+ * 비디오 미리보기 Props
+ */
+export interface VideoPreviewProps {
+  /** 비디오 파일 */
+  video: File;
+  /** 비디오 삭제 핸들러 */
+  onRemove: () => void;
 }
 ```
 
@@ -297,40 +272,56 @@ export function useEasterEggOptions() {
 
 ---
 
-### Phase 3: 드래그 인터랙션 구현
+### Phase 3: 첨부파일 미리보기 구현
 
-**목표**: 바텀시트 드래그 기능 및 70% 최대 높이 제한 구현
+**목표**: 이미지, 음원, 비디오 첨부파일 미리보기 기능 구현
 
 **작업 내역**:
-1. BottomSheet 공통 컴포넌트에 드래그 기능 추가 (또는 확장)
-2. 드래그 상태 관리 로직 구현
-3. 최대 높이 70% 제한 로직 구현
-4. 드래그로 닫기 기능 구현 (threshold 기반)
-5. 애니메이션 최적화 (60fps 유지)
+1. 이미지 미리보기 컴포넌트 구현
+   - 파일 선택 및 미리보기 표시
+   - 이미지 삭제 기능
+   - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev
+2. 음원 모달 컴포넌트 구현
+   - 모달 열기/닫기
+   - 직접 녹음 또는 파일 업로드
+   - Figma 디자인:
+     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev
+     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev
+     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev
+3. 음원 미리보기 컴포넌트 구현
+   - 오디오 플레이어 (재생/일시정지)
+   - 음원 삭제 기능
+   - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5660&m=dev
+4. 비디오 미리보기 컴포넌트 구현
+   - 썸네일 미리보기 표시
+   - 비디오 삭제 기능
+   - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6527&m=dev
+5. 첨부파일 버튼과 미리보기 연동
 
 **파일 목록**:
-- `src/commons/components/bottom-sheet/index.tsx` (수정 또는 확장)
-- `src/commons/components/bottom-sheet/types.ts` (수정)
-- `src/commons/components/bottom-sheet/styles.module.css` (수정)
-- `src/commons/components/bottom-sheet/hooks/useDragGesture.ts` (신규, 선택적)
+- `src/components/home/components/easter-egg-bottom-sheet/components/image-preview/index.tsx`
+- `src/components/home/components/easter-egg-bottom-sheet/components/image-preview/styles.module.css`
+- `src/components/home/components/easter-egg-bottom-sheet/components/audio-modal/index.tsx`
+- `src/components/home/components/easter-egg-bottom-sheet/components/audio-modal/styles.module.css`
+- `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/index.tsx`
+- `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/styles.module.css`
+- `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/index.tsx`
+- `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/styles.module.css`
+- `src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/index.tsx` (수정)
 
 **검증 기준**:
-- 바텀시트를 위로 드래그하여 최대 70%까지 확장 가능
-- 70%를 초과하면 저항감 있는 애니메이션 (rubber band effect)
-- 바텀시트를 아래로 드래그하여 닫기 가능 (threshold: 30%)
-- 드래그 동작이 60fps로 부드럽게 동작
-- 드래그 중 다른 인터랙션 무시
+- 이미지 파일 선택 시 미리보기가 즉시 표시됨
+- 음원 버튼 클릭 시 모달이 열림
+- 음원 녹음/업로드 완료 후 미리보기 및 플레이어 표시
+- 비디오 파일 선택 시 썸네일 미리보기 표시
+- 모든 미리보기에서 삭제 기능 정상 작동
+- Figma 디자인과 100% 일치
 
 **기술적 고려사항**:
-- **Option 1**: `react-use-gesture` 라이브러리 사용 (추천)
-  - 장점: 터치/마우스 이벤트 통합, 제스처 감지 용이
-  - 단점: 추가 의존성 (약 10KB gzipped)
-  
-- **Option 2**: 네이티브 터치 이벤트 사용
-  - 장점: 의존성 없음, 번들 크기 최소화
-  - 단점: 크로스 브라우저 호환성 직접 처리 필요
-
-**권장**: Phase 3에서는 Option 1 사용, 성능 이슈 발생 시 Option 2로 전환
+- **File API**: 파일 선택 및 미리보기
+- **MediaRecorder API**: 음원 녹음 (선택적, 브라우저 지원 확인 필요)
+- **URL.createObjectURL**: 파일 미리보기용 임시 URL 생성
+- **메모리 관리**: 미리보기 URL 해제 (revokeObjectURL)
 
 ---
 
@@ -396,10 +387,11 @@ export function useEasterEggOptions() {
    - 취소 버튼 클릭으로 닫기
    - ESC 키로 닫기
 
-3. **드래그 인터랙션 테스트**:
-   - 위로 드래그하여 확장
-   - 아래로 드래그하여 닫기
-   - 70% 최대 높이 제한 검증
+3. **미리보기 기능 테스트**:
+   - 이미지 미리보기 표시
+   - 음원 모달 열기/닫기
+   - 음원 미리보기 및 재생
+   - 비디오 미리보기 표시
 
 4. **접근성 테스트**:
    - 키보드 네비게이션
@@ -423,85 +415,52 @@ export function useEasterEggOptions() {
 
 ## 5. 기술적 고려사항
 
-### 5.1 BottomSheet 공통 컴포넌트 확장
+### 5.1 미디어 파일 처리
 
 **현재 상태**:
-- 기본 열기/닫기 기능 지원
-- 오버레이, ESC 키, 포커스 관리 구현됨
-- 드래그 기능 미구현
+- File API 지원 (모든 모던 브라우저)
+- MediaRecorder API 지원 (대부분의 모던 브라우저, iOS Safari 제한적)
 
-**확장 필요 사항**:
-1. **드래그 기능 추가**:
-   - `maxHeight` prop 추가 (기본값: 90vh, 이스터에그용: 70vh)
-   - 드래그 핸들 인터랙션 구현
-   - 드래그로 닫기 기능 구현
+**구현 필요 사항**:
+1. **파일 선택 및 미리보기**:
+   - `<input type="file">` 사용
+   - `accept` 속성으로 파일 타입 제한
+   - `URL.createObjectURL()`로 미리보기 URL 생성
+   - 컴포넌트 언마운트 시 `URL.revokeObjectURL()` 호출
 
-2. **API 확장**:
-   ```typescript
-   export interface BottomSheetProps {
-     isOpen: boolean;
-     onClose: () => void;
-     children: React.ReactNode;
-     footer?: React.ReactNode;
-     showHandle?: boolean;
-     closeOnBackdropPress?: boolean;
-     maxHeight?: string | number; // 🆕 추가
-     draggable?: boolean;          // 🆕 추가
-     onDragEnd?: (height: number) => void; // 🆕 추가
-   }
-   ```
+2. **음원 녹음** (선택적):
+   - MediaRecorder API 사용
+   - 브라우저 지원 확인 (getUserMedia)
+   - iOS Safari 대응 (제한적 지원)
 
-3. **구현 전략**:
-   - **Option A**: BottomSheet 컴포넌트 직접 수정 (다른 바텀시트에도 영향)
-   - **Option B**: EasterEggBottomSheet에서 BottomSheet를 래핑하여 확장 (권장)
+3. **메모리 관리**:
+   - 미리보기 URL 해제 (메모리 누수 방지)
+   - 파일 크기 제한 (예: 이미지 10MB, 비디오 100MB)
 
-**권장 접근법**: Option B
-- 기존 BottomSheet 컴포넌트는 그대로 유지
-- EasterEggBottomSheet에서 드래그 로직 구현
-- 향후 다른 바텀시트에서도 드래그 필요 시 공통 컴포넌트로 추출
-
-### 5.2 드래그 인터랙션 구현 상세
-
-**요구사항**:
-- 최대 높이: 화면 높이의 70%
-- 최소 높이: 컨텐츠 높이 (auto)
-- 닫기 threshold: 초기 높이의 30% 이하로 드래그 시 닫힘
-
-**구현 방법**:
+**구현 예시**:
 
 ```typescript
-// hooks/useDragGesture.ts (예시)
-import { useGesture } from '@use-gesture/react';
-import { useSpring, animated } from '@react-spring/web';
+// hooks/useFilePreview.ts
+import { useState, useCallback, useEffect } from 'react';
 
-export function useDragGesture(
-  maxHeight: number,
-  onClose: () => void
-) {
-  const [{ y }, api] = useSpring(() => ({ y: 0 }));
+export function useFilePreview() {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const bind = useGesture({
-    onDrag: ({ down, movement: [, my], velocity: [, vy] }) => {
-      // 위로 드래그: my < 0, 아래로 드래그: my > 0
-      const newY = Math.max(0, Math.min(my, maxHeight * 0.7));
-      
-      if (down) {
-        // 드래그 중
-        api.start({ y: newY, immediate: true });
-      } else {
-        // 드래그 종료
-        if (my > maxHeight * 0.3 || vy > 0.5) {
-          // 닫기
-          onClose();
-        } else {
-          // 원래 위치로 복원
-          api.start({ y: 0 });
-        }
+  const createPreview = useCallback((file: File) => {
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return url;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
       }
-    },
-  });
+    };
+  }, [previewUrl]);
 
-  return { bind, y };
+  return { previewUrl, createPreview };
 }
 ```
 
@@ -513,46 +472,62 @@ export function useDragGesture(
 - `requestAnimationFrame` 사용
 
 **렌더링 최적화**:
-- 옵션 버튼 컴포넌트에 `React.memo` 적용
+- 미리보기 컴포넌트에 `React.memo` 적용
 - 이벤트 핸들러에 `useCallback` 적용
-- 옵션 데이터에 `useMemo` 적용
+- 파일 목록에 `useMemo` 적용
 
-**번들 크기 최적화**:
-- 드래그 라이브러리는 동적 import로 로드
-- 아이콘은 SVG 스프라이트 또는 인라인 SVG 사용
-- 불필요한 의존성 제거
+**이미지/비디오 최적화**:
+- 이미지 썸네일 생성 (원본 크기 축소)
+- 비디오 썸네일 추출 (첫 프레임)
+- lazy loading 적용 (스크롤 시 로드)
+
+**메모리 관리**:
+- 미리보기 URL 해제 (revokeObjectURL)
+- 파일 크기 제한 및 검증
+- 대용량 파일 압축 (선택적)
 
 ### 5.4 에러 처리 및 엣지 케이스
 
 **에러 시나리오**:
-1. **옵션 데이터 로딩 실패**: 에러 메시지 표시 및 재시도 버튼
+1. **파일 선택 실패**: 에러 메시지 표시
 2. **빠른 연속 클릭**: 디바운싱 적용 (300ms)
 3. **작은 화면 크기**: 최소 높이 보장 및 스크롤 가능 영역
-4. **드래그 중 화면 회전**: 드래그 상태 초기화 및 높이 재계산
+4. **화면 회전**: 미리보기 크기 재조정
 5. **포커스 트랩 실패**: 포커스 강제 이동 및 로그 기록
+6. **파일 크기 초과**: 사용자 친화적 에러 메시지
+7. **지원하지 않는 파일 형식**: 파일 형식 안내 메시지
+8. **음원 녹음 실패**: 권한 요청 안내 및 대체 방법 제공
 
 **처리 방법**:
 ```typescript
 // 디바운싱 예시
-const handleOptionClick = useCallback(
-  debounce((optionId: string) => {
-    setSelectedOption(optionId);
+const handleFileSelect = useCallback(
+  debounce((file: File) => {
+    // 파일 크기 검증
+    if (file.size > MAX_FILE_SIZE) {
+      showError('파일 크기가 너무 큽니다.');
+      return;
+    }
+    setSelectedFile(file);
   }, 300),
   []
 );
 
+// 파일 형식 검증
+const validateFileType = (file: File, allowedTypes: string[]) => {
+  return allowedTypes.some(type => file.type.startsWith(type));
+};
+
 // 화면 회전 감지
 useEffect(() => {
   const handleResize = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      recalculateHeight();
-    }
+    // 미리보기 크기 재조정
+    recalculatePreviewSize();
   };
   
   window.addEventListener('resize', handleResize);
   return () => window.removeEventListener('resize', handleResize);
-}, [isDragging]);
+}, []);
 ```
 
 ---
@@ -565,12 +540,12 @@ useEffect(() => {
 ```json
 {
   "dependencies": {
-    "@use-gesture/react": "^10.3.0",
-    "@react-spring/web": "^9.7.3",
     "@remixicon/react": "^4.2.0"
   }
 }
 ```
+
+**참고**: 드래그 기능이 제거되어 @use-gesture/react, @react-spring/web는 필요 없음
 
 **선택적 패키지** (Phase 4 - 접근성):
 ```json
@@ -591,19 +566,7 @@ useEffect(() => {
 **파일 위치**: `FE/doc/v.1.0/package.md` (업데이트 필요)
 
 ```markdown
-## 추가된 패키지 (2026-01-26)
-
-### @use-gesture/react (v10.3.0)
-- **도입 목적**: 바텀시트 드래그 인터랙션 구현
-- **주요 사용처**: `src/components/home/components/easter-egg-bottom-sheet/`
-- **번들 크기**: ~10KB (gzipped)
-- **대안**: 네이티브 터치 이벤트 (성능 이슈 시 마이그레이션 고려)
-
-### @react-spring/web (v9.7.3)
-- **도입 목적**: 부드러운 애니메이션 및 물리 기반 스프링 애니메이션
-- **주요 사용처**: 바텀시트 드래그 애니메이션
-- **번들 크기**: ~20KB (gzipped)
-- **대안**: CSS 애니메이션 + framer-motion (이미 프로젝트에 있는 경우)
+## 사용 중인 패키지
 
 ### @remixicon/react (v4.2.0)
 - **도입 목적**: 프로젝트 전체 아이콘 라이브러리 (일관성 유지)
@@ -616,6 +579,8 @@ useEffect(() => {
 - **주요 사용처**: 모달 및 바텀시트 컴포넌트
 - **번들 크기**: ~5KB (gzipped)
 - **대안**: 커스텀 포커스 관리 로직 (기존 BottomSheet에 이미 구현된 경우)
+
+**참고**: 드래그 기능이 제거되어 @use-gesture/react, @react-spring/web는 사용하지 않음
 ```
 
 ---
@@ -714,34 +679,30 @@ test.describe('이스터에그 바텀시트', () => {
     await expect(page).toHaveURL(/\/easter-egg\/create/);
   });
 
-  test('드래그로 바텀시트 확장 및 닫기', async ({ page }) => {
+  test('첨부파일 미리보기 기능', async ({ page }) => {
     // 바텀시트 열기
     await page.click('[data-testid="fab-button"]');
     await page.click('[data-testid="fab-easter-egg-option"]');
     
-    // 드래그 핸들 위치 확인
-    const handle = page.locator('[data-testid="bottom-sheet-handle"]');
-    const handleBox = await handle.boundingBox();
+    // 이미지 파일 선택
+    const imageInput = page.locator('[data-testid="image-input"]');
+    await imageInput.setInputFiles('test-fixtures/sample-image.jpg');
     
-    // 위로 드래그 (확장)
-    await page.mouse.move(handleBox!.x + handleBox!.width / 2, handleBox!.y);
-    await page.mouse.down();
-    await page.mouse.move(handleBox!.x + handleBox!.width / 2, handleBox!.y - 200);
-    await page.mouse.up();
+    // 이미지 미리보기 표시 확인
+    await expect(page.locator('[data-testid="image-preview"]')).toBeVisible();
     
-    // 높이 증가 확인
-    const sheetAfterExpand = page.locator('[data-testid="easter-egg-bottom-sheet"]');
-    const heightAfterExpand = await sheetAfterExpand.evaluate(el => el.clientHeight);
-    expect(heightAfterExpand).toBeGreaterThan(400);
+    // 음원 버튼 클릭
+    await page.click('[data-testid="audio-button"]');
     
-    // 아래로 드래그 (닫기)
-    await page.mouse.move(handleBox!.x + handleBox!.width / 2, handleBox!.y);
-    await page.mouse.down();
-    await page.mouse.move(handleBox!.x + handleBox!.width / 2, handleBox!.y + 300);
-    await page.mouse.up();
+    // 음원 모달 표시 확인
+    await expect(page.locator('[data-testid="audio-modal"]')).toBeVisible();
     
-    // 바텀시트 닫힘 확인
-    await expect(sheetAfterExpand).not.toBeVisible();
+    // 비디오 파일 선택
+    const videoInput = page.locator('[data-testid="video-input"]');
+    await videoInput.setInputFiles('test-fixtures/sample-video.mp4');
+    
+    // 비디오 미리보기 표시 확인
+    await expect(page.locator('[data-testid="video-preview"]')).toBeVisible();
   });
 });
 ```
@@ -885,7 +846,10 @@ test.describe('이스터에그 바텀시트 접근성', () => {
 ### 11.3 Figma 디자인
 
 - [바텀시트 초기 상태](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5186&m=dev)
-- [바텀시트 확장 상태](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5362&m=dev)
+- [이미지 미리보기](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev)
+- [음원 모달](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev)
+- [음원 미리보기](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5660&m=dev)
+- [비디오 미리보기](https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6527&m=dev)
 
 ---
 
@@ -931,7 +895,7 @@ API 연결 → E2E 테스트 → UI 구현 → 사용자 승인 → 데이터 �
 
 1. **Phase 1** (필수, 1-2일): 기본 구조 및 상태 관리
 2. **Phase 2** (필수, 2-3일): Figma 디자인 구현
-3. **Phase 3** (필수, 2-3일): 드래그 인터랙션
+3. **Phase 3** (필수, 2-3일): 첨부파일 미리보기 기능
 4. **Phase 4** (필수, 1-2일): 접근성
 5. **Phase 5** (필수, 1-2일): 테스트 및 최적화
 
@@ -943,13 +907,16 @@ API 연결 → E2E 테스트 → UI 구현 → 사용자 승인 → 데이터 �
 
 ### 기능 완성도
 - [ ] FAB 버튼에서 이스터에그 선택 시 바텀시트 열림
-- [ ] 바텀시트 최대 높이 70% 제한
-- [ ] 드래그로 바텀시트 확장 및 닫기
-- [ ] 옵션 선택 시 시각적 피드백
-- [ ] 확인 버튼 활성화/비활성화
+- [ ] 이미지 미리보기 표시
+- [ ] 음원 모달 열기/닫기
+- [ ] 음원 미리보기 및 재생
+- [ ] 비디오 미리보기 표시
+- [ ] 폼 입력 시 시각적 피드백
+- [ ] 작성 완료 버튼 활성화/비활성화
 - [ ] 배경 오버레이 클릭으로 닫기
 - [ ] 취소 버튼 클릭으로 닫기
 - [ ] ESC 키로 닫기
+- [ ] 바텀시트는 드래그 기능 없음
 
 ### 디자인 일관성
 - [ ] Figma 디자인 100% 일치
@@ -967,8 +934,8 @@ API 연결 → E2E 테스트 → UI 구현 → 사용자 승인 → 데이터 �
 ### 성능
 - [ ] 애니메이션 60fps 유지
 - [ ] 렌더링 시간 100ms 이하
-- [ ] 드래그 응답 시간 16ms 이하
-- [ ] 번들 크기 증가분 50KB 이하
+- [ ] 이미지/비디오 미리보기 로딩 시간 500ms 이하
+- [ ] 번들 크기 증가분 최소화 (드래그 라이브러리 미사용)
 
 ### 테스트
 - [ ] E2E 테스트 작성 및 통과

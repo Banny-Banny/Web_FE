@@ -116,14 +116,36 @@ export function AudioAttachmentModal({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Escape 키로 닫기
+  useEffect(() => {
+    if (!visible) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [visible, onClose]);
+
   if (!visible) return null;
 
   return (
-    <div className={styles.backdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.backdrop} onClick={onClose} role="presentation">
+      <div 
+        className={styles.modal} 
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="audio-modal-title"
+      >
         {/* 헤더 */}
         <div className={styles.header}>
-          <h3 className={styles.title}>음원 첨부</h3>
+          <h3 id="audio-modal-title" className={styles.title}>음원 첨부</h3>
           <button className={styles.closeButton} onClick={onClose} aria-label="닫기">
             <RiCloseLine size={20} />
           </button>
@@ -135,15 +157,22 @@ export function AudioAttachmentModal({
             /* 미리보기 영역 */
             <div className={styles.previewContainer}>
               <p className={styles.previewTitle}>미리보기</p>
-              <p className={styles.previewFileName}>{selectedFile.name}</p>
+              <p className={styles.previewFileName} aria-label={`파일명: ${selectedFile.name}`}>
+                {selectedFile.name}
+              </p>
 
               {/* 재생 컨트롤 */}
-              <div className={styles.playbackContainer}>
-                <button className={styles.playButton} onClick={togglePlay} aria-label={isPlaying ? '일시정지' : '재생'}>
+              <div className={styles.playbackContainer} role="group" aria-label="오디오 재생 컨트롤">
+                <button 
+                  className={styles.playButton} 
+                  onClick={togglePlay} 
+                  aria-label={isPlaying ? '일시정지' : '재생'}
+                  aria-pressed={isPlaying}
+                >
                   {isPlaying ? <RiPauseCircleLine size={48} /> : <RiPlayCircleLine size={48} />}
                 </button>
                 <div className={styles.timeContainer}>
-                  <span className={styles.timeText}>
+                  <span className={styles.timeText} aria-live="off">
                     {formatTime(currentTime)} / {formatTime(duration)}
                   </span>
                 </div>
@@ -161,11 +190,19 @@ export function AudioAttachmentModal({
               )}
 
               {/* 액션 버튼 */}
-              <div className={styles.actionButtons}>
-                <button className={styles.resetButton} onClick={handleReset}>
+              <div className={styles.actionButtons} role="group" aria-label="액션 버튼">
+                <button 
+                  className={styles.resetButton} 
+                  onClick={handleReset}
+                  aria-label="다시 선택하기"
+                >
                   다시 선택
                 </button>
-                <button className={styles.confirmButton} onClick={handleConfirm}>
+                <button 
+                  className={styles.confirmButton} 
+                  onClick={handleConfirm}
+                  aria-label="선택한 음원 확인"
+                >
                   확인
                 </button>
               </div>
@@ -179,9 +216,14 @@ export function AudioAttachmentModal({
                 accept={getAcceptString('AUDIO')}
                 onChange={handleFileSelect}
                 style={{ display: 'none' }}
+                aria-label="오디오 파일 선택"
               />
-              <button className={styles.uploadButton} onClick={() => fileInputRef.current?.click()}>
-                <RiUploadLine size={32} />
+              <button 
+                className={styles.uploadButton} 
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="오디오 파일 선택하기"
+              >
+                <RiUploadLine size={32} aria-hidden="true" />
                 <span className={styles.uploadButtonTitle}>파일 선택하기</span>
                 <span className={styles.uploadButtonSubtitle}>MP3, M4A, AAC, MPEG (Max 20MB)</span>
               </button>

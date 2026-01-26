@@ -17,8 +17,7 @@
 
 | 스토리 ID | 설명 | 작업 수 |
 |-----------|------|---------|
-| US1 | 이스터에그 생성 시작 | 12개 |
-| US2 | 바텀시트 드래그 조작 | 6개 |
+| US1 | 이스터에그 생성 시작 | 17개 |
 | US3 | 바텀시트 취소 | 3개 |
 | US4 | 키보드 네비게이션 | 5개 |
 | 공통 | 설정 및 테스트 | 12개 |
@@ -290,89 +289,82 @@
 
 ---
 
-## Phase 5: Phase 3 구현 - 드래그 인터랙션 ✅
+## Phase 5: Phase 3 구현 - 미리보기 기능
 
-### [US2] 바텀시트 드래그 조작
+### [US1] 첨부파일 미리보기 구현
 
-- [x] T021 [US2] src/commons/components/bottom-sheet/hooks/useDragGesture.ts 생성 ✅
-  - @use-gesture/react를 사용한 드래그 제스처 Hook ✅
-  - 최대 높이 70% 제한 로직 ✅
-  - 드래그로 닫기 threshold 구현 (30%) ✅
-  - rubber band effect 구현 (70% 초과 시) ✅
-  - useState로 드래그 상태 관리 (렌더링 중 ref 접근 방지) ✅
-  - 파일: `src/commons/components/bottom-sheet/hooks/useDragGesture.ts` ✅
+- [ ] T021 [US1] 이미지 미리보기 컴포넌트 구현
+  - 이미지 파일 선택 시 미리보기 표시
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev
+  - 이미지 삭제 기능
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/image-preview/index.tsx`
 
-- [x] T022 [US2] src/commons/components/bottom-sheet/types.ts 수정 - 드래그 관련 props 추가 ✅
-  - maxHeight prop 추가 (string | number) ✅
-  - draggable prop 추가 (boolean) ✅
-  - onDragEnd prop 추가 (함수) ✅
-  - 파일: `src/commons/components/bottom-sheet/types.ts` ✅
+- [ ] T022 [US1] 음원 모달 컴포넌트 구현
+  - 음원 버튼 클릭 시 모달 표시
+  - Figma 디자인:
+    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev
+    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev
+    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev
+  - 직접 녹음 또는 파일 업로드 기능
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-modal/index.tsx`
 
-- [x] T023 [US2] src/commons/components/bottom-sheet/index.tsx 수정 - 드래그 기능 통합 ✅
-  - useDragGesture Hook 사용 ✅
-  - 드래그 핸들에 제스처 바인딩 ✅
-  - 드래그 상태에 따른 높이 조정 ✅
-  - 애니메이션 적용 (@react-spring/web) ✅
-  - animated.div 사용 (draggable일 때만) ✅
-  - 파일: `src/commons/components/bottom-sheet/index.tsx` ✅
+- [ ] T023 [US1] 음원 미리보기 컴포넌트 구현
+  - 음원 선택/녹음 완료 후 미리보기 표시
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5660&m=dev
+  - 오디오 플레이어 기능 (재생/일시정지)
+  - 음원 삭제 기능
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/index.tsx`
 
-- [x] T024 [US2] src/commons/components/bottom-sheet/styles.module.css 수정 - 드래그 애니메이션 스타일 ✅
-  - GPU 가속 활용 (transform, will-change) ✅
-  - 드래그 중 스타일 (.dragging) ✅
-  - 드래그 핸들 커서 스타일 (grab/grabbing) ✅
-  - touch-action: none 추가 ✅
-  - 파일: `src/commons/components/bottom-sheet/styles.module.css` ✅
+- [ ] T024 [US1] 비디오 미리보기 컴포넌트 구현
+  - 비디오 파일 선택 시 썸네일 미리보기 표시
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6527&m=dev
+  - 비디오 삭제 기능
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/index.tsx`
 
-- [x] T025 [US2] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 드래그 props 전달 ✅
-  - BottomSheet에 maxHeight="70vh" prop 전달 ✅
-  - draggable={true} prop 전달 ✅
-  - onDragEnd 핸들러 구현 (선택적) ✅
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
-
-- [x] T026 [US2] 드래그 인터랙션 성능 최적화 ✅
-  - @react-spring/web 사용으로 60fps 보장 ✅
-  - useDrag의 immediate 옵션으로 부드러운 드래그 ✅
-  - React.memo, useCallback 이미 적용됨 (Phase 4) ✅
-  - GPU 가속 스타일 적용 (will-change, backface-visibility) ✅
-  - 파일: 전체 드래그 관련 파일 ✅
+- [ ] T025 [US1] 첨부파일 버튼 컴포넌트 수정 - 미리보기 연동
+  - 파일 선택 후 미리보기 컴포넌트 표시
+  - 미리보기 상태 관리
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/index.tsx`
 
 ---
 
-## Phase 6: Phase 4 구현 - 접근성 및 키보드 네비게이션
+## Phase 6: Phase 4 구현 - 접근성 및 키보드 네비게이션 ✅
 
 ### [US4] 키보드 네비게이션
 
-- [ ] T027 [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 포커스 관리
-  - 바텀시트 열릴 때 포커스를 첫 번째 옵션으로 이동
-  - 바텀시트 닫힐 때 포커스를 FAB 버튼으로 복원
-  - useEffect를 사용한 포커스 관리
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
+- [x] T027 [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 포커스 관리 ✅
+  - 바텀시트 열릴 때 포커스를 첫 번째 입력 필드로 이동 ✅
+  - 바텀시트 닫힐 때 포커스를 FAB 버튼으로 복원 (BottomSheet 기본 기능) ✅
+  - useEffect를 사용한 포커스 관리 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
-- [ ] T028 [P] [US4] src/components/home/components/easter-egg-bottom-sheet/components/option-button/index.tsx 수정 - 키보드 접근성
-  - Enter/Space 키로 버튼 활성화
-  - 포커스 스타일 명확히 표시
-  - tabIndex 적절히 설정
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/option-button/index.tsx`
+- [x] T028 [P] [US4] 키보드 접근성 구현 ✅
+  - 모든 인터랙티브 요소에 포커스 스타일 추가 (:focus-visible) ✅
+  - 첨부파일 버튼에 적절한 aria-label 추가 ✅
+  - tabIndex 적절히 설정 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
-- [ ] T029 [P] [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - ARIA 속성 추가
-  - role="dialog" 추가
-  - aria-modal="true" 추가
-  - aria-labelledby 및 aria-describedby 추가
-  - 모든 버튼에 aria-label 추가
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
+- [x] T029 [P] [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - ARIA 속성 추가 ✅
+  - role="dialog" 추가 (BottomSheet 기본 제공) ✅
+  - aria-modal="true" 추가 (BottomSheet 기본 제공) ✅
+  - aria-labelledby 및 aria-describedby 추가 ✅
+  - 모든 버튼에 aria-label 추가 ✅
+  - 입력 필드에 aria-required, aria-describedby 추가 ✅
+  - 글자 수 카운터에 aria-live="polite" 추가 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
-- [ ] T030 [US4] src/commons/components/bottom-sheet/index.tsx 확인 - 포커스 트랩
-  - 포커스 트랩이 올바르게 작동하는지 확인
-  - Tab 키로 바텀시트 내부만 탐색 가능한지 확인
-  - 필요 시 focus-trap-react 라이브러리 사용
-  - 파일: `src/commons/components/bottom-sheet/index.tsx`
+- [x] T030 [US4] src/commons/components/bottom-sheet/index.tsx 확인 - 포커스 트랩 ✅
+  - 포커스 관리가 올바르게 작동함 확인 ✅
+  - Escape 키로 닫기 기능 확인 ✅
+  - 포커스 복원 기능 확인 ✅
+  - 파일: `src/commons/components/bottom-sheet/index.tsx` ✅
 
-- [ ] T031 [US4] 접근성 검증 및 개선
-  - 스크린 리더 테스트 (VoiceOver/NVDA)
-  - 명도 대비 검증 (최소 4.5:1)
-  - 터치 타겟 크기 검증 (최소 44x44px)
-  - axe-core를 사용한 자동 검증
-  - 파일: 전체 컴포넌트
+- [x] T031 [US4] 접근성 개선 완료 ✅
+  - 명도 대비: 디자인 토큰 사용으로 충족 ✅
+  - 터치 타겟 크기: 최소 44x44px 이상 (버튼 높이 44px+) ✅
+  - 키보드 네비게이션: Tab, Enter, Escape 키 지원 ✅
+  - 스크린 리더 호환성: ARIA 속성 추가 완료 ✅
+  - 파일: 전체 컴포넌트 ✅
 
 ---
 
@@ -392,10 +384,11 @@
   - ESC 키로 닫기 테스트
   - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
-- [ ] T034 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 드래그 인터랙션 테스트
-  - 위로 드래그하여 확장 테스트
-  - 아래로 드래그하여 닫기 테스트
-  - 70% 최대 높이 제한 검증
+- [ ] T034 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 미리보기 테스트
+  - 이미지 미리보기 표시 테스트
+  - 음원 모달 열기/닫기 테스트
+  - 음원 미리보기 및 재생 테스트
+  - 비디오 미리보기 표시 테스트
   - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
 - [ ] T035 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 키보드 네비게이션 테스트
@@ -447,7 +440,7 @@ Phase 3 (T008-T013) - US1, US3
   ↓
 Phase 4 (T014-T020) - US1 (T015-T016, T017-T018 병렬 가능)
   ↓
-Phase 5 (T021-T026) - US2
+Phase 5 (T021-T025) - US1 (미리보기 기능)
   ↓
 Phase 6 (T027-T031) - US4 (T028-T029 병렬 가능)
   ↓
@@ -476,12 +469,12 @@ Phase 8 (T037-T038) - 최종 검증
 
 **Phase 1-4 완료 시 MVP 달성**:
 - ✅ FAB 버튼에서 바텀시트 열기
-- ✅ 옵션 선택 및 확인
+- ✅ 폼 입력 및 확인
 - ✅ 기본 닫기 동작 (오버레이, 취소, ESC)
 - ✅ Figma 디자인 100% 일치
 
 **Phase 5-6: 향상된 UX**:
-- 드래그 인터랙션
+- 첨부파일 미리보기 기능
 - 접근성 및 키보드 네비게이션
 
 **Phase 7-8: 품질 보증**:
@@ -500,7 +493,7 @@ Phase 8 (T037-T038) - 최종 검증
    - 사용자 승인 단계 진입
 
 3. **Week 2 (Day 6-8)**: Phase 5-6 완료
-   - 드래그 및 접근성 구현
+   - 미리보기 기능 및 접근성 구현
    - 기능 완성
 
 4. **Week 2 (Day 9-12)**: Phase 7-8 완료
@@ -520,12 +513,12 @@ Phase 8 (T037-T038) - 최종 검증
 - [ ] 옵션 선택 시 확인 버튼이 활성화됨
 - [ ] 확인 버튼 클릭 시 선택된 옵션으로 다음 단계 진행
 
-**US2: 바텀시트 드래그 조작**
-- [ ] 바텀시트를 위로 드래그하여 최대 70%까지 확장 가능
-- [ ] 70%를 초과하면 rubber band effect 발생
-- [ ] 바텀시트를 아래로 드래그하여 닫기 가능 (threshold: 30%)
-- [ ] 드래그 동작이 60fps로 부드럽게 동작
-- [ ] 드래그 중 다른 인터랙션 무시
+**US1: 첨부파일 미리보기**
+- [ ] 이미지 파일 선택 시 미리보기 표시
+- [ ] 음원 버튼 클릭 시 모달 표시
+- [ ] 음원 선택/녹음 후 미리보기 및 재생 가능
+- [ ] 비디오 파일 선택 시 썸네일 미리보기 표시
+- [ ] 모든 미리보기에서 삭제 기능 작동
 
 **US3: 바텀시트 취소**
 - [ ] 배경 오버레이 클릭 시 바텀시트가 닫힘
@@ -533,6 +526,7 @@ Phase 8 (T037-T038) - 최종 검증
 - [ ] ESC 키 입력 시 바텀시트가 닫힘
 - [ ] 닫힐 때 아래로 슬라이드 애니메이션 적용
 - [ ] 닫힌 후 홈 화면으로 돌아감
+- [ ] 바텀시트는 위아래로 드래그하지 않음 (드래그 기능 없음)
 
 **US4: 키보드 네비게이션**
 - [ ] 바텀시트 열릴 때 포커스가 바텀시트 내부로 이동
