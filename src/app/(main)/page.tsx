@@ -3,9 +3,11 @@
 /**
  * @fileoverview 컴포넌트 미리보기 페이지
  * @description 모든 공통 컴포넌트를 한 페이지에서 확인할 수 있는 미리보기 페이지
+ * - 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Button,
   DualButton,
@@ -15,11 +17,26 @@ import {
 } from '@/commons/components';
 import { useModal } from '@/commons/provider';
 import { useToast } from '@/commons/provider';
+import { useAuth } from '@/commons/hooks/useAuth';
 
 export default function ComponentPreview() {
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuth();
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const { openModal, closeModal } = useModal();
   const { showToast } = useToast();
+
+  // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  // 로딩 중이거나 인증되지 않은 경우 빈 화면 표시
+  if (isLoading || !isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-white-500 px-4 py-8">
