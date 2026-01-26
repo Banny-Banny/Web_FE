@@ -31,7 +31,9 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowLeft, MoreVertical, X } from 'lucide-react';
+import RiArrowLeftLine from 'remixicon-react/ArrowLeftLineIcon';
+import RiMore2Fill from 'remixicon-react/More2FillIcon';
+import RiCloseLine from 'remixicon-react/CloseLineIcon';
 import { Icon } from '../icon';
 import type { IconName } from '../icon/types';
 import { Colors, Typography } from '@/commons/styles';
@@ -115,7 +117,7 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
               }
             }}
           >
-            <ArrowLeft size={24} color={Colors.black[500]} />
+            <RiArrowLeftLine size={24} color={Colors.black[500]} />
           </button>
         )}
 
@@ -182,12 +184,12 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 );
               }
 
-              // lucide-react 아이콘을 사용하는 경우
-              let LucideIcon: React.ComponentType<{ size: number; color: string }> | null = null;
+              // Remix Icon을 사용하는 경우
+              let RemixIcon: React.ComponentType<{ size?: number | string; color?: string }> | null = null;
               if (rightIcon.icon === 'more' || rightIcon.icon === 'more-2-fill') {
-                LucideIcon = MoreVertical;
+                RemixIcon = RiMore2Fill;
               } else if (rightIcon.icon === 'close' || rightIcon.icon === 'close-line') {
-                LucideIcon = X;
+                RemixIcon = RiCloseLine;
               }
 
               // 이미지 소스를 사용하는 경우
@@ -227,15 +229,15 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 );
               }
 
-              // lucide-react 아이콘 렌더링
-              if (LucideIcon) {
+              // Remix Icon 렌더링
+              if (RemixIcon) {
                 return (
                   <button
                     key={index}
                     type="button"
                     className={styles.iconButton}
-                    style={{ 
-                      width: Math.max(iconSize, 44), 
+                    style={{
+                      width: Math.max(iconSize, 44),
                       height: Math.max(iconSize, 44),
                       minWidth: 44,
                       minHeight: 44,
@@ -249,7 +251,7 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                       }
                     }}
                   >
-                    <LucideIcon size={iconSize} color={iconColor} />
+                    <RemixIcon size={iconSize} color={iconColor} />
                   </button>
                 );
               }

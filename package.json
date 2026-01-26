@@ -21,6 +21,7 @@
     "@remixicon/react": "^4.8.0",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.91.2",
+    "@tosspayments/payment-widget-sdk": "^0.12.1",
     "@use-gesture/react": "^10.3.1",
     "axios": "^1.13.2",
     "lucide-react": "^0.563.0",
@@ -28,6 +29,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
+    "remixicon-react": "^1.0.0",
     "web-vitals": "^5.1.0",
     "zod": "^4.3.6"
   },

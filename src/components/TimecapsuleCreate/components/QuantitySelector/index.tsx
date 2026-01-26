@@ -7,6 +7,8 @@
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import RiAddLine from 'remixicon-react/AddLineIcon';
+import RiSubtractLine from 'remixicon-react/SubtractLineIcon';
 import type { TimecapsuleFormData } from '../../schemas/timecapsuleFormSchema';
 import type { QuantitySelectorProps } from './types';
 import styles from './styles.module.css';
@@ -82,7 +84,7 @@ export function QuantitySelector({
           disabled={currentValue <= min}
           aria-label={`${label} 감소`}
         >
-          −
+          <RiSubtractLine size={20} />
         </button>
         <span className={styles.quantityDisplay}>
           {currentValue} {fieldName === 'participantCount' ? '명' : fieldName === 'photoCount' ? '개' : ''}
@@ -94,7 +96,7 @@ export function QuantitySelector({
           disabled={currentValue >= (fieldName === 'photoCount' ? maxPhotoCount : max)}
           aria-label={`${label} 증가`}
         >
-          +
+          <RiAddLine size={20} />
         </button>
       </div>
       {fieldName !== 'photoCount' && unitPrice > 0 && (

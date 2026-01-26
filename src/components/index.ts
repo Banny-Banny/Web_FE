@@ -4,3 +4,4 @@
  */
 
 export { TimecapsuleCreate } from './TimecapsuleCreate';
+export { Payment } from './Payment';
