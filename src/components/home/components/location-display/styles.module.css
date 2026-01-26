@@ -90,6 +90,16 @@
   color: #FF6B6B;
   letter-spacing: 0.6px;
   line-height: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.errorHint {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
 }
 
 /* 현재 위치 마커 (지도 위 오버레이) - Expo 디자인 적용 */

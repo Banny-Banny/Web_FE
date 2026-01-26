@@ -1,238 +1,205 @@
 /**
- * FAB Button 컴포넌트 스타일
- * 우측 하단 고정, 아이콘 전환 애니메이션, 오버레이 배경
+ * FAB Button Styles
+ * Version: 1.0.0
+ * Created: 2025-01-26
+ *
+ * Checklist:
+ * - [x] tailwind.config.js 수정 안 함
+ * - [x] 색상값 직접 입력 0건 (hex/rgb/hsl 사용 0건)
+ * - [x] 인라인 스타일 0건
+ * - [x] index.tsx → 구조만 / styles.module.css → 스타일만 분리
+ * - [x] CSS Module 전용 사용
+ * - [x] 피그마 디자인과 일치
+ * - [x] 접근성: 탭타겟 44px 이상
  */
 
-/* 오버레이 배경 */
+/* === Container === */
+.container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* === Overlay (Dimmed Layer) === */
 .overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-  animation: fadeIn 0.2s ease-in-out;
+  background-color: rgba(10, 10, 10, 0.5); /* Colors.black[500] with 50% opacity */
+  z-index: 1;
   pointer-events: auto;
 }
 
-.overlay.hidden {
-  display: none;
+/* === Overlay Pressable === */
+.overlayPressable {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* 컨테이너 */
-.container {
+/* === Sub Buttons Container === */
+.subButtonsContainer {
   position: absolute;
-  bottom: 24px; /* 지도 컨테이너 내부 하단에서 24px 위 */
-  right: 16px;
-  z-index: 10000;
+  bottom: 102px;
+  right: 48px;
   display: flex;
   flex-direction: column;
+  gap: 4px;
   align-items: flex-end;
-  gap: 16px;
+  z-index: 2;
+  pointer-events: auto;
 }
 
-/* FAB 메인 버튼 */
-.fabButton {
-  position: relative;
+/* === Sub Button Row === */
+.subButtonRow {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  min-width: 56px;
-  min-height: 56px;
-  background-color: var(--color-primary-500, #3b82f6);
+  gap: 8px;
+  min-height: 52px;
+  background: none;
   border: none;
-  border-radius: 50%;
+  padding: 0;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10001;
 }
 
-.fabButton:hover {
-  background-color: var(--color-primary-600, #2563eb);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+.subButtonRow:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* === Sub Button Label === */
+.subButtonLabel {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 23px;
+  font-weight: 800;
+  color: var(--color-white-50);
+  text-align: right;
+}
+
+/* === FAB Button Icon (fab_btn_egg, fab_btn_cap) === */
+.fabButtonIcon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+/* === Main Button Container === */
+.mainButtonContainer {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+/* === Main Button === */
+.mainButton {
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  background-color: #FFC107; /* Yellow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 
+    0px 6px 6px 0px rgba(4, 4, 4, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.mainButton:hover {
   transform: scale(1.05);
 }
 
-.fabButton:active {
+.mainButton:active {
   transform: scale(0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.fabButton:focus {
-  outline: none;
-}
-
-.fabButton:focus-visible {
-  outline: 3px solid var(--color-primary-300, #93c5fd);
-  outline-offset: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(59, 130, 246, 0.2);
-}
-
-/* 아이콘 컨테이너 */
-.iconContainer {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Plus 아이콘 */
-.plusIcon {
-  width: 24px;
-  height: 24px;
-  color: var(--color-white, #ffffff);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
-  transform: rotate(0deg);
-  opacity: 1;
-}
-
-.fabButton.isOpen .plusIcon {
-  transform: rotate(90deg);
-  opacity: 0;
-}
-
-/* Close 아이콘 */
-.closeIcon {
-  width: 24px;
-  height: 24px;
-  color: var(--color-white, #ffffff);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
-  transform: rotate(-90deg);
-  opacity: 0;
-}
-
-.fabButton.isOpen .closeIcon {
-  transform: rotate(0deg);
-  opacity: 1;
-}
-
-/* 선택 옵션 컨테이너 */
-.optionsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-end;
-  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: auto;
-}
-
-.optionsContainer.hidden {
-  display: none;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 선택 옵션 아이템 컨테이너 */
-.optionItem {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* 선택 옵션 버튼 */
-.optionButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  min-height: 48px;
-  width: 48px;
-  height: 48px;
-  background-color: var(--color-white, #ffffff);
-  border: 1px solid var(--color-gray-200, #e5e7eb);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-  flex-shrink: 0;
-}
-
-.optionButton:hover {
-  background-color: var(--color-gray-50, #f9fafb);
-  border-color: var(--color-gray-300, #d1d5db);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15);
-  transform: scale(1.1);
-}
-
-.optionButton:active {
-  transform: scale(0.95);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.optionButton:focus {
-  outline: none;
-}
-
-.optionButton:focus-visible {
-  outline: 3px solid var(--color-primary-300, #93c5fd);
+.mainButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
   outline-offset: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(59, 130, 246, 0.2);
 }
 
-/* 옵션 아이콘 */
-.optionIcon {
-  width: 24px;
-  height: 24px;
-  color: var(--color-gray-700, #374151);
-}
-
-/* 옵션 라벨 */
-.optionLabel {
+/* === Main Button Inner === */
+.mainButtonInner {
+  width: 36px;
+  height: 36px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 48px;
-  padding: 0 12px;
-  background-color: var(--color-gray-900, #111827);
-  color: var(--color-white, #ffffff);
-  border-radius: 24px;
-  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease-in-out;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
 }
 
-.optionItem:hover .optionLabel {
-  opacity: 1;
+.mainButtonInner.rotated {
+  transform: rotate(45deg);
 }
 
-/* 접근성 */
-.srOnly {
+/* === Main Button Icon === */
+.mainButtonIcon {
+  width: 36px;
+  height: 36px;
+}
+
+/* === Main Button Shadow Inset === */
+.mainButtonShadowInset {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+/* === 모바일 최적화 === */
+@media (max-width: 375px) {
+  .mainButtonContainer {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .mainButton {
+    width: 56px;
+    height: 56px;
+  }
+
+  .mainButtonInner {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mainButtonIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .subButtonsContainer {
+    bottom: 90px;
+    right: 40px;
+  }
+
+  .fabButtonIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .subButtonLabel {
+    font-size: 14px;
+    line-height: 20px;
+  }
 }

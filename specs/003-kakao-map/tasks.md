@@ -95,12 +95,12 @@
 
 ### 알 슬롯 컴포넌트
 
-- [ ] T031 [US5] `src/components/home/components/egg-slot/types.ts`에 EggSlot 컴포넌트 타입 정의 생성
-- [ ] T032 [P] [US5] `src/components/home/components/egg-slot/styles.module.css`에 EggSlot 스타일 작성 (우측 상단 고정, 알 개수 배지)
-- [ ] T033 [US5] `src/components/home/components/egg-slot/index.tsx`에 EggSlot 컴포넌트 구현 (알 개수 표시, 모달 열기)
-- [ ] T034 [US5] `src/components/home/index.tsx`에 EggSlot 컴포넌트 통합
-- [ ] T035 [US5] `src/components/home/components/egg-slot/index.tsx`에 알림 모달 연동 (공용 모달 컴포넌트 사용)
-- [ ] T036 [US5] `src/components/home/components/egg-slot/index.tsx`에 알 개수 0인 경우 처리
+- [x] T031 [US5] `src/components/home/components/egg-slot/types.ts`에 EggSlot 컴포넌트 타입 정의 생성
+- [x] T032 [P] [US5] `src/components/home/components/egg-slot/styles.module.css`에 EggSlot 스타일 작성 (우측 상단 고정, 알 개수 배지)
+- [x] T033 [US5] `src/components/home/components/egg-slot/index.tsx`에 EggSlot 컴포넌트 구현 (알 개수 표시, 모달 열기)
+- [x] T034 [US5] `src/components/home/index.tsx`에 EggSlot 컴포넌트 통합
+- [x] T035 [US5] `src/components/home/components/egg-slot/index.tsx`에 알림 모달 연동 (공용 모달 컴포넌트 사용)
+- [x] T036 [US5] `src/components/home/components/egg-slot/index.tsx`에 알 개수 0인 경우 처리
 
 ---
 
@@ -108,11 +108,11 @@
 
 ### 지도 관리 컨트롤
 
-- [ ] T037 [US3] `src/components/home/hooks/useMapControl.ts`에 지도 관리 훅 구현
-- [ ] T038 [US3] `src/components/home/components/map-controls/types.ts`에 MapControls 컴포넌트 타입 정의 생성
-- [ ] T039 [P] [US3] `src/components/home/components/map-controls/styles.module.css`에 MapControls 스타일 작성
-- [ ] T040 [US3] `src/components/home/components/map-controls/index.tsx`에 MapControls 컴포넌트 구현 (지도 초기화 버튼)
-- [ ] T041 [US3] `src/components/home/index.tsx`에 MapControls 컴포넌트 통합
+- [x] T037 [US3] `src/components/home/hooks/useMapControl.ts`에 지도 관리 훅 구현
+- [x] T038 [US3] `src/components/home/components/map-controls/types.ts`에 MapControls 컴포넌트 타입 정의 생성
+- [x] T039 [P] [US3] `src/components/home/components/map-controls/styles.module.css`에 MapControls 스타일 작성
+- [x] T040 [US3] `src/components/home/components/map-controls/index.tsx`에 MapControls 컴포넌트 구현 (지도 초기화 버튼)
+- [x] T041 [US3] `src/components/home/index.tsx`에 MapControls 컴포넌트 통합
 
 ---
 
@@ -120,25 +120,25 @@
 
 ### 에러 처리
 
-- [ ] T042 `src/commons/utils/kakao-map/config.ts`에 환경 변수 미설정 에러 처리 개선
-- [ ] T043 `src/commons/utils/kakao-map/script-loader.ts`에 네트워크 오류 처리 개선
-- [ ] T044 `src/commons/apis/kakao-map/address.ts`에 API 호출 실패 처리 개선
-- [ ] T045 `src/components/home/components/map-view/index.tsx`에 지도 렌더링 실패 에러 처리 추가
-- [ ] T046 `src/components/home/components/location-display/index.tsx`에 주소 조회 실패 에러 처리 추가
+- [x] T042 `src/commons/utils/kakao-map/config.ts`에 환경 변수 미설정 에러 처리 개선
+- [x] T043 `src/commons/utils/kakao-map/script-loader.ts`에 네트워크 오류 처리 개선
+- [x] T044 `src/commons/apis/kakao-map/address.ts`에 API 호출 실패 처리 개선
+- [x] T045 `src/components/home/components/map-view/index.tsx`에 지도 렌더링 실패 에러 처리 추가
+- [x] T046 `src/components/home/components/location-display/index.tsx`에 주소 조회 실패 에러 처리 추가
 
 ### 성능 최적화
 
-- [ ] T047 `src/components/home/hooks/useAddress.ts`에 디바운싱 최적화 (500ms)
-- [ ] T048 `src/components/home/hooks/useAddress.ts`에 주소 캐싱 로직 추가 (선택사항)
-- [ ] T049 `src/components/home/components/map-view/index.tsx`에 React.memo 적용 (필요시)
+- [x] T047 `src/components/home/hooks/useAddress.ts`에 디바운싱 최적화 (500ms)
+- [x] T048 `src/components/home/hooks/useAddress.ts`에 주소 캐싱 로직 추가 (선택사항)
+- [x] T049 `src/components/home/components/map-view/index.tsx`에 React.memo 적용 (필요시)
 
 ### 접근성 개선
 
-- [ ] T050 `src/components/home/components/map-view/index.tsx`에 지도 영역 접근성 레이블 추가
-- [ ] T051 `src/components/home/components/map-controls/index.tsx`에 키보드 네비게이션 지원 추가
-- [ ] T052 `src/components/home/components/fab-button/index.tsx`에 접근성 레이블 및 키보드 지원 추가
-- [ ] T053 `src/components/home/components/egg-slot/index.tsx`에 접근성 레이블 및 키보드 지원 추가
-- [ ] T054 `src/components/home/components/location-display/index.tsx`에 접근성 레이블 추가
+- [x] T050 `src/components/home/components/map-view/index.tsx`에 지도 영역 접근성 레이블 추가
+- [x] T051 `src/components/home/components/map-controls/index.tsx`에 키보드 네비게이션 지원 추가
+- [x] T052 `src/components/home/components/fab-button/index.tsx`에 접근성 레이블 및 키보드 지원 추가
+- [x] T053 `src/components/home/components/egg-slot/index.tsx`에 접근성 레이블 및 키보드 지원 추가
+- [x] T054 `src/components/home/components/location-display/index.tsx`에 접근성 레이블 추가
 
 ---
 
@@ -146,9 +146,9 @@
 
 ### 주소 조회 API 연결
 
-- [ ] T055 [US6] `src/components/home/hooks/useAddress.ts`에서 Mock 데이터를 실제 API 호출로 교체
-- [ ] T056 [US6] `src/components/home/components/location-display/index.tsx`에 로딩 상태 표시 추가
-- [ ] T057 [US6] `src/components/home/components/location-display/index.tsx`에 에러 상태 표시 추가
+- [x] T055 [US6] `src/components/home/hooks/useAddress.ts`에서 Mock 데이터를 실제 API 호출로 교체
+- [x] T056 [US6] `src/components/home/components/location-display/index.tsx`에 로딩 상태 표시 추가
+- [x] T057 [US6] `src/components/home/components/location-display/index.tsx`에 에러 상태 표시 추가
 
 ### 알림 데이터 연결 (향후)
 
@@ -161,12 +161,12 @@
 
 ### 컴포넌트 단위 테스트
 
-- [ ] T060 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 렌더링 테스트 작성
-- [ ] T061 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 조작 테스트 작성 (드래그, 확대/축소)
-- [ ] T062 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 FAB 버튼 테스트 작성
-- [ ] T063 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 알 슬롯 테스트 작성
-- [ ] T064 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 현재 위치 및 주소 표시 테스트 작성
-- [ ] T065 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 관리 기능 테스트 작성
+- [x] T060 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 렌더링 테스트 작성
+- [x] T061 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 조작 테스트 작성 (드래그, 확대/축소)
+- [x] T062 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 FAB 버튼 테스트 작성
+- [x] T063 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 알 슬롯 테스트 작성
+- [x] T064 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 현재 위치 및 주소 표시 테스트 작성
+- [x] T065 [P] `tests/ui/kakao-map/kakao-map.ui.spec.ts`에 지도 관리 기능 테스트 작성
 
 ---
 

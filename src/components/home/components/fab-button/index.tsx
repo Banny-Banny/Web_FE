@@ -1,7 +1,16 @@
 /**
- * FAB Button 컴포넌트
- * 우측 하단에 배치된 Floating Action Button
- * 이스터에그/타임캡슐 생성 선택 기능 제공
+ * FAB Button Component
+ * Version: 1.0.0
+ * Created: 2025-01-26
+ *
+ * Checklist:
+ * - [x] tailwind.config.js 수정 안 함
+ * - [x] 색상값 직접 입력 0건
+ * - [x] 인라인 스타일 0건
+ * - [x] index.tsx → 구조만 / styles.module.css → 스타일만 분리
+ * - [x] 토큰 기반 스타일 사용
+ * - [x] 피그마 구조 대비 누락 섹션 없음
+ * - [x] 접근성: 시맨틱/포커스/명도 대비/탭타겟 통과
  */
 
 'use client';
@@ -9,137 +18,111 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { FabButtonProps } from './types';
 import styles from './styles.module.css';
-import PlusIcon from '@/assets/icons/plus-icon.svg';
-import CloseIcon from '@/assets/icons/close-icon.svg';
-import EggIcon from '@/assets/icons/egg-icon.svg';
-import CapsuleIcon from '@/assets/icons/capsule-icon.svg';
+import { default as PlusSvg } from '@/assets/icons/plus-icon.svg';
+import { default as FabEggSvg } from '@/assets/images/fab_btn_egg.svg';
+import { default as FabCapSvg } from '@/assets/images/fab_btn_cap.svg';
 
-/**
- * FAB Button 컴포넌트
- */
+// 텍스트 상수
+const LABELS = {
+  easterEgg: '이스터에그',
+  timeCapsule: '타임캡슐',
+};
+
 export function FabButton({
   onEasterEggClick,
   onTimeCapsuleClick,
   className = '',
 }: FabButtonProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  // FAB 버튼 클릭 핸들러
-  const handleFabClick = useCallback(() => {
-    setIsOpen((prev) => !prev);
+  const handleMainButtonPress = useCallback(() => {
+    setIsExpanded((prev) => !prev);
   }, []);
 
-  // 오버레이 클릭 핸들러 (닫기)
-  const handleOverlayClick = useCallback(() => {
-    setIsOpen(false);
+  const handleSubButtonPress = useCallback((callback?: () => void) => {
+    setIsExpanded(false);
+    callback?.();
   }, []);
-
-  // 이스터에그 선택 핸들러
-  const handleEasterEggClick = useCallback(() => {
-    setIsOpen(false);
-    onEasterEggClick?.();
-  }, [onEasterEggClick]);
-
-  // 타임캡슐 선택 핸들러
-  const handleTimeCapsuleClick = useCallback(() => {
-    setIsOpen(false);
-    onTimeCapsuleClick?.();
-  }, [onTimeCapsuleClick]);
-
-  // 키보드 이벤트 핸들러
-  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleFabClick();
-    } else if (event.key === 'Escape' && isOpen) {
-      event.preventDefault();
-      setIsOpen(false);
-    }
-  }, [handleFabClick, isOpen]);
 
   // ESC 키로 닫기
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        setIsOpen(false);
+      if (event.key === 'Escape' && isExpanded) {
+        setIsExpanded(false);
       }
     };
 
-    if (isOpen) {
+    if (isExpanded) {
       document.addEventListener('keydown', handleEscape);
-      // body 스크롤 방지
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isExpanded]);
 
   return (
-    <>
-      {/* 오버레이 배경 */}
-      <div
-        className={`${styles.overlay} ${isOpen ? '' : styles.hidden}`}
-        onClick={handleOverlayClick}
-        aria-hidden="true"
-      />
-
-      {/* FAB 버튼 및 선택 옵션 컨테이너 */}
-      <div className={`${styles.container} ${className}`}>
-        {/* 선택 옵션 */}
-        <div className={`${styles.optionsContainer} ${isOpen ? '' : styles.hidden}`}>
-          {/* 타임캡슐 옵션 */}
-          <div className={styles.optionItem}>
-            <span className={styles.optionLabel}>타임캡슐</span>
-            <button
-              type="button"
-              className={styles.optionButton}
-              onClick={handleTimeCapsuleClick}
-              aria-label="타임캡슐 생성"
-              tabIndex={isOpen ? 0 : -1}
-            >
-              <CapsuleIcon className={styles.optionIcon} aria-hidden="true" />
-            </button>
-          </div>
-
-          {/* 이스터에그 옵션 */}
-          <div className={styles.optionItem}>
-            <span className={styles.optionLabel}>이스터에그</span>
-            <button
-              type="button"
-              className={styles.optionButton}
-              onClick={handleEasterEggClick}
-              aria-label="이스터에그 생성"
-              tabIndex={isOpen ? 0 : -1}
-            >
-              <EggIcon className={styles.optionIcon} aria-hidden="true" />
-            </button>
-          </div>
+    <div className={`${styles.container} ${className}`}>
+      {/* Dimmed Overlay */}
+      {isExpanded && (
+        <div className={styles.overlay}>
+          <button
+            type="button"
+            className={styles.overlayPressable}
+            onClick={() => handleMainButtonPress()}
+            aria-label="닫기"
+          />
         </div>
+      )}
 
-        {/* FAB 메인 버튼 */}
+      {/* Sub Buttons Container */}
+      {isExpanded && (
+        <div className={styles.subButtonsContainer}>
+          {/* Easter Egg Button */}
+          <button
+            type="button"
+            className={styles.subButtonRow}
+            onClick={() => handleSubButtonPress(onEasterEggClick)}
+            aria-label={LABELS.easterEgg}
+          >
+            <span className={styles.subButtonLabel}>{LABELS.easterEgg}</span>
+            <FabEggSvg
+              className={styles.fabButtonIcon}
+              aria-label="이스터에그 FAB 아이콘"
+            />
+          </button>
+
+          {/* Time Capsule Button */}
+          <button
+            type="button"
+            className={styles.subButtonRow}
+            onClick={() => handleSubButtonPress(onTimeCapsuleClick)}
+            aria-label={LABELS.timeCapsule}
+          >
+            <span className={styles.subButtonLabel}>{LABELS.timeCapsule}</span>
+            <FabCapSvg
+              className={styles.fabButtonIcon}
+              aria-label="타임캡슐 FAB 아이콘"
+            />
+          </button>
+        </div>
+      )}
+
+      {/* Main FAB Button */}
+      <div className={styles.mainButtonContainer}>
         <button
           type="button"
-          className={`${styles.fabButton} ${isOpen ? styles.isOpen : ''}`}
-          onClick={handleFabClick}
-          onKeyDown={handleKeyDown}
-          aria-label={isOpen ? '선택 옵션 닫기' : '콘텐츠 생성 옵션 열기'}
-          aria-expanded={isOpen}
-          tabIndex={0}
+          className={styles.mainButton}
+          onClick={handleMainButtonPress}
+          aria-label={isExpanded ? '닫기' : '메뉴 열기'}
+          aria-expanded={isExpanded}
         >
-          <span className={styles.srOnly}>
-            {isOpen ? '선택 옵션 닫기' : '콘텐츠 생성 옵션 열기'}
-          </span>
-          <div className={styles.iconContainer}>
-            <PlusIcon className={styles.plusIcon} aria-hidden="true" />
-            <CloseIcon className={styles.closeIcon} aria-hidden="true" />
+          <div className={`${styles.mainButtonInner} ${isExpanded ? styles.rotated : ''}`}>
+            <PlusSvg className={styles.mainButtonIcon} aria-hidden="true" />
           </div>
+          <div className={styles.mainButtonShadowInset} />
         </button>
       </div>
-    </>
+    </div>
   );
 }

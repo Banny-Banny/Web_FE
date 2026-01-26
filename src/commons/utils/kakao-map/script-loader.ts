@@ -44,26 +44,69 @@ export function loadKakaoMapScript(): Promise<void> {
       script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
       script.async = true;
       
+      // 타임아웃 설정 (30초)
+      const timeout = setTimeout(() => {
+        isLoading = false;
+        loadPromise = null;
+        const timeoutError = new Error(
+          '카카오 지도 스크립트 로딩 시간이 초과되었습니다.\n' +
+          '네트워크 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.'
+        );
+        console.error('[Kakao Map Script Loader]', timeoutError.message);
+        reject(timeoutError);
+      }, 30000);
+      
       // 로딩 완료 핸들러
       script.onload = () => {
+        clearTimeout(timeout);
+        
         // kakao.maps.load를 사용하여 지도 API 초기화
         if (window.kakao?.maps) {
-          window.kakao.maps.load(() => {
-            isLoaded = true;
+          try {
+            window.kakao.maps.load(() => {
+              isLoaded = true;
+              isLoading = false;
+              console.log('[Kakao Map Script Loader] 카카오 지도 스크립트 로딩 완료');
+              resolve();
+            });
+          } catch (loadError) {
             isLoading = false;
-            resolve();
-          });
+            const error = new Error(
+              '카카오 지도 API 초기화에 실패했습니다.\n' +
+              'API 키가 올바른지 확인해주세요.'
+            );
+            console.error('[Kakao Map Script Loader]', error.message, loadError);
+            reject(error);
+          }
         } else {
           isLoading = false;
-          reject(new Error('카카오 지도 API를 로드하는데 실패했습니다.'));
+          const error = new Error(
+            '카카오 지도 API 객체를 찾을 수 없습니다.\n' +
+            '스크립트가 올바르게 로드되지 않았습니다.'
+          );
+          console.error('[Kakao Map Script Loader]', error.message);
+          reject(error);
         }
       };
       
       // 로딩 실패 핸들러
-      script.onerror = () => {
+      script.onerror = (event) => {
+        clearTimeout(timeout);
         isLoading = false;
         loadPromise = null;
-        reject(new Error('카카오 지도 스크립트를 로드하는데 실패했습니다. 네트워크 연결을 확인해주세요.'));
+        
+        const error = new Error(
+          '카카오 지도 스크립트를 로드하는데 실패했습니다.\n\n' +
+          '가능한 원인:\n' +
+          '1. 네트워크 연결 문제\n' +
+          '2. 카카오 서버 일시적 장애\n' +
+          '3. API 키가 올바르지 않음\n' +
+          '4. 브라우저 확장 프로그램이 스크립트를 차단\n\n' +
+          '네트워크 연결을 확인하고 잠시 후 다시 시도해주세요.'
+        );
+        
+        console.error('[Kakao Map Script Loader]', error.message, event);
+        reject(error);
       };
       
       // 문서에 스크립트 추가
@@ -71,6 +114,10 @@ export function loadKakaoMapScript(): Promise<void> {
     } catch (error) {
       isLoading = false;
       loadPromise = null;
+      
+      if (error instanceof Error) {
+        console.error('[Kakao Map Script Loader] 초기화 실패:', error.message);
+      }
       reject(error);
     }
   });

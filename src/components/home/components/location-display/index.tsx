@@ -29,7 +29,11 @@ export const LocationDisplay = memo(function LocationDisplay({
    */
   useEffect(() => {
     if (center) {
-      fetchAddress(center.lat, center.lng);
+      try {
+        fetchAddress(center.lat, center.lng);
+      } catch (fetchError) {
+        console.error('[LocationDisplay] 주소 조회 요청 실패:', fetchError);
+      }
     }
   }, [center, fetchAddress]);
 
@@ -119,14 +123,17 @@ export const LocationDisplay = memo(function LocationDisplay({
 
   return (
     <div className={`${styles.container} ${className}`}>
-      <div className={styles.addressCard} role="status" aria-live="polite">
+      <div className={styles.addressCard} role="status" aria-live="polite" aria-atomic="true">
         {isLoading ? (
           <div className={styles.loadingText}>
             <div className={styles.loadingSpinner} aria-hidden="true" />
             <span>주소 확인 중</span>
           </div>
         ) : error ? (
-          <p className={styles.errorText}>{error}</p>
+          <div className={styles.errorText} role="alert" aria-live="assertive">
+            <p>{error}</p>
+            <p className={styles.errorHint}>잠시 후 다시 시도해주세요</p>
+          </div>
         ) : address ? (
           <>
             {/* 위치 아이콘 - Figma에서 가져온 SVG */}
@@ -143,7 +150,11 @@ export const LocationDisplay = memo(function LocationDisplay({
         )}
         {/* 스크린 리더용 */}
         <span className={styles.srOnly}>
-          {address ? `현재 위치: ${address}` : '현재 위치를 확인하는 중입니다'}
+          {error 
+            ? `오류: ${error}` 
+            : address 
+              ? `현재 위치: ${address}` 
+              : '현재 위치를 확인하는 중입니다'}
         </span>
       </div>
     </div>
