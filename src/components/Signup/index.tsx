@@ -6,6 +6,8 @@
  */
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { SignupForm } from './SignupForm';
 import type { SignupFormData } from './types';
 import { useSignupMutation, getSignupErrorMessage } from './hooks/useSignupMutation';
@@ -17,6 +19,7 @@ import styles from './styles.module.css';
  * 회원가입 폼 상태 관리 및 실제 API 기반 회원가입 처리
  */
 export function SignupContainer() {
+  const router = useRouter();
   const signupMutation = useSignupMutation();
 
   /**
@@ -43,10 +46,25 @@ export function SignupContainer() {
     ? getSignupErrorMessage(signupMutation.error)
     : undefined;
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>회원가입</h1>
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={handleBack}
+          aria-label="뒤로가기"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <div className={styles.titleSection}>
+          <h1 className={styles.title}>회원가입</h1>
+          <p className={styles.subtitle}>타임캡슐과 함께 추억을 보관하세요</p>
+        </div>
       </div>
       <SignupForm
         onSubmit={handleSignup}
