@@ -1,0 +1,94 @@
+/**
+ * TossPaymentWidget 컴포넌트 스타일
+ * 
+ * @description
+ * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - CSS 변수를 사용한 디자인 토큰 적용
+ * - 375px 기준 고정 레이아웃
+ */
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl) var(--spacing-xl);
+  background-color: var(--color-white-500);
+}
+
+.widgetContainer {
+  width: 100%;
+  margin-bottom: var(--spacing-xl);
+  min-height: 200px;
+}
+
+.paymentButton {
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background-color: var(--color-black-500);
+  color: var(--color-white-500);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  line-height: 28px;
+  letter-spacing: -0.44px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  min-height: 64px;
+}
+
+.paymentButton:hover:not(:disabled) {
+  background-color: var(--color-black-600);
+}
+
+.paymentButton:active:not(:disabled) {
+  background-color: var(--color-black-700);
+}
+
+.paymentButton:disabled {
+  background-color: var(--color-grey-500);
+  color: var(--color-white-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.loading {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+}
+
+.loadingMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: var(--font-weight-regular);
+  line-height: 20px;
+  letter-spacing: -0.15px;
+  color: var(--color-dark-grey-500);
+}
+
+.error {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background-color: var(--color-red-50);
+  border: 1px solid var(--color-red-200);
+  border-radius: var(--radius-lg);
+}
+
+.errorMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  line-height: 20px;
+  letter-spacing: -0.15px;
+  color: var(--color-red-500);
+  text-align: center;
+}

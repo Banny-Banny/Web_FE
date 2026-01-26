@@ -164,6 +164,14 @@ export const ORDER_ENDPOINTS = {
 } as const;
 
 /**
+ * 결제 관련 엔드포인트
+ */
+export const PAYMENT_ENDPOINTS = {
+  // 결제 완료 처리
+  COMPLETE: `${BASE_PATHS.API}/payment/complete`,
+} as const;
+
+/**
  * Health Check 관련 엔드포인트
  */
 export const HEALTH_ENDPOINTS = {
@@ -182,6 +190,7 @@ export const ENDPOINTS = {
   TIMEEGG: TIMEEGG_ENDPOINTS,
   ADMIN: ADMIN_ENDPOINTS,
   ORDER: ORDER_ENDPOINTS,
+  PAYMENT: PAYMENT_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,
