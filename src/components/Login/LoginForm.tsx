@@ -53,7 +53,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   /**
    * 입력 필드 변경 핸들러
    */
-  const handleChange = (field: 'phoneNumber' | 'email' | 'password') => (
+  const handleChange = (field: keyof LoginFormData) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     let value = e.target.value;
@@ -124,7 +124,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   /**
    * 입력 필드 블러 핸들러 (유효성 검증)
    */
-  const handleBlur = (field: 'phoneNumber' | 'email' | 'password') => () => {
+  const handleBlur = (field: keyof LoginFormData) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
     
     // 해당 필드만 검증
@@ -215,7 +215,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
             value={formData.email}
             onChange={handleChange('email')}
             onBlur={handleBlur('email')}
-            placeholder="user@example.com"
+            placeholder="example@email.com"
             className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
             aria-label="이메일"
             aria-required="true"
