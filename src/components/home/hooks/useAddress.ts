@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { getAddressFromCoord } from '@/commons/apis/kakao-map/address';
+import { ADDRESS_DEBOUNCE_TIME } from '../constants';
 
 export interface UseAddressReturn {
   /** 조회된 주소 */
@@ -16,11 +17,6 @@ export interface UseAddressReturn {
   /** 주소 조회 함수 */
   fetchAddress: (lat: number, lng: number) => void;
 }
-
-/**
- * 디바운싱 딜레이 (밀리초)
- */
-const DEBOUNCE_DELAY = 500;
 
 /**
  * 좌표를 기반으로 주소를 조회하는 훅
@@ -87,7 +83,7 @@ export function useAddress(): UseAddressReturn {
       } finally {
         setIsLoading(false);
       }
-    }, DEBOUNCE_DELAY);
+    }, ADDRESS_DEBOUNCE_TIME);
   }, []);
 
   /**

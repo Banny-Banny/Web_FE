@@ -25,3 +25,18 @@ export const DEFAULT_LEVEL = 5;
  * 사용자 위치를 가져왔을 때 사용하는 레벨
  */
 export const USER_LOCATION_LEVEL = 7;
+
+/**
+ * 지도 최소 확대/축소 레벨
+ */
+export const MIN_LEVEL = 1;
+
+/**
+ * 지도 최대 확대/축소 레벨
+ */
+export const MAX_LEVEL = 14;
+
+/**
+ * 주소 조회 디바운싱 시간 (ms)
+ */
+export const ADDRESS_DEBOUNCE_TIME = 500;
