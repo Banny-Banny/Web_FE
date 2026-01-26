@@ -1,36 +1,147 @@
 /**
- * 인증 관련 훅 (추후 구현 예정)
- * 현재는 기본 구조만 제공
+ * 인증 관련 훅
  */
 
-import type { AuthContextType } from '@/commons/types/auth';
+import { useState, useEffect, useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
+import { getAccessToken, clearTokens } from '@/commons/utils/auth';
+import { localLogin } from '@/commons/apis/auth/login';
 
 /**
  * 인증 상태 및 액션에 접근하는 커스텀 훅
- * TODO: 실제 인증 로직 구현 필요
  */
 export function useAuth(): AuthContextType {
-  // 임시 구현 - 추후 실제 인증 로직으로 교체
+  const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  /**
+   * 인증 상태 확인
+   */
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsLoading(true);
+      
+      try {
+        const token = getAccessToken();
+        
+        if (!token) {
+          setUser(null);
+          setIsLoading(false);
+          return;
+        }
+
+        // 캐시에서 사용자 정보 확인
+        const cachedUser = queryClient.getQueryData<User>(['auth', 'user']);
+        
+        if (cachedUser) {
+          setUser(cachedUser);
+        } else {
+          // 토큰은 있지만 사용자 정보가 없는 경우
+          // TODO: 토큰 검증 API 호출하여 사용자 정보 가져오기
+          setUser(null);
+        }
+      } catch (err: any) {
+        setError(err.message || '인증 상태 확인 중 오류가 발생했습니다.');
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [queryClient]);
+
+  /**
+   * 로그인 함수
+   */
+  const login = useCallback(async (credentials: LoginRequest) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await localLogin(credentials);
+      
+      // 사용자 정보 저장
+      if (response.user) {
+        setUser(response.user);
+        queryClient.setQueryData(['auth', 'user'], response.user);
+      }
+    } catch (err: any) {
+      const errorMessage = err.message || '로그인 중 오류가 발생했습니다.';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [queryClient]);
+
+  /**
+   * 회원가입 함수
+   */
+  const signup = useCallback(async () => {
+    // TODO: 회원가입 로직 구현
+    console.log('Signup function - to be implemented');
+  }, []);
+
+  /**
+   * 로그아웃 함수
+   */
+  const logout = useCallback(() => {
+    clearTokens();
+    setUser(null);
+    queryClient.removeQueries({ queryKey: ['auth'] });
+  }, [queryClient]);
+
+  /**
+   * 인증 상태 갱신
+   */
+  const refreshAuth = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const token = getAccessToken();
+      
+      if (!token) {
+        setUser(null);
+        return;
+      }
+
+      // TODO: 토큰 검증 API 호출
+      // 현재는 토큰이 있으면 인증된 것으로 간주
+      const cachedUser = queryClient.getQueryData<User>(['auth', 'user']);
+      setUser(cachedUser || null);
+    } catch (err: any) {
+      setError(err.message || '인증 상태 갱신 중 오류가 발생했습니다.');
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [queryClient]);
+
+  /**
+   * 에러 초기화
+   */
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  // 토큰 기반 인증 상태 확인
+  const isAuthenticated = !!getAccessToken() && !!user;
+
   return {
-    user: null,
-    isAuthenticated: false,
-    isLoading: false,
-    error: null,
-    login: async () => {
-      console.log('Login function - to be implemented');
-    },
-    signup: async () => {
-      console.log('Signup function - to be implemented');
-    },
-    logout: () => {
-      console.log('Logout function - to be implemented');
-    },
-    refreshAuth: async () => {
-      console.log('RefreshAuth function - to be implemented');
-    },
-    clearError: () => {
-      console.log('ClearError function - to be implemented');
-    },
+    user,
+    isAuthenticated,
+    isLoading,
+    error,
+    login,
+    signup,
+    logout,
+    refreshAuth,
+    clearError,
   };
 }
 
