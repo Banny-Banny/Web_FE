@@ -24,6 +24,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { animated } from '@react-spring/web';
+import { useDragGesture } from './hooks/useDragGesture';
 import styles from './styles.module.css';
 import type { BottomSheetProps } from './types';
 
@@ -38,8 +40,11 @@ import type { BottomSheetProps } from './types';
  * @param {() => void} props.onClose - 바텀시트 닫기 핸들러
  * @param {ReactNode} props.children - 바텀시트 내부 컨텐츠
  * @param {ReactNode} [props.footer] - 하단 고정 영역 (주로 버튼)
- * @param {boolean} [props.showHandle=true] - 드래그 핸들 표시 여부
+ * @param {boolean} [props.showHandle=false] - 드래그 핸들 표시 여부
  * @param {boolean} [props.closeOnBackdropPress=true] - 오버레이 클릭 시 닫기 여부
+ * @param {boolean} [props.draggable=false] - 드래그 가능 여부
+ * @param {string | number} [props.maxHeight="70vh"] - 최대 높이
+ * @param {Function} [props.onDragEnd] - 드래그 종료 핸들러
  * 
  * @example
  * ```tsx
@@ -69,12 +74,26 @@ export function BottomSheet({
   onClose,
   children,
   footer,
-  showHandle = true,
+  showHandle = false,
   closeOnBackdropPress = true,
+  draggable = false,
+  maxHeight = '70vh',
+  onDragEnd,
 }: BottomSheetProps) {
   const [shouldRender, setShouldRender] = React.useState(isOpen);
   const bottomSheetRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  // 드래그 제스처 Hook (draggable이 true일 때만 활성화)
+  const { style: dragStyle, bind: dragBind, isDragging } = useDragGesture({
+    isOpen: isOpen && draggable,
+    onClose,
+    maxHeightVh: typeof maxHeight === 'string' && maxHeight.includes('vh') 
+      ? parseFloat(maxHeight) 
+      : 70,
+    closeThreshold: 30,
+    onDragEnd,
+  });
 
   // isOpen 변경 시 렌더링 상태 업데이트
   useEffect(() => {
@@ -130,6 +149,17 @@ export function BottomSheet({
     return null;
   }
 
+  // 최대 높이 스타일 계산
+  const maxHeightStyle = typeof maxHeight === 'number' 
+    ? { maxHeight: `${maxHeight}px` }
+    : { maxHeight };
+
+  // 바텀시트 컨테이너 클래스
+  const containerClasses = [
+    styles.bottomSheetContainer,
+    isDragging ? styles.dragging : '',
+  ].filter(Boolean).join(' ');
+
   const bottomSheetContent = (
     <div className={`${styles.backdrop} ${isOpen ? styles.animateEnter : ''}`}>
       {/* 오버레이 클릭 영역 */}
@@ -139,33 +169,69 @@ export function BottomSheet({
         aria-hidden="true"
       />
       {/* 바텀시트 컨테이너 */}
-      <div
-        ref={bottomSheetRef}
-        className={styles.bottomSheetContainer}
-        role="dialog"
-        aria-modal="true"
-        aria-label="바텀시트"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') {
-            onClose();
-          }
-        }}
-        tabIndex={-1}
-      >
-        {/* 드래그 핸들 */}
-        {showHandle && (
-          <div className={styles.handleContainer}>
-            <div className={styles.handle} />
-          </div>
-        )}
+      {draggable ? (
+        <animated.div
+          ref={bottomSheetRef}
+          className={containerClasses}
+          style={{
+            ...maxHeightStyle,
+            y: dragStyle.y,
+            touchAction: 'none',
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="바텀시트"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              onClose();
+            }
+          }}
+          tabIndex={-1}
+        >
+          {/* 드래그 핸들 */}
+          {showHandle && (
+            <div className={styles.handleContainer} {...dragBind()}>
+              <div className={styles.handle} />
+            </div>
+          )}
 
-        {/* 바텀시트 내용 */}
-        <div className={styles.content}>{children}</div>
+          {/* 바텀시트 내용 */}
+          <div className={styles.content}>{children}</div>
 
-        {/* 하단 고정 영역 (footer) */}
-        {footer && <div className={styles.footer}>{footer}</div>}
-      </div>
+          {/* 하단 고정 영역 (footer) */}
+          {footer && <div className={styles.footer}>{footer}</div>}
+        </animated.div>
+      ) : (
+        <div
+          ref={bottomSheetRef}
+          className={containerClasses}
+          style={maxHeightStyle}
+          role="dialog"
+          aria-modal="true"
+          aria-label="바텀시트"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              onClose();
+            }
+          }}
+          tabIndex={-1}
+        >
+          {/* 드래그 핸들 */}
+          {showHandle && (
+            <div className={styles.handleContainer}>
+              <div className={styles.handle} />
+            </div>
+          )}
+
+          {/* 바텀시트 내용 */}
+          <div className={styles.content}>{children}</div>
+
+          {/* 하단 고정 영역 (footer) */}
+          {footer && <div className={styles.footer}>{footer}</div>}
+        </div>
+      )}
     </div>
   );
 

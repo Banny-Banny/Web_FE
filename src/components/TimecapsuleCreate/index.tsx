@@ -31,7 +31,6 @@ export function TimecapsuleCreate() {
   const {
     onSubmit,
     handleSubmitClick,
-    formState: { isValid, errors },
     watch,
     isSubmitting,
     apiError,

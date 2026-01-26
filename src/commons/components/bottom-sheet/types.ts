@@ -11,8 +11,14 @@ export interface BottomSheetProps {
   children: React.ReactNode;
   /** 하단 고정 영역 (버튼 등) */
   footer?: React.ReactNode;
-  /** 드래그 핸들 표시 여부 (기본: true) */
+  /** 드래그 핸들 표시 여부 (기본: false) */
   showHandle?: boolean;
   /** 오버레이 클릭 시 닫기 여부 (기본: true) */
   closeOnBackdropPress?: boolean;
+  /** 드래그 가능 여부 (기본: false) */
+  draggable?: boolean;
+  /** 최대 높이 (기본: "70vh") */
+  maxHeight?: string | number;
+  /** 드래그 종료 핸들러 (선택적) */
+  onDragEnd?: () => void;
 }

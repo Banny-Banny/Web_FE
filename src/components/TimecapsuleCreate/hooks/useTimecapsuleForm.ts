@@ -116,7 +116,7 @@ export function useTimecapsuleForm() {
       // 주문 생성 API 호출
       try {
         await createOrderMutation.mutateAsync(apiRequest);
-      } catch (error) {
+      } catch {
         // 에러는 mutation의 onError에서 처리됨
         // 여기서는 추가 처리 없음
       }
@@ -140,7 +140,7 @@ export function useTimecapsuleForm() {
           // 폼 데이터를 API 요청 형식으로 변환
           const apiRequest = transformFormDataToApiRequest(data);
           await createOrderMutation.mutateAsync(apiRequest);
-        } catch (error) {
+        } catch {
           // 에러는 mutation의 onError에서 처리됨
         }
       },
