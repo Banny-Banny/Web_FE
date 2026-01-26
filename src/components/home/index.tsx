@@ -8,15 +8,23 @@
 import { useEffect, useState } from 'react';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
+import { useGeolocation } from './hooks/useGeolocation';
 import { MapView } from './components/map-view';
 import { MapControls } from './components/map-controls';
+import { LocationDisplay } from './components/location-display';
 import type { HomeFeatureProps } from './types';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const { map, isLoading, error, initializeMap } = useKakaoMap();
+  const geolocation = useGeolocation();
+  
+  // Geolocation 값을 useKakaoMap에 전달
+  const { map, isLoading, error, initializeMap } = useKakaoMap({
+    initialLat: geolocation.latitude,
+    initialLng: geolocation.longitude,
+  });
 
   // 재시도 핸들러
   const handleRetry = () => {
@@ -49,8 +57,21 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     };
   }, [scriptLoaded, scriptError]);
 
-  // 스크립트 로딩 중
+  // 스크립트 로딩 중 또는 Geolocation 로딩 중
   if (!scriptLoaded && !scriptError) {
+    return (
+      <div className={`h-full w-full ${className}`}>
+        <MapView
+          onMapInit={initializeMap}
+          map={null}
+          isLoading={true}
+        />
+      </div>
+    );
+  }
+
+  // Geolocation 로딩 중 (스크립트는 로드됨)
+  if (scriptLoaded && geolocation.isLoading) {
     return (
       <div className={`h-full w-full ${className}`}>
         <MapView
@@ -135,7 +156,20 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         isLoading={isLoading}
         error={error}
       />
-      {map && <MapControls map={map} />}
+      {map && (
+        <>
+          <LocationDisplay 
+            map={map}
+            userLat={geolocation.latitude}
+            userLng={geolocation.longitude}
+          />
+          <MapControls 
+            map={map}
+            userLat={geolocation.latitude}
+            userLng={geolocation.longitude}
+          />
+        </>
+      )}
     </div>
   );
 }

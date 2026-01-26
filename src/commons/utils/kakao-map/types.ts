@@ -57,6 +57,35 @@ export interface KakaoLatLngConstructor {
 }
 
 /**
+ * 마커 옵션
+ */
+export interface MarkerOptions {
+  /** 마커의 위치 좌표 */
+  position: LatLng;
+  /** 마커를 표시할 지도 */
+  map?: KakaoMap | null;
+}
+
+/**
+ * 카카오 지도 마커 인스턴스
+ */
+export interface KakaoMarker {
+  /** 마커를 표시할 지도를 설정합니다 */
+  setMap(map: KakaoMap | null): void;
+  /** 마커의 위치를 설정합니다 */
+  setPosition(position: LatLng): void;
+  /** 마커의 위치를 가져옵니다 */
+  getPosition(): LatLng;
+}
+
+/**
+ * 카카오 지도 마커 생성자
+ */
+export interface KakaoMarkerConstructor {
+  new (options: MarkerOptions): KakaoMarker;
+}
+
+/**
  * 카카오 지도 이벤트 네임스페이스
  */
 export interface KakaoMapsEvent {
@@ -67,11 +96,50 @@ export interface KakaoMapsEvent {
 }
 
 /**
+ * 커스텀 오버레이 옵션
+ */
+export interface CustomOverlayOptions {
+  /** 오버레이의 위치 좌표 */
+  position: LatLng;
+  /** 오버레이 내용 (HTML 요소 또는 문자열) */
+  content: HTMLElement | string;
+  /** 오버레이를 표시할 지도 */
+  map?: KakaoMap | null;
+  /** x축 방향 위치 오프셋 */
+  xAnchor?: number;
+  /** y축 방향 위치 오프셋 */
+  yAnchor?: number;
+  /** z-index */
+  zIndex?: number;
+}
+
+/**
+ * 카카오 지도 커스텀 오버레이 인스턴스
+ */
+export interface KakaoCustomOverlay {
+  /** 오버레이를 표시할 지도를 설정합니다 */
+  setMap(map: KakaoMap | null): void;
+  /** 오버레이의 위치를 설정합니다 */
+  setPosition(position: LatLng): void;
+  /** 오버레이의 위치를 가져옵니다 */
+  getPosition(): LatLng;
+}
+
+/**
+ * 카카오 지도 커스텀 오버레이 생성자
+ */
+export interface KakaoCustomOverlayConstructor {
+  new (options: CustomOverlayOptions): KakaoCustomOverlay;
+}
+
+/**
  * 카카오 지도 API 네임스페이스
  */
 export interface KakaoMaps {
   Map: KakaoMapConstructor;
   LatLng: KakaoLatLngConstructor;
+  Marker: KakaoMarkerConstructor;
+  CustomOverlay: KakaoCustomOverlayConstructor;
   event: KakaoMapsEvent;
   /** 지도 API를 로드합니다 */
   load(callback: () => void): void;

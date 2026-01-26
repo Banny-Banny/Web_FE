@@ -4,7 +4,14 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { KakaoMap } from '@/commons/utils/kakao-map/types';
-import { DEFAULT_CENTER, DEFAULT_LEVEL } from '../constants';
+import { DEFAULT_CENTER, DEFAULT_LEVEL, USER_LOCATION_LEVEL } from '../constants';
+
+export interface UseKakaoMapParams {
+  /** 초기 위도 (선택사항) */
+  initialLat?: number | null;
+  /** 초기 경도 (선택사항) */
+  initialLng?: number | null;
+}
 
 export interface UseKakaoMapReturn {
   /** 지도 인스턴스 */
@@ -21,8 +28,11 @@ export interface UseKakaoMapReturn {
 
 /**
  * 카카오 지도 인스턴스를 생성하고 관리하는 훅
+ * 
+ * @param params 초기 위치 파라미터
  */
-export function useKakaoMap(): UseKakaoMapReturn {
+export function useKakaoMap(params?: UseKakaoMapParams): UseKakaoMapReturn {
+  const { initialLat, initialLng } = params || {};
   const [map, setMap] = useState<KakaoMap | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,17 +63,20 @@ export function useKakaoMap(): UseKakaoMapReturn {
       // LatLng 생성 시도
       let center;
       try {
-        center = new window.kakao.maps.LatLng(
-          DEFAULT_CENTER.lat,
-          DEFAULT_CENTER.lng
-        );
+        // 초기 위치가 제공되면 사용, 아니면 기본 위치 사용
+        const lat = initialLat ?? DEFAULT_CENTER.lat;
+        const lng = initialLng ?? DEFAULT_CENTER.lng;
+        center = new window.kakao.maps.LatLng(lat, lng);
       } catch {
         throw new Error('지도 좌표를 생성하는데 실패했습니다.');
       }
 
+      // 사용자 위치를 사용하는 경우 더 확대된 레벨 사용
+      const level = (initialLat && initialLng) ? USER_LOCATION_LEVEL : DEFAULT_LEVEL;
+
       const options = {
         center,
-        level: DEFAULT_LEVEL,
+        level,
       };
 
       // 지도 인스턴스 생성
@@ -92,7 +105,7 @@ export function useKakaoMap(): UseKakaoMapReturn {
       setIsLoading(false);
       console.error('지도 초기화 실패:', err);
     }
-  }, []);
+  }, [initialLat, initialLng]);
 
   /**
    * 지도를 기본 상태로 리셋합니다

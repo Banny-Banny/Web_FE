@@ -12,8 +12,13 @@ import styles from './styles.module.css';
 /**
  * Map Controls 컴포넌트
  */
-export const MapControls = memo(function MapControls({ map, className }: MapControlsProps) {
-  const { canReset, resetMap } = useMapControl({ map });
+export const MapControls = memo(function MapControls({ 
+  map, 
+  userLat, 
+  userLng, 
+  className 
+}: MapControlsProps) {
+  const { canReset, resetMap } = useMapControl({ map, userLat, userLng });
 
   const handleReset = () => {
     resetMap();

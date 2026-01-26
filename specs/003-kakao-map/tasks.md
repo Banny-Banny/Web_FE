@@ -44,13 +44,13 @@
 
 ### 지도 훅 및 기본 컴포넌트
 
-- [ ] T010 [US1] `src/components/home/types.ts`에 Home Feature 타입 정의 생성
-- [ ] T011 [US1] `src/components/home/hooks/useKakaoMap.ts`에 카카오 지도 훅 구현
-- [ ] T012 [US1] `src/components/home/components/map-view/types.ts`에 MapView 컴포넌트 타입 정의 생성
-- [ ] T013 [P] [US1] `src/components/home/components/map-view/styles.module.css`에 MapView 스타일 작성 (375px 기준)
-- [ ] T014 [US1] `src/components/home/components/map-view/index.tsx`에 MapView 컴포넌트 구현
-- [ ] T015 [US1] `src/components/home/index.tsx`에 Home Feature Container 구현 (스크립트 로딩 및 지도 초기화)
-- [ ] T016 [US1] `src/app/(main)/page.tsx`에 Home Feature 통합
+- [x] T010 [US1] `src/components/home/types.ts`에 Home Feature 타입 정의 생성
+- [x] T011 [US1] `src/components/home/hooks/useKakaoMap.ts`에 카카오 지도 훅 구현
+- [x] T012 [US1] `src/components/home/components/map-view/types.ts`에 MapView 컴포넌트 타입 정의 생성
+- [x] T013 [P] [US1] `src/components/home/components/map-view/styles.module.css`에 MapView 스타일 작성 (375px 기준)
+- [x] T014 [US1] `src/components/home/components/map-view/index.tsx`에 MapView 컴포넌트 구현
+- [x] T015 [US1] `src/components/home/index.tsx`에 Home Feature Container 구현 (스크립트 로딩 및 지도 초기화)
+- [x] T016 [US1] `src/app/(main)/page.tsx`에 Home Feature 통합
 
 ---
 
@@ -58,8 +58,8 @@
 
 ### 지도 조작 기능 (카카오 지도 API 기본 기능 활용)
 
-- [ ] T017 [US2] `src/components/home/components/map-view/index.tsx`에 지도 드래그 이동 기능 활성화
-- [ ] T018 [US2] `src/components/home/components/map-view/index.tsx`에 지도 확대/축소 기능 활성화
+- [x] T017 [US2] `src/components/home/components/map-view/index.tsx`에 지도 드래그 이동 기능 활성화
+- [x] T018 [US2] `src/components/home/components/map-view/index.tsx`에 지도 확대/축소 기능 활성화
 
 **참고**: US2는 카카오 지도 API의 기본 기능이므로 별도 구현 없이 활성화만 필요합니다.
 
@@ -69,13 +69,13 @@
 
 ### 주소 조회 훅 및 위치 표시 컴포넌트
 
-- [ ] T019 [US6] `src/components/home/hooks/useCurrentLocation.ts`에 현재 위치 추적 훅 구현
-- [ ] T020 [US6] `src/components/home/hooks/useAddress.ts`에 주소 조회 훅 구현 (디바운싱 포함)
-- [ ] T021 [US6] `src/components/home/components/location-display/types.ts`에 LocationDisplay 컴포넌트 타입 정의 생성
-- [ ] T022 [P] [US6] `src/components/home/components/location-display/styles.module.css`에 LocationDisplay 스타일 작성
-- [ ] T023 [US6] `src/components/home/components/location-display/index.tsx`에 LocationDisplay 컴포넌트 구현 (현재 위치 마커 및 주소 표시)
-- [ ] T024 [US6] `src/components/home/index.tsx`에 LocationDisplay 컴포넌트 통합
-- [ ] T025 [US6] `src/components/home/components/map-view/index.tsx`에 지도 이동 이벤트 리스너 등록 (주소 업데이트 트리거)
+- [x] T019 [US6] `src/components/home/hooks/useCurrentLocation.ts`에 현재 위치 추적 훅 구현
+- [x] T020 [US6] `src/components/home/hooks/useAddress.ts`에 주소 조회 훅 구현 (디바운싱 포함)
+- [x] T021 [US6] `src/components/home/components/location-display/types.ts`에 LocationDisplay 컴포넌트 타입 정의 생성
+- [x] T022 [P] [US6] `src/components/home/components/location-display/styles.module.css`에 LocationDisplay 스타일 작성
+- [x] T023 [US6] `src/components/home/components/location-display/index.tsx`에 LocationDisplay 컴포넌트 구현 (현재 위치 마커 및 주소 표시)
+- [x] T024 [US6] `src/components/home/index.tsx`에 LocationDisplay 컴포넌트 통합
+- [x] T025 [US6] `src/components/home/components/map-view/index.tsx`에 지도 이동 이벤트 리스너 등록 (주소 업데이트 트리거)
 
 ---
 

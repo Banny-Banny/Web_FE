@@ -4,11 +4,15 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import type { KakaoMap } from '@/commons/utils/kakao-map/types';
-import { DEFAULT_CENTER, DEFAULT_LEVEL } from '../constants';
+import { DEFAULT_CENTER, DEFAULT_LEVEL, USER_LOCATION_LEVEL } from '../constants';
 
 export interface UseMapControlProps {
   /** 지도 인스턴스 */
   map: KakaoMap | null;
+  /** 사용자 위치 위도 */
+  userLat?: number | null;
+  /** 사용자 위치 경도 */
+  userLng?: number | null;
 }
 
 export interface UseMapControlReturn {
@@ -21,8 +25,15 @@ export interface UseMapControlReturn {
 /**
  * 지도 관리 기능을 제공하는 훅
  */
-export function useMapControl({ map }: UseMapControlProps): UseMapControlReturn {
+export function useMapControl({ map, userLat, userLng }: UseMapControlProps): UseMapControlReturn {
   const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  // 사용자 위치가 있으면 사용, 없으면 기본 위치 사용
+  const hasUserLocation = userLat !== null && userLat !== undefined && 
+                          userLng !== null && userLng !== undefined;
+  const initialLat = hasUserLocation ? userLat! : DEFAULT_CENTER.lat;
+  const initialLng = hasUserLocation ? userLng! : DEFAULT_CENTER.lng;
+  const initialLevel = hasUserLocation ? USER_LOCATION_LEVEL : DEFAULT_LEVEL;
 
   /**
    * 지도가 초기 상태와 다른지 확인
@@ -38,11 +49,11 @@ export function useMapControl({ map }: UseMapControlProps): UseMapControlReturn 
 
       // 현재 위치와 초기 위치 비교
       const isPositionChanged =
-        Math.abs(currentCenter.getLat() - DEFAULT_CENTER.lat) > 0.0001 ||
-        Math.abs(currentCenter.getLng() - DEFAULT_CENTER.lng) > 0.0001;
+        Math.abs(currentCenter.getLat() - initialLat) > 0.0001 ||
+        Math.abs(currentCenter.getLng() - initialLng) > 0.0001;
 
       // 현재 레벨과 초기 레벨 비교
-      const isLevelChanged = currentLevel !== DEFAULT_LEVEL;
+      const isLevelChanged = currentLevel !== initialLevel;
 
       return isPositionChanged || isLevelChanged;
     } catch (err) {
@@ -51,13 +62,13 @@ export function useMapControl({ map }: UseMapControlProps): UseMapControlReturn 
     }
     // updateTrigger는 의도적으로 의존성에 포함하여 지도 상태 변경 시 재계산
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, updateTrigger]);
+  }, [map, initialLat, initialLng, initialLevel, updateTrigger]);
 
   // canReset을 계산된 값으로 사용
   const canReset = checkIfMapChanged();
 
   /**
-   * 지도를 기본 상태로 복원
+   * 지도를 초기 상태로 복원 (사용자 위치 또는 기본 위치)
    */
   const resetMap = useCallback(() => {
     if (!map || !window.kakao?.maps) {
@@ -65,20 +76,17 @@ export function useMapControl({ map }: UseMapControlProps): UseMapControlReturn 
     }
 
     try {
-      const center = new window.kakao.maps.LatLng(
-        DEFAULT_CENTER.lat,
-        DEFAULT_CENTER.lng
-      );
+      const center = new window.kakao.maps.LatLng(initialLat, initialLng);
 
       map.setCenter(center);
-      map.setLevel(DEFAULT_LEVEL);
+      map.setLevel(initialLevel);
 
       // 상태 업데이트 트리거
       setUpdateTrigger((prev) => prev + 1);
     } catch (err) {
       console.error('지도 리셋 실패:', err);
     }
-  }, [map]);
+  }, [map, initialLat, initialLng, initialLevel]);
 
   /**
    * 지도 이벤트 리스너 등록
