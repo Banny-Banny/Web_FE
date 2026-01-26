@@ -1,0 +1,230 @@
+/**
+ * 오디오 첨부 모달 스타일
+ */
+
+/* 백드롭 */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* 모달 */
+.modal {
+  width: 100%;
+  max-width: 340px;
+  background-color: var(--color-white);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+.closeButton {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--color-gray-900);
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--color-gray-100);
+}
+
+/* 컨텐츠 */
+.content {
+  min-height: 266px;
+  padding: 24px 0;
+}
+
+/* 업로드 영역 */
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.uploadButton {
+  width: 100%;
+  min-height: 184px;
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-gray-500);
+}
+
+.uploadButton:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+}
+
+.uploadButtonTitle {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+}
+
+.uploadButtonSubtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-500);
+}
+
+/* 미리보기 영역 */
+.previewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.previewTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+.previewFileName {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-600);
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 재생 컨트롤 */
+.playbackContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.playButton {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray-900);
+  transition: opacity 0.2s ease;
+}
+
+.playButton:hover {
+  opacity: 0.7;
+}
+
+.timeContainer {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeText {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-600);
+}
+
+/* 액션 버튼 */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.resetButton,
+.confirmButton {
+  flex: 1;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton {
+  background-color: var(--color-gray-100);
+  border: none;
+  color: var(--color-gray-700);
+}
+
+.resetButton:hover {
+  background-color: var(--color-gray-200);
+}
+
+.confirmButton {
+  background-color: var(--color-gray-900);
+  border: none;
+  color: var(--color-white);
+}
+
+.confirmButton:hover {
+  background-color: var(--color-gray-800);
+}
+
+.confirmButton:disabled {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}

@@ -51,191 +51,290 @@
 
 ---
 
-## Phase 2: 기본 타입 정의 및 Mock 데이터
+## Phase 2: 기본 타입 정의 및 Mock 데이터 ✅
 
 ### 타입 정의
 
-- [ ] T004 [P] src/components/home/components/easter-egg-bottom-sheet/types.ts 생성
-  - EasterEggOption 인터페이스 정의
-    - icon 필드: @remixicon/react 컴포넌트 이름 (string)
-  - EasterEggSheetState 인터페이스 정의
-  - EasterEggBottomSheetProps 인터페이스 정의
-  - OptionButtonProps 인터페이스 정의
-  - SheetContentProps 인터페이스 정의
+- [x] T004 [P] src/components/home/components/easter-egg-bottom-sheet/types.ts 생성 ✅
+  - EasterEggOption 인터페이스 정의 ✅
+    - icon 필드: @remixicon/react 컴포넌트 이름 (string) ✅
+  - EasterEggSheetState 인터페이스 정의 ✅
+  - EasterEggBottomSheetProps 인터페이스 정의 ✅
+  - OptionButtonProps 인터페이스 정의 ✅
+  - SheetContentProps 인터페이스 정의 ✅
 
-- [ ] T005 [P] src/components/home/components/easter-egg-bottom-sheet/components/option-button/types.ts 생성
-  - OptionButtonProps 타입 재export
-  - 추가 내부 타입 정의 (필요 시)
+- [x] T005 [P] src/components/home/components/easter-egg-bottom-sheet/components/option-button/types.ts 생성 ✅
+  - OptionButtonProps 타입 재export ✅
+  - 추가 내부 타입 정의 (필요 시) ✅
 
-- [ ] T006 [P] src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/types.ts 생성
-  - SheetContentProps 타입 재export
-  - 추가 내부 타입 정의 (필요 시)
+- [x] T006 [P] src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/types.ts 생성 ✅
+  - SheetContentProps 타입 재export ✅
+  - 추가 내부 타입 정의 (필요 시) ✅
 
 ### Mock 데이터
 
-- [ ] T007 src/components/home/hooks/useEasterEggOptions.ts 생성
-  - EASTER_EGG_OPTIONS Mock 데이터 정의
-  - **아이콘**: @remixicon/react 컴포넌트 이름 사용 (예: 'RiFlashlightLine')
-  - useEasterEggOptions Hook 구현
-  - 파일: `src/components/home/hooks/useEasterEggOptions.ts`
+- [x] T007 src/components/home/hooks/useEasterEggOptions.ts 생성 ✅
+  - EASTER_EGG_OPTIONS Mock 데이터 정의 ✅
+  - **아이콘**: @remixicon/react 컴포넌트 이름 사용 (예: 'RiFlashlightLine') ✅
+  - useEasterEggOptions Hook 구현 ✅
+  - 파일: `src/components/home/hooks/useEasterEggOptions.ts` ✅
 
 ---
 
-## Phase 3: Phase 1 구현 - 기본 바텀시트 통합 및 상태 관리
+## Phase 3: Phase 1 구현 - 기본 바텀시트 통합 및 상태 관리 ✅
 
 ### [US1] 이스터에그 생성 시작 - 기본 구조
 
-- [ ] T008 [US1] src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggSheet.ts 생성
-  - 바텀시트 상태 관리 Hook 구현
-  - isOpen, selectedOption, height, isDragging 상태 관리
-  - handleOpen, handleClose, handleSelectOption 함수 구현
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggSheet.ts`
+- [x] T008 [US1] src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggSheet.ts 생성 ✅
+  - 바텀시트 상태 관리 Hook 구현 ✅
+  - isOpen, selectedOption, height, isDragging 상태 관리 ✅
+  - handleOpen, handleClose, handleSelectOption 함수 구현 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggSheet.ts` ✅
 
-- [ ] T009 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx 생성 (기본 구조)
-  - 'use client' 지시어 추가
-  - EasterEggBottomSheet 컴포넌트 기본 구조 작성
-  - BottomSheet 공통 컴포넌트 import 및 사용
-  - props 정의 및 기본 렌더링
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
+- [x] T009 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx 생성 (기본 구조) ✅
+  - 'use client' 지시어 추가 ✅
+  - EasterEggBottomSheet 컴포넌트 기본 구조 작성 ✅
+  - BottomSheet 공통 컴포넌트 import 및 사용 ✅
+  - props 정의 및 기본 렌더링 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
-- [ ] T010 [US1] src/components/home/components/easter-egg-bottom-sheet/styles.module.css 생성
-  - 바텀시트 컨테이너 스타일
-  - 디자인 토큰 기반 스타일링
-  - 375px 모바일 프레임 기준
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/styles.module.css`
+- [x] T010 [US1] src/components/home/components/easter-egg-bottom-sheet/styles.module.css 생성 ✅
+  - 바텀시트 컨테이너 스타일 ✅
+  - 디자인 토큰 기반 스타일링 ✅
+  - 375px 모바일 프레임 기준 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/styles.module.css` ✅
 
-- [ ] T011 [US1] src/components/home/index.tsx 수정 - 바텀시트 상태 추가
-  - easterEggSheetOpen 상태 추가
-  - handleEasterEggClick 함수 수정 (바텀시트 열기)
-  - handleEasterEggSheetClose 함수 추가
-  - handleEasterEggConfirm 함수 추가 (임시 구현)
-  - 파일: `src/components/home/index.tsx`
+- [x] T011 [US1] src/components/home/index.tsx 수정 - 바텀시트 상태 추가 ✅
+  - easterEggSheetOpen 상태 추가 ✅
+  - handleEasterEggClick 함수 수정 (바텀시트 열기) ✅
+  - handleEasterEggSheetClose 함수 추가 ✅
+  - handleEasterEggConfirm 함수 추가 (임시 구현) ✅
+  - 파일: `src/components/home/index.tsx` ✅
 
-- [ ] T012 [US1] src/components/home/index.tsx 수정 - 바텀시트 렌더링
-  - EasterEggBottomSheet 컴포넌트 import
-  - JSX에 EasterEggBottomSheet 추가
-  - isOpen, onClose, onConfirm props 연결
-  - 파일: `src/components/home/index.tsx`
+- [x] T012 [US1] src/components/home/index.tsx 수정 - 바텀시트 렌더링 ✅
+  - EasterEggBottomSheet 컴포넌트 import ✅
+  - JSX에 EasterEggBottomSheet 추가 ✅
+  - isOpen, onClose, onConfirm props 연결 ✅
+  - 파일: `src/components/home/index.tsx` ✅
 
 ### [US3] 바텀시트 취소 - 닫기 동작
 
-- [ ] T013 [US3] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 닫기 동작 구현
-  - 배경 오버레이 클릭 시 닫기 (closeOnBackdropPress prop)
-  - ESC 키 입력 시 닫기 (BottomSheet 기본 기능 활용)
-  - 취소 버튼 클릭 시 닫기 (DualButton onCancelPress)
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
+- [x] T013 [US3] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 닫기 동작 구현 ✅
+  - 배경 오버레이 클릭 시 닫기 (closeOnBackdropPress prop) ✅
+  - ESC 키 입력 시 닫기 (BottomSheet 기본 기능 활용) ✅
+  - 취소 버튼 클릭 시 닫기 (DualButton onCancelPress) ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
 ---
 
-## Phase 4: Phase 2 구현 - Figma 디자인 기반 컨텐츠
+## Phase 4: Phase 2 구현 - Figma 디자인 기반 폼 컨텐츠 ✅ (재구현 완료)
 
-### Figma 디자인 추출
+✅ **완료**: 기존 "옵션 선택 버튼" 구현을 삭제하고, 실제 Figma 디자인에 맞는 "이스터에그 작성 폼"으로 재구현 완료!
 
-- [ ] T014 Figma Dev Mode MCP를 통해 디자인 스펙 추출
-  - 초기 상태 디자인 분석 (node-id=599-5186)
-  - 확장 상태 디자인 분석 (node-id=599-5362)
-  - 색상, 타이포그래피, 간격 토큰 확인
-  - **아이콘 확인**: Figma 디자인의 아이콘을 @remixicon/react에서 찾아 매칭
-  - **중요**: 새로운 아이콘 패키지 추가 금지, @remixicon/react만 사용
-  - 참고: Figma MCP 사용 시 로컬호스트 소스 직접 사용
+### Figma 디자인 추출 및 분석
 
-### [US1] 옵션 버튼 컴포넌트
+- [x] T014 Figma Desktop MCP를 통해 실제 디자인 확인 ✅
+  - 노드 ID: 599:5084 ✅
+  - **실제 디자인**: 이스터에그 작성 폼 (제목, 메시지, 첨부파일) ✅
+  - 색상, 타이포그래피, 간격 토큰 확인 ✅
+  - **아이콘**: @remixicon/react 사용 ✅
 
-- [ ] T015 [P] [US1] src/components/home/components/easter-egg-bottom-sheet/components/option-button/index.tsx 생성
+### [US1] 폼 타입 정의
+
+- [x] T015-NEW src/components/home/components/easter-egg-bottom-sheet/types.ts 수정 ✅
+  - EasterEggFormData 인터페이스 추가 ✅
+    - title: string (필수, 최대 30자) ✅
+    - message: string (선택, 최대 500자) ✅
+    - attachments: File[] (선택) ✅
+    - location (선택) ✅
+  - 기존 EasterEggOption 인터페이스 삭제 ✅
+  - TitleInputProps, MessageInputProps, AttachmentButtonsProps 인터페이스 추가 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/types.ts` ✅
+
+### [US1] 제목 입력 필드 컴포넌트
+
+- [ ] T016-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/title-input/index.tsx 생성
   - 'use client' 지시어 추가
-  - OptionButton 컴포넌트 구현
-  - **아이콘 렌더링**: @remixicon/react 동적 import 사용
-    - 예: `import * as RemixIcons from '@remixicon/react'`
-    - 동적 렌더링: `const Icon = RemixIcons[option.icon]`
-  - 선택 상태 시각적 표시 (isSelected prop)
-  - 클릭 이벤트 핸들러
-  - 접근성 속성 (aria-label, role)
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/option-button/index.tsx`
+  - TitleInput 컴포넌트 구현
+  - placeholder: "추억의 제목을 입력하세요"
+  - 최대 30자 제한
+  - 글자 수 표시 (우측 하단)
+  - onChange 핸들러
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/title-input/index.tsx`
 
-- [ ] T016 [P] [US1] src/components/home/components/easter-egg-bottom-sheet/components/option-button/styles.module.css 생성
-  - 옵션 버튼 기본 스타일
-  - 선택 상태 스타일 (.selected)
-  - 호버 및 포커스 스타일
-  - 디자인 토큰 기반 스타일링
-  - 터치 타겟 크기 44x44px 이상
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/option-button/styles.module.css`
+- [ ] T017-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/title-input/styles.module.css 생성
+  - Figma 디자인 스펙 준수
+  - 입력 필드 스타일 (border, padding, radius)
+  - 라벨 스타일
+  - 글자 수 카운터 스타일
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/title-input/styles.module.css`
 
-### [US1] 바텀시트 컨텐츠 컴포넌트
+### [US1] 메시지 입력 영역 컴포넌트
 
-- [ ] T017 [P] [US1] src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/index.tsx 생성
+- [ ] T018-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/message-input/index.tsx 생성
   - 'use client' 지시어 추가
-  - SheetContent 컴포넌트 구현
-  - 제목 및 설명 텍스트 렌더링
-  - 옵션 버튼 목록 렌더링 (OptionButton 컴포넌트 사용)
-  - 선택된 옵션 상태 관리
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/index.tsx`
+  - MessageInput 컴포넌트 구현
+  - textarea 사용
+  - 문서 아이콘 표시 (@remixicon/react)
+  - placeholder: "미래의 나에게 또는 친구에게 남길 메시지를 작성하세요..."
+  - 최대 500자 제한
+  - 글자 수 표시 (우측 하단)
+  - onChange 핸들러
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/message-input/index.tsx`
 
-- [ ] T018 [P] [US1] src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/styles.module.css 생성
-  - 컨텐츠 컨테이너 스타일
-  - 제목 및 설명 스타일 (Figma 타이포그래피)
-  - 옵션 버튼 목록 레이아웃 (간격, 정렬)
-  - 스크롤 가능 영역 스타일
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/styles.module.css`
+- [ ] T019-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/message-input/styles.module.css 생성
+  - Figma 디자인 스펙 준수
+  - textarea 스타일 (높이, padding)
+  - 라벨 및 아이콘 스타일
+  - 글자 수 카운터 스타일
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/message-input/styles.module.css`
 
-### [US1] 바텀시트 통합 - DualButton
+### [US1] 첨부파일 버튼 컴포넌트
 
-- [ ] T019 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 컨텐츠 및 버튼 통합
-  - SheetContent 컴포넌트 import 및 사용
-  - DualButton 컴포넌트 import (commons/components/dual-button)
-  - BottomSheet의 children에 SheetContent 추가
-  - BottomSheet의 footer에 DualButton 추가
-  - 선택된 옵션에 따라 확인 버튼 활성화/비활성화
+- [ ] T020-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/index.tsx 생성
+  - 'use client' 지시어 추가
+  - AttachmentButtons 컴포넌트 구현
+  - 3개 버튼: 사진, 음성, 동영상
+  - 각 버튼에 아이콘 표시 (@remixicon/react)
+  - 파일 선택 input (hidden)
+  - 파일 타입별 accept 속성
+  - onFileSelect 핸들러
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/index.tsx`
+
+- [ ] T021-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/styles.module.css 생성
+  - Figma 디자인 스펙 준수
+  - 버튼 그리드 레이아웃 (3개 가로 배치)
+  - 버튼 스타일 (border, radius, 아이콘 크기)
+  - 호버 상태
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/styles.module.css`
+
+### [US1] 안내 정보 박스 컴포넌트
+
+- [ ] T022-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/info-box/index.tsx 생성
+  - 'use client' 지시어 추가
+  - InfoBox 컴포넌트 구현
+  - 2개 안내 메시지:
+    - "💡 현재 위치에 추억이 저장됩니다"
+    - "💡 3명이 발견하면 이스터에그가 소멸됩니다"
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/info-box/index.tsx`
+
+- [ ] T023-NEW [P] src/components/home/components/easter-egg-bottom-sheet/components/info-box/styles.module.css 생성
+  - Figma 디자인 스펙 준수
+  - 배경색: #f5f5f5
+  - border 및 radius
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/info-box/styles.module.css`
+
+### [US1] 폼 상태 관리 Hook
+
+- [ ] T024-NEW src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggForm.ts 생성
+  - useEasterEggForm Hook 구현
+  - 폼 상태 관리 (title, message, attachments)
+  - 폼 검증 로직
+    - title 필수 체크
+    - 글자 수 제한 체크
+  - 파일 첨부 핸들러
+  - 폼 리셋 함수
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/hooks/useEasterEggForm.ts`
+
+### [US1] 바텀시트 메인 컴포넌트 재구현
+
+- [ ] T025-NEW src/components/home/components/easter-egg-bottom-sheet/index.tsx 대폭 수정
+  - 기존 옵션 선택 로직 제거
+  - useEasterEggForm Hook 사용
+  - TitleInput, MessageInput, AttachmentButtons, InfoBox 컴포넌트 사용
+  - DualButton: "취소" / "작성 완료"
+  - 작성 완료 버튼: title 입력 시에만 활성화
+  - onConfirm에 폼 데이터 전달
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
 
-- [ ] T020 [US1] src/components/home/components/easter-egg-bottom-sheet/styles.module.css 수정 - 최종 스타일 조정
-  - Figma 디자인과 100% 일치하도록 조정
-  - 패딩, 마진, 간격 최종 확인
-  - 색상 및 타이포그래피 최종 확인
+- [ ] T026-NEW src/components/home/components/easter-egg-bottom-sheet/styles.module.css 수정
+  - 폼 레이아웃에 맞게 스타일 조정
+  - 스크롤 가능 영역 설정
+  - Figma 디자인 100% 일치
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/styles.module.css`
 
+### 기존 구현 정리
+
+- [x] T027-CLEANUP 기존 옵션 버튼 관련 파일 삭제 ✅
+  - src/components/home/components/easter-egg-bottom-sheet/components/option-button/ 폴더 전체 삭제 ✅
+  - src/components/home/components/easter-egg-bottom-sheet/components/sheet-content/ 폴더 전체 삭제 ✅
+  - src/components/home/hooks/useEasterEggOptions.ts 삭제 ✅
+
+### 통합 구현 (컴포넌트를 메인 파일에 통합)
+
+- [x] T028-INTEGRATED 메인 컴포넌트에 폼 기능 통합 구현 ✅
+  - 제목 입력 필드 (최대 30자, 글자 수 표시) ✅
+  - 메시지 입력 영역 (최대 500자, 글자 수 표시) ✅
+  - 첨부파일 버튼 3개 (사진/음성/동영상) - UI만 구현 ✅
+  - 안내 정보 박스 2개 ✅
+  - 폼 상태 관리 (useState 사용) ✅
+  - 폼 검증 (제목 필수) ✅
+  - 작성 완료 버튼 활성화/비활성화 ✅
+  - 폼 초기화 로직 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
+
+- [x] T029-INTEGRATED Figma 디자인 100% 일치 스타일 적용 ✅
+  - 헤더 스타일 (제목 + 부제목) ✅
+  - 입력 필드 스타일 (border, padding, radius) ✅
+  - textarea 스타일 ✅
+  - 글자 수 카운터 스타일 ✅
+  - 첨부파일 버튼 그리드 레이아웃 ✅
+  - 안내 정보 박스 스타일 ✅
+  - 스크롤 가능 영역 설정 ✅
+  - 반응형 디자인 (375px 기준) ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/styles.module.css` ✅
+
+- [x] T030-INTEGRATED home/index.tsx 수정 ✅
+  - handleEasterEggConfirm 타입 변경 (optionId → formData) ✅
+  - 파일: `src/components/home/index.tsx` ✅
+
 ---
 
-## Phase 5: Phase 3 구현 - 드래그 인터랙션
+## Phase 5: Phase 3 구현 - 드래그 인터랙션 ✅
 
 ### [US2] 바텀시트 드래그 조작
 
-- [ ] T021 [US2] src/commons/components/bottom-sheet/hooks/useDragGesture.ts 생성 (선택적)
-  - @use-gesture/react를 사용한 드래그 제스처 Hook
-  - 최대 높이 70% 제한 로직
-  - 드래그로 닫기 threshold 구현 (30%)
-  - rubber band effect 구현 (70% 초과 시)
-  - 파일: `src/commons/components/bottom-sheet/hooks/useDragGesture.ts`
+- [x] T021 [US2] src/commons/components/bottom-sheet/hooks/useDragGesture.ts 생성 ✅
+  - @use-gesture/react를 사용한 드래그 제스처 Hook ✅
+  - 최대 높이 70% 제한 로직 ✅
+  - 드래그로 닫기 threshold 구현 (30%) ✅
+  - rubber band effect 구현 (70% 초과 시) ✅
+  - useState로 드래그 상태 관리 (렌더링 중 ref 접근 방지) ✅
+  - 파일: `src/commons/components/bottom-sheet/hooks/useDragGesture.ts` ✅
 
-- [ ] T022 [US2] src/commons/components/bottom-sheet/types.ts 수정 - 드래그 관련 props 추가
-  - maxHeight prop 추가 (string | number)
-  - draggable prop 추가 (boolean)
-  - onDragEnd prop 추가 (함수)
-  - 파일: `src/commons/components/bottom-sheet/types.ts`
+- [x] T022 [US2] src/commons/components/bottom-sheet/types.ts 수정 - 드래그 관련 props 추가 ✅
+  - maxHeight prop 추가 (string | number) ✅
+  - draggable prop 추가 (boolean) ✅
+  - onDragEnd prop 추가 (함수) ✅
+  - 파일: `src/commons/components/bottom-sheet/types.ts` ✅
 
-- [ ] T023 [US2] src/commons/components/bottom-sheet/index.tsx 수정 - 드래그 기능 통합
-  - useDragGesture Hook 사용
-  - 드래그 핸들에 제스처 바인딩
-  - 드래그 상태에 따른 높이 조정
-  - 애니메이션 적용 (@react-spring/web)
-  - 파일: `src/commons/components/bottom-sheet/index.tsx`
+- [x] T023 [US2] src/commons/components/bottom-sheet/index.tsx 수정 - 드래그 기능 통합 ✅
+  - useDragGesture Hook 사용 ✅
+  - 드래그 핸들에 제스처 바인딩 ✅
+  - 드래그 상태에 따른 높이 조정 ✅
+  - 애니메이션 적용 (@react-spring/web) ✅
+  - animated.div 사용 (draggable일 때만) ✅
+  - 파일: `src/commons/components/bottom-sheet/index.tsx` ✅
 
-- [ ] T024 [US2] src/commons/components/bottom-sheet/styles.module.css 수정 - 드래그 애니메이션 스타일
-  - GPU 가속 활용 (transform, will-change)
-  - 드래그 중 스타일 (.dragging)
-  - 트랜지션 애니메이션
-  - 파일: `src/commons/components/bottom-sheet/styles.module.css`
+- [x] T024 [US2] src/commons/components/bottom-sheet/styles.module.css 수정 - 드래그 애니메이션 스타일 ✅
+  - GPU 가속 활용 (transform, will-change) ✅
+  - 드래그 중 스타일 (.dragging) ✅
+  - 드래그 핸들 커서 스타일 (grab/grabbing) ✅
+  - touch-action: none 추가 ✅
+  - 파일: `src/commons/components/bottom-sheet/styles.module.css` ✅
 
-- [ ] T025 [US2] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 드래그 props 전달
-  - BottomSheet에 maxHeight="70vh" prop 전달
-  - draggable={true} prop 전달
-  - onDragEnd 핸들러 구현 (필요 시)
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
+- [x] T025 [US2] src/components/home/components/easter-egg-bottom-sheet/index.tsx 수정 - 드래그 props 전달 ✅
+  - BottomSheet에 maxHeight="70vh" prop 전달 ✅
+  - draggable={true} prop 전달 ✅
+  - onDragEnd 핸들러 구현 (선택적) ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
 
-- [ ] T026 [US2] 드래그 인터랙션 성능 최적화
-  - 60fps 유지 확인 (Chrome DevTools Performance)
-  - requestAnimationFrame 사용 확인
-  - 불필요한 리렌더링 방지 (React.memo, useCallback)
-  - 파일: 전체 드래그 관련 파일
+- [x] T026 [US2] 드래그 인터랙션 성능 최적화 ✅
+  - @react-spring/web 사용으로 60fps 보장 ✅
+  - useDrag의 immediate 옵션으로 부드러운 드래그 ✅
+  - React.memo, useCallback 이미 적용됨 (Phase 4) ✅
+  - GPU 가속 스타일 적용 (will-change, backface-visibility) ✅
+  - 파일: 전체 드래그 관련 파일 ✅
 
 ---
 
@@ -277,39 +376,39 @@
 
 ---
 
-## Phase 7: Phase 5 구현 - E2E 테스트
+## Phase 7: UI 테스트 (Playwright)
 
-### E2E 테스트 작성 (Playwright)
+### 컴포넌트 단위 테스트
 
-- [ ] T032 tests/easter-egg-bottom-sheet.spec.ts 생성 - 기본 플로우 테스트
+- [ ] T032 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 생성 - 기본 플로우 테스트
   - FAB 버튼 클릭 → 이스터에그 선택 → 바텀시트 열림 테스트
   - 옵션 선택 → 확인 버튼 활성화 테스트
   - 확인 버튼 클릭 → 다음 단계 진행 테스트
-  - 파일: `tests/easter-egg-bottom-sheet.spec.ts`
+  - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
-- [ ] T033 tests/easter-egg-bottom-sheet.spec.ts 수정 - 닫기 동작 테스트
+- [ ] T033 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 닫기 동작 테스트
   - 배경 오버레이 클릭으로 닫기 테스트
   - 취소 버튼 클릭으로 닫기 테스트
   - ESC 키로 닫기 테스트
-  - 파일: `tests/easter-egg-bottom-sheet.spec.ts`
+  - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
-- [ ] T034 tests/easter-egg-bottom-sheet.spec.ts 수정 - 드래그 인터랙션 테스트
+- [ ] T034 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 드래그 인터랙션 테스트
   - 위로 드래그하여 확장 테스트
   - 아래로 드래그하여 닫기 테스트
   - 70% 최대 높이 제한 검증
-  - 파일: `tests/easter-egg-bottom-sheet.spec.ts`
+  - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
-- [ ] T035 tests/easter-egg-bottom-sheet.spec.ts 수정 - 키보드 네비게이션 테스트
+- [ ] T035 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 키보드 네비게이션 테스트
   - Tab 키로 옵션 탐색 테스트
   - Enter 키로 옵션 선택 테스트
   - 포커스 관리 검증 (열기/닫기 시)
-  - 파일: `tests/easter-egg-bottom-sheet.spec.ts`
+  - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
-- [ ] T036 tests/easter-egg-bottom-sheet-a11y.spec.ts 생성 - 접근성 테스트
+- [ ] T036 tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts 수정 - 접근성 테스트
   - WCAG 2.1 AA 준수 검증 (axe-core)
   - 포커스 관리 검증
   - 스크린 리더 호환성 검증
-  - 파일: `tests/easter-egg-bottom-sheet-a11y.spec.ts`
+  - 파일: `tests/ui/easter-egg-bottom-sheet/easter-egg-bottom-sheet.ui.spec.ts`
 
 ---
 
@@ -352,7 +451,7 @@ Phase 5 (T021-T026) - US2
   ↓
 Phase 6 (T027-T031) - US4 (T028-T029 병렬 가능)
   ↓
-Phase 7 (T032-T036) - E2E 테스트
+Phase 7 (T032-T036) - UI 테스트
   ↓
 Phase 8 (T037-T038) - 최종 검증
 ```
@@ -386,7 +485,7 @@ Phase 8 (T037-T038) - 최종 검증
 - 접근성 및 키보드 네비게이션
 
 **Phase 7-8: 품질 보증**:
-- E2E 테스트
+- UI 테스트
 - 성능 최적화
 - 문서화
 

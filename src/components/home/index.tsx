@@ -15,6 +15,7 @@ import { LocationDisplay } from './components/location-display';
 import { FabButton } from './components/fab-button';
 import { EggSlot } from './components/egg-slot';
 import { MyEggsModal } from './components/my-eggs-modal';
+import { EasterEggBottomSheet } from './components/easter-egg-bottom-sheet';
 import type { HomeFeatureProps } from './types';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
@@ -22,6 +23,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [scriptError, setScriptError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [myEggsModalOpen, setMyEggsModalOpen] = useState(false);
+  const [easterEggSheetOpen, setEasterEggSheetOpen] = useState(false);
   const [eggCount] = useState<number>(2); // 임시 Mock 데이터 (향후 API 연동 시 실제 데이터로 변경)
   const geolocation = useGeolocation();
   
@@ -38,11 +40,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     setScriptLoaded(false);
   };
 
-  // 이스터에그 선택 핸들러 (임시)
+  // 이스터에그 선택 핸들러
   const handleEasterEggClick = () => {
-    // TODO: 향후 이스터에그 생성 페이지로 라우팅
-    console.log('이스터에그 생성 선택');
-    // 예시: router.push('/easter-egg/create');
+    setEasterEggSheetOpen(true);
   };
 
   // 타임캡슐 선택 핸들러 (임시)
@@ -50,6 +50,19 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     // TODO: 향후 타임캡슐 생성 페이지로 라우팅
     console.log('타임캡슐 생성 선택');
     // 예시: router.push('/time-capsule/create');
+  };
+
+  // 이스터에그 바텀시트 닫기 핸들러
+  const handleEasterEggSheetClose = () => {
+    setEasterEggSheetOpen(false);
+  };
+
+  // 이스터에그 작성 완료 핸들러
+  const handleEasterEggConfirm = (formData: import('./components/easter-egg-bottom-sheet/types').EasterEggFormData) => {
+    console.log('이스터에그 작성 완료:', formData);
+    // TODO: 향후 API 호출하여 이스터에그 생성
+    // 예시: createEasterEgg(formData);
+    setEasterEggSheetOpen(false);
   };
 
   // 알 슬롯 클릭 핸들러 (MY EGGS 모달 열기)
@@ -215,6 +228,13 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         visible={myEggsModalOpen}
         eggCount={eggCount}
         onClose={handleMyEggsModalClose}
+      />
+
+      {/* 이스터에그 바텀시트 */}
+      <EasterEggBottomSheet
+        isOpen={easterEggSheetOpen}
+        onClose={handleEasterEggSheetClose}
+        onConfirm={handleEasterEggConfirm}
       />
     </div>
   );
