@@ -6,6 +6,7 @@
 'use client';
 
 import { useEffect, useRef, memo } from 'react';
+import { Spinner } from '@/commons/components/spinner';
 import type { MapViewProps } from './types';
 import styles from './styles.module.css';
 
@@ -24,8 +25,12 @@ export const MapView = memo(function MapView({
       return;
     }
 
-    // 지도 초기화
-    onMapInit(containerRef.current);
+    // 지도 초기화 (에러 처리 포함)
+    try {
+      onMapInit(containerRef.current);
+    } catch (initError) {
+      console.error('[MapView] 지도 초기화 실패:', initError);
+    }
   }, [map, isLoading, onMapInit]);
 
   // 에러 상태 렌더링
@@ -44,7 +49,7 @@ export const MapView = memo(function MapView({
     return (
       <div className={`${styles.container} ${className}`} data-testid="map-loading">
         <div className={styles.loadingContainer} role="status" aria-live="polite">
-          <div className={styles.loadingSpinner} aria-hidden="true" />
+          <Spinner size="large" />
           <p className={styles.loadingText}>지도를 불러오는 중...</p>
         </div>
       </div>
