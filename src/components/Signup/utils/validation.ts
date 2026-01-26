@@ -20,9 +20,12 @@ export function isValidPhoneNumber(phoneNumber: string): boolean {
  */
 export function isValidEmail(email: string): boolean {
   if (!email) return false;
+  // 공백 제거 후 검증
+  const trimmedEmail = email.trim();
+  if (!trimmedEmail) return false;
   // @와 .이 포함된 기본 이메일 형식 검증
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return emailRegex.test(trimmedEmail);
 }
 
 /**
@@ -61,9 +64,10 @@ export function validateSignupForm(data: SignupFormData): SignupFormErrors {
   }
   
   // 이메일 필수 및 형식 검증
-  if (!data.email) {
+  const trimmedEmail = data.email?.trim() || '';
+  if (!trimmedEmail) {
     errors.email = '이메일을 입력해주세요.';
-  } else if (!isValidEmail(data.email)) {
+  } else if (!isValidEmail(trimmedEmail)) {
     errors.email = '올바른 이메일 형식이 아닙니다. (@와 .이 포함되어야 합니다)';
   }
   

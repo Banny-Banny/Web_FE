@@ -115,15 +115,10 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
       return;
     }
     
-    // 전화번호에서 하이픈 제거 후 제출
-    const submitData = {
-      ...formData,
-      phoneNumber: formData.phoneNumber.replace(/-/g, ''),
-    };
-    
+    // 전화번호는 prepareSignupRequest에서 정규화되므로 그대로 제출
     // 에러 초기화 후 제출
     setErrors({});
-    onSubmit(submitData);
+    onSubmit(formData);
   };
 
   /**
