@@ -24,6 +24,7 @@ export const AUTH_ENDPOINTS = {
   LOCAL_LOGIN: `${BASE_PATHS.AUTH}/local/login`,
   LOGOUT: `${BASE_PATHS.AUTH}/logout`,
   REFRESH: `${BASE_PATHS.AUTH}/refresh`,
+  VERIFY: `${BASE_PATHS.AUTH}/verify`, // 토큰 검증
   
   // 회원가입
   SIGNUP: `${BASE_PATHS.AUTH}/signup`,
@@ -162,6 +163,14 @@ export const HEALTH_ENDPOINTS = {
 } as const;
 
 /**
+ * 온보딩 관련 엔드포인트
+ */
+export const ONBOARDING_ENDPOINTS = {
+  // 온보딩 완료
+  COMPLETE: `${BASE_PATHS.API}/onboarding/complete`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -172,6 +181,7 @@ export const ENDPOINTS = {
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,
+  ONBOARDING: ONBOARDING_ENDPOINTS,
 } as const;
 
 /**

@@ -4,10 +4,12 @@
 
 export { localLogin } from './login';
 export { localSignup } from './signup';
+export { verifyAuth } from './verify';
 export type { 
   LocalLoginRequest, 
   LocalLoginResponse, 
   LocalSignupRequest,
   LocalSignupResponse,
-  LoginErrorResponse 
+  LoginErrorResponse,
+  VerifyResponse,
 } from './types';

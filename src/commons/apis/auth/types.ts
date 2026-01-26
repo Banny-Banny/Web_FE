@@ -50,3 +50,12 @@ export interface LoginErrorResponse {
   status: number;         // HTTP 상태 코드
   code?: string;         // 오류 코드 (선택)
 }
+
+/**
+ * 토큰 검증 응답 타입
+ */
+export interface VerifyResponse {
+  valid: boolean;         // 토큰 유효성 여부
+  user?: User;            // 사용자 정보 (토큰이 유효한 경우)
+  expiresAt?: string;    // 토큰 만료 시간 (선택)
+}
