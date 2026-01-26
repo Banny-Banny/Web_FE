@@ -177,7 +177,7 @@ apiClient.interceptors.response.use(
 
     return response;
   },
-  async (error: AxiosError<ApiResponse>) => {
+  async (error: AxiosError<any>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     // 401 에러이고 재시도하지 않은 경우
@@ -196,22 +196,112 @@ apiClient.interceptors.response.use(
       }
     }
 
-    // 에러 로깅
-    console.error(`❌ API Error: ${error.config?.method?.toUpperCase()} ${error.config?.url}`, {
-      status: error.response?.status,
-      message: error.response?.data?.message || error.message,
-      data: error.response?.data,
-    });
+    try {
+      // 안전한 에러 정보 추출 함수
+      const getErrorInfo = () => {
+        const responseData = error.response?.data;
+        const httpStatus = error.response?.status;
+        
+        // 다양한 응답 구조 처리
+        // 1. {statusCode, message} 형식 (예: {"statusCode":500,"message":"Internal server error"})
+        // 2. {status, data: {...}} 형식
+        // 3. {message, code} 형식
+        // 4. 일반적인 에러 응답
+        
+        let statusCode: number | undefined;
+        let message: string;
+        let errorCode: string | undefined;
+        let errorDetails: any;
+        
+        if (responseData) {
+          // statusCode 필드 확인 (서버가 {statusCode, message} 형식으로 응답하는 경우)
+          if (typeof responseData.statusCode === 'number') {
+            statusCode = responseData.statusCode;
+          }
+          
+          // message 필드 확인
+          if (typeof responseData.message === 'string') {
+            message = responseData.message;
+          }
+          
+          // code 필드 확인
+          if (typeof responseData.code === 'string') {
+            errorCode = responseData.code;
+          }
+          
+          // details 또는 전체 data 저장
+          errorDetails = responseData;
+        }
+        
+        // HTTP 상태 코드가 있으면 우선 사용 (응답 본문의 statusCode가 없을 경우)
+        if (!statusCode && httpStatus) {
+          statusCode = httpStatus;
+        }
+        
+        // 메시지가 없으면 기본 메시지 사용
+        if (!message) {
+          message = error.message || '알 수 없는 오류가 발생했습니다.';
+        }
+        
+        // 에러 코드가 없으면 Axios 에러 코드 사용
+        if (!errorCode) {
+          errorCode = error.code;
+        }
+        
+        return {
+          statusCode,
+          message,
+          errorCode,
+          errorDetails,
+          httpStatus,
+          statusText: error.response?.statusText,
+          axiosCode: error.code,
+          hasResponse: !!error.response,
+          hasRequest: !!error.request,
+        };
+      };
 
-    // 에러 객체 표준화
-    const apiError: ApiError = {
-      message: error.response?.data?.message || error.message || '알 수 없는 오류가 발생했습니다.',
-      status: error.response?.status,
-      code: error.response?.data?.code || error.code,
-      details: error.response?.data,
-    };
+      const errorInfo = getErrorInfo();
+      const method = error.config?.method?.toUpperCase() || 'UNKNOWN';
+      const url = error.config?.url || error.config?.baseURL || 'Unknown URL';
 
-    return Promise.reject(apiError);
+      // 상세한 에러 로깅
+      console.error(`❌ API Error: ${method} ${url}`);
+      console.error('Error Details:', {
+        statusCode: errorInfo.statusCode,
+        httpStatus: errorInfo.httpStatus,
+        statusText: errorInfo.statusText,
+        message: errorInfo.message,
+        errorCode: errorInfo.errorCode,
+        axiosCode: errorInfo.axiosCode,
+        responseData: errorInfo.errorDetails,
+        hasResponse: errorInfo.hasResponse,
+        hasRequest: errorInfo.hasRequest,
+      });
+
+      // 에러 객체 표준화
+      const apiError: ApiError = {
+        message: errorInfo.message,
+        status: errorInfo.statusCode,
+        code: errorInfo.errorCode,
+        details: errorInfo.errorDetails,
+      };
+
+      return Promise.reject(apiError);
+    } catch (parseError) {
+      // 에러 파싱 중 예외 발생 시 안전하게 처리
+      console.error('❌ Error parsing failed:', parseError);
+      console.error('Original error:', error);
+      
+      const fallbackError: ApiError = {
+        message: error.message || '에러 처리 중 오류가 발생했습니다.',
+        status: error.response?.status,
+        code: error.code,
+        details: error.response?.data,
+      };
+      
+      return Promise.reject(fallbackError);
+    }
   }
 );
 
