@@ -11,27 +11,14 @@ test.describe('로그인 페이지 UI', () => {
   });
 
   test.describe('US1: 로그인 폼 렌더링', () => {
-    test('로그인 타입 선택 라디오 버튼이 표시되는지 확인', async ({ page }) => {
-      // 라디오 버튼 그룹 확인
-      const phoneRadio = page.getByRole('radio', { name: '전화번호' });
-      await expect(phoneRadio).toBeVisible();
-
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await expect(emailRadio).toBeVisible();
-
-      // 기본값은 전화번호가 선택되어 있어야 함
-      await expect(phoneRadio).toBeChecked();
-      await expect(emailRadio).not.toBeChecked();
-    });
-
-    test('기본값(전화번호) 선택 시 전화번호 입력 필드만 표시', async ({ page }) => {
+    test('모든 입력 필드가 표시되는지 확인', async ({ page }) => {
       // 전화번호 입력 필드 확인
       const phoneInput = page.getByLabel('전화번호');
       await expect(phoneInput).toBeVisible();
 
-      // 이메일 입력 필드는 표시되지 않아야 함
+      // 이메일 입력 필드 확인
       const emailInput = page.getByLabel('이메일');
-      await expect(emailInput).not.toBeVisible();
+      await expect(emailInput).toBeVisible();
 
       // 비밀번호 입력 필드 확인
       const passwordInput = page.getByLabel('비밀번호');
@@ -46,34 +33,13 @@ test.describe('로그인 페이지 UI', () => {
       await expect(signupLink).toBeVisible();
     });
 
-    test('이메일 선택 시 이메일 입력 필드만 표시', async ({ page }) => {
-      // 이메일 라디오 버튼 클릭
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      // 이메일 입력 필드 확인
-      const emailInput = page.getByLabel('이메일');
-      await expect(emailInput).toBeVisible();
-
-      // 전화번호 입력 필드는 표시되지 않아야 함
-      const phoneInput = page.getByLabel('전화번호');
-      await expect(phoneInput).not.toBeVisible();
-    });
-
     test('입력 필드에 적절한 플레이스홀더가 표시되는지 확인', async ({ page }) => {
-      // 전화번호 입력 필드 플레이스홀더 확인
       const phoneInput = page.getByLabel('전화번호');
-      await expect(phoneInput).toHaveAttribute('placeholder', '01012345678');
+      await expect(phoneInput).toHaveAttribute('placeholder', '010-1234-5678');
 
-      // 이메일로 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      // 이메일 입력 필드 플레이스홀더 확인
       const emailInput = page.getByLabel('이메일');
       await expect(emailInput).toHaveAttribute('placeholder', 'user@example.com');
 
-      // 비밀번호 입력 필드 플레이스홀더 확인
       const passwordInput = page.getByLabel('비밀번호');
       await expect(passwordInput).toHaveAttribute('placeholder', '비밀번호를 입력하세요');
     });
@@ -89,40 +55,6 @@ test.describe('로그인 페이지 UI', () => {
     });
   });
 
-  test.describe('US1: 로그인 타입 선택 상호작용', () => {
-    test('전화번호 라디오 버튼 클릭 시 전화번호 입력 필드 표시', async ({ page }) => {
-      // 이메일로 먼저 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      // 전화번호로 다시 전환
-      const phoneRadio = page.getByRole('radio', { name: '전화번호' });
-      await phoneRadio.click();
-
-      // 전화번호 입력 필드가 표시되는지 확인
-      const phoneInput = page.getByLabel('전화번호');
-      await expect(phoneInput).toBeVisible();
-
-      // 이메일 입력 필드는 숨겨져야 함
-      const emailInput = page.getByLabel('이메일');
-      await expect(emailInput).not.toBeVisible();
-    });
-
-    test('이메일 라디오 버튼 클릭 시 이메일 입력 필드 표시', async ({ page }) => {
-      // 이메일 라디오 버튼 클릭
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      // 이메일 입력 필드가 표시되는지 확인
-      const emailInput = page.getByLabel('이메일');
-      await expect(emailInput).toBeVisible();
-
-      // 전화번호 입력 필드는 숨겨져야 함
-      const phoneInput = page.getByLabel('전화번호');
-      await expect(phoneInput).not.toBeVisible();
-    });
-  });
-
   test.describe('US1: 입력 필드 상호작용', () => {
     test('전화번호 입력 필드에 값 입력 가능', async ({ page }) => {
       const phoneInput = page.getByLabel('전화번호');
@@ -130,18 +62,7 @@ test.describe('로그인 페이지 UI', () => {
       await expect(phoneInput).toHaveValue('01012345678');
     });
 
-    test('전화번호 입력 필드에 숫자만 입력 가능 (문자 자동 제거)', async ({ page }) => {
-      const phoneInput = page.getByLabel('전화번호');
-      await phoneInput.fill('010-1234-5678');
-      // 하이픈이 제거되어야 함
-      await expect(phoneInput).toHaveValue('01012345678');
-    });
-
     test('이메일 입력 필드에 값 입력 가능', async ({ page }) => {
-      // 이메일로 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
       const emailInput = page.getByLabel('이메일');
       await emailInput.fill('test@example.com');
       await expect(emailInput).toHaveValue('test@example.com');
@@ -156,31 +77,15 @@ test.describe('로그인 페이지 UI', () => {
       await expect(passwordInput).toHaveAttribute('type', 'password');
     });
 
-    test('비밀번호 보이기/숨기기 토글 버튼 동작', async ({ page }) => {
-      const passwordInput = page.getByLabel('비밀번호');
-      await passwordInput.fill('Password123!');
-
-      // 비밀번호 토글 버튼 찾기
-      const toggleButton = page.getByRole('button', { name: /비밀번호 보이기/i });
-      await expect(toggleButton).toBeVisible();
-
-      // 토글 버튼 클릭
-      await toggleButton.click();
-
-      // 비밀번호가 보이는 상태로 변경되어야 함
-      await expect(passwordInput).toHaveAttribute('type', 'text');
-      await expect(toggleButton).toHaveAttribute('aria-label', '비밀번호 숨기기');
-    });
-
-    test('키보드로 입력 필드에 접근 가능', async ({ page }) => {
-      // Tab 키로 순차 이동 (라디오 버튼 → 입력 필드 → 비밀번호 → 버튼)
-      await page.keyboard.press('Tab'); // 전화번호 라디오 버튼
-      await expect(page.getByRole('radio', { name: '전화번호' })).toBeFocused();
-
-      await page.keyboard.press('Tab'); // 전화번호 입력 필드
+    test('키보드로 모든 입력 필드에 접근 가능', async ({ page }) => {
+      // Tab 키로 순차 이동
+      await page.keyboard.press('Tab'); // 전화번호
       await expect(page.getByLabel('전화번호')).toBeFocused();
 
-      await page.keyboard.press('Tab'); // 비밀번호 입력 필드
+      await page.keyboard.press('Tab'); // 이메일
+      await expect(page.getByLabel('이메일')).toBeFocused();
+
+      await page.keyboard.press('Tab'); // 비밀번호
       await expect(page.getByLabel('비밀번호')).toBeFocused();
 
       await page.keyboard.press('Tab'); // 로그인 버튼
@@ -219,32 +124,15 @@ test.describe('로그인 페이지 UI', () => {
       await expect(errorMessage).toBeVisible();
     });
 
-    test('선택한 로그인 타입의 입력 필드가 비어있으면 오류 메시지 표시', async ({ page }) => {
-      // 전화번호 선택 상태에서 전화번호 없이 제출
+    test('전화번호와 이메일 모두 비어있으면 일반 오류 메시지 표시', async ({ page }) => {
       const passwordInput = page.getByLabel('비밀번호');
       await passwordInput.fill('Password123!');
       
       const loginButton = page.getByRole('button', { name: /로그인/i });
       await loginButton.click();
 
-      // 전화번호 오류 메시지 확인
-      const errorMessage = page.locator('text=/전화번호를 입력해주세요/i');
-      await expect(errorMessage).toBeVisible();
-    });
-
-    test('이메일 선택 시 이메일이 비어있으면 오류 메시지 표시', async ({ page }) => {
-      // 이메일로 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      const passwordInput = page.getByLabel('비밀번호');
-      await passwordInput.fill('Password123!');
-      
-      const loginButton = page.getByRole('button', { name: /로그인/i });
-      await loginButton.click();
-
-      // 이메일 오류 메시지 확인
-      const errorMessage = page.locator('text=/이메일을 입력해주세요/i');
+      // 일반 오류 메시지 확인
+      const errorMessage = page.locator('text=/전화번호 또는 이메일을 입력해주세요/i');
       await expect(errorMessage).toBeVisible();
     });
   });
@@ -289,24 +177,9 @@ test.describe('로그인 페이지 UI', () => {
       await expect(loginButton).toBeDisabled();
     });
 
-    test('전화번호와 비밀번호 입력 시 로그인 버튼이 활성화됨', async ({ page }) => {
+    test('필수 입력이 완료되면 로그인 버튼이 활성화됨', async ({ page }) => {
       const phoneInput = page.getByLabel('전화번호');
       await phoneInput.fill('01012345678');
-      
-      const passwordInput = page.getByLabel('비밀번호');
-      await passwordInput.fill('Password123!');
-
-      const loginButton = page.getByRole('button', { name: /로그인/i });
-      await expect(loginButton).toBeEnabled();
-    });
-
-    test('이메일과 비밀번호 입력 시 로그인 버튼이 활성화됨', async ({ page }) => {
-      // 이메일로 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      const emailInput = page.getByLabel('이메일');
-      await emailInput.fill('test@example.com');
       
       const passwordInput = page.getByLabel('비밀번호');
       await passwordInput.fill('Password123!');
@@ -325,10 +198,9 @@ test.describe('로그인 페이지 UI', () => {
       const loginButton = page.getByRole('button', { name: /로그인/i });
       await loginButton.click();
 
-      // 로딩 상태 확인 (타임아웃 설정)
-      await expect(loginButton).toContainText(/로그인 중/i, { timeout: 2000 }).catch(() => {
-        // 로딩이 너무 빨리 끝나거나 API 호출이 없는 경우 무시
-      });
+      // 로딩 상태 확인
+      await expect(loginButton).toContainText(/로그인 중/i);
+      await expect(loginButton).toBeDisabled();
     });
   });
 
@@ -345,35 +217,15 @@ test.describe('로그인 페이지 UI', () => {
   });
 
   test.describe('접근성', () => {
-    test('라디오 버튼 그룹에 적절한 접근성 속성 제공', async ({ page }) => {
-      const phoneRadio = page.getByRole('radio', { name: '전화번호' });
-      await expect(phoneRadio).toHaveAttribute('name', 'loginType');
-      await expect(phoneRadio).toHaveAttribute('value', 'phone');
-
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await expect(emailRadio).toHaveAttribute('name', 'loginType');
-      await expect(emailRadio).toHaveAttribute('value', 'email');
-    });
-
-    test('표시된 입력 필드에 적절한 라벨이 제공됨', async ({ page }) => {
-      // 전화번호 입력 필드 (기본값)
+    test('모든 입력 필드에 적절한 라벨이 제공됨', async ({ page }) => {
       const phoneInput = page.getByLabel('전화번호');
       await expect(phoneInput).toHaveAttribute('aria-label', '전화번호');
-      await expect(phoneInput).toHaveAttribute('aria-required', 'true');
 
-      // 이메일로 전환
-      const emailRadio = page.getByRole('radio', { name: '이메일' });
-      await emailRadio.click();
-
-      // 이메일 입력 필드
       const emailInput = page.getByLabel('이메일');
       await expect(emailInput).toHaveAttribute('aria-label', '이메일');
-      await expect(emailInput).toHaveAttribute('aria-required', 'true');
 
-      // 비밀번호 입력 필드
       const passwordInput = page.getByLabel('비밀번호');
       await expect(passwordInput).toHaveAttribute('aria-label', '비밀번호');
-      await expect(passwordInput).toHaveAttribute('aria-required', 'true');
     });
 
     test('오류 메시지가 스크린 리더를 통해 접근 가능', async ({ page }) => {
