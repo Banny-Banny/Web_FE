@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
 import { getAccessToken, clearTokens } from '@/commons/utils/auth';
 import { localLogin } from '@/commons/apis/auth/login';
+import { verifyAuth } from '@/commons/apis/auth/verify';
 
 /**
  * 인증 상태 및 액션에 접근하는 커스텀 훅
@@ -40,8 +41,24 @@ export function useAuth(): AuthContextType {
           setUser(cachedUser);
         } else {
           // 토큰은 있지만 사용자 정보가 없는 경우
-          // TODO: 토큰 검증 API 호출하여 사용자 정보 가져오기
-          setUser(null);
+          // 토큰 검증 API 호출하여 사용자 정보 가져오기
+          try {
+            const verifyResult = await verifyAuth();
+            
+            if (verifyResult.valid && verifyResult.user) {
+              setUser(verifyResult.user);
+              queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+            } else {
+              // 토큰이 유효하지 않은 경우
+              clearTokens();
+              setUser(null);
+            }
+          } catch (err: any) {
+            // 토큰 검증 실패 시 토큰 제거
+            console.error('토큰 검증 실패:', err);
+            clearTokens();
+            setUser(null);
+          }
         }
       } catch (err: any) {
         setError(err.message || '인증 상태 확인 중 오류가 발생했습니다.');
@@ -110,10 +127,24 @@ export function useAuth(): AuthContextType {
         return;
       }
 
-      // TODO: 토큰 검증 API 호출
-      // 현재는 토큰이 있으면 인증된 것으로 간주
-      const cachedUser = queryClient.getQueryData<User>(['auth', 'user']);
-      setUser(cachedUser || null);
+      // 토큰 검증 API 호출
+      try {
+        const verifyResult = await verifyAuth();
+        
+        if (verifyResult.valid && verifyResult.user) {
+          setUser(verifyResult.user);
+          queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+        } else {
+          // 토큰이 유효하지 않은 경우
+          clearTokens();
+          setUser(null);
+        }
+      } catch (err: any) {
+        // 토큰 검증 실패 시 토큰 제거
+        console.error('토큰 검증 실패:', err);
+        clearTokens();
+        setUser(null);
+      }
     } catch (err: any) {
       setError(err.message || '인증 상태 갱신 중 오류가 발생했습니다.');
       setUser(null);
