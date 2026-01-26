@@ -6,8 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import CheckboxBlankCircleLineIcon from 'remixicon-react/CheckboxBlankCircleLineIcon';
-import CheckboxCircleFillIcon from 'remixicon-react/CheckboxCircleFillIcon';
+import { RiCheckboxBlankCircleLine, RiCheckboxCircleFill } from '@remixicon/react';
 import { Colors } from '@/commons/styles/color';
 import type { AgreementSectionProps } from './types';
 import styles from './styles.module.css';
@@ -88,9 +87,9 @@ export function AgreementSection({
           />
           <span className={styles.checkboxIcon}>
             {allAgreed ? (
-              <CheckboxCircleFillIcon size={20} color={Colors.black[500]} />
+              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
             ) : (
-              <CheckboxBlankCircleLineIcon size={20} color={Colors.black[500]} />
+              <RiCheckboxBlankCircleLine size={20} color={Colors.black[500]} />
             )}
           </span>
           <span className={styles.allAgreeText}>전체 동의</span>
@@ -108,9 +107,9 @@ export function AgreementSection({
           />
           <span className={styles.checkboxIcon}>
             {termsAgreed ? (
-              <CheckboxCircleFillIcon size={20} color={Colors.black[500]} />
+              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
             ) : (
-              <CheckboxBlankCircleLineIcon size={20} color={Colors.grey[500]} />
+              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
             )}
           </span>
           <span className={styles.agreementText}>
@@ -129,9 +128,9 @@ export function AgreementSection({
           />
           <span className={styles.checkboxIcon}>
             {privacyAgreed ? (
-              <CheckboxCircleFillIcon size={20} color={Colors.black[500]} />
+              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
             ) : (
-              <CheckboxBlankCircleLineIcon size={20} color={Colors.grey[500]} />
+              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
             )}
           </span>
           <span className={styles.agreementText}>
@@ -150,9 +149,9 @@ export function AgreementSection({
           />
           <span className={styles.checkboxIcon}>
             {paymentAgreed ? (
-              <CheckboxCircleFillIcon size={20} color={Colors.black[500]} />
+              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
             ) : (
-              <CheckboxBlankCircleLineIcon size={20} color={Colors.grey[500]} />
+              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
             )}
           </span>
           <span className={styles.agreementText}>

@@ -31,14 +31,12 @@
 
 import React from 'react';
 import Image from 'next/image';
-import RiArrowLeftLine from 'remixicon-react/ArrowLeftLineIcon';
-import RiMore2Fill from 'remixicon-react/More2FillIcon';
-import RiCloseLine from 'remixicon-react/CloseLineIcon';
+import { RiArrowLeftLine, RiMore2Fill, RiCloseLine } from '@remixicon/react';
 import { Icon } from '../icon';
 import type { IconName } from '../icon/types';
 import { Colors, Typography } from '@/commons/styles';
 import styles from './styles.module.css';
-import type { TimeCapsuleHeaderProps, HeaderIconName } from './types';
+import type { TimeCapsuleHeaderProps } from './types';
 
 /**
  * TimeCapsuleHeader 컴포넌트
@@ -152,9 +150,8 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 rightIcon.accessibilityLabel ||
                 `${rightIcon.icon || '아이콘'} 버튼`;
 
-              // Icon 컴포넌트를 사용할 수 있는 경우 (lucide-react 아이콘이 아닌 경우)
-              const lucideIcons: HeaderIconName[] = ['arrow-left', 'more', 'more-2-fill', 'close', 'close-line'];
-              if (rightIcon.icon && !lucideIcons.includes(rightIcon.icon)) {
+              // Icon 컴포넌트를 사용할 수 있는 경우
+              if (rightIcon.icon) {
                 return (
                   <button
                     key={index}
