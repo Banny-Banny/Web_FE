@@ -59,13 +59,22 @@ const DEFAULT_CONFIG: AxiosRequestConfig = {
  */
 export const apiClient: AxiosInstance = axios.create({
   ...DEFAULT_CONFIG,
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api',
 });
 
 /**
  * 토큰 가져오기
+ * 
+ * 개발 환경에서는 NEXT_PUBLIC_DEV_TOKEN을 우선적으로 사용합니다.
+ * 프로덕션 환경에서는 localStorage의 토큰을 사용합니다.
  */
 function getAccessToken(): string | null {
+  // 개발 환경에서 NEXT_PUBLIC_DEV_TOKEN 우선 사용
+  if (process.env.NEXT_PUBLIC_DEV_TOKEN) {
+    return process.env.NEXT_PUBLIC_DEV_TOKEN;
+  }
+  
+  // 프로덕션 환경에서는 localStorage에서 토큰 가져오기
   if (typeof window === 'undefined') return null;
   return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 }
