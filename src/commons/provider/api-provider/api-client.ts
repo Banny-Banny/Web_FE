@@ -55,11 +55,44 @@ const DEFAULT_CONFIG: AxiosRequestConfig = {
 };
 
 /**
- * Axios 인스턴스 생성
+ * baseURL 정규화 함수
+ * endpoints.ts에서 이미 `/api`가 포함되어 있으므로 baseURL에는 `/api`를 포함하지 않습니다.
  */
+function normalizeBaseURL(url: string | undefined): string {
+  if (!url) return ''; // 빈 문자열 = 상대 경로 (Next.js rewrites 사용)
+  
+  // 끝의 슬래시 제거
+  let normalized = url.trim().replace(/\/+$/, '');
+  
+  // 끝의 /api 제거 (endpoints.ts에서 이미 /api 포함)
+  normalized = normalized.replace(/\/api$/, '');
+  
+  return normalized;
+}
+
+/**
+ * Axios 인스턴스 생성
+ * 
+ * Next.js rewrites를 사용하는 경우:
+ * - 개발 환경: 클라이언트에서 `/api/*`로 요청하면 Next.js가 백엔드 서버로 프록시
+ * - 프로덕션: 절대 URL 사용 또는 Next.js API Routes 사용
+ * 
+ * 주의: endpoints.ts에서 이미 `/api`가 포함되어 있으므로 baseURL에는 `/api`를 포함하지 않습니다.
+ */
+const baseURL = normalizeBaseURL(process.env.NEXT_PUBLIC_API_BASE_URL);
+
+// 개발 환경에서 baseURL 확인용 로그
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  console.log('🔧 API Client Config:', {
+    env: process.env.NEXT_PUBLIC_API_BASE_URL,
+    normalized: baseURL,
+    nodeEnv: process.env.NODE_ENV,
+  });
+}
+
 export const apiClient: AxiosInstance = axios.create({
   ...DEFAULT_CONFIG,
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api',
+  baseURL,
 });
 
 /**
@@ -209,7 +242,7 @@ apiClient.interceptors.response.use(
         // 4. 일반적인 에러 응답
         
         let statusCode: number | undefined;
-        let message: string;
+        let message: string = error.message || '알 수 없는 오류가 발생했습니다.';
         let errorCode: string | undefined;
         let errorDetails: any;
         
@@ -238,11 +271,6 @@ apiClient.interceptors.response.use(
           statusCode = httpStatus;
         }
         
-        // 메시지가 없으면 기본 메시지 사용
-        if (!message) {
-          message = error.message || '알 수 없는 오류가 발생했습니다.';
-        }
-        
         // 에러 코드가 없으면 Axios 에러 코드 사용
         if (!errorCode) {
           errorCode = error.code;
@@ -263,10 +291,32 @@ apiClient.interceptors.response.use(
 
       const errorInfo = getErrorInfo();
       const method = error.config?.method?.toUpperCase() || 'UNKNOWN';
-      const url = error.config?.url || error.config?.baseURL || 'Unknown URL';
+      const requestBaseURL = error.config?.baseURL || '';
+      const requestEndpoint = error.config?.url || '';
+      
+      // Axios가 실제로 요청한 전체 URL 계산
+      // Axios는 baseURL과 url을 합칠 때 자동으로 슬래시를 처리합니다
+      let fullURL: string;
+      if (requestBaseURL && requestEndpoint) {
+        // baseURL이 있고 endpoint도 있는 경우
+        const base = requestBaseURL.endsWith('/') ? requestBaseURL.slice(0, -1) : requestBaseURL;
+        const endpoint = requestEndpoint.startsWith('/') ? requestEndpoint : `/${requestEndpoint}`;
+        fullURL = `${base}${endpoint}`;
+      } else {
+        fullURL = requestEndpoint || requestBaseURL || error.request?.responseURL || 'Unknown URL';
+      }
 
       // 상세한 에러 로깅
-      console.error(`❌ API Error: ${method} ${url}`);
+      console.error(`❌ API Error: ${method} ${fullURL}`);
+      console.error('Request Details:', {
+        baseURL: requestBaseURL,
+        endpoint: requestEndpoint,
+        fullURL,
+        method,
+        axiosRequestURL: error.request?.responseURL,
+        configURL: error.config?.url,
+        configBaseURL: error.config?.baseURL,
+      });
       console.error('Error Details:', {
         statusCode: errorInfo.statusCode,
         httpStatus: errorInfo.httpStatus,
