@@ -1,0 +1,345 @@
+/**
+ * 온보딩 컴포넌트 스타일
+ * 375px 모바일 프레임 기준
+ * Figma 디자인 기반
+ */
+
+.stepContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px 20px;
+  background-color: #F4F5F7;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* 진행 바 */
+.progressBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.progressBarActive {
+  flex: 3;
+  height: 4px;
+  background-color: var(--color-black-500, #0A0A0A);
+  border-radius: var(--radius-full, 9999px);
+}
+
+.progressBarInactive {
+  flex: 1;
+  height: 4px;
+  background-color: transparent;
+  border: 1px solid var(--color-grey-300, #CBCBCB);
+  border-radius: var(--radius-full, 9999px);
+}
+
+/* STEP 라벨 */
+.stepLabel {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: var(--color-black-500, #0A0A0A);
+  color: var(--color-white-50, #FFFFFF);
+  border-radius: 8px;
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 메인 타이틀 */
+.title {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 30px;
+  line-height: 40px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+/* 설명 */
+.description {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+/* 위치 일러스트 컨테이너 */
+.locationIllustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 48px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.locationIllustration img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 정보 카드 컨테이너 */
+.infoCards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* 정보 카드 */
+.infoCard {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  background-color: var(--color-white-50, #FFFFFF);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.infoCardIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white-grey-200, #F3F3F3);
+  border-radius: var(--radius-full, 9999px);
+}
+
+.infoCardIcon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.infoCardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+}
+
+.infoCardTitle {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+.infoCardDescription {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+}
+
+/* 하단 버튼 영역 */
+.footer {
+  margin-top: auto;
+  padding-top: 48px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.allowButton {
+  width: 100%;
+  min-height: 56px;
+  padding: 16px 24px;
+  background-color: var(--color-black-500, #0A0A0A);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.allowButton:hover {
+  background-color: var(--color-black-600, #1a1a1a);
+}
+
+.allowButton:active {
+  transform: scale(0.98);
+  background-color: var(--color-black-700, #2a2a2a);
+}
+
+.allowButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.allowButton:disabled:hover {
+  background-color: var(--color-black-500, #0A0A0A);
+}
+
+.allowButtonText {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3125px;
+  color: var(--color-white-50, #FFFFFF);
+  white-space: nowrap;
+}
+
+.allowButtonIcon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.skipButton {
+  background: none;
+  border: none;
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: -0.3125px;
+  color: var(--color-grey-700, #7E7E7E);
+  cursor: pointer;
+  text-align: center;
+  padding: var(--spacing-sm, 8px);
+  transition: color 0.2s ease;
+}
+
+.skipButton:hover {
+  color: var(--color-black-500, #0A0A0A);
+}
+
+.skipButton:active {
+  opacity: 0.7;
+}
+
+.skipButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.skipButton:disabled:hover {
+  color: var(--color-grey-700, #7E7E7E);
+}
+
+/* 기존 스타일 유지 (LocationConsentStep용) */
+.consentOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  margin-top: var(--spacing-xl, 24px);
+  width: 100%;
+}
+
+.consentButton {
+  width: 100%;
+  min-height: 56px;
+  padding: var(--spacing-lg, 16px) var(--spacing-xl, 24px);
+  border: 1px solid var(--color-border-light, rgba(10, 10, 10, 0.08));
+  border-radius: var(--radius-lg, 12px);
+  background-color: var(--color-white-50, #FFFFFF);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.consentButton:hover:not(:disabled) {
+  background-color: var(--color-white-grey-50, #FCFCFC);
+  border-color: var(--color-grey-300, #CBCBCB);
+}
+
+.consentButton:active:not(:disabled) {
+  background-color: var(--color-white-grey-100, #F7F7F7);
+  transform: scale(0.98);
+}
+
+.consentButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.consentButtonActive {
+  background-color: var(--color-blue-50, #E9EEFB);
+  border-color: var(--color-blue-500, #1F59DB);
+  border-width: 2px;
+}
+
+.consentButtonActive:hover:not(:disabled) {
+  background-color: var(--color-blue-100, #DDE6FA);
+  border-color: var(--color-blue-600, #1C50C5);
+}
+
+.consentLabel {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+}
+
+.consentButtonActive .consentLabel {
+  color: var(--color-blue-700, #1947AF);
+  font-weight: 600;
+}
+
+.nextButton,
+.completeButton {
+  width: 100%;
+}
+
+.errorMessage {
+  margin-top: var(--spacing-lg, 16px);
+  padding: var(--spacing-md, 12px) var(--spacing-lg, 16px);
+  background-color: var(--color-red-50, #fef2f2);
+  border: 1px solid var(--color-red-200, #fecaca);
+  border-radius: var(--radius-md, 8px);
+  color: var(--color-red-700, #b91c1c);
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
