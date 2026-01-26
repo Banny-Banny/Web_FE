@@ -31,7 +31,7 @@ export const MapView = memo(function MapView({
   // 에러 상태 렌더링
   if (error) {
     return (
-      <div className={`${styles.container} ${className}`}>
+      <div className={`${styles.container} ${className}`} data-testid="map-error">
         <div className={styles.errorContainer} role="alert" aria-live="assertive">
           <p className={styles.errorText}>{error}</p>
         </div>
@@ -42,7 +42,7 @@ export const MapView = memo(function MapView({
   // 로딩 상태 렌더링
   if (isLoading) {
     return (
-      <div className={`${styles.container} ${className}`}>
+      <div className={`${styles.container} ${className}`} data-testid="map-loading">
         <div className={styles.loadingContainer} role="status" aria-live="polite">
           <div className={styles.loadingSpinner} aria-hidden="true" />
           <p className={styles.loadingText}>지도를 불러오는 중...</p>
@@ -53,7 +53,7 @@ export const MapView = memo(function MapView({
 
   // 지도 렌더링
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.container} ${className}`} data-testid="map-container">
       <div
         ref={containerRef}
         className={styles.mapContainer}
