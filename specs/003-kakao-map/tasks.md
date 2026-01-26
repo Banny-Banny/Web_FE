@@ -26,10 +26,10 @@
 - `src/commons/utils/kakao-map/config.ts`
 
 **완료 기준**:
-- [ ] `getKakaoMapApiKey` 함수가 정상 동작함
-- [ ] 환경 변수가 설정된 경우 API 키 반환
-- [ ] 환경 변수가 설정되지 않은 경우 적절한 에러 발생
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `getKakaoMapApiKey` 함수가 정상 동작함
+- [x] 환경 변수가 설정된 경우 API 키 반환
+- [x] 환경 변수가 설정되지 않은 경우 적절한 에러 발생
+- [x] TypeScript 컴파일 에러 없음
 
 #### T002: 카카오 지도 타입 정의 파일 생성
 **목표**: 카카오 지도 API 타입 정의
@@ -46,10 +46,10 @@
 - `src/commons/utils/kakao-map/types.ts`
 
 **완료 기준**:
-- [ ] `Window.kakao` 타입이 정의됨
-- [ ] `MapOptions`, `LatLng`, `Map` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
-- [ ] 타입 자동 완성이 정상 동작함
+- [x] `Window.kakao` 타입이 정의됨
+- [x] `MapOptions`, `LatLng`, `Map` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
+- [x] 타입 자동 완성이 정상 동작함
 
 #### T003: 카카오 지도 스크립트 로더 유틸리티 구현
 **목표**: 카카오 지도 스크립트를 동적으로 로딩하는 유틸리티 구현
@@ -67,11 +67,11 @@
 - `src/commons/utils/kakao-map/script-loader.ts`
 
 **완료 기준**:
-- [ ] 스크립트가 동적으로 로드됨
-- [ ] 중복 로딩이 방지됨
-- [ ] 로딩 완료 시 Promise가 resolve됨
-- [ ] 에러 발생 시 적절한 에러 처리
-- [ ] TypeScript 컴파일 에러 없음
+- [x] 스크립트가 동적으로 로드됨
+- [x] 중복 로딩이 방지됨
+- [x] 로딩 완료 시 Promise가 resolve됨
+- [x] 에러 발생 시 적절한 에러 처리
+- [x] TypeScript 컴파일 에러 없음
 
 #### T004: 카카오 지도 설정 파일 생성
 **목표**: 지도 초기 설정값 정의
@@ -88,9 +88,9 @@
 - `src/components/home/config/map-config.ts`
 
 **완료 기준**:
-- [ ] 기본 위치 상수가 정의됨
-- [ ] 기본 확대/축소 레벨이 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] 기본 위치 상수가 정의됨
+- [x] 기본 확대/축소 레벨이 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -112,8 +112,8 @@
 - `src/components/home/types.ts`
 
 **완료 기준**:
-- [ ] `HomeFeatureProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `HomeFeatureProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T006: [US1] useKakaoMap 훅 구현
 **목표**: 카카오 지도 인스턴스 생성 및 관리 훅 구현
@@ -132,13 +132,13 @@
 - `src/components/home/hooks/useKakaoMap.ts`
 
 **완료 기준**:
-- [ ] `useKakaoMap` 훅이 정상 동작함
-- [ ] 지도 인스턴스가 생성됨
-- [ ] `initializeMap` 함수가 정상 동작함
-- [ ] `resetMap` 함수가 정상 동작함
-- [ ] 로딩 상태가 관리됨
-- [ ] 에러 상태가 관리됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `useKakaoMap` 훅이 정상 동작함
+- [x] 지도 인스턴스가 생성됨
+- [x] `initializeMap` 함수가 정상 동작함
+- [x] `resetMap` 함수가 정상 동작함
+- [x] 로딩 상태가 관리됨
+- [x] 에러 상태가 관리됨
+- [x] TypeScript 컴파일 에러 없음
 
 ### P2-2: 지도 뷰 컴포넌트 구현
 
@@ -156,8 +156,8 @@
 - `src/components/home/components/map-view/types.ts`
 
 **완료 기준**:
-- [ ] `MapViewProps` 인터페이스가 정의됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] `MapViewProps` 인터페이스가 정의됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T008: [P] [US1] Map View CSS Module 스타일 작성
 **목표**: Map View 컴포넌트의 스타일 정의
@@ -175,10 +175,10 @@
 - `src/components/home/components/map-view/styles.module.css`
 
 **완료 기준**:
-- [ ] 375px 고정 너비 스타일 정의됨
-- [ ] 지도 컨테이너 높이가 설정됨
-- [ ] CSS 변수가 사용됨
-- [ ] 로딩 상태 스타일이 정의됨
+- [x] 375px 고정 너비 스타일 정의됨
+- [x] 지도 컨테이너 높이가 설정됨
+- [x] CSS 변수가 사용됨
+- [x] 로딩 상태 스타일이 정의됨
 
 #### T009: [US1] Map View 컴포넌트 구현
 **목표**: 카카오 지도를 렌더링하는 Map View 컴포넌트 구현
@@ -198,13 +198,13 @@
 - `src/components/home/components/map-view/index.tsx`
 
 **완료 기준**:
-- [ ] Map View 컴포넌트가 정상적으로 렌더링됨
-- [ ] 지도가 화면에 표시됨
-- [ ] CSS Module 스타일이 적용됨
-- [ ] 로딩 상태가 표시됨
-- [ ] 에러 상태가 처리됨
-- [ ] 접근성 속성이 추가됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] Map View 컴포넌트가 정상적으로 렌더링됨
+- [x] 지도가 화면에 표시됨
+- [x] CSS Module 스타일이 적용됨
+- [x] 로딩 상태가 표시됨
+- [x] 에러 상태가 처리됨
+- [x] 접근성 속성이 추가됨
+- [x] TypeScript 컴파일 에러 없음
 
 ### P2-3: Home Feature Container 구현
 
@@ -225,12 +225,12 @@
 - `src/components/home/index.tsx`
 
 **완료 기준**:
-- [ ] Home Feature Container가 정상적으로 렌더링됨
-- [ ] 카카오 지도 스크립트가 로드됨
-- [ ] 지도가 표시됨
-- [ ] 로딩 상태가 관리됨
-- [ ] 에러 상태가 처리됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] Home Feature Container가 정상적으로 렌더링됨
+- [x] 카카오 지도 스크립트가 로드됨
+- [x] 지도가 표시됨
+- [x] 로딩 상태가 관리됨
+- [x] 에러 상태가 처리됨
+- [x] TypeScript 컴파일 에러 없음
 
 #### T011: [US1] 홈 페이지에 Home Feature 통합
 **목표**: 홈 페이지에 Home Feature Container 통합
@@ -246,10 +246,10 @@
 - `src/app/(main)/page.tsx`
 
 **완료 기준**:
-- [ ] 홈 페이지에 지도가 표시됨
-- [ ] 기존 코드가 제거됨
-- [ ] Home Feature가 정상적으로 렌더링됨
-- [ ] TypeScript 컴파일 에러 없음
+- [x] 홈 페이지에 지도가 표시됨
+- [x] 기존 코드가 제거됨
+- [x] Home Feature가 정상적으로 렌더링됨
+- [x] TypeScript 컴파일 에러 없음
 
 ---
 
@@ -667,19 +667,19 @@ Phase 5 (최적화)
 ## ✅ 완료 체크리스트
 
 ### Phase 1: 프로젝트 설정
-- [ ] T001: 환경 변수 설정 유틸리티
-- [ ] T002: 카카오 지도 타입 정의
-- [ ] T003: 스크립트 로더 구현
-- [ ] T004: 지도 설정 파일
+- [x] T001: 환경 변수 설정 유틸리티
+- [x] T002: 카카오 지도 타입 정의
+- [x] T003: 스크립트 로더 구현
+- [x] T004: 지도 설정 파일
 
 ### Phase 2: US1 - 홈 페이지에서 지도 확인
-- [ ] T005: Home Feature 타입 정의
-- [ ] T006: useKakaoMap 훅 구현
-- [ ] T007: Map View 타입 정의
-- [ ] T008: Map View CSS Module 스타일
-- [ ] T009: Map View 컴포넌트 구현
-- [ ] T010: Home Feature Container 구현
-- [ ] T011: 홈 페이지 통합
+- [x] T005: Home Feature 타입 정의
+- [x] T006: useKakaoMap 훅 구현
+- [x] T007: Map View 타입 정의
+- [x] T008: Map View CSS Module 스타일
+- [x] T009: Map View 컴포넌트 구현
+- [x] T010: Home Feature Container 구현
+- [x] T011: 홈 페이지 통합
 
 ### Phase 3: US2 - 지도 기본 조작
 - [ ] T012: 드래그 이동 기능
