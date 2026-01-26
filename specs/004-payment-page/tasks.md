@@ -33,9 +33,9 @@
 
 **⚠️ CRITICAL**: 이 단계가 완료되어야 UI 구현 및 데이터 바인딩이 가능합니다
 
-- [ ] T004 `src/commons/apis/orders/hooks/useOrder.ts` 생성 - 주문 정보 조회 React Query 훅 (`getOrder` API 래핑)
-- [ ] T005 `src/commons/apis/orders/hooks/useOrderStatus.ts` 생성 - 주문 상태 조회 React Query 훅 (`getOrderStatus` API 래핑, 폴링 로직 포함)
-- [ ] T006 [P] `src/commons/utils/payment.ts` 생성 - 결제 관련 유틸리티 함수 (결제 ID 생성 등)
+- [x] T004 `src/commons/apis/orders/hooks/useOrder.ts` 생성 - 주문 정보 조회 React Query 훅 (`getOrder` API 래핑)
+- [x] T005 `src/commons/apis/orders/hooks/useOrderStatus.ts` 생성 - 주문 상태 조회 React Query 훅 (`getOrderStatus` API 래핑, 폴링 로직 포함)
+- [x] T006 [P] `src/commons/utils/payment.ts` 생성 - 결제 관련 유틸리티 함수 (결제 ID 생성 등)
 
 **Checkpoint**: API 연결 레이어 완료 - E2E 테스트 및 UI 구현 시작 가능
 
