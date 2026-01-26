@@ -30,7 +30,6 @@ const ADDITIONAL_OPTIONS: AdditionalOptionInfo[] = [
 export function AdditionalOptions({}: Omit<AdditionalOptionsProps, 'register' | 'errors' | 'watch'>) {
   const {
     register,
-    formState: { errors },
     watch,
   } = useFormContext<TimecapsuleFormData>();
 

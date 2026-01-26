@@ -6,8 +6,11 @@
 
 .container {
   width: 100%;
-  min-height: 100vh;
+  max-width: 375px;
+  margin: 0 auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px; /* GNB 높이(60px) + 여유 공간(20px) */
+  overflow: hidden;
+  position: relative;
 }

@@ -30,8 +30,8 @@ export function ThemeSelector({
     watch,
   } = useFormContext<TimecapsuleFormData>();
 
-  const error = errors.theme;
-  const selectedTheme = watch('theme');
+  const error = (errors as any).theme;
+  const selectedTheme = watch('theme' as any);
 
   return (
     <div className={styles.container}>
@@ -56,7 +56,7 @@ export function ThemeSelector({
               <input
                 id={`theme-${theme.id}`}
                 type="radio"
-                {...register('theme')}
+                {...register('theme' as any)}
                 value={theme.id}
                 className={styles.hiddenInput}
                 aria-label={theme.name}

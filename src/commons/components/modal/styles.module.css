@@ -93,3 +93,20 @@
 .noAnimation {
   animation: none;
 }
+
+/* 모바일 최적화 (375px 기준) */
+@media (max-width: 375px) {
+  .backdrop {
+    max-width: 375px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    margin: 0 auto;
+  }
+
+  .modalContainer {
+    max-width: calc(100% - 32px); /* 좌우 16px 여백 */
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
+}
