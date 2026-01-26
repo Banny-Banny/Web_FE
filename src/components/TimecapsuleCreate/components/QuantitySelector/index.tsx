@@ -7,8 +7,7 @@
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import RiAddLine from 'remixicon-react/AddLineIcon';
-import RiSubtractLine from 'remixicon-react/SubtractLineIcon';
+import { RiAddLine, RiSubtractLine } from '@remixicon/react';
 import type { TimecapsuleFormData } from '../../schemas/timecapsuleFormSchema';
 import type { QuantitySelectorProps } from './types';
 import styles from './styles.module.css';

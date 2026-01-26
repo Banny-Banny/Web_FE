@@ -5,8 +5,7 @@ const nextConfig: NextConfig = {
   // 실험적 기능 설정
   experimental: {
     // 최적화된 패키지 임포트
-    // lucide-react는 Next.js 16에서 기본적으로 최적화됨
-    optimizePackageImports: ['@tanstack/react-query'] as string[],
+    optimizePackageImports: ['@tanstack/react-query', '@remixicon/react'] as string[],
   },
 
   // 이미지 최적화 설정

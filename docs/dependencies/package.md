@@ -106,12 +106,6 @@
   - Figma 디자인의 아이콘을 @remixicon/react에서 찾아 매칭
 - **대안**: 없음 (일관성 유지를 위해 단일 라이브러리 사용)
 
-#### lucide-react (v0.563.0)
-- **도입 목적**: 추가 아이콘 라이브러리 (기존 코드 호환성)
-- **주요 사용처**: 일부 기존 컴포넌트
-- **번들 크기**: Tree-shaking 지원
-- **참고**: 신규 개발 시 @remixicon/react 사용 권장
-
 ---
 
 ### 인터랙션 및 애니메이션
@@ -196,7 +190,22 @@
 
 ## Archived (제거된 라이브러리)
 
-현재 제거된 라이브러리가 없습니다.
+#### lucide-react (v0.563.0) (Archived)
+- **제거 일자**: 2026-01-26
+- **제거 사유**: 프로젝트 전체 아이콘 라이브러리 통일을 위해 @remixicon/react로 마이그레이션 완료
+- **대체 수단**: @remixicon/react
+- **이전 사용처**: GNB 컴포넌트 (Bell, Map, User 아이콘)
+- **마이그레이션**: RiNotificationLine, RiMapLine, RiUserLine으로 교체 완료
+
+#### remixicon-react (v1.0.0) (Archived)
+- **제거 일자**: 2026-01-26
+- **제거 사유**: @remixicon/react (v4.8.0)로 통일하여 일관성 유지 및 최신 버전 사용
+- **대체 수단**: @remixicon/react (v4.8.0)
+- **이전 사용처**: 
+  - QuantitySelector 컴포넌트 (AddLineIcon, SubtractLineIcon)
+  - AgreementSection 컴포넌트 (CheckboxBlankCircleLineIcon, CheckboxCircleFillIcon)
+  - TimeCapsuleHeader 컴포넌트 (ArrowLeftLineIcon, More2FillIcon, CloseLineIcon)
+- **마이그레이션**: @remixicon/react의 named export로 교체 완료 (RiAddLine, RiSubtractLine, RiCheckboxBlankCircleLine, RiCheckboxCircleFill, RiArrowLeftLine, RiMore2Fill, RiCloseLine)
 
 ---
 
