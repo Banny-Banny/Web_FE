@@ -24,17 +24,20 @@ export interface AuthState {
  * 로그인 요청 타입
  */
 export interface LoginRequest {
-  email: string;
-  password: string;
+  phoneNumber?: string;  // 전화번호 (선택)
+  email?: string;        // 이메일 (선택)
+  password: string;      // 비밀번호 (필수)
 }
 
 /**
  * 회원가입 요청 타입
  */
 export interface SignupRequest {
-  email: string;
-  password: string;
-  nickname: string;
+  nickname: string;      // 닉네임 (필수)
+  phoneNumber: string;  // 전화번호 (필수)
+  email: string;        // 이메일 (필수)
+  password: string;      // 비밀번호 (필수)
+  profileImg?: string;  // 프로필 이미지 URL (선택)
 }
 
 /**
