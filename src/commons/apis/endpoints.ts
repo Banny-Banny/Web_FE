@@ -21,11 +21,13 @@ export const BASE_PATHS = {
 export const AUTH_ENDPOINTS = {
   // 로그인/로그아웃
   LOGIN: `${BASE_PATHS.AUTH}/login`,
+  LOCAL_LOGIN: `${BASE_PATHS.AUTH}/local/login`,
   LOGOUT: `${BASE_PATHS.AUTH}/logout`,
   REFRESH: `${BASE_PATHS.AUTH}/refresh`,
   
   // 회원가입
   SIGNUP: `${BASE_PATHS.AUTH}/signup`,
+  LOCAL_SIGNUP: `${BASE_PATHS.AUTH}/local/signup`,
   VERIFY_EMAIL: `${BASE_PATHS.AUTH}/verify-email`,
   RESEND_VERIFICATION: `${BASE_PATHS.AUTH}/resend-verification`,
   
