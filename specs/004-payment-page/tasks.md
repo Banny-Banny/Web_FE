@@ -45,8 +45,8 @@
 
 **목적**: 전체 결제 플로우 검증을 위한 E2E 테스트 작성
 
-- [ ] T007 `tests/e2e/payment/payment.spec.ts` 생성 - 결제 페이지 E2E 테스트 (주문 정보 조회, 결제 플로우, 에러 처리)
-- [ ] T008 [P] `tests/e2e/payment/fixtures/mockData.ts` 생성 - 테스트용 Mock 데이터 (주문 정보, 결제 응답 등)
+- [x] T007 `tests/e2e/payment/payment.spec.ts` 생성 - 결제 페이지 E2E 테스트 (주문 정보 조회, 결제 플로우, 에러 처리)
+- [x] T008 [P] `tests/e2e/payment/fixtures/mockData.ts` 생성 - 테스트용 Mock 데이터 (주문 정보, 결제 응답 등)
 
 **Checkpoint**: E2E 테스트 작성 완료 - UI 구현 시작 가능
 
