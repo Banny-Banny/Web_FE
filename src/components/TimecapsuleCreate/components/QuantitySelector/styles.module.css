@@ -1,0 +1,121 @@
+/**
+ * QuantitySelector 컴포넌트 스타일
+ * 
+ * @description
+ * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - CSS 변수를 사용한 디자인 토큰 적용
+ * - 375px 기준 고정 레이아웃
+ */
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.label {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black-500);
+  line-height: var(--line-height-normal);
+}
+
+.subLabel {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-grey-500);
+  line-height: var(--line-height-normal);
+}
+
+.currentCost {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black-500);
+  line-height: var(--line-height-normal);
+}
+
+.selectorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--color-white-grey-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
+.decreaseButton,
+.increaseButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--color-white-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black-500);
+}
+
+.decreaseButton:hover:not(:disabled),
+.increaseButton:hover:not(:disabled) {
+  background-color: var(--color-white-grey-100);
+  border-color: var(--color-black-500);
+}
+
+.decreaseButton:disabled,
+.increaseButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantityDisplay {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black-500);
+  line-height: var(--line-height-normal);
+}
+
+.hintText {
+  margin-top: var(--spacing-xs);
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-grey-500);
+  line-height: var(--line-height-normal);
+  text-align: center;
+}
+
+.error {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-red-500);
+  margin-top: var(--spacing-xs);
+  line-height: var(--line-height-normal);
+}

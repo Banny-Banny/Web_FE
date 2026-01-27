@@ -153,6 +153,28 @@ export const EXTERNAL_ENDPOINTS = {
 } as const;
 
 /**
+ * 주문 관리 관련 엔드포인트
+ */
+export const ORDER_ENDPOINTS = {
+  // 주문 생성
+  CREATE: `${BASE_PATHS.API}/orders`,
+  // 주문 상세 조회
+  DETAIL: (id: string) => `${BASE_PATHS.API}/orders/${id}`,
+  // 주문 상태 및 결제 정보 조회
+  STATUS: (id: string) => `${BASE_PATHS.API}/orders/${id}/status`,
+  // 주문 상태 변경 (수동)
+  UPDATE_STATUS: (id: string) => `${BASE_PATHS.API}/orders/${id}/status`,
+} as const;
+
+/**
+ * 결제 관련 엔드포인트
+ */
+export const PAYMENT_ENDPOINTS = {
+  // 결제 완료 처리
+  COMPLETE: `${BASE_PATHS.API}/payment/complete`,
+} as const;
+
+/**
  * Health Check 관련 엔드포인트
  */
 export const HEALTH_ENDPOINTS = {
@@ -178,6 +200,8 @@ export const ENDPOINTS = {
   USER: USER_ENDPOINTS,
   TIMEEGG: TIMEEGG_ENDPOINTS,
   ADMIN: ADMIN_ENDPOINTS,
+  ORDER: ORDER_ENDPOINTS,
+  PAYMENT: PAYMENT_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,

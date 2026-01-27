@@ -31,6 +31,9 @@
   left: 0;
   right: 0;
   bottom: 0;
+  width: 375px;
+  max-width: 480px;
+  margin: 0 auto;
   max-height: 90vh;
   background-color: var(--color-white-100); /* Colors.white[100] */
   border-top-left-radius: var(--radius-2xl); /* 24px */
@@ -49,6 +52,14 @@
   padding-top: var(--spacing-md); /* 16px */
   padding-bottom: var(--spacing-md); /* Spacing.md = 0.75rem = 12px */
   flex-shrink: 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.handleContainer:active {
+  cursor: grabbing;
 }
 
 /* 드래그 핸들 */
@@ -105,6 +116,44 @@
 .animateEnter .bottomSheetContainer {
   animation: slideUp 0.3s ease-out;
   will-change: transform; /* GPU 가속 */
-  transform: translateZ(0); /* GPU 가속 강제 */
   backface-visibility: hidden; /* 렌더링 최적화 */
+}
+
+/* 드래그 중 스타일 */
+.dragging {
+  transition: none !important;
+  will-change: transform;
+}
+
+.dragging .content {
+  pointer-events: none;
+}
+
+.dragging .footer {
+  pointer-events: none;
+}
+
+/* 작은 화면 최적화 */
+@media (max-width: 375px) {
+  .bottomSheetContainer {
+    width: 100vw;
+    max-width: 375px;
+    border-top-left-radius: var(--radius-xl); /* 20px */
+    border-top-right-radius: var(--radius-xl); /* 20px */
+  }
+
+  .handleContainer {
+    padding-top: var(--spacing-sm); /* 12px */
+    padding-bottom: var(--spacing-sm); /* 12px */
+  }
+
+  .handle {
+    width: 40px;
+    height: 3px;
+  }
+
+  .footer {
+    padding: var(--spacing-md); /* 16px */
+    gap: var(--spacing-sm); /* 12px */
+  }
 }

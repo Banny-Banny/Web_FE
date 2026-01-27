@@ -31,12 +31,12 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowLeft, MoreVertical, X } from 'lucide-react';
+import { RiArrowLeftLine, RiMore2Fill, RiCloseLine } from '@remixicon/react';
 import { Icon } from '../icon';
 import type { IconName } from '../icon/types';
 import { Colors, Typography } from '@/commons/styles';
 import styles from './styles.module.css';
-import type { TimeCapsuleHeaderProps, HeaderIconName } from './types';
+import type { TimeCapsuleHeaderProps } from './types';
 
 /**
  * TimeCapsuleHeader 컴포넌트
@@ -115,7 +115,7 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
               }
             }}
           >
-            <ArrowLeft size={24} color={Colors.black[500]} />
+            <RiArrowLeftLine size={24} color={Colors.black[500]} />
           </button>
         )}
 
@@ -150,9 +150,8 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 rightIcon.accessibilityLabel ||
                 `${rightIcon.icon || '아이콘'} 버튼`;
 
-              // Icon 컴포넌트를 사용할 수 있는 경우 (lucide-react 아이콘이 아닌 경우)
-              const lucideIcons: HeaderIconName[] = ['arrow-left', 'more', 'more-2-fill', 'close', 'close-line'];
-              if (rightIcon.icon && !lucideIcons.includes(rightIcon.icon)) {
+              // Icon 컴포넌트를 사용할 수 있는 경우
+              if (rightIcon.icon) {
                 return (
                   <button
                     key={index}
@@ -182,12 +181,12 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 );
               }
 
-              // lucide-react 아이콘을 사용하는 경우
-              let LucideIcon: React.ComponentType<{ size: number; color: string }> | null = null;
+              // Remix Icon을 사용하는 경우
+              let RemixIcon: React.ComponentType<{ size?: number | string; color?: string }> | null = null;
               if (rightIcon.icon === 'more' || rightIcon.icon === 'more-2-fill') {
-                LucideIcon = MoreVertical;
+                RemixIcon = RiMore2Fill;
               } else if (rightIcon.icon === 'close' || rightIcon.icon === 'close-line') {
-                LucideIcon = X;
+                RemixIcon = RiCloseLine;
               }
 
               // 이미지 소스를 사용하는 경우
@@ -227,15 +226,15 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                 );
               }
 
-              // lucide-react 아이콘 렌더링
-              if (LucideIcon) {
+              // Remix Icon 렌더링
+              if (RemixIcon) {
                 return (
                   <button
                     key={index}
                     type="button"
                     className={styles.iconButton}
-                    style={{ 
-                      width: Math.max(iconSize, 44), 
+                    style={{
+                      width: Math.max(iconSize, 44),
                       height: Math.max(iconSize, 44),
                       minWidth: 44,
                       minHeight: 44,
@@ -249,7 +248,7 @@ export const TimeCapsuleHeader = React.memo(function TimeCapsuleHeader({
                       }
                     }}
                   >
-                    <LucideIcon size={iconSize} color={iconColor} />
+                    <RemixIcon size={iconSize} color={iconColor} />
                   </button>
                 );
               }

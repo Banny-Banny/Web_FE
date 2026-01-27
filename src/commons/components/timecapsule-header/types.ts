@@ -6,20 +6,15 @@
 import type { IconName } from '../icon/types';
 
 /**
- * lucide-react 아이콘 이름 (추가 지원)
- */
-export type LucideIconName = 'arrow-left' | 'more' | 'more-2-fill' | 'close' | 'close-line';
-
-/**
  * 헤더에서 사용 가능한 모든 아이콘 이름
  */
-export type HeaderIconName = IconName | LucideIconName;
+export type HeaderIconName = IconName;
 
 /**
  * 오른쪽 아이콘 버튼 타입
  */
 export interface RightIcon {
-  /** Icon 컴포넌트의 아이콘 이름 또는 lucide-react 아이콘 이름 (icon 또는 imageSource 중 하나 필수) */
+  /** Icon 컴포넌트의 아이콘 이름 또는 @remixicon/react 아이콘 이름 (icon 또는 imageSource 중 하나 필수) */
   icon?: HeaderIconName;
   /** 이미지 소스 URL 또는 경로 (icon 또는 imageSource 중 하나 필수) */
   imageSource?: string;

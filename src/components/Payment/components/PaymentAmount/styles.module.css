@@ -1,0 +1,40 @@
+/**
+ * PaymentAmount 컴포넌트 스타일
+ * 
+ * @description
+ * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - CSS 변수를 사용한 디자인 토큰 적용
+ * - 375px 기준 고정 레이아웃
+ * - 중요한 정보이므로 시각적으로 강조
+ */
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xl);
+  background-color: var(--color-white-500);
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.label {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: var(--font-weight-bold);
+  line-height: 24px;
+  letter-spacing: -0.31px;
+  color: var(--color-black-500);
+}
+
+.amount {
+  font-family: var(--font-pretendard);
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  line-height: 28px;
+  letter-spacing: -0.31px;
+  color: var(--color-red-500);
+}

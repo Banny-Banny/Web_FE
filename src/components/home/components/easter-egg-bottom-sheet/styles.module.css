@@ -1,0 +1,333 @@
+/**
+ * 이스터에그 바텀시트 스타일
+ * 
+ * Figma 디자인 시스템 기준:
+ * - 375px 모바일 프레임 기준
+ * - 디자인 토큰 사용 (색상, 타이포그래피, 간격)
+ * - 하드코딩된 색상값 사용 금지
+ */
+
+/* 바텀시트 컨테이너 */
+.container {
+  padding: 0 22px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 헤더 영역 */
+.header {
+  padding: 48px 0 24px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  margin: 0 0 4px 0;
+  letter-spacing: 0.07px;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--color-gray-600);
+  margin: 0;
+  letter-spacing: -0.15px;
+}
+
+/* 폼 컨텐츠 영역 */
+.formContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+
+/* 필드 그룹 */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+/* 라벨 */
+.label {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  letter-spacing: -0.31px;
+}
+
+.labelWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.messageIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-gray-900);
+}
+
+.attachmentLabel {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-700);
+  letter-spacing: -0.15px;
+}
+
+/* 입력 필드 */
+.input {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--color-gray-900);
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 16px;
+  letter-spacing: -0.31px;
+  transition: border-color 0.2s ease;
+}
+
+.input::placeholder {
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* 텍스트 영역 */
+.textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 16px;
+  letter-spacing: -0.31px;
+  resize: none;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.textarea::placeholder {
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* 글자 수 카운터 */
+.charCount {
+  position: absolute;
+  right: 0;
+  bottom: -24px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-500);
+}
+
+/* 첨부파일 버튼들 */
+.attachmentButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.attachmentBtn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 104px;
+  overflow: hidden;
+}
+
+.attachmentBtn:hover:not(:disabled) {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+}
+
+.attachmentBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.attachmentBtnActive {
+  border-color: var(--color-primary);
+}
+
+.attachmentIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-gray-100);
+  border-radius: 50%;
+  color: var(--color-gray-700);
+}
+
+.attachmentBtn span {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--color-gray-700);
+  letter-spacing: 0.12px;
+}
+
+/* 첨부파일 미리보기 */
+.attachmentPreview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* 첨부파일 이름 */
+.attachmentFileName {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-white);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* 삭제 버튼 */
+.deleteBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-white);
+  z-index: 2;
+  transition: background-color 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* 안내 정보 박스 */
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 17px;
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 16px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.infoEmoji {
+  font-size: 14px;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.infoText {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-gray-700);
+  letter-spacing: -0.15px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 375px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .header {
+    padding: 40px 0 20px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .formContent {
+    gap: 20px;
+  }
+}
+
+/* 스크롤바 스타일 */
+.formContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.formContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.formContent::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-300);
+  border-radius: 2px;
+}
+
+.formContent::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-gray-400);
+}

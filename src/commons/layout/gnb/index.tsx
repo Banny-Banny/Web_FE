@@ -13,25 +13,25 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Bell, Map, User } from 'lucide-react';
+import { RiNotificationLine, RiMapLine, RiUserLine } from '@remixicon/react';
 import styles from './styles.module.css';
 import type { GNBProps, MenuItem } from './types';
 
 const menuItems: MenuItem[] = [
   {
-    icon: Bell,
+    icon: RiNotificationLine,
     label: '소식',
     path: '/notifications',
     ariaLabel: '소식',
   },
   {
-    icon: Map,
+    icon: RiMapLine,
     label: '홈',
     path: '/',
     ariaLabel: '홈',
   },
   {
-    icon: User,
+    icon: RiUserLine,
     label: '마이',
     path: '/profile',
     ariaLabel: '마이페이지',

@@ -1,0 +1,414 @@
+'use client';
+
+/**
+ * @fileoverview 이스터에그 바텀시트 컴포넌트
+ * 
+ * 이 컴포넌트는 홈 화면의 FAB 버튼에서 이스터에그를 선택했을 때 표시되는 바텀시트입니다.
+ * 사용자가 이스터에그 작성 폼을 통해 이스터에그를 생성할 수 있도록 합니다.
+ * 
+ * @module components/home/components/easter-egg-bottom-sheet
+ */
+
+import React from 'react';
+import BottomSheet from '@/commons/components/bottom-sheet';
+import DualButton from '@/commons/components/dual-button';
+import { RiImageLine, RiMicLine, RiVideoLine, RiCloseLine } from '@remixicon/react';
+import { AudioAttachmentModal } from './components/audio-attachment-modal';
+import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
+import type { EasterEggBottomSheetProps, EasterEggFormData, Attachment, AttachmentType } from './types';
+import styles from './styles.module.css';
+
+/**
+ * 이스터에그 바텀시트 컴포넌트
+ * 
+ * 사용자가 이스터에그 작성 폼을 작성할 수 있는 바텀시트입니다.
+ * 
+ * @param {EasterEggBottomSheetProps} props - 컴포넌트 props
+ * @param {boolean} props.isOpen - 바텀시트 표시 여부
+ * @param {() => void} props.onClose - 바텀시트 닫기 핸들러
+ * @param {(formData: EasterEggFormData) => void} props.onConfirm - 작성 완료 버튼 클릭 핸들러
+ * @param {string} [props.className] - 추가 CSS 클래스
+ */
+export function EasterEggBottomSheet({
+  isOpen,
+  onClose,
+  onConfirm,
+  className = '',
+}: EasterEggBottomSheetProps) {
+  // 폼 상태
+  const [title, setTitle] = React.useState('');
+  const [message, setMessage] = React.useState('');
+  const [attachments, setAttachments] = React.useState<Attachment[]>([]);
+  const [isAudioModalVisible, setIsAudioModalVisible] = React.useState(false);
+
+  // 파일 input refs
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  const videoInputRef = React.useRef<HTMLInputElement>(null);
+
+  /**
+   * 작성 완료 버튼 클릭 핸들러
+   */
+  const handleConfirm = React.useCallback(() => {
+    if (title.trim()) {
+      const formData: EasterEggFormData = {
+        title: title.trim(),
+        message: message.trim(),
+        attachments,
+      };
+      onConfirm(formData);
+      onClose();
+      
+      // 바텀시트가 닫힌 후 폼 초기화
+      setTimeout(() => {
+        setTitle('');
+        setMessage('');
+        setAttachments([]);
+      }, 300);
+    }
+  }, [title, message, attachments, onConfirm, onClose]);
+
+  /**
+   * 취소 버튼 클릭 핸들러
+   */
+  const handleCancel = React.useCallback(() => {
+    onClose();
+    // 바텀시트가 닫힌 후 폼 초기화
+    setTimeout(() => {
+      setTitle('');
+      setMessage('');
+      setAttachments([]);
+    }, 300);
+  }, [onClose]);
+
+  /**
+   * 첨부파일 추가 핸들러
+   */
+  const handleAddAttachment = React.useCallback((type: AttachmentType, file: File) => {
+    const newAttachment: Attachment = {
+      id: `${type}-${Date.now()}`,
+      type,
+      file,
+      name: file.name,
+    };
+
+    // 이미지나 비디오의 경우 미리보기 URL 생성
+    if (type === 'IMAGE' || type === 'VIDEO') {
+      newAttachment.previewUrl = URL.createObjectURL(file);
+    }
+
+    // 같은 타입의 기존 첨부파일 제거 (각 타입당 1개만)
+    setAttachments(prev => {
+      const filtered = prev.filter(att => att.type !== type);
+      // 기존 미리보기 URL 정리
+      prev.forEach(att => {
+        if (att.type === type && att.previewUrl) {
+          URL.revokeObjectURL(att.previewUrl);
+        }
+      });
+      return [...filtered, newAttachment];
+    });
+  }, []);
+
+  /**
+   * 첨부파일 삭제 핸들러
+   */
+  const handleDeleteAttachment = React.useCallback((id: string) => {
+    setAttachments(prev => {
+      const attachment = prev.find(att => att.id === id);
+      if (attachment?.previewUrl) {
+        URL.revokeObjectURL(attachment.previewUrl);
+      }
+      return prev.filter(att => att.id !== id);
+    });
+  }, []);
+
+  /**
+   * 이미지 파일 선택 핸들러
+   */
+  const handleImageSelect = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // MIME 타입 검증
+    if (!validateFileMimeType(file, 'IMAGE')) {
+      alert('지원하지 않는 이미지 형식입니다.\n허용 형식: JPEG, JPG, PNG, WEBP');
+      e.target.value = '';
+      return;
+    }
+
+    // 파일 크기 검증 (5MB)
+    if (!validateFileSize(file, 'IMAGE')) {
+      alert(`이미지 파일 크기는 최대 ${SIZE_LIMITS.IMAGE / (1024 * 1024)}MB입니다.`);
+      e.target.value = '';
+      return;
+    }
+
+    handleAddAttachment('IMAGE', file);
+    // input 초기화
+    e.target.value = '';
+  }, [handleAddAttachment]);
+
+  /**
+   * 비디오 파일 선택 핸들러
+   */
+  const handleVideoSelect = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // MIME 타입 검증
+    if (!validateFileMimeType(file, 'VIDEO')) {
+      alert('지원하지 않는 동영상 형식입니다.\n허용 형식: MP4, WEBM');
+      e.target.value = '';
+      return;
+    }
+
+    // 파일 크기 검증 (200MB)
+    if (!validateFileSize(file, 'VIDEO')) {
+      alert(`동영상 파일 크기는 최대 ${SIZE_LIMITS.VIDEO / (1024 * 1024)}MB입니다.`);
+      e.target.value = '';
+      return;
+    }
+
+    handleAddAttachment('VIDEO', file);
+    // input 초기화
+    e.target.value = '';
+  }, [handleAddAttachment]);
+
+  /**
+   * 오디오 파일 선택 핸들러 (모달에서)
+   */
+  const handleAudioSelect = React.useCallback((file: File) => {
+    handleAddAttachment('AUDIO', file);
+    setIsAudioModalVisible(false);
+  }, [handleAddAttachment]);
+
+  /**
+   * 바텀시트가 닫힐 때 폼 초기화
+   */
+  React.useEffect(() => {
+    if (!isOpen) {
+      setTitle('');
+      setMessage('');
+      setAttachments([]);
+    }
+  }, [isOpen]);
+
+  // 작성 완료 버튼 활성화 여부 (제목 필수)
+  const isFormValid = title.trim().length > 0;
+
+  return (
+    <BottomSheet
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnBackdropPress={true}
+      maxHeight="70vh"
+      footer={
+        <DualButton
+          cancelLabel="취소"
+          confirmLabel="작성 완료"
+          confirmDisabled={!isFormValid}
+          onCancelPress={handleCancel}
+          onConfirmPress={handleConfirm}
+          fullWidth={true}
+        />
+      }
+    >
+      <div className={`${styles.container} ${className}`}>
+        {/* 헤더 */}
+        <div className={styles.header}>
+          <h2 className={styles.title}>이스터에그 작성</h2>
+          <p className={styles.subtitle}>현재 위치에 추억을 숨겨요</p>
+        </div>
+
+        {/* 폼 컨텐츠 */}
+        <div className={styles.formContent}>
+          {/* 제목 입력 */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>제목</label>
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="추억의 제목을 입력하세요"
+              value={title}
+              onChange={(e) => {
+                if (e.target.value.length <= 30) {
+                  setTitle(e.target.value);
+                }
+              }}
+              maxLength={30}
+            />
+            <div className={styles.charCount}>{title.length}/30</div>
+          </div>
+
+          {/* 메시지 입력 */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>메시지</label>
+            <textarea
+              className={styles.textarea}
+              placeholder="미래의 나에게 또는 친구에게 남길 메시지를 작성하세요..."
+              value={message}
+              onChange={(e) => {
+                if (e.target.value.length <= 500) {
+                  setMessage(e.target.value);
+                }
+              }}
+              maxLength={500}
+              rows={6}
+            />
+            <div className={styles.charCount}>{message.length}/500</div>
+          </div>
+
+          {/* 첨부파일 */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.attachmentLabel}>첨부파일</label>
+            <div className={styles.attachmentButtons}>
+              {/* 사진 버튼 */}
+              <button 
+                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'IMAGE') ? styles.attachmentBtnActive : ''}`}
+                onClick={() => imageInputRef.current?.click()}
+                type="button"
+              >
+                {attachments.find(a => a.type === 'IMAGE') ? (
+                  <>
+                    <img 
+                      src={attachments.find(a => a.type === 'IMAGE')?.previewUrl} 
+                      alt="사진 미리보기"
+                      className={styles.attachmentPreview}
+                    />
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const img = attachments.find(a => a.type === 'IMAGE');
+                        if (img) handleDeleteAttachment(img.id);
+                      }}
+                      type="button"
+                      aria-label="사진 삭제"
+                    >
+                      <RiCloseLine size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.attachmentIconWrapper}>
+                      <RiImageLine size={20} />
+                    </div>
+                    <span>사진</span>
+                  </>
+                )}
+              </button>
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept={getAcceptString('IMAGE')}
+                onChange={handleImageSelect}
+                style={{ display: 'none' }}
+              />
+
+              {/* 음원 버튼 */}
+              <button 
+                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'AUDIO') ? styles.attachmentBtnActive : ''}`}
+                onClick={() => setIsAudioModalVisible(true)}
+                type="button"
+              >
+                {attachments.find(a => a.type === 'AUDIO') ? (
+                  <>
+                    <div className={styles.attachmentIconWrapper}>
+                      <RiMicLine size={20} />
+                    </div>
+                    <div className={styles.attachmentFileName}>
+                      {attachments.find(a => a.type === 'AUDIO')?.name}
+                    </div>
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const audio = attachments.find(a => a.type === 'AUDIO');
+                        if (audio) handleDeleteAttachment(audio.id);
+                      }}
+                      type="button"
+                      aria-label="음원 삭제"
+                    >
+                      <RiCloseLine size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.attachmentIconWrapper}>
+                      <RiMicLine size={20} />
+                    </div>
+                    <span>음원</span>
+                  </>
+                )}
+              </button>
+
+              {/* 동영상 버튼 */}
+              <button 
+                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'VIDEO') ? styles.attachmentBtnActive : ''}`}
+                onClick={() => videoInputRef.current?.click()}
+                type="button"
+              >
+                {attachments.find(a => a.type === 'VIDEO') ? (
+                  <>
+                    <video 
+                      src={attachments.find(a => a.type === 'VIDEO')?.previewUrl} 
+                      className={styles.attachmentPreview}
+                      muted
+                    />
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const video = attachments.find(a => a.type === 'VIDEO');
+                        if (video) handleDeleteAttachment(video.id);
+                      }}
+                      type="button"
+                      aria-label="동영상 삭제"
+                    >
+                      <RiCloseLine size={16} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.attachmentIconWrapper}>
+                      <RiVideoLine size={20} />
+                    </div>
+                    <span>동영상</span>
+                  </>
+                )}
+              </button>
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept={getAcceptString('VIDEO')}
+                onChange={handleVideoSelect}
+                style={{ display: 'none' }}
+              />
+            </div>
+          </div>
+
+          {/* 안내 정보 */}
+          <div className={styles.infoBox}>
+            <div className={styles.infoItem}>
+              <span className={styles.infoEmoji}>💡</span>
+              <span className={styles.infoText}>현재 위치에 추억이 저장됩니다</span>
+            </div>
+            <div className={styles.infoItem}>
+              <span className={styles.infoEmoji}>💡</span>
+              <span className={styles.infoText}>3명이 발견하면 이스터에그가 소멸됩니다</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 오디오 첨부 모달 */}
+      <AudioAttachmentModal
+        visible={isAudioModalVisible}
+        onClose={() => setIsAudioModalVisible(false)}
+        onSelectAudio={handleAudioSelect}
+      />
+    </BottomSheet>
+  );
+}
+
+export default EasterEggBottomSheet;
