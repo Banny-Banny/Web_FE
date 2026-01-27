@@ -16,9 +16,9 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import { RiAddLine } from '@remixicon/react';
 import type { FabButtonProps } from './types';
 import styles from './styles.module.css';
-import { default as PlusSvg } from '@/assets/icons/plus-icon.svg';
 import { default as FabEggSvg } from '@/assets/images/fab_btn_egg.svg';
 import { default as FabCapSvg } from '@/assets/images/fab_btn_cap.svg';
 
@@ -118,7 +118,7 @@ export function FabButton({
           aria-expanded={isExpanded}
         >
           <div className={`${styles.mainButtonInner} ${isExpanded ? styles.rotated : ''}`}>
-            <PlusSvg className={styles.mainButtonIcon} aria-hidden="true" />
+            <RiAddLine className={styles.mainButtonIcon} size={36} aria-hidden="true" />
           </div>
           <div className={styles.mainButtonShadowInset} />
         </button>

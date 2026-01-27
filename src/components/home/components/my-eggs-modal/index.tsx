@@ -15,14 +15,15 @@
 
 'use client';
 
+import Image from 'next/image';
+import { RiInformationLine } from '@remixicon/react';
 import { Modal } from '@/commons/components/modal';
 import type { MyEggsModalProps } from './types';
 import styles from './styles.module.css';
 
-// 알 아이콘 import
-import { default as FilledEggSvg } from '@/assets/images/filled_egg.svg';
-import { default as UnfilledEggSvg } from '@/assets/images/unfilled_egg.svg';
-import { default as QuestionEggSvg } from '@/assets/images/question_egg.svg';
+// 알 이미지 경로
+const FILLED_EGG_SRC = '/assets/images/filled_egg.svg';
+const UNFILLED_EGG_SRC = '/assets/images/unfilled_egg.svg';
 
 export function MyEggsModal({ visible, eggCount, onClose }: MyEggsModalProps) {
   // 최대 알 개수 (고정값)
@@ -51,11 +52,15 @@ export function MyEggsModal({ visible, eggCount, onClose }: MyEggsModalProps) {
           <div className={styles.eggsContainer} role="img" aria-label={`보유 이스터에그 ${safeEggCount}개 중 최대 ${maxEggs}개`}>
             {Array.from({ length: maxEggs }, (_, index) => {
               const isFilled = index < safeEggCount;
-              const EggIcon = isFilled ? FilledEggSvg : UnfilledEggSvg;
+              const eggSrc = isFilled ? FILLED_EGG_SRC : UNFILLED_EGG_SRC;
               
               return (
                 <div key={index} className={styles.eggItem}>
-                  <EggIcon
+                  <Image
+                    src={eggSrc}
+                    alt=""
+                    width={64}
+                    height={64}
                     className={isFilled ? styles.eggIcon : styles.eggIconEmpty}
                     aria-hidden="true"
                   />
@@ -73,8 +78,9 @@ export function MyEggsModal({ visible, eggCount, onClose }: MyEggsModalProps) {
 
         {/* 안내 문구 */}
         <aside className={styles.infoSection}>
-          <QuestionEggSvg 
+          <RiInformationLine 
             className={styles.infoIcon}
+            size={20}
             aria-hidden="true"
           />
           <p className={styles.infoText}>
