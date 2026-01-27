@@ -6,11 +6,15 @@ import type { LocalLoginRequest } from '@/commons/apis/auth/types';
 import type { SlotInfoResponse, SlotResetResponse } from '@/commons/apis/easter-egg/types';
 
 /**
- * 환경 변수에서 테스트 계정 정보 가져오기
+ * 테스트 계정 정보
+ * 
+ * ⚠️ 주의: 
+ * - 실제 서버에 등록된 테스트 계정을 사용하세요.
+ * - 테스트 실패 시 비밀번호가 서버와 일치하는지 확인하세요.
  */
 export const testLoginRequest: LocalLoginRequest = {
-  phoneNumber: process.env.NEXT_PUBLIC_PHONE_NUMBER || '01030728535',
-  password: process.env.NEXT_PUBLIC_PASSWORD || 'test1234!@',
+  phoneNumber: process.env.NEXT_PUBLIC_PHONE_NUMBER,
+  password: process.env.NEXT_PUBLIC_PASSWORD,
 };
 
 /**

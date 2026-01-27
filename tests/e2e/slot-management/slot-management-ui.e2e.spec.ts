@@ -11,31 +11,49 @@
 
 import { test, expect } from '@playwright/test';
 import { localLogin } from '@/commons/apis/auth/login';
-import { testLoginRequest } from './fixtures/mockData';
+
+/**
+ * 테스트 계정 정보 (mockData에서 복사)
+ */
+const testLoginRequest = {
+  phoneNumber: '01030728535',
+  password: 'test1234!',
+};
 
 /**
  * 로그인 헬퍼 함수
- * API를 직접 호출하여 로그인 후 브라우저에 토큰 설정
+ * 
+ * ⚠️ 주의사항:
+ * - UI 테스트는 개발 서버(npm run dev)가 실행 중이어야 합니다.
+ * - 로그인 API를 먼저 호출하여 인증 토큰을 받습니다.
+ * - 받은 토큰을 브라우저 컨텍스트에 설정합니다.
  */
 async function login(page: any) {
   try {
-    // API로 직접 로그인
+    // Step 1: API로 직접 로그인하여 토큰 획득
+    console.log('🔐 테스트 계정으로 로그인 중...');
+    console.log('   전화번호:', testLoginRequest.phoneNumber);
+    
     const loginResponse = await localLogin(testLoginRequest);
     expect(loginResponse.accessToken).toBeDefined();
     
-    // 홈 페이지로 이동
-    await page.goto('/home');
+    console.log('✅ 로그인 성공! 토큰 획득');
     
-    // 토큰을 localStorage에 저장 (실제 앱의 인증 방식에 따라 조정 필요)
+    // Step 2: 홈 페이지로 이동
+    await page.goto('http://localhost:3000');
+    
+    // Step 3: 토큰을 localStorage에 저장
     await page.evaluate((token) => {
       localStorage.setItem('accessToken', token);
     }, loginResponse.accessToken);
     
-    // 페이지 새로고침으로 토큰 적용
+    // Step 4: 페이지 새로고침으로 토큰 적용
     await page.reload();
     
-    // 홈 페이지가 로드될 때까지 대기
-    await page.waitForLoadState('networkidle');
+    // Step 5: 페이지 로드 대기
+    await page.waitForLoadState('domcontentloaded');
+    
+    console.log('✅ 브라우저 인증 설정 완료');
   } catch (error) {
     console.error('❌ 로그인 실패:', error);
     throw error;

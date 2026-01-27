@@ -300,12 +300,12 @@
 
 ### UI 테스트 작성
 
-- [ ] T027 [US1] [US5] tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts 생성
+- [x] T027 [US1] [US5] tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts 생성
   - 제출 중 로딩 인디케이터 표시 테스트
   - 파일 업로드 진행률 표시 테스트
   - 파일: `tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts`
 
-- [ ] T028 [US2] [US3] [US4] tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts에 에러 메시지 표시 테스트 추가
+- [x] T028 [US2] [US3] [US4] tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts에 에러 메시지 표시 테스트 추가
   - 에러 메시지 표시 테스트
   - 제출 성공 후 바텀시트 닫기 테스트
   - 파일: `tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts`
