@@ -202,9 +202,14 @@
 
 ## Phase 4: 캡슐 마커 표시 로직 구현 (Mock 데이터 기반)
 
+**⚠️ 중요 참고사항**:
+- 지도에 마커는 이스터에그(EASTER_EGG)와 타임캡슐(TIME_CAPSULE) 둘 다 표시합니다.
+- 하지만 **이 task(007-easter-egg-map-display) 내의 모든 기능은 이스터에그 기반으로만 동작**합니다.
+- 타임캡슐은 마커 표시만 되고, 자동 발견, 모달 표시 등 기능은 이스터에그만 대상입니다.
+
 ### 훅 구현
 
-- [ ] T016 src/components/home/hooks/useCapsuleMarkers.ts 생성
+- [x] T016 src/components/home/hooks/useCapsuleMarkers.ts 생성
   - React Query를 활용한 캡슐 목록 조회
   - Query Key: `['capsules', lat, lng, radius_m]`
   - 캐시 시간: 5분, Stale Time: 1분
@@ -214,14 +219,14 @@
 
 ### 마커 컴포넌트 구현
 
-- [ ] T017 [P] [US1] src/components/home/components/capsule-markers/types.ts 생성
+- [x] T017 [P] [US1] src/components/home/components/capsule-markers/types.ts 생성
   - `CapsuleMarkersProps` 인터페이스 정의
     - `map` (KakaoMap | null)
     - `capsules` (CapsuleItem[])
     - `onMarkerClick` (capsule: CapsuleItem) => void
   - 파일: `src/components/home/components/capsule-markers/types.ts`
 
-- [ ] T018 [P] [US1] src/components/home/components/capsule-markers/index.tsx 생성
+- [x] T018 [P] [US1] src/components/home/components/capsule-markers/index.tsx 생성
   - 카카오 지도 CustomOverlay 또는 Marker API 활용
   - 캡슐 타입별 마커 아이콘 구분 (EASTER_EGG, TIME_CAPSULE)
   - 마커 생성 및 제거 로직
@@ -229,14 +234,14 @@
   - Mock 데이터 기반 구현
   - 파일: `src/components/home/components/capsule-markers/index.tsx`
 
-- [ ] T019 [P] [US1] src/components/home/components/capsule-markers/styles.module.css 생성
+- [x] T019 [P] [US1] src/components/home/components/capsule-markers/styles.module.css 생성
   - 캡슐 마커 스타일 정의
   - 이스터에그 마커 스타일
   - 타임캡슐 마커 스타일
   - 375px 기준 스타일
   - 파일: `src/components/home/components/capsule-markers/styles.module.css`
 
-- [ ] T020 [US1] src/components/home/components/map-view/index.tsx 수정
+- [x] T020 [US1] src/components/home/components/map-view/index.tsx 수정
   - `CapsuleMarkers` 컴포넌트 통합
   - `useCapsuleMarkers` 훅 사용
   - 마커 클릭 핸들러 연결
@@ -260,11 +265,13 @@
 
 ## Phase 6: 자동 발견 감지 로직 구현
 
+**⚠️ 참고**: 이스터에그만 대상입니다. 타임캡슐은 자동 발견 대상이 아닙니다.
+
 ### 자동 발견 훅 구현
 
 - [ ] T022 [US1] src/components/home/hooks/useAutoDiscovery.ts 생성
   - 거리 계산 유틸리티 활용
-  - 30m 이내 친구 캡슐 감지 로직
+  - 30m 이내 친구 이스터에그 감지 로직 (타임캡슐 제외)
   - 여러 캡슐 동시 발견 시 우선순위 처리 (가장 가까운 것 우선)
   - `discoveredCapsule`, `isChecking` 상태 관리
   - `checkDiscovery`, `clearDiscovery` 함수 제공
@@ -281,6 +288,8 @@
 ---
 
 ## Phase 7: 마커 클릭 이벤트 처리 및 정보 조회 (Mock 데이터 기반)
+
+**⚠️ 참고**: 이스터에그만 대상입니다. 타임캡슐 마커 클릭 시 동작하지 않습니다.
 
 ### 마커 클릭 처리
 
@@ -302,6 +311,8 @@
 ---
 
 ## Phase 8: 조건별 모달 UI 구현 (Mock 데이터 기반)
+
+**⚠️ 참고**: 모든 모달은 이스터에그만 대상입니다. 타임캡슐은 모달이 표시되지 않습니다.
 
 ### 내 캡슐 모달
 

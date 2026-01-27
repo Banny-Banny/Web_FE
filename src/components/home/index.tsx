@@ -12,12 +12,14 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { MapView } from './components/map-view';
 import { MapControls } from './components/map-controls';
 import { LocationDisplay } from './components/location-display';
+import { CapsuleMarkers } from './components/capsule-markers';
 import { FabButton } from './components/fab-button';
 import { EggSlot } from './components/egg-slot';
 import { EggSlotModal } from './components/egg-slot-modal';
 import { EasterEggBottomSheet } from './components/easter-egg-bottom-sheet';
 import type { HomeFeatureProps } from './types';
 import { useSlotManagement } from './hooks/useSlotManagement';
+import { useCapsuleMarkers } from './hooks/useCapsuleMarkers';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -35,6 +37,57 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     initialLat: geolocation.latitude,
     initialLng: geolocation.longitude,
   });
+
+  // 캡슐 마커 관리 훅
+  // 위치가 없어도 기본 위치 기준으로 Mock 데이터 표시
+  const { capsules, isLoading: isCapsulesLoading } = useCapsuleMarkers({
+    lat: geolocation.latitude,
+    lng: geolocation.longitude,
+    radius_m: 300,
+  });
+
+  // 개발 환경에서 캡슐 로딩 상태 로그
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      if (isCapsulesLoading) {
+        console.log('[HomeFeature] 캡슐 목록 로딩 중...');
+      } else if (capsules.length > 0) {
+        console.log('[HomeFeature] 캡슐 목록 로드 완료:', {
+          count: capsules.length,
+          types: {
+            easter_egg: capsules.filter(c => c.type === 'EASTER_EGG').length,
+            time_capsule: capsules.filter(c => c.type === 'TIME_CAPSULE').length,
+          },
+          mine: capsules.filter(c => c.is_mine).length,
+        });
+      }
+    }
+  }, [isCapsulesLoading, capsules]);
+
+  // 마커 클릭 핸들러
+  // ⚠️ 참고: 이 task 내 기능은 이스터에그만 대상입니다. 타임캡슐은 마커 표시만 됩니다.
+  const handleMarkerClick = (capsule: import('@/commons/apis/easter-egg/types').CapsuleItem) => {
+    // 타임캡슐은 기능 대상이 아니므로 무시
+    if (capsule.type === 'TIME_CAPSULE') {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[HomeFeature] 타임캡슐은 이 task에서 기능 대상이 아닙니다.');
+      }
+      return;
+    }
+    
+    // TODO: Phase 7에서 구현 예정 - 마커 클릭 시 캡슐 정보 조회 및 모달 표시 (이스터에그만)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[HomeFeature] 마커 클릭:', {
+        id: capsule.id,
+        title: capsule.title,
+        type: capsule.type,
+        is_mine: capsule.is_mine,
+        distance_m: capsule.distance_m,
+      });
+      // 개발 환경에서 간단한 알림 표시
+      alert(`[개발 모드] 캡슐 클릭\n\n제목: ${capsule.title || '제목 없음'}\n타입: ${capsule.type === 'EASTER_EGG' ? '이스터에그' : '타임캡슐'}\n거리: ${capsule.distance_m ? `${capsule.distance_m}m` : '알 수 없음'}\n\nPhase 7에서 모달이 표시됩니다.`);
+    }
+  };
 
   // 재시도 핸들러
   const handleRetry = () => {
@@ -210,6 +263,12 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
             map={map}
             userLat={geolocation.latitude}
             userLng={geolocation.longitude}
+          />
+          {/* 캡슐 마커 표시 */}
+          <CapsuleMarkers
+            map={map}
+            capsules={capsules}
+            onMarkerClick={handleMarkerClick}
           />
           {/* FAB 버튼은 항상 표시 (GNB 위에 위치) */}
           <FabButton
