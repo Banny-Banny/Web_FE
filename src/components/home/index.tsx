@@ -6,6 +6,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
 import { useGeolocation } from './hooks/useGeolocation';
@@ -20,6 +21,7 @@ import type { HomeFeatureProps } from './types';
 import { useSlotManagement } from './hooks/useSlotManagement';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
+  const router = useRouter();
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -48,10 +50,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     setEasterEggSheetOpen(true);
   };
 
-  // 타임캡슐 선택 핸들러 (임시)
+  // 타임캡슐 선택 핸들러
   const handleTimeCapsuleClick = () => {
-    // TODO: 향후 타임캡슐 생성 페이지로 라우팅
-    // 예시: router.push('/time-capsule/create');
+    router.push('/timecapsule/create');
   };
 
   // 이스터에그 바텀시트 닫기 핸들러

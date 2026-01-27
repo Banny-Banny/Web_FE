@@ -10,6 +10,14 @@ export * from './health';
 export * from './orders';
 export type * from './orders/types';
 
+// 결제 API
+export * from './payment';
+export type * from './payment/types';
+
+// 캡슐 API
+export * from './capsules';
+export type * from './capsules/types';
+
 // API 클라이언트 및 함수들이 여기에 추가됩니다
 // 예: export { apiClient } from './client';
 // 예: export * from './user';

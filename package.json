@@ -21,7 +21,7 @@
     "@remixicon/react": "^4.8.0",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.91.2",
-    "@tosspayments/payment-widget-sdk": "^0.12.1",
+    "@tosspayments/tosspayments-sdk": "^2.5.0",
     "@use-gesture/react": "^10.3.1",
     "axios": "^1.13.2",
     "next": "16.1.4",
