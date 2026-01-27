@@ -20,7 +20,7 @@ export function useOnboardingMutation() {
     mutationFn: (request: OnboardingCompleteRequest) => {
       return completeOnboarding(request);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       // 온보딩 완료 상태 업데이트 (필요시)
       queryClient.setQueryData(['onboarding', 'status'], { completed: true });
       

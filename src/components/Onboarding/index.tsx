@@ -11,7 +11,6 @@ import { LocationConsentStep } from './LocationConsentStep';
 import { useOnboardingFlow } from './hooks/useOnboardingFlow';
 import { useOnboardingMutation, getOnboardingErrorMessage } from './hooks/useOnboardingMutation';
 import type { OnboardingCompleteRequest } from '@/commons/apis/onboarding/types';
-import styles from './styles.module.css';
 
 /**
  * OnboardingContainer 컴포넌트
@@ -24,8 +23,6 @@ export function OnboardingContainer() {
     handleFriendConsentChange,
     handleLocationConsentChange,
     handleNext,
-    prepareCompleteRequest,
-    canComplete,
   } = useOnboardingFlow();
 
   const onboardingMutation = useOnboardingMutation();

@@ -1,0 +1,258 @@
+/**
+ * 발견 성공 모달 스타일 (Figma 디자인 기반)
+ * 375px 기준
+ */
+
+/* 모달 배경 */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--spacing-lg);
+}
+
+/* 모달 컨테이너 */
+.modal {
+  background: var(--color-white-500);
+  border-radius: 40px;
+  width: 100%;
+  max-width: 343px;
+  max-height: 90vh;
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* 상단 이모지 아이콘 */
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconCircle {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--radius-full);
+  background: var(--color-white-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 80px;
+}
+
+/* 메인 타이틀 */
+.mainTitle {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-2xl);
+  line-height: 32px;
+  color: var(--color-light-black-500);
+  text-align: center;
+  margin: 0;
+}
+
+/* 서브 타이틀 */
+.subtitle {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  line-height: 20px;
+  color: var(--color-dark-grey-500);
+  text-align: center;
+  margin: 0;
+}
+
+/* 첫 번째 발견자 뱃지 */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 4px 18px;
+  background: var(--color-grey-50);
+  border: 0.76px solid var(--color-white-grey-500);
+  border-radius: var(--radius-full);
+  height: var(--spacing-xl);
+}
+
+.badgeIcon {
+  width: var(--spacing-lg);
+  height: var(--spacing-lg);
+}
+
+.badgeText {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-sm);
+  line-height: 20px;
+  color: var(--color-light-black-800);
+}
+
+/* 콘텐츠 카드 */
+.contentCard {
+  width: 100%;
+  background: var(--color-grey-50);
+  border: 0.76px solid var(--color-white-grey-300);
+  border-radius: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* 작성자 헤더 */
+.authorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 0.76px solid var(--color-white-grey-400);
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.authorEmoji {
+  width: 36px;
+  height: 36px;
+  background: var(--color-white-500);
+  border: 0.76px solid var(--color-white-grey-400);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-base);
+}
+
+.authorName {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-sm);
+  line-height: 20px;
+  color: var(--color-light-black-500);
+}
+
+.dateInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  background: var(--color-white-500);
+  border: 0.76px solid var(--color-white-grey-300);
+  border-radius: var(--radius-full);
+  height: 20px;
+}
+
+.dateText {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  line-height: 16px;
+  color: var(--color-grey-500);
+}
+
+/* 캡슐 제목 */
+.capsuleTitle {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-black);
+  font-size: var(--font-size-lg);
+  line-height: 22.5px;
+  color: var(--color-light-black-500);
+  margin: 0;
+}
+
+/* 메시지 */
+.message {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-sm);
+  line-height: 22.75px;
+  color: var(--color-dark-grey-800);
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 이미지 컨테이너 */
+.imageContainer {
+  width: 100%;
+  height: 234px;
+  border-radius: var(--spacing-lg);
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 열람 횟수 */
+.viewCount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px var(--spacing-md);
+  background: var(--color-white-grey-300);
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+.viewLabel {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-extrabold);
+  font-size: 11px;
+  line-height: 16.5px;
+  color: var(--color-dark-grey-500);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.viewValue {
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-extrabold);
+  font-size: 11px;
+  line-height: 16.5px;
+  color: var(--color-light-black-500);
+}
+
+/* 확인 버튼 */
+.confirmButton {
+  width: 100%;
+  height: 56px;
+  background: var(--color-black-500);
+  border: none;
+  border-radius: var(--spacing-lg);
+  font-family: var(--font-pretendard);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  line-height: 28px;
+  color: var(--color-white-500);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.confirmButton:hover {
+  opacity: 0.9;
+}
+
+.confirmButton:active {
+  transform: scale(0.98);
+}

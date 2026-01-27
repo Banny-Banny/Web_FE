@@ -65,11 +65,12 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
     }
     
     // 실시간 검증 (onChange)
-    if (field !== 'agreeToTerms') {
+    // profileImg와 agreeToTerms는 검증하지 않음
+    if (field !== 'agreeToTerms' && field !== 'profileImg') {
       const updatedData = { ...formData, [field]: value };
       const fieldErrors = validateSignupForm(updatedData);
-      if (fieldErrors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
+      if (fieldErrors[field as keyof SignupFormErrors]) {
+        setErrors((prev) => ({ ...prev, [field]: fieldErrors[field as keyof SignupFormErrors] }));
       } else {
         setErrors((prev) => ({ ...prev, [field]: undefined }));
       }
@@ -127,10 +128,12 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
   const handleBlur = (field: keyof SignupFormData) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
     
-    // 해당 필드만 검증
-    const fieldErrors = validateSignupForm(formData);
-    if (fieldErrors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
+    // 해당 필드만 검증 (profileImg와 agreeToTerms는 검증하지 않음)
+    if (field !== 'profileImg' && field !== 'agreeToTerms') {
+      const fieldErrors = validateSignupForm(formData);
+      if (fieldErrors[field as keyof SignupFormErrors]) {
+        setErrors((prev) => ({ ...prev, [field]: fieldErrors[field as keyof SignupFormErrors] }));
+      }
     }
   };
 

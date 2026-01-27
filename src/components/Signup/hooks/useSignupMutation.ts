@@ -2,7 +2,7 @@
  * 회원가입 API 훅 (React Query)
  */
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { localSignup } from '@/commons/apis/auth/signup';
 import type { LocalSignupRequest } from '@/commons/apis/auth/types';
@@ -103,7 +103,6 @@ function getErrorMessage(error: any): string {
  * @returns 회원가입 mutation 객체
  */
 export function useSignupMutation() {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({

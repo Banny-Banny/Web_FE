@@ -81,11 +81,11 @@ test.describe('로그인 플로우 E2E 테스트', () => {
           if (response.status() === 200 || response.status() === 201) {
             await expect(page).toHaveURL('/', { timeout: 3000 });
           }
-        } catch (error) {
+        } catch {
           // API 응답이 없어도 요청은 전송되었으므로 테스트 통과
           console.warn('API 응답 또는 리다이렉트 확인 실패 (서버 미연결 가능)');
         }
-      } catch (error) {
+      } catch {
         // API 요청이 전송되지 않은 경우에도 테스트는 통과 (서버 미연결 가능)
         console.warn('API 요청 확인 실패 (서버 미연결 가능):', error);
       }
@@ -116,7 +116,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
           },
           { timeout: 5000 }
         );
-      } catch (error) {
+      } catch {
         // 응답이 없어도 타임아웃 시간 내에 실패했는지 확인
       }
       
@@ -189,11 +189,11 @@ test.describe('로그인 플로우 E2E 테스트', () => {
           if (response.status() === 200 || response.status() === 201) {
             await expect(page).toHaveURL('/', { timeout: 3000 });
           }
-        } catch (error) {
+        } catch {
           // API가 연결되지 않은 경우에도 요청이 전송되었는지는 확인됨
           console.warn('API 응답 또는 리다이렉트 확인 실패 (서버 미연결 가능)');
         }
-      } catch (error) {
+      } catch {
         // API 요청이 전송되지 않은 경우에도 테스트는 통과 (서버 미연결 가능)
         console.warn('API 요청 확인 실패 (서버 미연결 가능):', error);
       }
@@ -223,7 +223,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
           },
           { timeout: 5000 }
         );
-      } catch (error) {
+      } catch {
         // 응답이 없어도 계속 진행
       }
 
@@ -231,7 +231,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
       const errorMessage = page.locator('[role="alert"]');
       try {
         await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
-      } catch (error) {
+      } catch {
         // 오류 메시지가 표시되지 않을 수도 있음 (서버 미연결)
         console.warn('오류 메시지 확인 실패 (서버 미연결 가능)');
       }
@@ -294,7 +294,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
           },
           { timeout: 5000 }
         );
-      } catch (error) {
+      } catch {
         // 응답이 없어도 계속 진행
       }
 
@@ -307,7 +307,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
         const errorText = await errorMessage.textContent();
         expect(errorText).toBeTruthy();
         expect(errorText?.length).toBeGreaterThan(0);
-      } catch (error) {
+      } catch {
         // 오류 메시지가 표시되지 않을 수도 있음 (서버 미연결)
         console.warn('오류 메시지 확인 실패 (서버 미연결 가능)');
       }
@@ -525,7 +525,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
   });
 
   test.describe('이미 인증된 사용자 처리', () => {
-    test('이미 인증된 사용자가 로그인 페이지에 접근하면 홈으로 리다이렉트', async ({ page, context }) => {
+    test('이미 인증된 사용자가 로그인 페이지에 접근하면 홈으로 리다이렉트', async ({ page }) => {
       // 로컬 스토리지에 토큰 저장 (인증된 상태 시뮬레이션)
       // 실제 구현에서는 localStorage나 쿠키를 통해 토큰을 관리할 수 있음
       await page.goto('/login');
@@ -543,7 +543,7 @@ test.describe('로그인 플로우 E2E 테스트', () => {
       // 인증 로직이 구현되어 있지 않을 수 있으므로 조건부로 확인
       try {
         await expect(page).toHaveURL('/', { timeout: 3000 });
-      } catch (error) {
+      } catch {
         // 리다이렉트가 발생하지 않을 수도 있음 (인증 로직에 따라)
         // 이 경우 테스트는 통과하되 경고만 표시
         console.warn('리다이렉트 확인 실패 (인증 로직 미구현 가능)');

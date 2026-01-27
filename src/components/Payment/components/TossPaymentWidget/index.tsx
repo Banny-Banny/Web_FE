@@ -19,7 +19,7 @@ import styles from './styles.module.css';
 export function TossPaymentWidget({
   orderId,
   amount,
-  onSuccess,
+  onSuccess: _onSuccess,
   onError,
   disabled = false,
 }: TossPaymentWidgetProps) {

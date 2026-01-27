@@ -104,7 +104,7 @@ function getCurrentLocation(): Promise<{ latitude: number; longitude: number }> 
         });
       },
       (error) => {
-        let errorMessage = ERROR_MESSAGES.LOCATION_UNAVAILABLE;
+        let errorMessage: string = ERROR_MESSAGES.LOCATION_UNAVAILABLE;
         
         switch (error.code) {
           case error.PERMISSION_DENIED:
