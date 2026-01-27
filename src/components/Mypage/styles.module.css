@@ -1,0 +1,183 @@
+/**
+ * 마이페이지 컴포넌트 스타일
+ * 375px 모바일 프레임 기준
+ * Figma 디자인 기반
+ * CSS 변수 기반 디자인 토큰 사용
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-white-500, #FAFAFA);
+  box-sizing: border-box;
+}
+
+/* 프로필 섹션 */
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--spacing-xl, 24px) var(--spacing-lg, 16px);
+  background-color: var(--color-white-50, #FFFFFF);
+  box-sizing: border-box;
+}
+
+.profileHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-lg, 16px);
+  width: 100%;
+}
+
+.profileImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+}
+
+.profileImageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+}
+
+.profileImage {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full, 9999px);
+  background-color: var(--color-grey-100, #E7E7E7);
+  border: 1px solid var(--color-grey-300, #CBCBCB);
+  box-sizing: border-box;
+}
+
+.cameraButtonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -28px;
+  margin-right: -4px;
+}
+
+.cameraButton {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full, 9999px);
+  background-color: var(--color-black-500, #0A0A0A);
+  border: 2px solid var(--color-white-50, #FFFFFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.cameraIcon {
+  color: var(--color-white-50, #FFFFFF);
+  flex-shrink: 0;
+}
+
+.cameraButton:hover {
+  background-color: var(--color-black-600, #090909);
+}
+
+.cameraButton:active {
+  background-color: var(--color-black-700, #2a2a2a);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  flex: 1;
+  min-width: 0;
+}
+
+.profileName {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+  text-align: left;
+}
+
+.profileEmail {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: -0.150390625px;
+  color: var(--color-grey-700, #7E7E7E);
+  margin: 0;
+  text-align: left;
+}
+
+/* 메뉴 섹션 */
+.menuSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: var(--spacing-md, 12px);
+  padding: 0 var(--spacing-lg, 16px);
+  box-sizing: border-box;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  width: 100%;
+  background-color: var(--color-white-50, #FFFFFF);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--spacing-sm, 8px) 0;
+  box-sizing: border-box;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-lg, 16px) var(--spacing-xl, 24px);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.menuItem:hover {
+  background-color: var(--color-white-grey-50, #FCFCFC);
+}
+
+.menuItem:active {
+  background-color: var(--color-white-grey-100, #F7F7F7);
+}
+
+.menuItemText {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  letter-spacing: -0.3125px;
+  color: var(--color-black-500, #0A0A0A);
+}
+
+.menuItemIcon {
+  color: var(--color-grey-500, #B2B2B2);
+  flex-shrink: 0;
+}
