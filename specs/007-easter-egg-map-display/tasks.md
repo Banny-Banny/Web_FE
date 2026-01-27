@@ -8,7 +8,7 @@
 - 기능 명세서: `specs/007-easter-egg-map-display/spec.md`
 - 기술 계획: `specs/007-easter-egg-map-display/plan.md`
 
-**총 작업 수**: 67개
+**총 작업 수**: 68개
 **예상 소요 기간**: 10-14일 (개발자 1명 기준)
 
 ---
@@ -23,7 +23,7 @@
 | US4 | 내 캡슐 조회 | 6개 |
 | US5 | 친구 이스터에그 발견 성공 (30m 이내) | 8개 |
 | US6 | 친구 이스터에그 힌트 확인 (30m 밖) | 4개 |
-| 공통 | 설정 및 테스트 | 21개 |
+| 공통 | 설정 및 테스트 | 22개 |
 
 ---
 
@@ -141,19 +141,26 @@
 
 ### 로그인 헬퍼 함수
 
-- [ ] T009 tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 로그인 헬퍼 함수 추가
-  - 기존 패턴 참조: `tests/e2e/slot-management/slot-management-ui.e2e.spec.ts` 또는 `tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts`
-  - `localLogin`을 `@/commons/apis/auth/login`에서 import
+- [ ] T009 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 테스트 계정 정보 추가
+  - 기존 패턴 참조: `tests/e2e/login/fixtures/mockData.ts`
   - 환경 변수에서 테스트 계정 정보 가져오기 (NEXT_PUBLIC_PHONE_NUMBER, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_PASSWORD)
-  - `login` 또는 `setupAuthenticatedPage` 헬퍼 함수 구현
+  - `testLoginRequest` 객체 생성 (LocalLoginRequest 타입)
+  - 파일: `tests/e2e/easter-egg-map-display/fixtures/mockData.ts`
+
+- [ ] T009-1 tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 로그인 헬퍼 함수 추가
+  - 기존 패턴 참조: `tests/e2e/slot-management/slot-management-ui.e2e.spec.ts`의 `login` 함수
+  - `localLogin`을 `@/commons/apis/auth/login`에서 import
+  - `mockData.ts`에서 `testLoginRequest` import
+  - `login` 헬퍼 함수 구현
     - `localLogin` API 호출하여 토큰 발급
-    - Playwright page 객체에 localStorage에 토큰 저장
+    - 홈 페이지로 이동
+    - localStorage에 토큰 저장
     - 페이지 새로고침하여 토큰 적용
   - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
 ### E2E 테스트 작성
 
-- [ ] T010 tests/e2e/easter-egg-map-display/fixtures/mockData.ts 생성
+- [ ] T010 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 캡슐 Mock 데이터 추가
   - 캡슐 목록 Mock 데이터 생성
   - 캡슐 기본 정보 Mock 데이터 생성
   - 발견자 목록 Mock 데이터 생성
