@@ -18,7 +18,7 @@ import styles from './styles.module.css';
  */
 export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFormProps) {
   const [formData, setFormData] = useState<SignupFormData>({
-    nickname: '',
+    name: '',
     phoneNumber: '',
     email: '',
     password: '',
@@ -28,7 +28,7 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
 
   const [errors, setErrors] = useState<SignupFormErrors>({});
   const [touched, setTouched] = useState({
-    nickname: false,
+    name: false,
     phoneNumber: false,
     email: false,
     password: false,
@@ -89,7 +89,7 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
     
     // 모든 필드를 터치 상태로 설정
     setTouched({
-      nickname: true,
+      name: true,
       phoneNumber: true,
       email: true,
       password: true,
@@ -115,15 +115,10 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
       return;
     }
     
-    // 전화번호에서 하이픈 제거 후 제출
-    const submitData = {
-      ...formData,
-      phoneNumber: formData.phoneNumber.replace(/-/g, ''),
-    };
-    
+    // 전화번호는 prepareSignupRequest에서 정규화되므로 그대로 제출
     // 에러 초기화 후 제출
     setErrors({});
-    onSubmit(submitData);
+    onSubmit(formData);
   };
 
   /**
@@ -153,28 +148,28 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
         </div>
       )}
 
-      {/* 닉네임 입력 필드 */}
+      {/* 이름 입력 필드 */}
       <div className={styles.inputGroup}>
-        <label htmlFor="nickname" className={styles.label}>
-          닉네임
+        <label htmlFor="name" className={styles.label}>
+          이름
         </label>
         <input
-          id="nickname"
-          name="nickname"
+          id="name"
+          name="name"
           type="text"
-          value={formData.nickname}
-          onChange={handleChange('nickname')}
-          onBlur={handleBlur('nickname')}
-          placeholder="닉네임을 입력하세요"
-          className={`${styles.input} ${errors.nickname ? styles.inputError : ''}`}
-          aria-label="닉네임"
+          value={formData.name}
+          onChange={handleChange('name')}
+          onBlur={handleBlur('name')}
+          placeholder="홍길동"
+          className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+          aria-label="이름"
           aria-required="true"
-          aria-invalid={!!errors.nickname}
-          autoComplete="nickname"
+          aria-invalid={!!errors.name}
+          autoComplete="name"
         />
-        {(touched.nickname || errors.nickname) && errors.nickname && (
+        {(touched.name || errors.name) && errors.name && (
           <span className={styles.fieldError} role="alert">
-            {errors.nickname}
+            {errors.name}
           </span>
         )}
       </div>
@@ -219,7 +214,7 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
           value={formData.email}
           onChange={handleChange('email')}
           onBlur={handleBlur('email')}
-          placeholder="user@example.com"
+          placeholder="example@email.com"
           className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
           aria-label="이메일"
           aria-required="true"
@@ -246,7 +241,7 @@ export function SignupForm({ onSubmit, isLoading, error: serverError }: SignupFo
             value={formData.password}
             onChange={handleChange('password')}
             onBlur={handleBlur('password')}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="8자 이상 입력해주세요"
             className={`${styles.input} ${styles.passwordInput} ${errors.password ? styles.inputError : ''}`}
             aria-label="비밀번호"
             aria-required="true"

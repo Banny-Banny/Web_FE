@@ -61,6 +61,15 @@ export function useLoginMutation() {
       return localLogin(request);
     },
     onSuccess: (data) => {
+      // 회원가입에서 넘어온 경우 세션 스토리지의 정보 삭제
+      if (typeof window !== 'undefined') {
+        try {
+          sessionStorage.removeItem('signup_info');
+        } catch (error) {
+          console.error('회원가입 정보 삭제 실패:', error);
+        }
+      }
+
       // 토큰 저장
       if (data.accessToken) {
         saveTokens({

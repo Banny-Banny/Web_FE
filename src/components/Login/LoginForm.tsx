@@ -4,7 +4,7 @@
  * 로그인 폼 컴포넌트
  */
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/commons/components/button';
 import type { LoginFormProps, LoginFormData, LoginFormErrors } from './types';
@@ -35,6 +35,32 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   const [showPassword, setShowPassword] = useState(false);
 
   /**
+   * 회원가입에서 넘어온 경우 세션 스토리지에서 정보 가져오기
+   */
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const signupInfoStr = sessionStorage.getItem('signup_info');
+        if (signupInfoStr) {
+          const signupInfo = JSON.parse(signupInfoStr);
+          
+          // 회원가입 정보가 있으면 폼에 미리 채우기
+          if (signupInfo.email || signupInfo.phoneNumber) {
+            setFormData((prev) => ({
+              ...prev,
+              loginType: signupInfo.email ? 'email' : 'phone',
+              email: signupInfo.email || '',
+              phoneNumber: signupInfo.phoneNumber || '',
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('회원가입 정보 불러오기 실패:', error);
+      }
+    }
+  }, []);
+
+  /**
    * 로그인 타입 변경 핸들러
    */
   const handleLoginTypeChange = (type: 'phone' | 'email') => {
@@ -53,7 +79,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   /**
    * 입력 필드 변경 핸들러
    */
-  const handleChange = (field: keyof LoginFormData) => (
+  const handleChange = (field: 'phoneNumber' | 'email' | 'password') => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     let value = e.target.value;
@@ -124,13 +150,14 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
   /**
    * 입력 필드 블러 핸들러 (유효성 검증)
    */
-  const handleBlur = (field: keyof LoginFormData) => () => {
+  const handleBlur = (field: 'phoneNumber' | 'email' | 'password') => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
     
     // 해당 필드만 검증
     const fieldErrors = validateLoginForm(formData);
-    if (fieldErrors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
+    const errorValue = fieldErrors[field as keyof LoginFormErrors];
+    if (errorValue) {
+      setErrors((prev) => ({ ...prev, [field]: errorValue }));
     }
   };
 
@@ -215,7 +242,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
             value={formData.email}
             onChange={handleChange('email')}
             onBlur={handleBlur('email')}
-            placeholder="user@example.com"
+            placeholder="example@email.com"
             className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
             aria-label="이메일"
             aria-required="true"

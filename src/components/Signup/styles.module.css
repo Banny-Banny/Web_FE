@@ -17,7 +17,44 @@
   padding: var(--spacing-xl, 24px) var(--spacing-lg, 16px) var(--spacing-lg, 16px);
   width: 100%;
   box-sizing: border-box;
-  border-bottom: 1px solid var(--color-white-grey-300, #EDEDED);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-black-500, #0A0A0A);
+  transition: opacity 0.2s;
+  align-self: flex-start;
+}
+
+.backButton:hover {
+  opacity: 0.7;
+}
+
+.backButton:active {
+  opacity: 0.5;
+}
+
+.backButton:focus-visible {
+  outline: 2px solid var(--color-blue-500, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
 }
 
 .title {
@@ -28,7 +65,17 @@
   letter-spacing: -0.3125px;
   color: var(--color-black-500, #0A0A0A);
   margin: 0;
-  text-align: center;
+  text-align: left;
+}
+
+.subtitle {
+  font-family: var(--font-family-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--color-grey-600, #4b5563);
+  margin: 0;
+  text-align: left;
 }
 
 .form {
@@ -143,6 +190,7 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
+
 
 /* 약관 동의 */
 .termsGroup {

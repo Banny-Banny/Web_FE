@@ -20,9 +20,12 @@ export function isValidPhoneNumber(phoneNumber: string): boolean {
  */
 export function isValidEmail(email: string): boolean {
   if (!email) return false;
+  // 공백 제거 후 검증
+  const trimmedEmail = email.trim();
+  if (!trimmedEmail) return false;
   // @와 .이 포함된 기본 이메일 형식 검증
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return emailRegex.test(trimmedEmail);
 }
 
 /**
@@ -46,11 +49,11 @@ export function isValidPassword(password: string): boolean {
 export function validateSignupForm(data: SignupFormData): SignupFormErrors {
   const errors: SignupFormErrors = {};
   
-  // 닉네임 필수
-  if (!data.nickname) {
-    errors.nickname = '닉네임을 입력해주세요.';
-  } else if (data.nickname.length < 2) {
-    errors.nickname = '닉네임은 2자 이상이어야 합니다.';
+  // 이름 필수
+  if (!data.name) {
+    errors.name = '이름을 입력해주세요.';
+  } else if (data.name.length < 2) {
+    errors.name = '이름은 2자 이상이어야 합니다.';
   }
   
   // 전화번호 필수 및 형식 검증
@@ -61,17 +64,18 @@ export function validateSignupForm(data: SignupFormData): SignupFormErrors {
   }
   
   // 이메일 필수 및 형식 검증
-  if (!data.email) {
+  const trimmedEmail = data.email?.trim() || '';
+  if (!trimmedEmail) {
     errors.email = '이메일을 입력해주세요.';
-  } else if (!isValidEmail(data.email)) {
+  } else if (!isValidEmail(trimmedEmail)) {
     errors.email = '올바른 이메일 형식이 아닙니다. (@와 .이 포함되어야 합니다)';
   }
   
   // 비밀번호 필수 및 강도 검증
   if (!data.password) {
     errors.password = '비밀번호를 입력해주세요.';
-  } else if (!isValidPassword(data.password)) {
-    errors.password = '비밀번호는 영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.';
+  } else if (data.password.length < 8) {
+    errors.password = '비밀번호는 8자 이상이어야 합니다.';
   }
   
   // 비밀번호 확인

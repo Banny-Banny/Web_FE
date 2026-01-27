@@ -6,6 +6,8 @@
  */
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { LoginForm } from './LoginForm';
 import type { LoginFormData } from './types';
 import { useLoginMutation, getLoginErrorMessage } from './hooks/useLoginMutation';
@@ -17,6 +19,7 @@ import styles from './styles.module.css';
  * 로그인 폼 상태 관리 및 실제 API 기반 로그인 처리
  */
 export function LoginContainer() {
+  const router = useRouter();
   const loginMutation = useLoginMutation();
 
   /**
@@ -38,10 +41,25 @@ export function LoginContainer() {
     ? getLoginErrorMessage(loginMutation.error)
     : undefined;
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>로그인</h1>
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={handleBack}
+          aria-label="뒤로가기"
+        >
+          <ArrowLeft size={24} />
+        </button>
+        <div className={styles.titleSection}>
+          <h1 className={styles.title}>로그인</h1>
+          <p className={styles.subtitle}>이메일과 비밀번호로 로그인하세요</p>
+        </div>
       </div>
       <LoginForm
         onSubmit={handleLogin}
