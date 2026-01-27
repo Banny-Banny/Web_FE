@@ -33,7 +33,7 @@ function generateCustomerKey(): string {
 export function TossPaymentWidget({
   orderId,
   amount,
-  onSuccess,
+  onSuccess: _onSuccess,
   onError,
   disabled = false,
 }: TossPaymentWidgetProps) {

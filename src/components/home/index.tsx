@@ -23,6 +23,7 @@ import { EasterEggBottomSheet } from './components/easter-egg-bottom-sheet';
 import { MyCapsuleModal } from './components/my-capsule-modal';
 import { DiscoveryModal } from './components/discovery-modal';
 import { HintModal } from './components/hint-modal';
+import { Toast } from '@/commons/components/toast';
 import type { HomeFeatureProps } from './types';
 import { useSlotManagement } from './hooks/useSlotManagement';
 import { useCapsuleMarkers } from './hooks/useCapsuleMarkers';
@@ -64,6 +65,11 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [showMyCapsuleModal, setShowMyCapsuleModal] = useState(false);
   const [showDiscoveryModal, setShowDiscoveryModal] = useState(false);
   const [showHintModal, setShowHintModal] = useState(false);
+  
+  // Toast 상태 관리
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('info');
   
   const geolocation = useGeolocation();
   
@@ -182,6 +188,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   useEffect(() => {
     if (discoveredCapsule) {
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.log('[HomeFeature] 자동 발견:', {
           id: discoveredCapsule.id,
           title: discoveredCapsule.title,
@@ -189,21 +196,23 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         });
       }
 
-      // TODO: Phase 8에서 구현 예정 - 발견 모달 표시
-      // 임시로 개발 환경에서 알림 표시
-      if (process.env.NODE_ENV === 'development') {
-        alert(
-          `[자동 발견]\n\n` +
-          `제목: ${discoveredCapsule.title || '제목 없음'}\n` +
-          `타입: ${discoveredCapsule.type === 'EASTER_EGG' ? '이스터에그' : '타임캡슐'}\n` +
-          `거리: ${discoveredCapsule.distance_m ? `${discoveredCapsule.distance_m}m` : '알 수 없음'}\n\n` +
-          `Phase 8에서 발견 모달이 표시됩니다.`
-        );
-        // 알림 표시 후 발견 상태 초기화
-        clearDiscovery();
-      }
+      // 자동 발견 시 바로 발견 모달 표시
+      // 마커 클릭과 동일한 로직 적용
+      // 기존에 열려있는 모달 모두 닫기
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowHintModal(false);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowMyCapsuleModal(false);
+
+      // 캡슐 정보 설정 (상세 조회는 자동으로 트리거됨)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedCapsule(discoveredCapsule);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedCapsuleId(discoveredCapsule.id);
+
+      // 발견 상태는 모달 닫을 때 초기화
     }
-  }, [discoveredCapsule, clearDiscovery]);
+  }, [discoveredCapsule]);
 
   // 캡슐 상세 정보 조회 완료 시 조건별 모달 표시
   useEffect(() => {
@@ -258,8 +267,22 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     if (process.env.NODE_ENV === 'development') {
       console.error('[HomeFeature] 캡슐 정보 조회 실패:', capsuleDetailError);
     }
-    // 에러 메시지 표시
-    alert('캡슐 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.');
+    
+    // Toast로 에러 메시지 표시
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setToastMessage('캡슐 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setToastType('error');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowToast(true);
+    
+    // 모든 모달 닫기
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowMyCapsuleModal(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowDiscoveryModal(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowHintModal(false);
     
     // 상태 초기화는 별도 함수로 처리
     const resetCapsuleSelection = () => {
@@ -353,6 +376,8 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     setShowDiscoveryModal(false);
     setSelectedCapsuleId(null);
     setSelectedCapsule(null);
+    // 자동 발견 상태도 초기화
+    clearDiscovery();
   };
 
   // 힌트 모달 닫기 핸들러
@@ -534,7 +559,6 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       <MyCapsuleModal
         isOpen={showMyCapsuleModal}
         capsule={capsuleDetail}
-        viewers={null}
         onClose={handleMyCapsuleModalClose}
       />
 
@@ -561,6 +585,16 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
             : 0
         }
         onClose={handleHintModalClose}
+      />
+
+      {/* Toast 메시지 */}
+      <Toast
+        message={toastMessage}
+        visible={showToast}
+        onHide={() => setShowToast(false)}
+        type={toastType}
+        duration={3000}
+        position="bottom"
       />
     </div>
   );

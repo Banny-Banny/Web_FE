@@ -53,7 +53,7 @@ test.describe('자체 로그인 API', () => {
         
         // 응답 시간이 3초 이내인지 확인
         expect(responseTime).toBeLessThan(3000);
-      } catch (error) {
+      } catch {
         // API 호출 실패 시에도 응답 시간은 확인 가능
         const endTime = Date.now();
         const responseTime = endTime - startTime;

@@ -46,6 +46,7 @@ export function LoginForm({ onSubmit, isLoading, error: serverError }: LoginForm
           
           // 회원가입 정보가 있으면 폼에 미리 채우기
           if (signupInfo.email || signupInfo.phoneNumber) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData((prev) => ({
               ...prev,
               loginType: signupInfo.email ? 'email' : 'phone',

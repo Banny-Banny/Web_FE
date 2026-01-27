@@ -169,8 +169,10 @@ export interface GetCapsuleResponse {
     nickname?: string;
     profile_img?: string;
   };
-  viewers?: any[];
+  /** 캡슐 발견자 목록 (GET /api/capsules/{id}에 포함됨) */
+  viewers?: ViewerInfo[];
   created_at?: string;
+  location_name?: string;
   // 기타 서버 응답 필드
 }
 

@@ -162,8 +162,8 @@ test.describe('결제 페이지 UI 테스트', () => {
     const errorMessage = page.getByText(/주문을 찾을 수 없습니다|주문 정보를 불러올 수 없습니다/);
     
     // 둘 중 하나라도 표시되는지 확인 (더 유연한 검증)
-    const titleVisible = await errorTitle.first().isVisible().catch(() => false);
-    const messageVisible = await errorMessage.first().isVisible().catch(() => false);
+    await errorTitle.first().isVisible().catch(() => false);
+    await errorMessage.first().isVisible().catch(() => false);
     
     // 오류 메시지가 표시되면 좋지만, 재시도 버튼이 있으면 통과
     // (오류 메시지가 표시되지 않아도 재시도 버튼이 있으면 오류 처리가 된 것으로 간주)

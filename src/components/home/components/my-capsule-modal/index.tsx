@@ -11,7 +11,7 @@ import { RiTimeLine, RiMapPinLine, RiStarFill } from '@remixicon/react';
 import type { MyCapsuleModalProps } from './types';
 import styles from './styles.module.css';
 
-export function MyCapsuleModal({ isOpen, capsule, viewers, onClose }: MyCapsuleModalProps) {
+export function MyCapsuleModal({ isOpen, capsule, onClose }: MyCapsuleModalProps) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     if (!isOpen) return;
@@ -29,10 +29,10 @@ export function MyCapsuleModal({ isOpen, capsule, viewers, onClose }: MyCapsuleM
   // 모달이 열려있지 않거나 캡슐 정보가 없으면 렌더링하지 않음
   if (!isOpen || !capsule) return null;
 
-  // 발견자 수 계산
-  const viewCount = capsule.view_count ?? 0;
-  const viewersCount = viewers?.total_viewers ?? viewCount;
-  const viewersList = viewers?.viewers ?? [];
+  // 발견자 정보 (캡슐 상세 정보에 포함됨)
+  const viewersCount = capsule.view_count ?? 0;
+  const viewersList = capsule.viewers ?? [];
+  const displayViewersList = viewersList;
 
   // 모달 배경 클릭 시 닫기
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -95,9 +95,9 @@ export function MyCapsuleModal({ isOpen, capsule, viewers, onClose }: MyCapsuleM
           </div>
 
           {/* 발견자 목록 */}
-          {viewersList.length > 0 ? (
+          {displayViewersList.length > 0 ? (
             <div className={styles.viewersList}>
-              {viewersList.map((viewer, index) => (
+              {displayViewersList.map((viewer, index) => (
                 <div key={viewer.id} className={styles.viewerItem}>
                   <div className={styles.viewerInfo}>
                     <div className={styles.viewerBadge}>

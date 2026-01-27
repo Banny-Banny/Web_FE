@@ -6,11 +6,49 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { DiscoveryModalProps } from './types';
 import styles from './styles.module.css';
+import { useRecordCapsuleView } from '../../hooks/useRecordCapsuleView';
+import { useGeolocation } from '../../hooks/useGeolocation';
 
-export function DiscoveryModal({ isOpen, capsule, onClose }: DiscoveryModalProps) {
+export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }: DiscoveryModalProps) {
+  const { recordView } = useRecordCapsuleView();
+  const geolocation = useGeolocation();
+  const hasRecordedRef = useRef<Set<string>>(new Set());
+
+  // 모달 진입 시점에 발견 기록 저장
+  useEffect(() => {
+    if (!isOpen || !capsule) return;
+
+    // 이미 기록한 캡슐인지 확인 (중복 기록 방지)
+    if (hasRecordedRef.current.has(capsule.id)) {
+      return;
+    }
+
+    // 위치 정보가 있는 경우에만 기록 저장
+    if (geolocation.latitude !== null && geolocation.longitude !== null) {
+      // 백그라운드에서 발견 기록 저장 (사용자 경험에 영향 없도록)
+      recordView(capsule.id, {
+        lat: geolocation.latitude,
+        lng: geolocation.longitude,
+      })
+        .then((response) => {
+          // 기록 완료 후 콜백 호출 (선택)
+          if (onDiscoveryRecorded && response) {
+            onDiscoveryRecorded();
+          }
+        })
+        .catch((error) => {
+          // 에러는 조용히 처리 (이미 훅에서 처리됨)
+          console.warn('발견 기록 저장 실패:', error);
+        });
+
+      // 기록 완료 표시
+      hasRecordedRef.current.add(capsule.id);
+    }
+  }, [isOpen, capsule, geolocation.latitude, geolocation.longitude, recordView, onDiscoveryRecorded]);
+
   // ESC 키로 모달 닫기
   useEffect(() => {
     if (!isOpen) return;
