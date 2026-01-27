@@ -17,6 +17,7 @@ import { AudioAttachmentModal } from './components/audio-attachment-modal';
 import { AudioPreview } from './components/audio-preview';
 import { VideoPreview } from './components/video-preview';
 import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
+import { useEasterEggSubmit } from '../../hooks/useEasterEggSubmit';
 import type { EasterEggBottomSheetProps, EasterEggFormData, Attachment, AttachmentType } from './types';
 import styles from './styles.module.css';
 
@@ -47,17 +48,37 @@ export function EasterEggBottomSheet({
   const imageInputRef = React.useRef<HTMLInputElement>(null);
   const videoInputRef = React.useRef<HTMLInputElement>(null);
 
+  // 이스터에그 제출 훅
+  const { submit, isSubmitting, progress, error, clearError } = useEasterEggSubmit();
+
   /**
    * 작성 완료 버튼 클릭 핸들러
    */
-  const handleConfirm = React.useCallback(() => {
-    if (title.trim()) {
-      const formData: EasterEggFormData = {
-        title: title.trim(),
-        message: message.trim(),
-        attachments,
-      };
+  const handleConfirm = React.useCallback(async () => {
+    if (!title.trim()) {
+      return;
+    }
+
+    const formData: EasterEggFormData = {
+      title: title.trim(),
+      message: message.trim(),
+      attachments,
+    };
+
+    try {
+      // 이스터에그 제출
+      await submit(formData);
+      
+      // 제출 성공 시
       onConfirm(formData);
+      
+      // 모든 미리보기 URL 정리 (메모리 누수 방지)
+      attachments.forEach(att => {
+        if (att.previewUrl) {
+          URL.revokeObjectURL(att.previewUrl);
+        }
+      });
+      
       onClose();
       
       // 바텀시트가 닫힌 후 폼 초기화
@@ -65,9 +86,13 @@ export function EasterEggBottomSheet({
         setTitle('');
         setMessage('');
         setAttachments([]);
+        clearError();
       }, 300);
+    } catch {
+      // 에러는 useEasterEggSubmit에서 관리
+      // UI에 에러 메시지가 표시됨
     }
-  }, [title, message, attachments, onConfirm, onClose]);
+  }, [title, message, attachments, submit, onConfirm, onClose, clearError]);
 
   /**
    * 취소 버튼 클릭 핸들러
@@ -185,15 +210,22 @@ export function EasterEggBottomSheet({
   }, [handleAddAttachment]);
 
   /**
-   * 바텀시트가 닫힐 때 폼 초기화
+   * 바텀시트가 닫힐 때 폼 초기화 및 미리보기 URL 정리
    */
   React.useEffect(() => {
     if (!isOpen) {
+      // 모든 미리보기 URL 정리 (메모리 누수 방지)
+      attachments.forEach(att => {
+        if (att.previewUrl) {
+          URL.revokeObjectURL(att.previewUrl);
+        }
+      });
+      
       setTitle('');
       setMessage('');
       setAttachments([]);
     }
-  }, [isOpen]);
+  }, [isOpen, attachments]);
 
   // 작성 완료 버튼 활성화 여부 (제목 필수)
   const isFormValid = title.trim().length > 0;
@@ -220,8 +252,8 @@ export function EasterEggBottomSheet({
       footer={
         <DualButton
           cancelLabel="취소"
-          confirmLabel="작성 완료"
-          confirmDisabled={!isFormValid}
+          confirmLabel={isSubmitting ? '제출 중...' : '작성 완료'}
+          confirmDisabled={!isFormValid || isSubmitting}
           onCancelPress={handleCancel}
           onConfirmPress={handleConfirm}
           fullWidth={true}
@@ -234,6 +266,29 @@ export function EasterEggBottomSheet({
           <h2 id="easter-egg-sheet-title" className={styles.title}>이스터에그 작성</h2>
           <p id="easter-egg-sheet-description" className={styles.subtitle}>현재 위치에 추억을 숨겨요</p>
         </div>
+
+        {/* 에러 메시지 */}
+        {error && (
+          <div className={styles.errorMessage} role="alert" aria-live="assertive">
+            <span>⚠️ {error}</span>
+            <button
+              onClick={clearError}
+              className={styles.errorCloseBtn}
+              type="button"
+              aria-label="에러 메시지 닫기"
+            >
+              <RiCloseLine size={16} />
+            </button>
+          </div>
+        )}
+
+        {/* 파일 업로드 진행률 */}
+        {isSubmitting && progress > 0 && progress < 100 && (
+          <div className={styles.progressBar} role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+            <span className={styles.progressText}>{progress}% 업로드 중...</span>
+          </div>
+        )}
 
         {/* 폼 컨텐츠 */}
         <div className={styles.formContent}>
@@ -253,6 +308,7 @@ export function EasterEggBottomSheet({
                 }
               }}
               maxLength={30}
+              disabled={isSubmitting}
               aria-required="true"
               aria-label="이스터에그 제목"
               aria-describedby="title-char-count"
@@ -277,6 +333,7 @@ export function EasterEggBottomSheet({
               }}
               maxLength={500}
               rows={6}
+              disabled={isSubmitting}
               aria-label="이스터에그 메시지"
               aria-describedby="message-char-count"
             />
@@ -296,6 +353,7 @@ export function EasterEggBottomSheet({
                   className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'IMAGE') ? styles.attachmentBtnActive : ''}`}
                   onClick={() => imageInputRef.current?.click()}
                   type="button"
+                  disabled={isSubmitting}
                   aria-label={attachments.find(a => a.type === 'IMAGE') ? '사진 첨부됨, 클릭하여 변경' : '사진 첨부하기'}
                 >
                   <div className={styles.attachmentIconWrapper}>
@@ -321,6 +379,7 @@ export function EasterEggBottomSheet({
                   className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'AUDIO') ? styles.attachmentBtnActive : ''}`}
                   onClick={() => setIsAudioModalVisible(true)}
                   type="button"
+                  disabled={isSubmitting}
                   aria-label={attachments.find(a => a.type === 'AUDIO') ? '음원 첨부됨, 클릭하여 변경' : '음원 첨부하기'}
                 >
                   <div className={styles.attachmentIconWrapper}>
@@ -339,6 +398,7 @@ export function EasterEggBottomSheet({
                   className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'VIDEO') ? styles.attachmentBtnActive : ''}`}
                   onClick={() => videoInputRef.current?.click()}
                   type="button"
+                  disabled={isSubmitting}
                   aria-label={attachments.find(a => a.type === 'VIDEO') ? '동영상 첨부됨, 클릭하여 변경' : '동영상 첨부하기'}
                 >
                   <div className={styles.attachmentIconWrapper}>

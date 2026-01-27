@@ -7,8 +7,15 @@ import path from 'path';
  * https://github.com/motdotla/dotenv
  */
 // .env.local 파일 로드 (우선순위: .env.local > .env)
-dotenv.config({ path: path.resolve(__dirname, '.env.local'), override: false });
+dotenv.config({ path: path.resolve(__dirname, '.env.local'), override: true });
 dotenv.config({ path: path.resolve(__dirname, '.env'), override: false });
+
+// 환경변수 로드 확인
+console.log('🔧 Playwright 환경변수:', {
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  HAS_PHONE: !!process.env.NEXT_PUBLIC_PHONE_NUMBER,
+  HAS_PASSWORD: !!process.env.NEXT_PUBLIC_PASSWORD,
+});
 
 /**
  * See https://playwright.dev/docs/test-configuration.

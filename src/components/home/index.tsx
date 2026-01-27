@@ -14,18 +14,21 @@ import { MapControls } from './components/map-controls';
 import { LocationDisplay } from './components/location-display';
 import { FabButton } from './components/fab-button';
 import { EggSlot } from './components/egg-slot';
-import { MyEggsModal } from './components/my-eggs-modal';
+import { EggSlotModal } from './components/egg-slot-modal';
 import { EasterEggBottomSheet } from './components/easter-egg-bottom-sheet';
 import type { HomeFeatureProps } from './types';
+import { useSlotManagement } from './hooks/useSlotManagement';
 
 export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const [myEggsModalOpen, setMyEggsModalOpen] = useState(false);
+  const [slotModalOpen, setSlotModalOpen] = useState(false);
   const [easterEggSheetOpen, setEasterEggSheetOpen] = useState(false);
-  const [eggCount] = useState<number>(2); // 임시 Mock 데이터 (향후 API 연동 시 실제 데이터로 변경)
   const geolocation = useGeolocation();
+  
+  // 슬롯 관리 훅
+  const { slotInfo, isLoading: isSlotLoading } = useSlotManagement();
   
   // Geolocation 값을 useKakaoMap에 전달
   const { map, isLoading, error, initializeMap } = useKakaoMap({
@@ -48,7 +51,6 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   // 타임캡슐 선택 핸들러 (임시)
   const handleTimeCapsuleClick = () => {
     // TODO: 향후 타임캡슐 생성 페이지로 라우팅
-    console.log('타임캡슐 생성 선택');
     // 예시: router.push('/time-capsule/create');
   };
 
@@ -58,21 +60,20 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   };
 
   // 이스터에그 작성 완료 핸들러
-  const handleEasterEggConfirm = (formData: import('./components/easter-egg-bottom-sheet/types').EasterEggFormData) => {
-    console.log('이스터에그 작성 완료:', formData);
-    // TODO: 향후 API 호출하여 이스터에그 생성
-    // 예시: createEasterEgg(formData);
+  const handleEasterEggConfirm = (_formData: import('./components/easter-egg-bottom-sheet/types').EasterEggFormData) => {
+    // 제출 로직은 바텀시트 컴포넌트 내부에서 처리됨
+    // 성공 시 지도 업데이트 등 추가 작업이 필요하면 여기서 처리
     setEasterEggSheetOpen(false);
   };
 
-  // 알 슬롯 클릭 핸들러 (MY EGGS 모달 열기)
+  // 알 슬롯 클릭 핸들러 (슬롯 모달 열기)
   const handleEggSlotClick = () => {
-    setMyEggsModalOpen(true);
+    setSlotModalOpen(true);
   };
 
-  // MY EGGS 모달 닫기 핸들러
-  const handleMyEggsModalClose = () => {
-    setMyEggsModalOpen(false);
+  // 슬롯 모달 닫기 핸들러
+  const handleSlotModalClose = () => {
+    setSlotModalOpen(false);
   };
 
   // 카카오 지도 스크립트 로딩
@@ -217,17 +218,17 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
           />
           {/* 알 슬롯 (우측 상단) */}
           <EggSlot
-            count={eggCount}
+            count={slotInfo?.remainingSlots ?? 0}
             onClick={handleEggSlotClick}
+            isLoading={isSlotLoading}
           />
         </>
       )}
 
-      {/* MY EGGS 모달 */}
-      <MyEggsModal
-        visible={myEggsModalOpen}
-        eggCount={eggCount}
-        onClose={handleMyEggsModalClose}
+      {/* 슬롯 정보 모달 */}
+      <EggSlotModal
+        isOpen={slotModalOpen}
+        onClose={handleSlotModalClose}
       />
 
       {/* 이스터에그 바텀시트 */}

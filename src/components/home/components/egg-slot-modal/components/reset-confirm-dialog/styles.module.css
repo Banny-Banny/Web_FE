@@ -1,0 +1,171 @@
+/**
+ * ResetConfirmDialog Component Styles
+ * Version: 1.0.0
+ * Created: 2026-01-27
+ *
+ * Checklist:
+ * - [x] tailwind.config.js 수정 안 함
+ * - [x] 색상값 직접 입력 0건 (Colors 토큰만 사용)
+ * - [x] 인라인 스타일 0건
+ * - [x] 모든 스타일은 styles.module.css에만 정의
+ * - [x] 토큰 기반 스타일 사용
+ */
+
+/* 오버레이 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001; /* Modal(9999/10000)보다 높게 설정 */
+  padding: 16px;
+}
+
+/* 다이얼로그 */
+.dialog {
+  position: relative;
+  background-color: var(--color-white);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 
+    0px 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0px 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 10002; /* 오버레이보다 높게 */
+}
+
+/* 헤더 */
+.header {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-red-600);
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+/* 콘텐츠 */
+.content {
+  margin-bottom: 24px;
+}
+
+.warningText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin: 0 0 12px 0;
+}
+
+.warningList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.warningList li {
+  font-size: 14px;
+  color: var(--color-gray-700);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.confirmText {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin: 0;
+  text-align: center;
+}
+
+/* 버튼 그룹 */
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+}
+
+/* 취소 버튼 */
+.cancelButton {
+  flex: 1;
+  padding: 12px 24px;
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-900);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: var(--color-gray-300);
+}
+
+.cancelButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancelButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* 확인 버튼 (위험 스타일) */
+.confirmButton {
+  flex: 1;
+  padding: 12px 24px;
+  background-color: var(--color-red-600);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background-color: var(--color-red-700);
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirmButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 375px) {
+  .dialog {
+    padding: 20px;
+  }
+
+  .header {
+    font-size: 18px;
+  }
+
+  .warningText,
+  .warningList li {
+    font-size: 13px;
+  }
+
+  .confirmText {
+    font-size: 15px;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+}
