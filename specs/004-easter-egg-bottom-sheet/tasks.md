@@ -289,42 +289,104 @@
 
 ---
 
-## Phase 5: Phase 3 구현 - 미리보기 기능
+## Phase 5: Phase 3 구현 - 미리보기 기능 ✅
 
 ### [US1] 첨부파일 미리보기 구현
 
-- [ ] T021 [US1] 이미지 미리보기 컴포넌트 구현
-  - 이미지 파일 선택 시 미리보기 표시
-  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev
-  - 이미지 삭제 기능
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/image-preview/index.tsx`
+- [x] T021 [US1] 미디어 상수 파일 업데이트 ✅
+  - AUDIO 파일 크기 제한: 20MB → 10MB (Figma 디자인 스펙) ✅
+  - AUDIO 허용 형식: MPEG, AAC (Figma 디자인 스펙) ✅
+  - MIME 타입 매핑 업데이트 ✅
+  - accept 속성 문자열 업데이트 ✅
+  - 파일: `src/commons/constants/media.ts` ✅
 
-- [ ] T022 [US1] 음원 모달 컴포넌트 구현
-  - 음원 버튼 클릭 시 모달 표시
+- [x] T022 [US1] 음원 모달 컴포넌트 구현 ✅
+  - 음원 버튼 클릭 시 모달 표시 ✅
   - Figma 디자인:
-    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev
-    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev
-    - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev
-  - 직접 녹음 또는 파일 업로드 기능
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-modal/index.tsx`
+    - 직접 녹음 - 대기: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev ✅
+    - 직접 녹음 - 녹음 중: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev ✅
+    - 파일 업로드: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev ✅
+  - 2개 탭: "직접 녹음" / "파일 업로드" ✅
+  - 직접 녹음 기능: ✅
+    - MediaRecorder API 사용 ✅
+    - 녹음 버튼 클릭 시 녹음 시작 ✅
+    - 타이머 표시 (0:00 → 0:45 등) ✅
+    - 녹음 중 버튼 클릭 시 녹음 중지 ✅
+    - 마이크 권한 요청 및 에러 처리 ✅
+  - 파일 업로드 기능: ✅
+    - 파일 선택 버튼 ✅
+    - 지원 형식 안내: "MPEG, AAC (Max 10MB)" ✅
+    - 파일 형식 및 크기 검증 ✅
+    - accept 속성: "audio/mpeg,audio/mp3,audio/aac,.mp3,.aac" ✅
+  - 닫기 버튼 (우측 상단) ✅
+  - Escape 키로 닫기 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-attachment-modal/index.tsx` ✅
 
-- [ ] T023 [US1] 음원 미리보기 컴포넌트 구현
-  - 음원 선택/녹음 완료 후 미리보기 표시
-  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5660&m=dev
-  - 오디오 플레이어 기능 (재생/일시정지)
-  - 음원 삭제 기능
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/index.tsx`
+- [x] T023 [US1] 음원 모달 스타일 업데이트 ✅
+  - 탭 버튼 스타일 ✅
+  - 직접 녹음 패널 스타일 ✅
+    - 타이머 디스플레이 ✅
+    - 녹음 버튼 (대기/녹음 중 상태) ✅
+    - 안내 문구 ✅
+  - 파일 업로드 패널 스타일 ✅
+    - 파일 선택 버튼 ✅
+    - 파일 선택 완료 화면 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-attachment-modal/styles.module.css` ✅
 
-- [ ] T024 [US1] 비디오 미리보기 컴포넌트 구현
-  - 비디오 파일 선택 시 썸네일 미리보기 표시
-  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6527&m=dev
-  - 비디오 삭제 기능
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/index.tsx`
+- [x] T024 [US1] 이미지 미리보기 컴포넌트 구현 (선택적) ✅
+  - 이미지 파일 선택 시 미리보기 표시 ✅
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev ✅
+  - 이미지 삭제 기능 ✅
+  - **참고**: 현재 메인 컴포넌트에 이미지 미리보기 구현되어 있음 ✅
 
-- [ ] T025 [US1] 첨부파일 버튼 컴포넌트 수정 - 미리보기 연동
-  - 파일 선택 후 미리보기 컴포넌트 표시
-  - 미리보기 상태 관리
-  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/attachment-buttons/index.tsx`
+- [x] T025 [US1] 음원 미리보기 컴포넌트 구현 ✅
+  - **완료**: 별도 컴포넌트로 분리 완료 ✅
+  - 음원 선택/녹음 완료 후 미리보기 표시 ✅
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5660&m=dev ✅
+  - 오디오 플레이어 기능 (재생/일시정지) ✅
+  - 재생 바 (progress bar) ✅
+  - 재생 시간 표시 (MM:SS 형식) ✅
+  - 음원 삭제 기능 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/index.tsx` ✅
+  - 스타일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-preview/styles.module.css` ✅
+
+- [x] T026 [US1] 비디오 미리보기 컴포넌트 구현 (썸네일만) ✅
+  - **완료**: 별도 컴포넌트로 분리 완료 ✅
+  - 비디오 파일 선택 시 썸네일 미리보기 표시 ✅
+  - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6527&m=dev ✅
+  - 비디오 썸네일 미리보기 (240px 높이) ✅
+  - 비디오 삭제 기능 ✅
+  - **Canvas API를 사용한 중간 프레임 추출** ✅
+    - 비디오 중간 지점(duration / 2)에서 썸네일 생성
+    - 실패 시 첫 프레임(0.1초)으로 자동 재시도
+  - **에러 처리 개선** ✅
+    - FFmpeg DEMUXER_ERROR 등 비디오 로드 실패 시 사용자 친화적인 에러 UI 표시
+    - 비디오 아이콘 + 에러 메시지로 폴백 UI 제공
+  - **Vercel React Best Practices 적용** ✅
+    - `js-early-exit`: 조기 반환으로 중첩 감소
+    - `rerender-lazy-state-init`: 초기 상태를 함수로 전달
+    - 타임아웃 관리 및 메모리 정리 개선
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/index.tsx` ✅
+  - 스타일: `src/components/home/components/easter-egg-bottom-sheet/components/video-preview/styles.module.css` ✅
+  - **TODO**: 비디오 재생 기능 추가 예정
+    - [ ] 재생/일시정지 버튼 (중앙 오버레이)
+    - [ ] 재생 바 (progress bar)
+    - [ ] 재생 시간 표시 (MM:SS 형식)
+
+- [x] T027 [US1] 메인 컴포넌트 리팩토링 ✅
+  - AudioPreview 컴포넌트 import 및 사용 ✅
+  - VideoPreview 컴포넌트 import 및 사용 ✅
+  - 오디오/비디오 재생 상태 제거 (컴포넌트 내부로 이동) ✅
+  - 미리보기 순서: 사진 → 음원 → 영상 ✅
+  - 메인 컴포넌트 스타일에서 사용하지 않는 스타일 제거 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx` ✅
+  - 스타일: `src/components/home/components/easter-egg-bottom-sheet/styles.module.css` ✅
+
+- [x] T028 [US1] 음원 첨부 모달 개선 ✅
+  - **완료**: 모달 height 고정 (470px) ✅
+  - **완료**: 모달 위치를 화면 중간으로 변경 (z-index: 10000) ✅
+  - **완료**: 탭 전환 시에도 일관된 높이 유지 ✅
+  - 파일: `src/components/home/components/easter-egg-bottom-sheet/components/audio-attachment-modal/styles.module.css` ✅
 
 ---
 
