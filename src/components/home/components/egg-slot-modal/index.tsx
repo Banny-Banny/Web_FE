@@ -20,7 +20,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { RiInformationLine } from '@remixicon/react';
 import { Modal } from '@/commons/components/modal';
@@ -57,37 +57,19 @@ export function EggSlotModal({ isOpen, onClose }: EggSlotModalProps) {
     resetSlots,
     isResetting,
     resetError,
-    resetSuccess,
-    clearResetStatus,
   } = useSlotManagement();
-
-  // 모달이 열릴 때 reset 상태 클리어
-  useEffect(() => {
-    if (isOpen) {
-      clearResetStatus();
-    }
-  }, [isOpen, clearResetStatus]);
-
-  // 초기화 성공 시 메인 모달 자동 닫기
-  useEffect(() => {
-    if (resetSuccess && isOpen) {
-      // 0.3초 후 메인 모달 닫기 (사용자가 성공을 인지할 수 있도록)
-      const timer = setTimeout(() => {
-        onClose();
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [resetSuccess, isOpen, onClose]);
 
   const handleResetClick = () => {
     setIsConfirmDialogOpen(true);
   };
 
   const handleConfirmReset = () => {
-    // 초기화 실행 및 확인 다이얼로그 즉시 닫기
+    // 초기화 실행
     resetSlots();
+    // 확인 다이얼로그 즉시 닫기
     setIsConfirmDialogOpen(false);
+    // 메인 모달도 즉시 닫기
+    onClose();
   };
 
   const handleCancelReset = () => {
