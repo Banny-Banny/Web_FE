@@ -6,11 +6,8 @@
  * - GNB 표시 (Main Layout 적용)
  */
 
+import { Mypage } from '@/components/Mypage';
+
 export default function ProfilePage() {
-  return (
-    <div>
-      <h1>마이페이지</h1>
-      {/* 향후 구현 예정 */}
-    </div>
-  );
+  return <Mypage />;
 }
