@@ -1,0 +1,23 @@
+/**
+ * PaymentSuccess 메인 컨테이너 스타일
+ * 
+ * @description
+ * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - CSS 변수를 사용한 디자인 토큰 적용
+ * - 375px 기준 고정 레이아웃
+ */
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--color-white-500);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}

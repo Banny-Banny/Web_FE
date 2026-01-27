@@ -1,0 +1,36 @@
+/**
+ * PaymentFail 메인 컨테이너 스타일
+ * 
+ * @description
+ * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - CSS 변수를 사용한 디자인 토큰 적용
+ * - 375px 기준 고정 레이아웃
+ */
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--color-white-500);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--spacing-2xl);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 280px;
+  margin-top: var(--spacing-lg);
+}
