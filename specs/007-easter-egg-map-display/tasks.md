@@ -141,17 +141,15 @@
 
 ### 로그인 헬퍼 함수
 
-- [ ] T009 tests/e2e/easter-egg-map-display/helpers/auth.ts 생성
-  - `authenticateUser` 함수 구현
-    - 환경 변수에서 테스트 계정 정보 가져오기 (NEXT_PUBLIC_PHONE_NUMBER, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_PASSWORD)
+- [ ] T009 tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 로그인 헬퍼 함수 추가
+  - 기존 패턴 참조: `tests/e2e/slot-management/slot-management-ui.e2e.spec.ts` 또는 `tests/ui/easter-egg/easter-egg-form-submit.ui.spec.ts`
+  - `localLogin`을 `@/commons/apis/auth/login`에서 import
+  - 환경 변수에서 테스트 계정 정보 가져오기 (NEXT_PUBLIC_PHONE_NUMBER, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_PASSWORD)
+  - `login` 또는 `setupAuthenticatedPage` 헬퍼 함수 구현
     - `localLogin` API 호출하여 토큰 발급
-    - 받은 토큰을 반환
-  - `setupAuthenticatedPage` 함수 구현
-    - Playwright page 객체를 받아서
-    - `authenticateUser`로 토큰 발급
-    - localStorage에 토큰 저장
+    - Playwright page 객체에 localStorage에 토큰 저장
     - 페이지 새로고침하여 토큰 적용
-  - 파일: `tests/e2e/easter-egg-map-display/helpers/auth.ts`
+  - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
 ### E2E 테스트 작성
 
