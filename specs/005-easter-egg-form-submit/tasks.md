@@ -197,7 +197,7 @@
 
 ### handleConfirm 함수 수정
 
-- [ ] T016 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx의 handleConfirm 함수 수정
+- [x] T016 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx의 handleConfirm 함수 수정
   - 기존 콘솔 로그 제거
   - `submit` 함수 호출
   - 제출 성공 후 바텀시트 닫기 및 폼 초기화
@@ -312,19 +312,20 @@
 
 ### 성능 최적화
 
-- [ ] T029 src/components/home/components/easter-egg-bottom-sheet/index.tsx에 메모리 누수 방지 로직 추가
+- [x] T029 src/components/home/components/easter-egg-bottom-sheet/index.tsx에 메모리 누수 방지 로직 추가
   - 미리보기 URL 정리 (URL.revokeObjectURL)
   - 제출 완료 후 폼 데이터 초기화
+  - 바텀시트 닫힐 때 모든 미리보기 URL 정리
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
 
-- [ ] T030 src/commons/apis/easter-egg/index.ts에 타임아웃 설정 추가
+- [x] T030 src/commons/apis/easter-egg/index.ts에 타임아웃 설정 추가
   - API 요청 타임아웃 설정 (30초)
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
 ### 타입 정의 확장
 
-- [ ] T031 src/components/home/components/easter-egg-bottom-sheet/types.ts에 제출 상태 타입 추가
-  - `SubmitState` 인터페이스 정의 (필요시)
+- [x] T031 src/components/home/components/easter-egg-bottom-sheet/types.ts에 제출 상태 타입 추가
+  - `SubmitState` 인터페이스 정의
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/types.ts`
 
 ---

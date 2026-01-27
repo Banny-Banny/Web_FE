@@ -71,6 +71,14 @@ export function EasterEggBottomSheet({
       
       // 제출 성공 시
       onConfirm(formData);
+      
+      // 모든 미리보기 URL 정리 (메모리 누수 방지)
+      attachments.forEach(att => {
+        if (att.previewUrl) {
+          URL.revokeObjectURL(att.previewUrl);
+        }
+      });
+      
       onClose();
       
       // 바텀시트가 닫힌 후 폼 초기화
@@ -202,15 +210,22 @@ export function EasterEggBottomSheet({
   }, [handleAddAttachment]);
 
   /**
-   * 바텀시트가 닫힐 때 폼 초기화
+   * 바텀시트가 닫힐 때 폼 초기화 및 미리보기 URL 정리
    */
   React.useEffect(() => {
     if (!isOpen) {
+      // 모든 미리보기 URL 정리 (메모리 누수 방지)
+      attachments.forEach(att => {
+        if (att.previewUrl) {
+          URL.revokeObjectURL(att.previewUrl);
+        }
+      });
+      
       setTitle('');
       setMessage('');
       setAttachments([]);
     }
-  }, [isOpen]);
+  }, [isOpen, attachments]);
 
   // 작성 완료 버튼 활성화 여부 (제목 필수)
   const isFormValid = title.trim().length > 0;
