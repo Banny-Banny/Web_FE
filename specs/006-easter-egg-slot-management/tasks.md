@@ -279,19 +279,21 @@
 
 ### 홈 페이지 수정
 
-- [ ] T020 src/app/(main)/page.tsx 수정
-  - **상태 추가**
-    - `isSlotModalOpen` 상태 (슬롯 모달 열림 상태)
+- [x] T020 src/components/home/index.tsx 수정 (MyEggsModal과 EggSlotModal 통합)
+  - **상태 수정**
+    - `myEggsModalOpen` → `slotModalOpen`으로 변경
+    - `eggCount` Mock 데이터 제거
   - **훅 사용**
     - `useSlotManagement` 훅 import 및 사용
   - **EggSlot 컴포넌트 수정**
-    - `count` prop: `slotInfo?.remainingSlots ?? 3`
-    - `onClick` prop: `() => setIsSlotModalOpen(true)`
-    - `isLoading` prop: `isLoading`
-  - **EggSlotModal 추가**
-    - `isOpen` prop: `isSlotModalOpen`
-    - `onClose` prop: `() => setIsSlotModalOpen(false)`
-  - 파일: `src/app/(main)/page.tsx`
+    - `count` prop: `slotInfo?.remainingSlots ?? 0`
+    - `onClick` prop: `handleEggSlotClick`
+    - `isLoading` prop: `isSlotLoading`
+  - **MyEggsModal 제거 및 EggSlotModal 추가**
+    - `isOpen` prop: `slotModalOpen`
+    - `onClose` prop: `handleSlotModalClose`
+  - **MyEggsModal 디렉토리 완전 삭제**
+  - 파일: `src/components/home/index.tsx`
 
 ---
 
@@ -299,7 +301,7 @@
 
 ### useEasterEggSubmit 훅 수정
 
-- [ ] T021 src/components/home/hooks/useEasterEggSubmit.ts 수정
+- [x] T021 src/components/home/hooks/useEasterEggSubmit.ts 수정
   - `SLOT_QUERY_KEYS` import 추가
   - `useQueryClient` 훅 사용
   - 이스터에그 생성 성공 시 (`onSuccess`) 슬롯 정보 쿼리 무효화
@@ -408,20 +410,20 @@
 - [x] T007 E2E 테스트 실행 (API 함수 구현 검증 완료)
 
 ### Phase 3: 슬롯 관리 훅 (1개)
-- [ ] T008 useSlotManagement 훅 구현
+- [x] T008 useSlotManagement 훅 구현
 
 ### Phase 4: UI 컴포넌트 (11개)
-- [ ] T009 EggSlot types 수정
-- [ ] T010 EggSlot 컴포넌트 수정
-- [ ] T011 EggSlot 스타일 수정
-- [ ] T012 ResetConfirmDialog 디렉토리 생성
-- [ ] T013 ResetConfirmDialog types 생성
-- [ ] T014 ResetConfirmDialog 컴포넌트 구현
-- [ ] T015 ResetConfirmDialog 스타일 생성
-- [ ] T016 EggSlotModal 디렉토리 생성
-- [ ] T017 EggSlotModal types 생성
-- [ ] T018 EggSlotModal 컴포넌트 구현
-- [ ] T019 EggSlotModal 스타일 생성
+- [x] T009 EggSlot types 수정
+- [x] T010 EggSlot 컴포넌트 수정
+- [x] T011 EggSlot 스타일 수정
+- [x] T012 ResetConfirmDialog 디렉토리 생성
+- [x] T013 ResetConfirmDialog types 생성
+- [x] T014 ResetConfirmDialog 컴포넌트 구현
+- [x] T015 ResetConfirmDialog 스타일 생성
+- [x] T016 EggSlotModal 디렉토리 생성
+- [x] T017 EggSlotModal types 생성
+- [x] T018 EggSlotModal 컴포넌트 구현
+- [x] T019 EggSlotModal 스타일 생성
 
 ### Phase 5: 홈 페이지 통합 (1개)
 - [ ] T020 홈 페이지 수정

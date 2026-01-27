@@ -30,7 +30,7 @@
 
 ### 타입 정의
 
-- [ ] T001 src/commons/apis/easter-egg/types.ts 생성
+- [x] T001 src/commons/apis/easter-egg/types.ts 생성
   - `CreateEasterEggRequest` 인터페이스 정의
     - `latitude` (number, required)
     - `longitude` (number, required)
@@ -51,7 +51,7 @@
 
 ### API 함수 구현
 
-- [ ] T002 src/commons/apis/easter-egg/index.ts 생성
+- [x] T002 src/commons/apis/easter-egg/index.ts 생성
   - `createEasterEgg` 함수 구현
   - multipart/form-data 생성 로직
   - FormData에 필수 필드 추가 (latitude, longitude)
@@ -62,7 +62,7 @@
   - `onUploadProgress` 콜백 지원
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T003 src/commons/apis/endpoints.ts 확인 및 수정
+- [x] T003 src/commons/apis/endpoints.ts 확인 및 수정
   - `TIMEEGG_ENDPOINTS.CREATE_CAPSULE` 엔드포인트 확인
   - 필요시 엔드포인트 상수 추가 또는 수정
   - 파일: `src/commons/apis/endpoints.ts`
@@ -73,7 +73,7 @@
 
 ### 환경 변수 설정
 
-- [ ] T004 .env.local 파일에 테스트 로그인용 환경 변수 설정
+- [x] T004 .env.local 파일에 테스트 로그인용 환경 변수 설정
   - `NEXT_PUBLIC_PHONE_NUMBER`: 테스트용 전화번호
   - `NEXT_PUBLIC_EMAIL`: 테스트용 이메일
   - `NEXT_PUBLIC_PASSWORD`: 테스트용 비밀번호
@@ -82,7 +82,7 @@
 
 ### E2E 테스트 작성
 
-- [ ] T005 [US1] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts 생성
+- [x] T005 [US1] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts 생성
   - 이스터에그 생성 API 함수 직접 테스트
   - multipart/form-data 형식 검증
   - 필수 필드 (latitude, longitude) 검증
@@ -90,16 +90,16 @@
   - 성공 응답 검증
   - 파일: `tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts`
 
-- [ ] T006 [US2] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 위치 정보 수집 실패 시나리오 테스트 추가
+- [x] T006 [US2] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 위치 정보 수집 실패 시나리오 테스트 추가
   - 위치 정보 누락 시 API 호출 실패 검증
   - 파일: `tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts`
 
-- [ ] T007 [US3] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 슬롯 부족 시나리오 테스트 추가
+- [x] T007 [US3] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 슬롯 부족 시나리오 테스트 추가
   - 409 에러 응답 시뮬레이션
   - 에러 응답 구조 검증
   - 파일: `tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts`
 
-- [ ] T008 [US4] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 네트워크 오류 시나리오 테스트 추가
+- [x] T008 [US4] tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts에 네트워크 오류 시나리오 테스트 추가
   - 네트워크 차단 시뮬레이션
   - 에러 처리 검증
   - 파일: `tests/e2e/easter-egg/easter-egg-form-submit.e2e.spec.ts`
@@ -110,7 +110,7 @@
 
 ### 검증 함수 구현
 
-- [ ] T009 src/components/home/hooks/useEasterEggSubmit.ts에 검증 함수 구현
+- [x] T009 src/components/home/hooks/useEasterEggSubmit.ts에 검증 함수 구현
   - `validateFormData` 함수 구현
     - 제목 길이 검증 (최대 30자)
     - 메시지 길이 검증 (최대 500자)
@@ -121,7 +121,7 @@
 
 ### 변환 함수 구현
 
-- [ ] T010 src/components/home/hooks/useEasterEggSubmit.ts에 변환 함수 구현
+- [x] T010 src/components/home/hooks/useEasterEggSubmit.ts에 변환 함수 구현
   - `transformFormDataToApiRequest` 함수 구현
     - `EasterEggFormData` → `CreateEasterEggRequest` 변환
     - 첨부파일 배열 변환 (Attachment[] → File[])
@@ -135,7 +135,7 @@
 
 ### 위치 정보 수집 통합
 
-- [ ] T011 src/components/home/hooks/useEasterEggSubmit.ts에 위치 정보 수집 로직 추가
+- [x] T011 src/components/home/hooks/useEasterEggSubmit.ts에 위치 정보 수집 로직 추가
   - 기존 `useGeolocation` 훅 활용
   - 제출 시점에 위치 정보 수집
   - 위치 정보 수집 실패 시 에러 처리
@@ -148,7 +148,7 @@
 
 ### React Query Mutation 설정
 
-- [ ] T012 src/components/home/hooks/useEasterEggSubmit.ts에 React Query mutation 설정
+- [x] T012 src/components/home/hooks/useEasterEggSubmit.ts에 React Query mutation 설정
   - `useMutation` 훅 사용
   - `createEasterEgg` API 함수 호출
   - mutation 옵션 설정 (onSuccess, onError)
@@ -156,7 +156,7 @@
 
 ### 제출 함수 구현
 
-- [ ] T013 [US1] src/components/home/hooks/useEasterEggSubmit.ts에 제출 함수 구현
+- [x] T013 [US1] src/components/home/hooks/useEasterEggSubmit.ts에 제출 함수 구현
   - `submit` 함수 구현
   - 위치 정보 수집 통합
   - 폼 데이터 검증 호출
@@ -166,7 +166,7 @@
 
 ### 상태 관리 구현
 
-- [ ] T014 src/components/home/hooks/useEasterEggSubmit.ts에 상태 관리 구현
+- [x] T014 src/components/home/hooks/useEasterEggSubmit.ts에 상태 관리 구현
   - `isSubmitting` 상태 관리
   - `progress` 상태 관리 (파일 업로드 진행률)
   - `error` 상태 관리
@@ -175,7 +175,7 @@
 
 ### 훅 인터페이스 정의
 
-- [ ] T015 src/components/home/hooks/useEasterEggSubmit.ts에 훅 인터페이스 정의
+- [x] T015 src/components/home/hooks/useEasterEggSubmit.ts에 훅 인터페이스 정의
   - `UseEasterEggSubmitReturn` 인터페이스 정의
     - `submit` 함수
     - `isSubmitting` (boolean)
@@ -190,7 +190,7 @@
 
 ### 제출 훅 통합
 
-- [ ] T016 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 useEasterEggSubmit 훅 통합
+- [x] T016 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 useEasterEggSubmit 훅 통합
   - `useEasterEggSubmit` 훅 import 및 사용
   - 제출 상태 변수 할당
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
@@ -205,7 +205,7 @@
 
 ### 제출 중 상태 표시
 
-- [ ] T018 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 제출 중 상태 표시 추가
+- [x] T018 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 제출 중 상태 표시 추가
   - `isSubmitting` 상태에 따른 로딩 인디케이터 표시
   - 제출 중 버튼 비활성화
   - 제출 중 폼 필드 수정 불가능 상태
@@ -213,14 +213,14 @@
 
 ### 파일 업로드 진행률 표시
 
-- [ ] T019 [US5] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 파일 업로드 진행률 표시 추가
+- [x] T019 [US5] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 파일 업로드 진행률 표시 추가
   - `progress` 상태에 따른 진행률 표시
   - 진행률 바 또는 퍼센트 표시
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
 
 ### 에러 메시지 표시
 
-- [ ] T020 [US2] [US3] [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 에러 메시지 표시 추가
+- [x] T020 [US2] [US3] [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 에러 메시지 표시 추가
   - `error` 상태에 따른 에러 메시지 표시
   - 에러 메시지 UI 컴포넌트 추가
   - 에러 발생 시 폼 데이터 보존
@@ -228,7 +228,7 @@
 
 ### 제출 성공 후 처리
 
-- [ ] T021 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 제출 성공 후 처리 추가
+- [x] T021 [US1] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 제출 성공 후 처리 추가
   - 성공 메시지 표시 (선택적)
   - 바텀시트 닫기
   - 폼 데이터 초기화
@@ -240,7 +240,7 @@
 
 ### 에러 메시지 정의
 
-- [ ] T022 src/components/home/hooks/useEasterEggSubmit.ts에 에러 메시지 상수 정의
+- [x] T022 src/components/home/hooks/useEasterEggSubmit.ts에 에러 메시지 상수 정의
   - `ERROR_MESSAGES` 객체 정의
     - `LOCATION_PERMISSION_DENIED`
     - `LOCATION_TIMEOUT`
@@ -257,7 +257,7 @@
 
 ### 위치 정보 수집 실패 처리
 
-- [ ] T023 [US2] src/components/home/hooks/useEasterEggSubmit.ts에 위치 정보 수집 실패 처리 추가
+- [x] T023 [US2] src/components/home/hooks/useEasterEggSubmit.ts에 위치 정보 수집 실패 처리 추가
   - 권한 거부 에러 처리
   - 타임아웃 에러 처리
   - 브라우저 미지원 에러 처리
@@ -266,7 +266,7 @@
 
 ### API 에러 처리
 
-- [ ] T024 [US3] [US4] src/components/home/hooks/useEasterEggSubmit.ts에 API 에러 처리 추가
+- [x] T024 [US3] [US4] src/components/home/hooks/useEasterEggSubmit.ts에 API 에러 처리 추가
   - 400 에러 처리 (잘못된 요청 데이터)
   - 401 에러 처리 (인증 실패)
   - 409 에러 처리 (슬롯 부족)
@@ -277,7 +277,7 @@
 
 ### 재시도 옵션 제공
 
-- [ ] T025 [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 재시도 옵션 추가
+- [x] T025 [US4] src/components/home/components/easter-egg-bottom-sheet/index.tsx에 재시도 옵션 추가
   - 네트워크 오류 시 재시도 버튼 표시
   - 재시도 버튼 클릭 시 제출 재시도
   - 파일: `src/components/home/components/easter-egg-bottom-sheet/index.tsx`
@@ -288,7 +288,7 @@
 
 ### 홈 페이지 수정
 
-- [ ] T026 [US1] src/components/home/index.tsx의 handleEasterEggConfirm 함수 수정
+- [x] T026 [US1] src/components/home/index.tsx의 handleEasterEggConfirm 함수 수정
   - 기존 TODO 주석 제거
   - 제출 로직은 바텀시트 컴포넌트 내부에서 처리하도록 변경
   - 제출 성공 후 지도 업데이트 (선택적)
