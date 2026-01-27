@@ -14,6 +14,8 @@ import BottomSheet from '@/commons/components/bottom-sheet';
 import DualButton from '@/commons/components/dual-button';
 import { RiImageLine, RiMicLine, RiVideoLine, RiCloseLine } from '@remixicon/react';
 import { AudioAttachmentModal } from './components/audio-attachment-modal';
+import { AudioPreview } from './components/audio-preview';
+import { VideoPreview } from './components/video-preview';
 import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
 import type { EasterEggBottomSheetProps, EasterEggFormData, Attachment, AttachmentType } from './types';
 import styles from './styles.module.css';
@@ -91,8 +93,8 @@ export function EasterEggBottomSheet({
       name: file.name,
     };
 
-    // 이미지나 비디오의 경우 미리보기 URL 생성
-    if (type === 'IMAGE' || type === 'VIDEO') {
+    // 이미지, 비디오, 오디오의 경우 미리보기 URL 생성
+    if (type === 'IMAGE' || type === 'VIDEO' || type === 'AUDIO') {
       newAttachment.previewUrl = URL.createObjectURL(file);
     }
 
@@ -380,26 +382,26 @@ export function EasterEggBottomSheet({
                 </div>
               )}
 
-              {/* 비디오 미리보기 (큰 이미지) */}
+              {/* 음원 미리보기 */}
+              {attachments.find(a => a.type === 'AUDIO') && (
+                <AudioPreview
+                  audioUrl={attachments.find(a => a.type === 'AUDIO')!.previewUrl!}
+                  onDelete={() => {
+                    const audio = attachments.find(a => a.type === 'AUDIO');
+                    if (audio) handleDeleteAttachment(audio.id);
+                  }}
+                />
+              )}
+
+              {/* 비디오 미리보기 */}
               {attachments.find(a => a.type === 'VIDEO') && (
-                <div className={styles.imagePreviewLarge}>
-                  <video 
-                    src={attachments.find(a => a.type === 'VIDEO')?.previewUrl} 
-                    className={styles.previewImage}
-                    muted
-                  />
-                  <button
-                    className={styles.previewDeleteBtn}
-                    onClick={() => {
-                      const video = attachments.find(a => a.type === 'VIDEO');
-                      if (video) handleDeleteAttachment(video.id);
-                    }}
-                    type="button"
-                    aria-label="동영상 삭제"
-                  >
-                    <RiCloseLine size={16} />
-                  </button>
-                </div>
+                <VideoPreview
+                  videoUrl={attachments.find(a => a.type === 'VIDEO')!.previewUrl!}
+                  onDelete={() => {
+                    const video = attachments.find(a => a.type === 'VIDEO');
+                    if (video) handleDeleteAttachment(video.id);
+                  }}
+                />
               )}
             </div>
           </div>

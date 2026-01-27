@@ -283,11 +283,13 @@ export interface VideoPreviewProps {
    - Figma 디자인: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5260&m=dev
 2. 음원 모달 컴포넌트 구현
    - 모달 열기/닫기
-   - 직접 녹음 또는 파일 업로드
+   - 2개 탭: "직접 녹음" / "파일 업로드"
+   - 직접 녹음 기능 (MediaRecorder API)
+   - 파일 업로드 기능 (형식: MPEG, AAC / 크기: Max 10MB)
    - Figma 디자인:
-     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev
-     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev
-     - https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev
+     - 직접 녹음 - 대기: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-5637&m=dev
+     - 직접 녹음 - 녹음 중: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6061&m=dev
+     - 파일 업로드: https://www.figma.com/design/k7IWFISJsHIQ4g6FoAZqup/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8?node-id=599-6504&m=dev
 3. 음원 미리보기 컴포넌트 구현
    - 오디오 플레이어 (재생/일시정지)
    - 음원 삭제 기능

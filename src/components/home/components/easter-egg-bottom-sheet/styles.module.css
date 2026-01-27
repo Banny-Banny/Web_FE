@@ -301,6 +301,8 @@
   outline-offset: 2px;
 }
 
+/* 음원/비디오 미리보기는 별도 컴포넌트로 분리됨 */
+
 /* 첨부파일 이름 */
 .attachmentFileName {
   position: absolute;

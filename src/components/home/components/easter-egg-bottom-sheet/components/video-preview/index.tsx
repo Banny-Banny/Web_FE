@@ -163,7 +163,7 @@ export function VideoPreview({ videoUrl, onDelete }: VideoPreviewProps) {
         let thumbnail: string;
         try {
           thumbnail = await generateThumbnail(videoUrl);
-        } catch (midError) {
+        } catch {
           // 중간 프레임 실패 시 첫 프레임으로 재시도
           thumbnail = await generateThumbnail(videoUrl, 0.1);
         }
