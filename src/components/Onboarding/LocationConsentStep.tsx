@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Icon } from '@/commons/components/icon';
-import { ChevronRight } from 'lucide-react';
+import { RiArrowRightSLine } from '@remixicon/react';
 import type { LocationConsentStepProps } from './types';
 import styles from './styles.module.css';
 
@@ -82,7 +82,7 @@ export function LocationConsentStep({
           aria-label="위치 권한 허용"
         >
           <span className={styles.allowButtonText}>위치 권한 허용</span>
-          <ChevronRight size={20} color="white" className={styles.allowButtonIcon} />
+          <RiArrowRightSLine size={20} color="white" className={styles.allowButtonIcon} />
         </button>
         <button
           type="button"

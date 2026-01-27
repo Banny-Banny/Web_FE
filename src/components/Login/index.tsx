@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { RiArrowLeftLine } from '@remixicon/react';
 import { LoginForm } from './LoginForm';
 import type { LoginFormData } from './types';
 import { useLoginMutation, getLoginErrorMessage } from './hooks/useLoginMutation';
@@ -54,7 +54,7 @@ export function LoginContainer() {
           onClick={handleBack}
           aria-label="뒤로가기"
         >
-          <ArrowLeft size={24} />
+          <RiArrowLeftLine size={24} />
         </button>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>로그인</h1>

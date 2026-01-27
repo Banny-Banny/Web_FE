@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { RiArrowLeftLine } from '@remixicon/react';
 import { SignupForm } from './SignupForm';
 import type { SignupFormData } from './types';
 import { useSignupMutation, getSignupErrorMessage } from './hooks/useSignupMutation';
@@ -76,7 +76,7 @@ export function SignupContainer() {
           onClick={handleBack}
           aria-label="뒤로가기"
         >
-          <ArrowLeft size={24} />
+          <RiArrowLeftLine size={24} />
         </button>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>회원가입</h1>
