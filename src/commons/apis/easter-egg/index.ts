@@ -8,7 +8,13 @@ import {
   CreateEasterEggRequest, 
   CreateEasterEggResponse,
   SlotInfoResponse,
-  SlotResetResponse 
+  SlotResetResponse,
+  GetCapsulesRequest,
+  GetCapsulesResponse,
+  GetCapsuleResponse,
+  RecordCapsuleViewRequest,
+  RecordCapsuleViewResponse,
+  GetCapsuleViewersResponse 
 } from './types';
 
 /**
@@ -92,6 +98,90 @@ export async function getSlotInfo(): Promise<SlotInfoResponse> {
 export async function resetSlots(): Promise<SlotResetResponse> {
   const response = await apiClient.post<SlotResetResponse>(
     TIMEEGG_ENDPOINTS.RESET_SLOTS
+  );
+  return response.data;
+}
+
+/**
+ * 캡슐 목록 조회 API
+ * 
+ * @param params - 캡슐 목록 조회 요청 파라미터
+ * @returns 캡슐 목록 조회 응답
+ */
+export async function getCapsules(
+  params: GetCapsulesRequest
+): Promise<GetCapsulesResponse> {
+  const response = await apiClient.get<GetCapsulesResponse>(
+    TIMEEGG_ENDPOINTS.GET_CAPSULES,
+    {
+      params: {
+        lat: params.lat,
+        lng: params.lng,
+        radius_m: params.radius_m ?? 300,
+        limit: params.limit ?? 50,
+        cursor: params.cursor,
+        include_consumed: params.include_consumed ?? false,
+        include_locationless: params.include_locationless ?? false,
+      },
+    }
+  );
+  return response.data;
+}
+
+/**
+ * 캡슐 기본 정보 조회 API
+ * 
+ * @param id - 캡슐 ID (UUID)
+ * @param lat - 사용자 현재 위도
+ * @param lng - 사용자 현재 경도
+ * @returns 캡슐 기본 정보 응답
+ */
+export async function getCapsule(
+  id: string,
+  lat: number,
+  lng: number
+): Promise<GetCapsuleResponse> {
+  const response = await apiClient.get<GetCapsuleResponse>(
+    TIMEEGG_ENDPOINTS.GET_CAPSULE(id),
+    {
+      params: {
+        lat,
+        lng,
+      },
+    }
+  );
+  return response.data;
+}
+
+/**
+ * 캡슐 발견 기록 API
+ * 
+ * @param id - 캡슐 ID (UUID)
+ * @param data - 발견 위치 정보 (선택)
+ * @returns 캡슐 발견 기록 응답
+ */
+export async function recordCapsuleView(
+  id: string,
+  data?: RecordCapsuleViewRequest
+): Promise<RecordCapsuleViewResponse> {
+  const response = await apiClient.post<RecordCapsuleViewResponse>(
+    TIMEEGG_ENDPOINTS.RECORD_CAPSULE_VIEW(id),
+    data ?? {}
+  );
+  return response.data;
+}
+
+/**
+ * 캡슐 발견자 목록 조회 API
+ * 
+ * @param id - 캡슐 ID (UUID)
+ * @returns 캡슐 발견자 목록 조회 응답
+ */
+export async function getCapsuleViewers(
+  id: string
+): Promise<GetCapsuleViewersResponse> {
+  const response = await apiClient.get<GetCapsuleViewersResponse>(
+    TIMEEGG_ENDPOINTS.GET_CAPSULE_VIEWERS(id)
   );
   return response.data;
 }

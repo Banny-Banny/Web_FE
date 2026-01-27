@@ -31,7 +31,7 @@
 
 ### 타입 정의
 
-- [ ] T001 src/commons/apis/easter-egg/types.ts 수정
+- [x] T001 src/commons/apis/easter-egg/types.ts 수정
   - `GetCapsulesRequest` 인터페이스 추가
     - `lat` (number, required)
     - `lng` (number, required)
@@ -70,7 +70,7 @@
 
 ### API 함수 구현
 
-- [ ] T002 src/commons/apis/easter-egg/index.ts 수정
+- [x] T002 src/commons/apis/easter-egg/index.ts 수정
   - `getCapsules` 함수 추가
     - `GetCapsulesRequest` 파라미터 받기
     - Query 파라미터로 lat, lng, radius_m 등 전달
@@ -78,7 +78,7 @@
     - `GetCapsulesResponse` 반환
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T003 src/commons/apis/easter-egg/index.ts 수정
+- [x] T003 src/commons/apis/easter-egg/index.ts 수정
   - `getCapsule` 함수 추가
     - `id` (string), `lat` (number), `lng` (number) 파라미터 받기
     - Path 파라미터로 id 전달
@@ -87,7 +87,7 @@
     - `GetCapsuleResponse` 반환
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T004 src/commons/apis/easter-egg/index.ts 수정
+- [x] T004 src/commons/apis/easter-egg/index.ts 수정
   - `recordCapsuleView` 함수 추가
     - `id` (string), `data` (RecordCapsuleViewRequest, optional) 파라미터 받기
     - Path 파라미터로 id 전달
@@ -97,7 +97,7 @@
     - 에러 발생 시에도 사용자 경험에 영향 없도록 처리
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T005 src/commons/apis/easter-egg/index.ts 수정
+- [x] T005 src/commons/apis/easter-egg/index.ts 수정
   - `getCapsuleViewers` 함수 추가
     - `id` (string) 파라미터 받기
     - Path 파라미터로 id 전달
@@ -105,7 +105,7 @@
     - `GetCapsuleViewersResponse` 반환
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T006 src/commons/apis/endpoints.ts 확인 및 수정
+- [x] T006 src/commons/apis/endpoints.ts 확인 및 수정
   - `GET_CAPSULES` 엔드포인트 상수 추가
   - `GET_CAPSULE` 엔드포인트 상수 추가
   - `RECORD_CAPSULE_VIEW` 엔드포인트 상수 추가
@@ -118,7 +118,7 @@
 
 ### 거리 계산 함수
 
-- [ ] T007 [P] src/commons/utils/distance/calculate-distance.ts 생성
+- [x] T007 [P] src/commons/utils/distance/calculate-distance.ts 생성
   - `calculateDistance` 함수 구현
     - Haversine formula 사용
     - `lat1`, `lng1`, `lat2`, `lng2` 파라미터 받기
@@ -132,7 +132,7 @@
 
 ### 환경 변수 설정
 
-- [ ] T008 .env.local 파일에 테스트 로그인용 환경 변수 설정
+- [x] T008 .env.local 파일에 테스트 로그인용 환경 변수 설정
   - `NEXT_PUBLIC_PHONE_NUMBER`: 테스트용 전화번호
   - `NEXT_PUBLIC_EMAIL`: 테스트용 이메일
   - `NEXT_PUBLIC_PASSWORD`: 테스트용 비밀번호
@@ -141,13 +141,13 @@
 
 ### 로그인 헬퍼 함수
 
-- [ ] T009 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 테스트 계정 정보 추가
+- [x] T009 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 테스트 계정 정보 추가
   - 기존 패턴 참조: `tests/e2e/login/fixtures/mockData.ts`
   - 환경 변수에서 테스트 계정 정보 가져오기 (NEXT_PUBLIC_PHONE_NUMBER, NEXT_PUBLIC_EMAIL, NEXT_PUBLIC_PASSWORD)
   - `testLoginRequest` 객체 생성 (LocalLoginRequest 타입)
   - 파일: `tests/e2e/easter-egg-map-display/fixtures/mockData.ts`
 
-- [ ] T009-1 tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 로그인 헬퍼 함수 추가
+- [x] T009-1 tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 로그인 헬퍼 함수 추가
   - 기존 패턴 참조: `tests/e2e/slot-management/slot-management-ui.e2e.spec.ts`의 `login` 함수
   - `localLogin`을 `@/commons/apis/auth/login`에서 import
   - `mockData.ts`에서 `testLoginRequest` import
@@ -160,13 +160,13 @@
 
 ### E2E 테스트 작성
 
-- [ ] T010 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 캡슐 Mock 데이터 추가
+- [x] T010 tests/e2e/easter-egg-map-display/fixtures/mockData.ts에 캡슐 Mock 데이터 추가
   - 캡슐 목록 Mock 데이터 생성
   - 캡슐 기본 정보 Mock 데이터 생성
   - 발견자 목록 Mock 데이터 생성
   - 파일: `tests/e2e/easter-egg-map-display/fixtures/mockData.ts`
 
-- [ ] T011 [US1] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts 생성
+- [x] T011 [US1] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts 생성
   - `setupAuthenticatedPage` 헬퍼 함수 사용하여 인증 설정
   - 지도 진입 시 캡슐 목록 조회 API 테스트
   - `getCapsules` 함수 직접 테스트
@@ -174,25 +174,25 @@
   - 성공 응답 검증
   - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
-- [ ] T012 [US3] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 마커 클릭 시 캡슐 기본 정보 조회 테스트 추가
+- [x] T012 [US3] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 마커 클릭 시 캡슐 기본 정보 조회 테스트 추가
   - `getCapsule` 함수 직접 테스트
   - Path 파라미터 및 Query 파라미터 검증
   - 성공 응답 검증
   - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
-- [ ] T013 [US5] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 발견 기록 API 테스트 추가
+- [x] T013 [US5] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 발견 기록 API 테스트 추가
   - `recordCapsuleView` 함수 직접 테스트
   - 첫 발견 시나리오 테스트 (is_first_view: true)
   - 중복 발견 시나리오 테스트 (is_first_view: false)
   - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
-- [ ] T014 [US4] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 발견자 목록 조회 테스트 추가
+- [x] T014 [US4] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 발견자 목록 조회 테스트 추가
   - `getCapsuleViewers` 함수 직접 테스트
   - 성공 응답 검증
   - 빈 배열 응답 검증
   - 파일: `tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts`
 
-- [ ] T015 [US5] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 에러 케이스 테스트 추가
+- [x] T015 [US5] tests/e2e/easter-egg-map-display/easter-egg-map-display.e2e.spec.ts에 에러 케이스 테스트 추가
   - 400 에러 (잘못된 파라미터)
   - 401 에러 (인증 실패)
   - 404 에러 (캡슐 미존재)

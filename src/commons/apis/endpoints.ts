@@ -70,10 +70,16 @@ export const USER_ENDPOINTS = {
 export const TIMEEGG_ENDPOINTS = {
   // 타임캡슐 관련
   CAPSULES: `${BASE_PATHS.API}/capsules`,
+  GET_CAPSULES: `${BASE_PATHS.API}/capsules`,
   CAPSULE_DETAIL: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  GET_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   CREATE_CAPSULE: `${BASE_PATHS.API}/capsules`,
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  
+  // 캡슐 발견 관련
+  RECORD_CAPSULE_VIEW: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
+  GET_CAPSULE_VIEWERS: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
   
   // 슬롯 관리
   GET_SLOTS: `${BASE_PATHS.API}/capsules/slots`,
