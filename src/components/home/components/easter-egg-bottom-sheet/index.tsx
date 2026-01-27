@@ -215,17 +215,21 @@ export function EasterEggBottomSheet({
   React.useEffect(() => {
     if (!isOpen) {
       // 모든 미리보기 URL 정리 (메모리 누수 방지)
-      attachments.forEach(att => {
-        if (att.previewUrl) {
-          URL.revokeObjectURL(att.previewUrl);
-        }
+      // attachments를 의존성 배열에서 제거하여 무한 루프 방지
+      // 대신 클로저를 통해 현재 attachments 값을 참조
+      setAttachments(prevAttachments => {
+        prevAttachments.forEach(att => {
+          if (att.previewUrl) {
+            URL.revokeObjectURL(att.previewUrl);
+          }
+        });
+        return [];
       });
       
       setTitle('');
       setMessage('');
-      setAttachments([]);
     }
-  }, [isOpen, attachments]);
+  }, [isOpen]);
 
   // 작성 완료 버튼 활성화 여부 (제목 필수)
   const isFormValid = title.trim().length > 0;

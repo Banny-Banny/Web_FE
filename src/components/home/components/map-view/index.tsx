@@ -29,7 +29,9 @@ export const MapView = memo(function MapView({
     try {
       onMapInit(containerRef.current);
     } catch (initError) {
-      console.error('[MapView] 지도 초기화 실패:', initError);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[MapView] 지도 초기화 실패:', initError);
+      }
     }
   }, [map, isLoading, onMapInit]);
 
