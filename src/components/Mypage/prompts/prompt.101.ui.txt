@@ -12,6 +12,7 @@
 
 조건-피그마) 활용할MCP: Figma Desktop MCP
 조건-Figma Desktop MCP 링크) https://www.figma.com/design/ChrSWhvkq3f0bWwOzWHKJN/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8--%EB%B3%B5%EC%82%AC-?node-id=161-24058&t=Y2GkL0RJylNEzjnP-4
+
 조건-파일경로) 구현될 페이지 파일경로: src/app/(main)/profile/page.tsx
 조건-파일경로) 구현될 CSS 파일경로: src/components/Mypage/styles.module.css
 조건-파일경로) 구현될 컴포넌트 파일경로: src/components/Mypage/index.tsx
