@@ -9,6 +9,12 @@ import type {
   OrderDetail,
   ProductInfo,
 } from '@/commons/apis/orders/types';
+import type {
+  ConfirmPaymentResponse,
+} from '@/commons/apis/payment/types';
+import type {
+  CreateWaitingRoomResponse,
+} from '@/commons/apis/capsules/types';
 
 /**
  * Mock 주문 상세 정보
@@ -113,4 +119,60 @@ export const mockOrderDetailMinimal: OrderDetail = {
   add_music: false,
   add_video: false,
   total_amount: 10000,
+};
+
+/**
+ * Mock 토스페이먼츠 결제 승인 성공 응답
+ */
+export const mockConfirmPaymentSuccess: ConfirmPaymentResponse = {
+  order_id: 'test-order-123',
+  payment_key: 'pay-1234-5678',
+  status: 'PAID',
+  amount: 15000,
+  approved_at: '2026-01-27T10:00:00.000Z',
+  capsule_id: 'capsule-uuid-123',
+  receipt_url: 'https://mock.toss/receipt/pay-1234-5678',
+};
+
+/**
+ * Mock 토스페이먼츠 결제 승인 실패 응답
+ */
+export const mockConfirmPaymentFailed: ConfirmPaymentResponse = {
+  order_id: 'test-order-123',
+  payment_key: 'pay-1234-5678',
+  status: 'FAILED',
+  amount: 15000,
+  approved_at: '2026-01-27T10:00:00.000Z',
+  capsule_id: '',
+  receipt_url: '',
+};
+
+/**
+ * Mock 타임캡슐 대기실 생성 성공 응답
+ */
+export const mockCreateWaitingRoomSuccess: CreateWaitingRoomResponse = {
+  waitingRoomId: 'waiting-room-uuid-123',
+  orderId: 'test-order-123',
+  capsuleName: '우리들의 추억',
+  headcount: 5,
+  inviteCode: 'ABC123',
+  createdAt: '2026-01-27T10:00:00.000Z',
+};
+
+/**
+ * Mock 결제 실패 콜백 파라미터
+ */
+export const mockPaymentFailParams = {
+  code: 'CARD_AUTHORIZATION_FAILED',
+  message: '카드 승인에 실패했습니다.',
+  orderId: 'test-order-123',
+};
+
+/**
+ * Mock 결제 성공 콜백 파라미터
+ */
+export const mockPaymentSuccessParams = {
+  paymentKey: 'pay-1234-5678',
+  orderId: 'test-order-123',
+  amount: '15000',
 };

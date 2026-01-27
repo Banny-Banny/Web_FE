@@ -172,6 +172,8 @@ export const ORDER_ENDPOINTS = {
 export const PAYMENT_ENDPOINTS = {
   // 결제 완료 처리
   COMPLETE: `${BASE_PATHS.API}/payment/complete`,
+  // 토스페이먼츠 결제 승인 처리
+  CONFIRM: `${BASE_PATHS.API}/payments/toss/confirm`,
 } as const;
 
 /**
@@ -193,6 +195,14 @@ export const ONBOARDING_ENDPOINTS = {
 } as const;
 
 /**
+ * 캡슐 관련 엔드포인트
+ */
+export const CAPSULE_ENDPOINTS = {
+  // 타임캡슐 대기실 생성
+  CREATE_WAITING_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -202,6 +212,7 @@ export const ENDPOINTS = {
   ADMIN: ADMIN_ENDPOINTS,
   ORDER: ORDER_ENDPOINTS,
   PAYMENT: PAYMENT_ENDPOINTS,
+  CAPSULE: CAPSULE_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,
