@@ -6,9 +6,7 @@
 /**
  * 결제 성공 페이지 Props
  */
-export interface PaymentSuccessPageProps {
-  // URL 쿼리 파라미터에서 결제 정보 추출
-}
+export type PaymentSuccessPageProps = Record<string, never>;
 
 /**
  * 결제 성공 처리 상태

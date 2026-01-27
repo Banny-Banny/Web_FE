@@ -77,6 +77,15 @@ export function usePaymentSuccess() {
     
     const { paymentKey, orderId, amount } = paymentInfo;
     
+    // 필수 파라미터 확인
+    if (!paymentKey || !orderId || !amount) {
+      setState({
+        status: 'failed',
+        error: '결제 정보가 불완전합니다.',
+      });
+      return;
+    }
+    
     // 이미 결제 완료된 주문인지 확인 (중복 처리 방지)
     if (orderStatus?.order_status === 'PAID') {
       // 이미 결제 완료된 경우, capsule_id로 대기실 페이지로 이동

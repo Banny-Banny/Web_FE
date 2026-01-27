@@ -6,9 +6,7 @@
 /**
  * 결제 실패 페이지 Props
  */
-export interface PaymentFailPageProps {
-  // URL 쿼리 파라미터에서 실패 정보 추출
-}
+export type PaymentFailPageProps = Record<string, never>;
 
 /**
  * 결제 실패 처리 상태

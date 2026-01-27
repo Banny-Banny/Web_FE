@@ -4,7 +4,7 @@
  */
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { convertErrorCodeToMessage } from '@/commons/utils/payment';
 import type { PaymentFailState } from '../types';
 

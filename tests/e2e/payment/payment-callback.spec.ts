@@ -10,8 +10,6 @@ import {
   mockCreateWaitingRoomSuccess,
   mockPaymentFailParams,
   mockPaymentSuccessParams,
-  mockOrderStatusPending,
-  mockOrderStatusPaid,
 } from './fixtures/mockData';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
