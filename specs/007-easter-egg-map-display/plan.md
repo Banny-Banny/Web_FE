@@ -66,7 +66,7 @@
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
 ✅ **아키텍처 준수**: Feature Slice Architecture 준수, API 함수는 `src/commons/apis/`에 배치  
-✅ **디렉토리 구조**: API 함수는 `src/commons/apis/capsule/`, 훅은 `src/components/home/hooks/`  
+✅ **디렉토리 구조**: API 함수는 `src/commons/apis/easter-egg/`, 훅은 `src/components/home/hooks/`  
 ✅ **타입 안전성**: TypeScript로 모든 API 요청/응답 타입 정의  
 ✅ **API 통신**: api-client.ts를 통한 일관된 API 통신  
 ✅ **에러 핸들링**: 표준화된 에러 처리 및 사용자 피드백  
@@ -92,9 +92,9 @@ specs/007-easter-egg-map-display/
 src/
 ├── commons/
 │   ├── apis/
-│   │   └── capsule/                    # 캡슐 관련 API 함수 (신규)
-│   │       ├── index.ts               # API 함수들
-│   │       └── types.ts              # API 요청/응답 타입 정의
+│   │   └── easter-egg/                # 이스터에그 관련 API 함수 (기존 확장)
+│   │       ├── index.ts               # API 함수들 (기존 파일 수정)
+│   │       └── types.ts              # API 요청/응답 타입 정의 (기존 파일 수정)
 │   └── utils/
 │       └── distance/                  # 거리 계산 유틸리티 (신규)
 │           └── calculate-distance.ts  # 거리 계산 함수
@@ -282,7 +282,7 @@ export interface GetCapsuleViewersResponse {
 
 **함수명**: `getCapsules(params: GetCapsulesRequest): Promise<GetCapsulesResponse>`
 
-**구현 위치**: `src/commons/apis/capsule/index.ts`
+**구현 위치**: `src/commons/apis/easter-egg/index.ts`
 
 **주요 로직**:
 - lat, lng 필수 파라미터로 전달
@@ -297,7 +297,7 @@ export interface GetCapsuleViewersResponse {
 
 **함수명**: `getCapsule(id: string, lat: number, lng: number): Promise<GetCapsuleResponse>`
 
-**구현 위치**: `src/commons/apis/capsule/index.ts`
+**구현 위치**: `src/commons/apis/easter-egg/index.ts`
 
 **주요 로직**:
 - Path 파라미터로 id 전달
@@ -311,7 +311,7 @@ export interface GetCapsuleViewersResponse {
 
 **함수명**: `recordCapsuleView(id: string, data?: RecordCapsuleViewRequest): Promise<RecordCapsuleViewResponse>`
 
-**구현 위치**: `src/commons/apis/capsule/index.ts`
+**구현 위치**: `src/commons/apis/easter-egg/index.ts`
 
 **주요 로직**:
 - Path 파라미터로 id 전달
@@ -326,7 +326,7 @@ export interface GetCapsuleViewersResponse {
 
 **함수명**: `getCapsuleViewers(id: string): Promise<GetCapsuleViewersResponse>`
 
-**구현 위치**: `src/commons/apis/capsule/index.ts`
+**구현 위치**: `src/commons/apis/easter-egg/index.ts`
 
 **주요 로직**:
 - Path 파라미터로 id 전달
@@ -609,8 +609,8 @@ export function calculateDistance(
 **목표**: API 통신 레이어 구축
 
 **작업**:
-1. `src/commons/apis/capsule/types.ts` 생성 및 타입 정의
-2. `src/commons/apis/capsule/index.ts` 생성 및 API 함수 구현
+1. `src/commons/apis/easter-egg/types.ts` 수정 및 타입 추가
+2. `src/commons/apis/easter-egg/index.ts` 수정 및 API 함수 추가
    - `getCapsules` 함수
    - `getCapsule` 함수
    - `recordCapsuleView` 함수
@@ -780,7 +780,7 @@ API 연결 → E2E 테스트 → UI 구현 → 사용자 승인 → 데이터 �
 ```
 
 ### Step 1: API 연결
-- `src/commons/apis/capsule/`에 타입과 API 함수 통합 작성
+- `src/commons/apis/easter-egg/`에 타입과 API 함수 통합 작성
 - 요청/응답 인터페이스 정의
 - 에러 핸들링 및 인터셉터 구현
 
