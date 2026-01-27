@@ -75,6 +75,10 @@ export const TIMEEGG_ENDPOINTS = {
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   
+  // 슬롯 관리
+  GET_SLOTS: `${BASE_PATHS.API}/capsules/slots`,
+  RESET_SLOTS: `${BASE_PATHS.API}/capsules/slots/reset`,
+  
   // 위치 관련
   LOCATIONS: `${BASE_PATHS.API}/locations`,
   NEARBY_LOCATIONS: `${BASE_PATHS.API}/locations/nearby`,

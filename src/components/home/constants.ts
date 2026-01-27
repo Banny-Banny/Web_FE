@@ -24,7 +24,7 @@ export const DEFAULT_LEVEL = 5;
  * 사용자 위치 기준 확대/축소 레벨
  * 사용자 위치를 가져왔을 때 사용하는 레벨
  */
-export const USER_LOCATION_LEVEL = 7;
+export const USER_LOCATION_LEVEL = 3;
 
 /**
  * 지도 최소 확대/축소 레벨

@@ -92,7 +92,9 @@ export function useKakaoMap(params?: UseKakaoMapParams): UseKakaoMapReturn {
         mapInstance.setDraggable(true); // 드래그 이동 활성화
         mapInstance.setZoomable(true);  // 확대/축소 활성화
       } catch (controlErr) {
-        console.warn('지도 조작 기능 설정 실패:', controlErr);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('지도 조작 기능 설정 실패:', controlErr);
+        }
         // 조작 기능 설정 실패는 치명적이지 않으므로 계속 진행
       }
       
@@ -103,7 +105,9 @@ export function useKakaoMap(params?: UseKakaoMapParams): UseKakaoMapReturn {
       const errorMessage = err instanceof Error ? err.message : '지도를 초기화하는데 실패했습니다.';
       setError(errorMessage);
       setIsLoading(false);
-      console.error('지도 초기화 실패:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('지도 초기화 실패:', err);
+      }
     }
   }, [initialLat, initialLng]);
 
@@ -124,7 +128,9 @@ export function useKakaoMap(params?: UseKakaoMapParams): UseKakaoMapReturn {
       mapRef.current.setCenter(center);
       mapRef.current.setLevel(DEFAULT_LEVEL);
     } catch (resetErr) {
-      console.error('지도 리셋 실패:', resetErr);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('지도 리셋 실패:', resetErr);
+      }
     }
   }, []);
 

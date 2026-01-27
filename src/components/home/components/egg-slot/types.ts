@@ -12,6 +12,8 @@ export interface EggSlotProps {
   onClick?: () => void;
   /** 추가 CSS 클래스 */
   className?: string;
+  /** 로딩 상태 */
+  isLoading?: boolean;
 }
 
 /**

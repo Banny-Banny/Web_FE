@@ -150,3 +150,17 @@ export interface AudioAttachmentModalProps {
   /** 오디오 파일 선택 완료 콜백 */
   onSelectAudio: (file: File) => void;
 }
+
+/**
+ * 제출 상태 타입
+ * 
+ * 이스터에그 폼 제출 시의 상태를 나타냅니다.
+ */
+export interface SubmitState {
+  /** 제출 중 여부 */
+  isSubmitting: boolean;
+  /** 파일 업로드 진행률 (0-100) */
+  progress: number;
+  /** 에러 메시지 (없으면 null) */
+  error: string | null;
+}
