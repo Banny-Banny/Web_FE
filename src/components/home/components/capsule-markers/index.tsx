@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useEffect, useRef, memo } from 'react';
+import { useEffect, useRef, memo, useMemo } from 'react';
 import type { KakaoCustomOverlay } from '@/commons/utils/kakao-map/types';
 import type { CapsuleMarkersProps } from './types';
 import type { CapsuleItem } from '@/commons/apis/easter-egg/types';
@@ -19,7 +19,6 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
   map,
   capsules,
   onMarkerClick,
-  className = '',
 }: CapsuleMarkersProps) {
   const overlaysRef = useRef<Map<string, KakaoCustomOverlay>>(new Map());
 
@@ -36,12 +35,34 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
   };
 
   /**
+   * 유효한 캡슐 목록 (좌표가 올바른 캡슐만 필터링)
+   * useMemo로 최적화하여 불필요한 재계산 방지
+   */
+  const validCapsules = useMemo(() => {
+    return capsules.filter((capsule) => {
+      return (
+        typeof capsule.latitude === 'number' &&
+        typeof capsule.longitude === 'number' &&
+        !isNaN(capsule.latitude) &&
+        !isNaN(capsule.longitude)
+      );
+    });
+  }, [capsules]);
+
+  /**
    * 마커 HTML 요소를 생성합니다
    */
   const createMarkerElement = (capsule: CapsuleItem): HTMLElement => {
     const markerWrapper = document.createElement('div');
     markerWrapper.className = styles.markerWrapper;
     markerWrapper.setAttribute('data-capsule-id', capsule.id);
+    
+    // 테스트를 위한 data-testid 속성 추가
+    const typePrefix = capsule.type === 'EASTER_EGG' ? 'easter-egg' : 'time-capsule';
+    markerWrapper.setAttribute('data-testid', `${typePrefix}-marker-${capsule.id}`);
+    markerWrapper.setAttribute('data-marker-type', capsule.type);
+    markerWrapper.setAttribute('data-marker-owner', capsule.is_mine ? 'mine' : 'friend');
+    
     markerWrapper.setAttribute('role', 'button');
     markerWrapper.setAttribute('aria-label', `${capsule.title || '캡슐'} 마커`);
     markerWrapper.setAttribute('tabindex', '0');
@@ -76,7 +97,7 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
    * 마커를 생성하고 지도에 추가합니다
    */
   useEffect(() => {
-    if (!map || !window.kakao?.maps || capsules.length === 0) {
+    if (!map || !window.kakao?.maps || validCapsules.length === 0) {
       return;
     }
 
@@ -93,26 +114,19 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
 
       // 개발 환경에서 마커 생성 시작 로그
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[CapsuleMarkers] 마커 생성 시작: ${capsules.length}개 캡슐`);
+        console.log(`[CapsuleMarkers] 마커 생성 시작: ${validCapsules.length}개 유효한 캡슐`);
       }
 
       let createdCount = 0;
-      let skippedCount = 0;
 
-      // 각 캡슐에 대해 마커 생성
-      capsules.forEach((capsule) => {
+      // 각 유효한 캡슐에 대해 마커 생성
+      validCapsules.forEach((capsule) => {
         try {
-          // 좌표가 유효한지 확인
-          if (
-            typeof capsule.latitude !== 'number' ||
-            typeof capsule.longitude !== 'number' ||
-            isNaN(capsule.latitude) ||
-            isNaN(capsule.longitude)
-          ) {
+          // Kakao Maps API가 로드되었는지 확인
+          if (!window.kakao?.maps) {
             if (process.env.NODE_ENV === 'development') {
-              console.warn(`[CapsuleMarkers] 유효하지 않은 좌표: ${capsule.id}`);
+              console.warn('[CapsuleMarkers] Kakao Maps API가 로드되지 않음');
             }
-            skippedCount++;
             return;
           }
 
@@ -148,13 +162,12 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
           }
         } catch (err) {
           console.error(`[CapsuleMarkers] 마커 생성 실패 (${capsule.id}):`, err);
-          skippedCount++;
         }
       });
 
       // 개발 환경에서 마커 생성 완료 로그
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[CapsuleMarkers] 마커 생성 완료: ${createdCount}개 생성, ${skippedCount}개 건너뜀`);
+        console.log(`[CapsuleMarkers] 마커 생성 완료: ${createdCount}개 생성`);
       }
     } catch (err) {
       console.error('[CapsuleMarkers] 마커 생성 중 오류:', err);
@@ -171,7 +184,7 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
       });
       overlaysRef.current.clear();
     };
-  }, [map, capsules, onMarkerClick]);
+  }, [map, validCapsules, onMarkerClick]);
 
   // 지도가 없으면 렌더링하지 않음
   if (!map) {

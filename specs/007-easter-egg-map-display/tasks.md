@@ -253,7 +253,7 @@
 
 ### 위치 추적 훅 구현
 
-- [ ] T021 src/components/home/hooks/useLocationTracking.ts 생성
+- [x] T021 src/components/home/hooks/useLocationTracking.ts 생성
   - Geolocation API watchPosition 활용
   - 위치 업데이트 주기 최적화 (배터리 고려)
   - `latitude`, `longitude`, `isTracking`, `error` 상태 관리
@@ -269,7 +269,7 @@
 
 ### 자동 발견 훅 구현
 
-- [ ] T022 [US1] src/components/home/hooks/useAutoDiscovery.ts 생성
+- [x] T022 [US1] src/components/home/hooks/useAutoDiscovery.ts 생성
   - 거리 계산 유틸리티 활용
   - 30m 이내 친구 이스터에그 감지 로직 (타임캡슐 제외)
   - 여러 캡슐 동시 발견 시 우선순위 처리 (가장 가까운 것 우선)
@@ -277,7 +277,7 @@
   - `checkDiscovery`, `clearDiscovery` 함수 제공
   - 파일: `src/components/home/hooks/useAutoDiscovery.ts`
 
-- [ ] T023 [US1] src/components/home/index.tsx 수정
+- [x] T023 [US1] src/components/home/index.tsx 수정
   - `useLocationTracking` 훅 통합
   - `useAutoDiscovery` 훅 통합
   - 지도 로드 시 위치 추적 시작
@@ -293,7 +293,7 @@
 
 ### 마커 클릭 처리
 
-- [ ] T024 [US3] src/components/home/hooks/useCapsuleDetail.ts 생성
+- [x] T024 [US3] src/components/home/hooks/useCapsuleDetail.ts 생성
   - React Query를 활용한 캡슐 기본 정보 조회
   - Query Key: `['capsule', id, lat, lng]`
   - 캐시 시간: 10분, Stale Time: 5분
@@ -301,7 +301,7 @@
   - `capsule`, `isLoading`, `error` 반환
   - 파일: `src/components/home/hooks/useCapsuleDetail.ts`
 
-- [ ] T025 [US3] src/components/home/index.tsx 수정
+- [x] T025 [US3] src/components/home/index.tsx 수정
   - 마커 클릭 핸들러 구현
   - `useCapsuleDetail` 훅 사용
   - 소유자 및 거리 조건 판단 로직
@@ -316,7 +316,7 @@
 
 ### 내 캡슐 모달
 
-- [ ] T026 [P] [US4] src/components/home/components/my-capsule-modal/types.ts 생성
+- [x] T026 [P] [US4] src/components/home/components/my-capsule-modal/types.ts 생성
   - `MyCapsuleModalProps` 인터페이스 정의
     - `isOpen` (boolean)
     - `capsule` (GetCapsuleResponse)
@@ -324,7 +324,7 @@
     - `onClose` () => void
   - 파일: `src/components/home/components/my-capsule-modal/types.ts`
 
-- [ ] T027 [P] [US4] src/components/home/components/my-capsule-modal/index.tsx 생성
+- [x] T027 [P] [US4] src/components/home/components/my-capsule-modal/index.tsx 생성
   - Figma 디자인 기반 UI 구현 (node-id=600-6931, node-id=600-7114)
   - 발견자 목록 표시
   - 발견자 수, 상태 정보 표시
@@ -332,14 +332,14 @@
   - Mock 데이터 기반 구현
   - 파일: `src/components/home/components/my-capsule-modal/index.tsx`
 
-- [ ] T028 [P] [US4] src/components/home/components/my-capsule-modal/styles.module.css 생성
+- [x] T028 [P] [US4] src/components/home/components/my-capsule-modal/styles.module.css 생성
   - 내 캡슐 모달 스타일 정의
   - 375px 기준 스타일
   - 파일: `src/components/home/components/my-capsule-modal/styles.module.css`
 
 ### 발견 성공 모달
 
-- [ ] T029 [P] [US5] src/components/home/components/discovery-modal/types.ts 생성
+- [x] T029 [P] [US5] src/components/home/components/discovery-modal/types.ts 생성
   - `DiscoveryModalProps` 인터페이스 정의
     - `isOpen` (boolean)
     - `capsule` (GetCapsuleResponse)
@@ -347,7 +347,7 @@
     - `onDiscoveryRecorded` (() => void, optional)
   - 파일: `src/components/home/components/discovery-modal/types.ts`
 
-- [ ] T030 [P] [US5] src/components/home/components/discovery-modal/index.tsx 생성
+- [x] T030 [P] [US5] src/components/home/components/discovery-modal/index.tsx 생성
   - Figma 디자인 기반 UI 구현
     - 텍스트 + 이미지 (node-id=599-6755)
     - 텍스트 + 이미지 + 음원 + 영상 (node-id=599-6801)
@@ -357,7 +357,7 @@
   - Mock 데이터 기반 구현
   - 파일: `src/components/home/components/discovery-modal/index.tsx`
 
-- [ ] T031 [P] [US5] src/components/home/components/discovery-modal/styles.module.css 생성
+- [x] T031 [P] [US5] src/components/home/components/discovery-modal/styles.module.css 생성
   - 발견 성공 모달 스타일 정의
   - 콘텐츠 타입별 스타일
   - 375px 기준 스타일
@@ -365,14 +365,14 @@
 
 ### 힌트 모달
 
-- [ ] T032 [P] [US6] src/components/home/components/hint-modal/types.ts 생성
+- [x] T032 [P] [US6] src/components/home/components/hint-modal/types.ts 생성
   - `HintModalProps` 인터페이스 정의
     - `isOpen` (boolean)
     - `capsule` (GetCapsuleResponse)
     - `onClose` () => void
   - 파일: `src/components/home/components/hint-modal/types.ts`
 
-- [ ] T033 [P] [US6] src/components/home/components/hint-modal/index.tsx 생성
+- [x] T033 [P] [US6] src/components/home/components/hint-modal/index.tsx 생성
   - Figma 디자인 기반 UI 구현 (node-id=291-1176, node-id=291-1301)
   - 위치 힌트 정보 표시
   - 실제 콘텐츠는 표시하지 않음
@@ -380,14 +380,14 @@
   - Mock 데이터 기반 구현
   - 파일: `src/components/home/components/hint-modal/index.tsx`
 
-- [ ] T034 [P] [US6] src/components/home/components/hint-modal/styles.module.css 생성
+- [x] T034 [P] [US6] src/components/home/components/hint-modal/styles.module.css 생성
   - 힌트 모달 스타일 정의
   - 375px 기준 스타일
   - 파일: `src/components/home/components/hint-modal/styles.module.css`
 
 ### 모달 통합
 
-- [ ] T035 [US3] src/components/home/index.tsx 수정
+- [x] T035 [US3] src/components/home/index.tsx 수정
   - `MyCapsuleModal` 컴포넌트 통합
   - `DiscoveryModal` 컴포넌트 통합
   - `HintModal` 컴포넌트 통합
@@ -400,7 +400,7 @@
 
 ### 발견 기록 훅 구현
 
-- [ ] T036 [US5] src/components/home/hooks/useRecordCapsuleView.ts 생성
+- [x] T036 [US5] src/components/home/hooks/useRecordCapsuleView.ts 생성
   - React Query Mutation 활용
   - `recordCapsuleView` API 호출
   - Optimistic Update 적용
@@ -409,7 +409,7 @@
   - Mock 데이터 기반 구현 (초기)
   - 파일: `src/components/home/hooks/useRecordCapsuleView.ts`
 
-- [ ] T037 [US5] src/components/home/components/discovery-modal/index.tsx 수정
+- [x] T037 [US5] src/components/home/components/discovery-modal/index.tsx 수정
   - 모달 진입 시점에 발견 기록 저장
   - `useRecordCapsuleView` 훅 사용
   - 백그라운드 처리
@@ -421,7 +421,7 @@
 
 ### 발견자 목록 훅 구현
 
-- [ ] T038 [US4] src/components/home/hooks/useCapsuleViewers.ts 생성
+- [x] T038 [US4] src/components/home/hooks/useCapsuleViewers.ts 생성
   - React Query를 활용한 발견자 목록 조회
   - Query Key: `['capsule-viewers', id]`
   - 캐시 시간: 5분, Stale Time: 1분
@@ -429,7 +429,7 @@
   - `viewers`, `isLoading`, `error` 반환
   - 파일: `src/components/home/hooks/useCapsuleViewers.ts`
 
-- [ ] T039 [US4] src/components/home/components/my-capsule-modal/index.tsx 수정
+- [x] T039 [US4] src/components/home/components/my-capsule-modal/index.tsx 수정
   - `useCapsuleViewers` 훅 사용
   - 발견자 목록 조회 및 표시
   - 파일: `src/components/home/components/my-capsule-modal/index.tsx`
@@ -440,7 +440,7 @@
 
 ### 캡슐 목록 조회 바인딩
 
-- [ ] T040 [US1] src/components/home/hooks/useCapsuleMarkers.ts 수정
+- [x] T040 [US1] src/components/home/hooks/useCapsuleMarkers.ts 수정
   - Mock 데이터를 실제 `getCapsules` API 호출로 교체
   - React Query `useQuery` 활용
   - 로딩/에러 상태 처리
@@ -448,7 +448,7 @@
 
 ### 캡슐 기본 정보 조회 바인딩
 
-- [ ] T041 [US3] src/components/home/hooks/useCapsuleDetail.ts 수정
+- [x] T041 [US3] src/components/home/hooks/useCapsuleDetail.ts 수정
   - Mock 데이터를 실제 `getCapsule` API 호출로 교체
   - React Query `useQuery` 활용
   - 로딩/에러 상태 처리
@@ -456,31 +456,34 @@
 
 ### 발견 기록 저장 바인딩
 
-- [ ] T042 [US5] src/components/home/hooks/useRecordCapsuleView.ts 수정
+- [x] T042 [US5] src/components/home/hooks/useRecordCapsuleView.ts 수정
   - Mock 데이터를 실제 `recordCapsuleView` API 호출로 교체
   - React Query `useMutation` 활용
   - 파일: `src/components/home/hooks/useRecordCapsuleView.ts`
 
 ### 발견자 목록 조회 바인딩
 
-- [ ] T043 [US4] src/components/home/hooks/useCapsuleViewers.ts 수정
-  - Mock 데이터를 실제 `getCapsuleViewers` API 호출로 교체
-  - React Query `useQuery` 활용
-  - 로딩/에러 상태 처리
-  - 파일: `src/components/home/hooks/useCapsuleViewers.ts`
+- [x] ~~T043 [US4] src/components/home/hooks/useCapsuleViewers.ts 수정~~ (제거됨)
+  - **제거 사유**: `GET /api/capsules/{id}` API 응답에 이미 `viewers` 정보가 포함되어 있어 별도 API 호출 불필요
+  - `GetCapsuleResponse.viewers` 필드를 직접 사용하도록 변경
+  - `useCapsuleViewers` 훅 삭제
+  - `MyCapsuleModal`에서 `capsule.viewers` 직접 사용
 
 ---
 
 ## Phase 12: 자동 발견 감지 로직 개선 (실제 거리 계산)
 
-- [ ] T044 [US1] src/components/home/hooks/useAutoDiscovery.ts 수정
-  - 실제 거리 계산 유틸리티 활용
-  - 실제 위치 데이터 기반 감지
+- [x] T044 [US1] src/components/home/hooks/useAutoDiscovery.ts 수정
+  - 실제 거리 계산 유틸리티 활용 (Haversine formula)
+  - 실제 위치 데이터 기반 감지 (30m 이내)
+  - 가장 가까운 캡슐 선택 로직 구현
   - 파일: `src/components/home/hooks/useAutoDiscovery.ts`
 
-- [ ] T045 [US2] src/components/home/index.tsx 수정
-  - 지도 이동 시 위치 추적 로직 개선
-  - 실시간 거리 계산 및 자동 발견 감지
+- [x] T045 [US2] src/components/home/index.tsx 수정
+  - 지도 로드 시 위치 추적 자동 시작
+  - 초기 위치로 즉시 자동 발견 체크
+  - 위치 업데이트 시 실시간 자동 발견 감지
+  - 실제 거리 기반 모달 분기 처리 (30m 기준)
   - 파일: `src/components/home/index.tsx`
 
 ---
@@ -489,33 +492,34 @@
 
 ### 에러 처리
 
-- [ ] T046 [US5] src/components/home/components/map-view/index.tsx 수정
+- [x] T046 [US5] src/components/home/components/map-view/index.tsx 수정
   - 캡슐 목록 조회 실패 시 에러 처리
   - 사용자에게 적절한 오류 메시지 표시
   - 재시도 옵션 제공
   - 파일: `src/components/home/components/map-view/index.tsx`
 
-- [ ] T047 [US6] src/components/home/index.tsx 수정
+- [x] T047 [US6] src/components/home/index.tsx 수정
   - 마커 클릭 시 정보 조회 실패 에러 처리
-  - 사용자에게 적절한 오류 메시지 표시
+  - Toast 컴포넌트로 오류 메시지 표시
   - 모달 닫기 처리
   - 파일: `src/components/home/index.tsx`
 
-- [ ] T048 src/components/home/hooks/useLocationTracking.ts 수정
+- [x] T048 src/components/home/hooks/useLocationTracking.ts 수정
   - 위치 추적 실패 시 에러 처리
-  - 기본값 또는 오류 메시지 처리
+  - 재시도 로직 구현 (최대 3회)
+  - 배터리 절약 모드 (enableHighAccuracy: false)
   - 파일: `src/components/home/hooks/useLocationTracking.ts`
 
 ### 성능 최적화
 
-- [ ] T049 src/components/home/components/capsule-markers/index.tsx 수정
-  - 마커 렌더링 최적화
-  - 마커 클러스터링 고려 (선택사항)
+- [x] T049 src/components/home/components/capsule-markers/index.tsx 수정
+  - 마커 렌더링 최적화 (useMemo로 유효한 캡슐 필터링)
+  - 불필요한 재계산 방지
   - 파일: `src/components/home/components/capsule-markers/index.tsx`
 
-- [ ] T048 src/components/home/hooks/useLocationTracking.ts 수정
-  - 위치 추적 주기 최적화 (배터리 고려)
-  - 지도 이동 시에만 추적하도록 개선
+- [x] T050 src/components/home/hooks/useLocationTracking.ts 최적화
+  - 위치 추적 주기 최적화 (maximumAge: 30000ms)
+  - 배터리 고려 (enableHighAccuracy: false)
   - 파일: `src/components/home/hooks/useLocationTracking.ts`
 
 ---
@@ -524,33 +528,33 @@
 
 ### UI 테스트 작성
 
-- [ ] T051 [P] [US1] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts 생성
+- [x] T051 [P] [US1] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts 생성
   - 캡슐 마커 렌더링 테스트
   - 캡슐 타입별 마커 구분 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
 
-- [ ] T052 [P] [US3] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 마커 클릭 이벤트 테스트 추가
+- [x] T052 [P] [US3] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 마커 클릭 이벤트 테스트 추가
   - 마커 클릭 시 모달 표시 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
 
-- [ ] T053 [P] [US4] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 내 캡슐 모달 테스트 추가
+- [x] T053 [P] [US4] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 내 캡슐 모달 테스트 추가
   - 내 캡슐 모달 렌더링 테스트
   - 발견자 목록 표시 테스트
   - 모달 열기/닫기 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
 
-- [ ] T054 [P] [US5] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 발견 성공 모달 테스트 추가
+- [x] T054 [P] [US5] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 발견 성공 모달 테스트 추가
   - 발견 성공 모달 렌더링 테스트
   - 콘텐츠 타입별 UI 분기 테스트
   - 모달 열기/닫기 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
 
-- [ ] T055 [P] [US6] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 힌트 모달 테스트 추가
+- [x] T055 [P] [US6] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 힌트 모달 테스트 추가
   - 힌트 모달 렌더링 테스트
   - 모달 열기/닫기 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
 
-- [ ] T056 [P] [US1] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 자동 발견 모달 테스트 추가
+- [x] T056 [P] [US1] tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts에 자동 발견 모달 테스트 추가
   - 지도 진입 시 자동 발견 모달 표시 테스트
   - 지도 이동 중 자동 발견 모달 표시 테스트
   - 파일: `tests/ui/easter-egg-map-display/easter-egg-map-display.ui.spec.ts`
