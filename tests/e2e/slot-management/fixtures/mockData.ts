@@ -12,9 +12,9 @@ import type { SlotInfoResponse, SlotResetResponse } from '@/commons/apis/easter-
  * - 실제 서버에 등록된 테스트 계정을 사용하세요.
  * - 테스트 실패 시 비밀번호가 서버와 일치하는지 확인하세요.
  */
-export const testLoginRequest: LocalLoginRequest = {
-  phoneNumber: process.env.NEXT_PUBLIC_PHONE_NUMBER,
-  password: process.env.NEXT_PUBLIC_PASSWORD,
+export const validPhoneLoginRequest: LocalLoginRequest = {
+  phoneNumber: '01012345678',
+  password: 'Password123!',
 };
 
 /**
