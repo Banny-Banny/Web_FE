@@ -37,5 +37,13 @@ export function useOrder(orderId: string | null | undefined) {
     enabled: !!orderId,
     staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
     gcTime: 1000 * 60 * 10, // 10분간 가비지 컬렉션 방지
+    retry: (failureCount, error) => {
+      // 네트워크 오류(status가 없는 경우)는 재시도하지 않음
+      if (!error.status) return false;
+      // 4xx 클라이언트 오류는 재시도하지 않음
+      if (error.status >= 400 && error.status < 500) return false;
+      // 5xx 서버 오류는 최대 1회 재시도
+      return failureCount < 1;
+    },
   });
 }

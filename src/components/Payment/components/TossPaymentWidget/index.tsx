@@ -3,13 +3,14 @@
 /**
  * @fileoverview TossPaymentWidget 컴포넌트
  * @description 토스 결제 위젯 래퍼 컴포넌트
- * 
+ *
  * @note
  * Phase 5에서 실제 토스페이먼츠 SDK 연동이 완료되었습니다.
  */
 
 import React, { useEffect, useRef, useState } from 'react';
 import { loadPaymentWidget, PaymentWidgetInstance } from '@tosspayments/payment-widget-sdk';
+import { Button } from '@/commons/components/button';
 import type { TossPaymentWidgetProps } from './types';
 import styles from './styles.module.css';
 
@@ -52,10 +53,6 @@ export function TossPaymentWidget({
       setError(errorMsg);
       setIsLoading(false);
       onError?.(errorMsg);
-      return;
-    }
-
-    if (!containerRef.current) {
       return;
     }
 
@@ -138,37 +135,38 @@ export function TossPaymentWidget({
     }
   };
 
-  if (error) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.error}>
-          <p className={styles.errorMessage}>{error}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>
-          <p className={styles.loadingMessage}>결제 위젯을 불러오는 중...</p>
-        </div>
-      </div>
-    );
-  }
+  // 버튼 레이블 결정
+  const getButtonLabel = () => {
+    if (isLoading) return '결제 준비 중...';
+    if (error) return '토스페이로 결제하기';
+    return '토스페이로 결제하기';
+  };
 
   return (
     <div className={styles.container}>
-      <div ref={containerRef} className={styles.widgetContainer} />
-      <button
-        type="button"
-        className={styles.paymentButton}
-        onClick={handleRequestPayment}
+      {/* 결제 위젯 컨테이너 - 항상 렌더링하되 에러 시 숨김 */}
+      <div
+        ref={containerRef}
+        className={styles.widgetContainer}
+        style={{ display: error ? 'none' : 'block' }}
+      />
+
+      {/* 에러 메시지 표시 */}
+      {error && (
+        <div className={styles.error}>
+          <p className={styles.errorMessage}>{error}</p>
+        </div>
+      )}
+
+      {/* 공통 Button 컴포넌트 사용 */}
+      <Button
+        label={getButtonLabel()}
+        variant={disabled || isLoading || !!error ? 'disabled' : 'primary'}
+        size="L"
+        fullWidth
         disabled={isLoading || !!error || disabled}
-      >
-        토스페이먼츠로 결제하기
-      </button>
+        onPress={handleRequestPayment}
+      />
     </div>
   );
 }
