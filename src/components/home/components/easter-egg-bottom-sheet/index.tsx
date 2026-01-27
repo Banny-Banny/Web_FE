@@ -14,6 +14,8 @@ import BottomSheet from '@/commons/components/bottom-sheet';
 import DualButton from '@/commons/components/dual-button';
 import { RiImageLine, RiMicLine, RiVideoLine, RiCloseLine } from '@remixicon/react';
 import { AudioAttachmentModal } from './components/audio-attachment-modal';
+import { AudioPreview } from './components/audio-preview';
+import { VideoPreview } from './components/video-preview';
 import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
 import type { EasterEggBottomSheetProps, EasterEggFormData, Attachment, AttachmentType } from './types';
 import styles from './styles.module.css';
@@ -91,8 +93,8 @@ export function EasterEggBottomSheet({
       name: file.name,
     };
 
-    // 이미지나 비디오의 경우 미리보기 URL 생성
-    if (type === 'IMAGE' || type === 'VIDEO') {
+    // 이미지, 비디오, 오디오의 경우 미리보기 URL 생성
+    if (type === 'IMAGE' || type === 'VIDEO' || type === 'AUDIO') {
       newAttachment.previewUrl = URL.createObjectURL(file);
     }
 
@@ -196,6 +198,19 @@ export function EasterEggBottomSheet({
   // 작성 완료 버튼 활성화 여부 (제목 필수)
   const isFormValid = title.trim().length > 0;
 
+  // 바텀시트가 열릴 때 첫 번째 입력 필드로 포커스 이동
+  const titleInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (isOpen && titleInputRef.current) {
+      // 약간의 지연을 두어 애니메이션 완료 후 포커스
+      const timer = setTimeout(() => {
+        titleInputRef.current?.focus();
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   return (
     <BottomSheet
       isOpen={isOpen}
@@ -216,16 +231,18 @@ export function EasterEggBottomSheet({
       <div className={`${styles.container} ${className}`}>
         {/* 헤더 */}
         <div className={styles.header}>
-          <h2 className={styles.title}>이스터에그 작성</h2>
-          <p className={styles.subtitle}>현재 위치에 추억을 숨겨요</p>
+          <h2 id="easter-egg-sheet-title" className={styles.title}>이스터에그 작성</h2>
+          <p id="easter-egg-sheet-description" className={styles.subtitle}>현재 위치에 추억을 숨겨요</p>
         </div>
 
         {/* 폼 컨텐츠 */}
         <div className={styles.formContent}>
           {/* 제목 입력 */}
           <div className={styles.fieldGroup}>
-            <label className={styles.label}>제목</label>
+            <label htmlFor="easter-egg-title" className={styles.label}>제목</label>
             <input
+              ref={titleInputRef}
+              id="easter-egg-title"
               type="text"
               className={styles.input}
               placeholder="추억의 제목을 입력하세요"
@@ -236,14 +253,20 @@ export function EasterEggBottomSheet({
                 }
               }}
               maxLength={30}
+              aria-required="true"
+              aria-label="이스터에그 제목"
+              aria-describedby="title-char-count"
             />
-            <div className={styles.charCount}>{title.length}/30</div>
+            <div id="title-char-count" className={styles.charCount} aria-live="polite">
+              {title.length}/30
+            </div>
           </div>
 
           {/* 메시지 입력 */}
           <div className={styles.fieldGroup}>
-            <label className={styles.label}>메시지</label>
+            <label htmlFor="easter-egg-message" className={styles.label}>메시지</label>
             <textarea
+              id="easter-egg-message"
               className={styles.textarea}
               placeholder="미래의 나에게 또는 친구에게 남길 메시지를 작성하세요..."
               value={message}
@@ -254,147 +277,143 @@ export function EasterEggBottomSheet({
               }}
               maxLength={500}
               rows={6}
+              aria-label="이스터에그 메시지"
+              aria-describedby="message-char-count"
             />
-            <div className={styles.charCount}>{message.length}/500</div>
+            <div id="message-char-count" className={styles.charCount} aria-live="polite">
+              {message.length}/500
+            </div>
           </div>
 
           {/* 첨부파일 */}
           <div className={styles.fieldGroup}>
-            <label className={styles.attachmentLabel}>첨부파일</label>
-            <div className={styles.attachmentButtons}>
-              {/* 사진 버튼 */}
-              <button 
-                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'IMAGE') ? styles.attachmentBtnActive : ''}`}
-                onClick={() => imageInputRef.current?.click()}
-                type="button"
-              >
-                {attachments.find(a => a.type === 'IMAGE') ? (
-                  <>
-                    <img 
-                      src={attachments.find(a => a.type === 'IMAGE')?.previewUrl} 
-                      alt="사진 미리보기"
-                      className={styles.attachmentPreview}
-                    />
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const img = attachments.find(a => a.type === 'IMAGE');
-                        if (img) handleDeleteAttachment(img.id);
-                      }}
-                      type="button"
-                      aria-label="사진 삭제"
-                    >
-                      <RiCloseLine size={16} />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.attachmentIconWrapper}>
-                      <RiImageLine size={20} />
+            <label id="attachments-label" className={styles.attachmentLabel}>첨부파일</label>
+            <div className={styles.attachmentButtons} role="group" aria-labelledby="attachments-label">
+              {/* 버튼 그리드 */}
+              <div className={styles.attachmentButtonsGrid}>
+                {/* 사진 버튼 */}
+                <button 
+                  className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'IMAGE') ? styles.attachmentBtnActive : ''}`}
+                  onClick={() => imageInputRef.current?.click()}
+                  type="button"
+                  aria-label={attachments.find(a => a.type === 'IMAGE') ? '사진 첨부됨, 클릭하여 변경' : '사진 첨부하기'}
+                >
+                  <div className={styles.attachmentIconWrapper}>
+                    <RiImageLine size={20} />
+                  </div>
+                  <span>사진</span>
+                  {attachments.find(a => a.type === 'IMAGE') && (
+                    <div className={styles.checkmark}>
+                      <span>✓</span>
                     </div>
-                    <span>사진</span>
-                  </>
-                )}
-              </button>
-              <input
-                ref={imageInputRef}
-                type="file"
-                accept={getAcceptString('IMAGE')}
-                onChange={handleImageSelect}
-                style={{ display: 'none' }}
-              />
+                  )}
+                </button>
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept={getAcceptString('IMAGE')}
+                  onChange={handleImageSelect}
+                  style={{ display: 'none' }}
+                />
 
-              {/* 음원 버튼 */}
-              <button 
-                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'AUDIO') ? styles.attachmentBtnActive : ''}`}
-                onClick={() => setIsAudioModalVisible(true)}
-                type="button"
-              >
-                {attachments.find(a => a.type === 'AUDIO') ? (
-                  <>
-                    <div className={styles.attachmentIconWrapper}>
-                      <RiMicLine size={20} />
+                {/* 음원 버튼 */}
+                <button 
+                  className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'AUDIO') ? styles.attachmentBtnActive : ''}`}
+                  onClick={() => setIsAudioModalVisible(true)}
+                  type="button"
+                  aria-label={attachments.find(a => a.type === 'AUDIO') ? '음원 첨부됨, 클릭하여 변경' : '음원 첨부하기'}
+                >
+                  <div className={styles.attachmentIconWrapper}>
+                    <RiMicLine size={20} />
+                  </div>
+                  <span>음성</span>
+                  {attachments.find(a => a.type === 'AUDIO') && (
+                    <div className={styles.checkmark}>
+                      <span>✓</span>
                     </div>
-                    <div className={styles.attachmentFileName}>
-                      {attachments.find(a => a.type === 'AUDIO')?.name}
-                    </div>
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const audio = attachments.find(a => a.type === 'AUDIO');
-                        if (audio) handleDeleteAttachment(audio.id);
-                      }}
-                      type="button"
-                      aria-label="음원 삭제"
-                    >
-                      <RiCloseLine size={16} />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.attachmentIconWrapper}>
-                      <RiMicLine size={20} />
-                    </div>
-                    <span>음원</span>
-                  </>
-                )}
-              </button>
+                  )}
+                </button>
 
-              {/* 동영상 버튼 */}
-              <button 
-                className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'VIDEO') ? styles.attachmentBtnActive : ''}`}
-                onClick={() => videoInputRef.current?.click()}
-                type="button"
-              >
-                {attachments.find(a => a.type === 'VIDEO') ? (
-                  <>
-                    <video 
-                      src={attachments.find(a => a.type === 'VIDEO')?.previewUrl} 
-                      className={styles.attachmentPreview}
-                      muted
-                    />
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const video = attachments.find(a => a.type === 'VIDEO');
-                        if (video) handleDeleteAttachment(video.id);
-                      }}
-                      type="button"
-                      aria-label="동영상 삭제"
-                    >
-                      <RiCloseLine size={16} />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.attachmentIconWrapper}>
-                      <RiVideoLine size={20} />
+                {/* 동영상 버튼 */}
+                <button 
+                  className={`${styles.attachmentBtn} ${attachments.find(a => a.type === 'VIDEO') ? styles.attachmentBtnActive : ''}`}
+                  onClick={() => videoInputRef.current?.click()}
+                  type="button"
+                  aria-label={attachments.find(a => a.type === 'VIDEO') ? '동영상 첨부됨, 클릭하여 변경' : '동영상 첨부하기'}
+                >
+                  <div className={styles.attachmentIconWrapper}>
+                    <RiVideoLine size={20} />
+                  </div>
+                  <span>동영상</span>
+                  {attachments.find(a => a.type === 'VIDEO') && (
+                    <div className={styles.checkmark}>
+                      <span>✓</span>
                     </div>
-                    <span>동영상</span>
-                  </>
-                )}
-              </button>
-              <input
-                ref={videoInputRef}
-                type="file"
-                accept={getAcceptString('VIDEO')}
-                onChange={handleVideoSelect}
-                style={{ display: 'none' }}
-              />
+                  )}
+                </button>
+                <input
+                  ref={videoInputRef}
+                  type="file"
+                  accept={getAcceptString('VIDEO')}
+                  onChange={handleVideoSelect}
+                  style={{ display: 'none' }}
+                />
+              </div>
+
+              {/* 이미지 미리보기 (큰 이미지) */}
+              {attachments.find(a => a.type === 'IMAGE') && (
+                <div className={styles.imagePreviewLarge}>
+                  <img 
+                    src={attachments.find(a => a.type === 'IMAGE')?.previewUrl} 
+                    alt="사진 미리보기"
+                    className={styles.previewImage}
+                  />
+                  <button
+                    className={styles.previewDeleteBtn}
+                    onClick={() => {
+                      const img = attachments.find(a => a.type === 'IMAGE');
+                      if (img) handleDeleteAttachment(img.id);
+                    }}
+                    type="button"
+                    aria-label="사진 삭제"
+                  >
+                    <RiCloseLine size={16} />
+                  </button>
+                </div>
+              )}
+
+              {/* 음원 미리보기 */}
+              {attachments.find(a => a.type === 'AUDIO') && (
+                <AudioPreview
+                  audioUrl={attachments.find(a => a.type === 'AUDIO')!.previewUrl!}
+                  onDelete={() => {
+                    const audio = attachments.find(a => a.type === 'AUDIO');
+                    if (audio) handleDeleteAttachment(audio.id);
+                  }}
+                />
+              )}
+
+              {/* 비디오 미리보기 */}
+              {attachments.find(a => a.type === 'VIDEO') && (
+                <VideoPreview
+                  videoUrl={attachments.find(a => a.type === 'VIDEO')!.previewUrl!}
+                  onDelete={() => {
+                    const video = attachments.find(a => a.type === 'VIDEO');
+                    if (video) handleDeleteAttachment(video.id);
+                  }}
+                />
+              )}
             </div>
           </div>
 
           {/* 안내 정보 */}
-          <div className={styles.infoBox}>
+          <div className={styles.infoBox} role="note" aria-label="이스터에그 작성 안내">
             <div className={styles.infoItem}>
-              <span className={styles.infoEmoji}>💡</span>
+              <span className={styles.infoEmoji} aria-hidden="true">💡</span>
               <span className={styles.infoText}>현재 위치에 추억이 저장됩니다</span>
             </div>
             <div className={styles.infoItem}>
-              <span className={styles.infoEmoji}>💡</span>
+              <span className={styles.infoEmoji} aria-hidden="true">💡</span>
               <span className={styles.infoText}>3명이 발견하면 이스터에그가 소멸됩니다</span>
             </div>
           </div>

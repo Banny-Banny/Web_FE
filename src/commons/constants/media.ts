@@ -10,18 +10,18 @@ export type MediaType = 'IMAGE' | 'VIDEO' | 'AUDIO';
 // 백엔드 허용 MIME 타입:
 // - IMAGE: image/jpeg, image/jpg, image/png, image/webp (최대 5MB)
 // - VIDEO: video/mp4, video/webm (최대 200MB)
-// - AUDIO: audio/mpeg, audio/mp3, audio/mp4, audio/x-m4a, audio/aac, audio/m4a, audio/x-aac (최대 20MB)
+// - AUDIO: audio/mpeg, audio/aac (최대 10MB - Figma 디자인 스펙)
 export const ALLOWED_EXTENSIONS = {
   IMAGE: ['jpeg', 'jpg', 'png', 'webp'],
   VIDEO: ['mp4', 'webm'],
-  AUDIO: ['mpeg', 'mp3', 'mp4', 'x-m4a', 'aac', 'm4a', 'x-aac'],
+  AUDIO: ['mpeg', 'mp3', 'aac'], // Figma 디자인 스펙: MPEG, AAC
 } as const;
 
 // 용량 제한 (바이트 단위)
 export const SIZE_LIMITS = {
   IMAGE: 5 * 1024 * 1024, // 5MB
   VIDEO: 200 * 1024 * 1024, // 200MB
-  AUDIO: 20 * 1024 * 1024, // 20MB
+  AUDIO: 10 * 1024 * 1024, // 10MB (Figma 디자인 스펙)
 } as const;
 
 // MIME Type 매핑 (백엔드 허용 형식에 맞춤)
@@ -34,14 +34,10 @@ export const MIME_TYPE_MAP: Record<string, string> = {
   // VIDEO
   'video-mp4': 'video/mp4',
   webm: 'video/webm',
-  // AUDIO
+  // AUDIO (Figma 디자인 스펙: MPEG, AAC)
   mpeg: 'audio/mpeg',
   mp3: 'audio/mpeg',
-  'audio-mp4': 'audio/mp4',
-  'x-m4a': 'audio/x-m4a',
   aac: 'audio/aac',
-  m4a: 'audio/m4a',
-  'x-aac': 'audio/x-aac',
 };
 
 // MIME Type에서 확장자 역매핑 (검증용)
@@ -54,14 +50,10 @@ export const MIME_TO_EXTENSION: Record<string, string[]> = {
   // VIDEO
   'video/mp4': ['mp4'],
   'video/webm': ['webm'],
-  // AUDIO
+  // AUDIO (Figma 디자인 스펙: MPEG, AAC)
   'audio/mpeg': ['mpeg', 'mp3'],
   'audio/mp3': ['mp3'],
-  'audio/mp4': ['mp4'],
-  'audio/x-m4a': ['m4a', 'x-m4a'],
   'audio/aac': ['aac'],
-  'audio/m4a': ['m4a'],
-  'audio/x-aac': ['aac', 'x-aac'],
 };
 
 /**
@@ -78,14 +70,11 @@ export function validateFileMimeType(file: File, type: MediaType): boolean {
   } else if (type === 'VIDEO') {
     allowedMimeTypes.push('video/mp4', 'video/webm');
   } else if (type === 'AUDIO') {
+    // Figma 디자인 스펙: MPEG, AAC (Max 10MB)
     allowedMimeTypes.push(
       'audio/mpeg',
       'audio/mp3',
-      'audio/mp4',
-      'audio/x-m4a',
-      'audio/aac',
-      'audio/m4a',
-      'audio/x-aac'
+      'audio/aac'
     );
   }
   
@@ -123,7 +112,8 @@ export function getAcceptString(type: MediaType): string {
   } else if (type === 'VIDEO') {
     return 'video/mp4,video/webm';
   } else if (type === 'AUDIO') {
-    return 'audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,audio/m4a,audio/x-aac';
+    // Figma 디자인 스펙: MPEG, AAC
+    return 'audio/mpeg,audio/mp3,audio/aac,.mp3,.aac';
   }
   return '';
 }

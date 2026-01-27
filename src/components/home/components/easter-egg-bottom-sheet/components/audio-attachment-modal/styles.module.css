@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 10000;
   padding: 20px;
 }
 
@@ -21,10 +21,13 @@
 .modal {
   width: 100%;
   max-width: 340px;
+  height: 470px;
   background-color: var(--color-white);
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
 }
 
 /* 헤더 */
@@ -61,19 +64,200 @@
   background-color: var(--color-gray-100);
 }
 
-/* 컨텐츠 */
-.content {
-  min-height: 266px;
-  padding: 24px 0;
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-/* 업로드 영역 */
-.uploadContent {
+/* 탭 컨테이너 */
+.tabContainer {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tabButton {
+  flex: 1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray-100);
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabButton:hover {
+  background-color: var(--color-gray-200);
+}
+
+.tabButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.tabButtonActive {
+  background-color: var(--color-gray-900);
+  color: var(--color-white);
+}
+
+.tabButtonActive:hover {
+  background-color: var(--color-gray-800);
+}
+
+/* 컨텐츠 */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  overflow: hidden;
+}
+
+/* 직접 녹음 패널 */
+.recordPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  height: 100%;
+}
+
+.timerDisplay {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-gray-900);
+  font-variant-numeric: tabular-nums;
+}
+
+.recordButton {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray-100);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-gray-900);
+  transition: all 0.2s ease;
+}
+
+.recordButton:hover {
+  background-color: var(--color-gray-200);
+}
+
+.recordButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.recordButtonActive {
+  background-color: var(--color-gray-900);
+  border-color: var(--color-gray-900);
+  color: var(--color-white);
+}
+
+.recordButtonActive:hover {
+  background-color: var(--color-gray-800);
+  border-color: var(--color-gray-800);
+}
+
+.recordHint {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-gray-500);
+  margin: 0;
+  text-align: center;
+}
+
+/* 재생 버튼 */
+.playButton {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray-900);
+  transition: opacity 0.2s ease;
+  padding: 0;
+}
+
+.playButton:hover {
+  opacity: 0.7;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* 녹음 액션 버튼 */
+.recordActions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* 파일 업로드 패널 */
+.uploadPanel {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
+}
+
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.uploadComplete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.uploadFileName {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-gray-900);
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.uploadActions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
 }
 
 .uploadButton {
@@ -98,6 +282,11 @@
   border-color: var(--color-gray-300);
 }
 
+.uploadButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .uploadButtonTitle {
   font-size: 13px;
   font-weight: 600;
@@ -106,86 +295,10 @@
 }
 
 .uploadButtonSubtitle {
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 11px;
+  font-weight: 600;
   line-height: 1.5;
   color: var(--color-gray-500);
-}
-
-/* 미리보기 영역 */
-.previewContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.previewTitle {
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.5;
-  color: var(--color-gray-900);
-  margin: 0;
-}
-
-.previewFileName {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--color-gray-600);
-  margin: 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* 재생 컨트롤 */
-.playbackContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.playButton {
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-gray-900);
-  transition: opacity 0.2s ease;
-}
-
-.playButton:hover {
-  opacity: 0.7;
-}
-
-.timeContainer {
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeText {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--color-gray-600);
-}
-
-/* 액션 버튼 */
-.actionButtons {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  margin-top: 16px;
 }
 
 .resetButton,
@@ -213,6 +326,11 @@
   background-color: var(--color-gray-200);
 }
 
+.resetButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .confirmButton {
   background-color: var(--color-gray-900);
   border: none;
@@ -221,6 +339,11 @@
 
 .confirmButton:hover {
   background-color: var(--color-gray-800);
+}
+
+.confirmButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .confirmButton:disabled {
