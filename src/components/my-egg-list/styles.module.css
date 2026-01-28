@@ -1,0 +1,41 @@
+/**
+ * components/my-egg-list/styles.module.css
+ * 이스터에그 목록 Feature Container 스타일
+ *
+ * 체크리스트:
+ * - [✓] CSS Module 사용
+ * - [✓] 색상 토큰만 사용 (하드코딩 0건)
+ * - [✓] 인라인 스타일 0건
+ * - [✓] 피그마 디자인 1:1 대응
+ *
+ * Figma 노드 ID: 161:29166 (발견한 알), 161:25846 (심은 알)
+ * 생성 시각: 2026-01-28
+ */
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-white-500);
+}
+
+/* ============================================
+   Filter Container
+   ============================================ */
+.filterContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  z-index: 999;
+  position: relative;
+}

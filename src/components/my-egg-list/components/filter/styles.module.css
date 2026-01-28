@@ -1,0 +1,146 @@
+/**
+ * components/my-egg-list/components/filter/styles.module.css
+ * 이스터에그 목록 필터 스타일 정의
+ *
+ * 일반적인 필터 UI 패턴 적용:
+ * - 버튼은 항상 표시되고 드롭다운은 아래에 나타남
+ * - 깔끔하고 세련된 디자인
+ */
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+/* ============================================
+   Button
+   ============================================ */
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  min-width: 120px;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  gap: 6px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.button:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.buttonText {
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  color: var(--color-black-500);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.iconContainer {
+  width: 13px;
+  height: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  color: var(--color-dark-grey-600);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Dropdown
+   ============================================ */
+.dropdownWrapper {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  z-index: 1001;
+  margin-top: 4px;
+}
+
+.dropdown {
+  min-width: 120px;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-black-500) 8%, transparent);
+}
+
+.dropdownItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.dropdownItemSelected {
+  background-color: var(--color-white-grey-200);
+}
+
+.dropdownItemText {
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  color: var(--color-black-500);
+  flex: 1;
+}
+
+.dropdownItemTextSelected {
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-black-500);
+}
+
+.checkIconContainer {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.checkIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--color-border-lighter);
+  margin-left: 12px;
+  margin-right: 12px;
+}

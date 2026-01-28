@@ -1,0 +1,118 @@
+/**
+ * components/my-egg-list/components/header/styles.module.css
+ * 이스터에그 목록 헤더 스타일 정의
+ *
+ * 체크리스트:
+ * - [✓] CSS Module 사용
+ * - [✓] 색상 토큰만 사용 (하드코딩 0건)
+ * - [✓] 인라인 스타일 0건
+ * - [✓] 피그마 디자인 1:1 대응
+ * - [✓] Typography 토큰 활용
+ * - [✓] Figma 디자인 사이즈 정확히 반영 (소수점 반올림)
+ *
+ * Figma 노드 ID: 161:29250
+ * 생성 시각: 2026-01-28
+ */
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 32px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+/* ============================================
+   Header Row
+   ============================================ */
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Title
+   ============================================ */
+.titleContainer {
+  flex: 1;
+  min-height: 33px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: var(--spacing-md);
+}
+
+.titleText {
+  font-family: var(--font-pretendard);
+  font-size: 30px;
+  line-height: 33px;
+  font-weight: var(--font-weight-extrabold, 800);
+  color: var(--color-black-500);
+  letter-spacing: 0;
+  margin: 0;
+  flex-shrink: 1;
+}
+
+/* ============================================
+   Button
+   ============================================ */
+.button {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.button:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.button:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.icon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Subtitle
+   ============================================ */
+.subtitleContainer {
+  min-height: 20px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.subtitleText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-grey-500);
+  letter-spacing: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}

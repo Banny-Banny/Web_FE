@@ -53,7 +53,7 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
     // 새로고침 로직
   };
 
-  const handleBlock = (friendId: string) => {
+  const handleBlock = (_friendId: string) => {
     // 차단 로직
   };
 

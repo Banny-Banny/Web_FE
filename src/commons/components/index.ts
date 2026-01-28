@@ -23,6 +23,10 @@ export type { IconProps, IconName, IconSize } from './icon/types';
 export { TimeCapsuleHeader } from './timecapsule-header';
 export type { TimeCapsuleHeaderProps, RightIcon, HeaderIconName } from './timecapsule-header/types';
 
+// PageHeader 컴포넌트
+export { PageHeader } from './page-header';
+export type { PageHeaderProps } from './page-header/types';
+
 // Toast 컴포넌트
 export { Toast } from './toast';
 export type { ToastProps, ToastType } from './toast/types';
