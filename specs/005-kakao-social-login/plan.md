@@ -305,11 +305,16 @@ interface KakaoLoginState {
 
 ## 🔐 보안 고려사항
 
-### 카카오 JavaScript 키
+### 카카오 OAuth (리다이렉트 방식)
 
-- **클라이언트 노출**: 카카오 JavaScript 키는 클라이언트에 노출됨 (정상)
-- **환경 변수**: `NEXT_PUBLIC_KAKAO_JS_KEY`에 저장
-- **실제 인증**: 백엔드에서 카카오 액세스 토큰으로 사용자 정보 조회 후 JWT 발급
+- **클라이언트 키 불필요**: 본 구현은 카카오 JavaScript SDK를 사용하지 않으므로 FE에서 `NEXT_PUBLIC_KAKAO_JS_KEY`가 필요하지 않습니다.
+- **실제 인증**: 카카오 인증은 백엔드 OAuth 엔드포인트에서 처리하고, 성공 시 프론트 콜백으로 `token`을 전달합니다.
+
+### (참고) 카카오 JavaScript 키 (웹)
+
+- 본 프로젝트의 **웹용 JavaScript 키**: `f57869c7f0ef471103954086910311b1`
+- **주의**: 현재 로그인 구현은 SDK 미사용(OAuth 리다이렉트)이므로, 위 키는 **프론트 로그인 플로우에서는 사용하지 않습니다**.
+- SDK 기반 로그인으로 전환하거나, 다른 카카오 JS SDK 기능을 붙일 때만 필요합니다.
 
 ### 인증 코드
 
@@ -378,23 +383,16 @@ interface KakaoLoginState {
 
 ## 📝 개발 워크플로우
 
-### Step 1: 카카오 JavaScript SDK 설정
+### Step 1: OAuth 리다이렉트 플로우 연결
 
-**목적**: 카카오 JavaScript SDK를 동적으로 로드하고 초기화
+**목적**: 앱과 동일한 OAuth 리다이렉트 방식으로 카카오 로그인을 시작
 
 **작업**:
-1. `src/commons/utils/kakao-auth/config.ts` 파일 생성
-   - 환경 변수 `NEXT_PUBLIC_KAKAO_JS_KEY` 읽기 함수 구현
-   - 에러 처리 및 경고 메시지
+1. `src/components/Login/hooks/useKakaoLogin.ts`
+   - `redirect_uri` 생성
+   - `GET /api/auth/kakao?redirect_uri=...`로 `window.location.href` 이동
 
-2. `src/commons/utils/kakao-auth/script-loader.ts` 파일 생성
-   - 카카오 지도 스크립트 로더(`src/commons/utils/kakao-map/script-loader.ts`) 참고
-   - `https://developers.kakao.com/sdk/js/kakao.js` 스크립트 동적 로드
-   - `Kakao.init()` 호출하여 SDK 초기화
-   - Promise 기반 비동기 처리
-   - 중복 로딩 방지
-
-**결과물**: 카카오 JavaScript SDK를 동적으로 로드하고 초기화하는 유틸리티
+**결과물**: 카카오 OAuth 시작 리다이렉트가 동작
 
 ### Step 2: 카카오 로그인 타입 정의
 
@@ -467,18 +465,15 @@ interface KakaoLoginState {
 
 **결과물**: 카카오 로그인이 연결된 로그인 컨테이너
 
-### Step 7: 환경 변수 설정
+### Step 7: 카카오 개발자센터 설정 점검 (웹)
 
-**목적**: 카카오 JavaScript 키 설정
+**목적**: 웹 도메인/Redirect URI 설정이 백엔드 OAuth 플로우와 일치하는지 확인
 
 **작업**:
-1. `.env.local` 파일에 환경 변수 추가
-   ```env
-   NEXT_PUBLIC_KAKAO_JS_KEY=76464dc0c450e1a52df586f4bba35579
-   ```
-2. 환경 변수 설정 가이드 문서화
+1. **JavaScript SDK 도메인**: (SDK 사용 시에만 필요) 본 구현은 SDK 미사용이므로 선택 사항
+2. **Redirect URI**: 백엔드에서 사용하는 Redirect URI(예: `http://localhost:3000/auth/callback`) 등록
 
-**결과물**: 환경 변수 설정 완료
+**결과물**: 개발자센터 설정이 웹 플로우와 일치
 
 ### Step 8: E2E 테스트 작성 (Playwright)
 
@@ -706,9 +701,9 @@ if (!isOnboardingCompleted) {
 - 자체 로그인 API: `POST /api/auth/local/login` (참고)
 
 ### 카카오 개발자 센터
-- JavaScript 키: `76464dc0c450e1a52df586f4bba35579`
-- JavaScript SDK 도메인: `http://localhost:3000` (추가 완료)
-- 카카오 로그인 리다이렉트 URI: `http://localhost:3000` (설정 완료)
+- JavaScript 키(웹): `f57869c7f0ef471103954086910311b1`
+- JavaScript SDK 도메인: `http://localhost:3000` (SDK 사용 시에만 필요)
+- 카카오 로그인 리다이렉트 URI: `http://localhost:3000/auth/callback` (OAuth 리다이렉트 플로우 기준)
 
 ### 기존 코드
 - API 클라이언트: `src/commons/provider/api-provider/api-client.ts`

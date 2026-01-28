@@ -149,37 +149,27 @@ TimeEgg 웹 애플리케이션에서 사용자가 카카오 계정을 사용하�
 **설명**: 사용자가 카카오 계정으로 인증할 수 있는 플로우를 제공합니다.
 
 **요구사항**:
-- 카카오 로그인 버튼 클릭 시 `src/commons/utils/kakao-auth/kakao-login.ts`의 `executeKakaoLogin()` 함수가 실행됨
-- 카카오 JavaScript SDK가 초기화되어 있는지 확인 (`Kakao.isInitialized()`)
-- SDK가 초기화되지 않은 경우 `src/commons/utils/kakao-auth/script-loader.ts`를 통해 SDK 스크립트를 동적 로드하고 초기화 (`Kakao.init()`)
-- 환경 변수 `NEXT_PUBLIC_KAKAO_JS_KEY`에서 카카오 JavaScript 키를 읽어 SDK 초기화
-- `Kakao.Auth.login()` 메서드를 호출하여 카카오 로그인 팝업을 열기
-- 사용자가 카카오 계정 정보를 입력하고 로그인할 수 있음
-- 사용자가 필요한 권한에 동의할 수 있음
-- 카카오 인증이 완료되면 인증 코드(`code`)를 받음
+- 카카오 로그인 버튼 클릭 시 `src/components/Login/hooks/useKakaoLogin.ts`의 `loginWithKakao()`가 실행됨
+- 웹은 **앱과 동일한 OAuth 리다이렉트 방식**을 사용함 (카카오 JavaScript SDK 미사용)
+- `window.location.href`로 백엔드 OAuth 시작 엔드포인트로 이동함: `GET /api/auth/kakao?redirect_uri=<frontend_callback_url>`
+- 카카오 인증 완료 후, 백엔드가 프론트 콜백으로 리다이렉트함: `/auth/callback?token=...`
 
 **검증 기준**:
-- 카카오 로그인 버튼 클릭 시 카카오 인증 화면이 표시됨
-- 카카오 SDK가 정상적으로 초기화됨
-- 사용자가 카카오 계정으로 로그인할 수 있음
-- 카카오 인증 완료 후 인증 코드를 받음
+- 카카오 로그인 버튼 클릭 시 백엔드 OAuth 시작 엔드포인트로 리다이렉트됨
+- 인증 완료 후 `/auth/callback?token=...`로 진입하여 토큰 처리 로직이 실행됨
 
 ### FR-003: 서버 인증 및 토큰 발급
 **설명**: 카카오 인증 정보를 서버로 전송하여 애플리케이션 인증 토큰을 받습니다.
 
 **요구사항**:
-- 카카오 인증 코드를 `src/commons/apis/auth/kakao-login.ts`의 `kakaoLogin()` 함수를 통해 서버로 전송
-- `apiClient.post()` 메서드를 사용하여 `EXTERNAL_ENDPOINTS.KAKAO_LOGIN` (`/api/auth/kakao`) 엔드포인트로 요청
-- 요청 본문에 `{ code: string }` 형식으로 카카오 인증 코드 전송
-- 서버에서 카카오 계정을 확인하고 사용자 계정을 생성하거나 연동함
-- 서버에서 응답으로 `{ accessToken: string, refreshToken?: string, user?: User }` 형식의 JWT 토큰을 받음
-- `src/commons/utils/auth.ts`의 `saveTokens()` 함수를 사용하여 인증 토큰을 안전하게 저장
+- 프론트는 백엔드 OAuth 흐름을 시작하기 위해 `GET /api/auth/kakao?redirect_uri=...`로 이동함
+- 백엔드가 카카오 인증을 처리한 뒤, 프론트 콜백(`/auth/callback`)로 `token`을 전달하여 리다이렉트함
+- 콜백 페이지(`src/app/(auth)/auth/callback/page.tsx`)에서 `token`을 `saveTokens()`로 저장함
+- 저장된 토큰으로 `AUTH_ENDPOINTS.VERIFY`를 호출(`verifyAuth()`)하여 사용자 정보를 갱신함
 
 **검증 기준**:
-- 카카오 인증 코드가 서버로 전송됨
-- API 요청이 올바른 엔드포인트와 형식으로 전송됨
-- 서버에서 인증 토큰이 발급됨
-- 인증 토큰이 안전하게 저장됨
+- `/auth/callback?token=...` 진입 시 토큰이 저장됨
+- 토큰 검증 API 호출로 사용자 정보가 캐시에 저장됨
 
 ### FR-004: 로그인 성공 처리
 **설명**: 카카오 로그인에 성공하면 사용자를 적절한 페이지로 이동시킵니다.
@@ -222,17 +212,11 @@ TimeEgg 웹 애플리케이션에서 사용자가 카카오 계정을 사용하�
 **설명**: 사용자가 카카오 로그인을 취소하면 조용히 처리합니다.
 
 **요구사항**:
-- `Kakao.Auth.login()` 호출 시 사용자가 취소하거나 팝업을 닫은 경우 에러를 조용히 처리
-- 사용자 취소는 에러로 간주하지 않고 오류 메시지를 표시하지 않음
-- `executeKakaoLogin()` 함수에서 사용자 취소를 감지하고 조용히 처리
-- 사용자가 로그인 페이지에 그대로 남아있음
-- 사용자가 다른 로그인 방법을 선택할 수 있음
+- OAuth 리다이렉트 플로우 특성상, 사용자가 카카오 인증 화면에서 취소하면 백엔드가 에러 상태로 콜백 리다이렉트할 수 있음
+- 이 경우 프론트는 콜백에서 토큰 부재(또는 실패 응답)를 감지하여 일반적인 인증 실패로 처리하되, 사용자 경험 정책에 따라 조정 가능
 
 **검증 기준**:
-- 로그인 취소 시 오류 메시지가 표시되지 않음
-- 사용자 취소가 정상적으로 감지되고 처리됨
-- 로그인 취소 후 로그인 페이지가 정상적으로 동작함
-- 사용자가 다른 로그인 방법을 선택할 수 있음
+- (백엔드 동작 정의에 따라) 취소 시 로그인 페이지로 복귀하며, 과도한 경고/에러 노출이 없음
 
 ### FR-007: 기존 자체 로그인과의 통합
 **설명**: 카카오 소셜 로그인과 기존 자체 로그인이 동일한 인증 시스템을 사용합니다.
@@ -389,11 +373,14 @@ TimeEgg 웹 애플리케이션에서 사용자가 카카오 계정을 사용하�
 ## 🔗 기술 의존성
 
 ### 필수 의존성
-- **카카오 JavaScript SDK**: 카카오 계정 인증을 위한 카카오 JavaScript SDK (`https://developers.kakao.com/sdk/js/kakao.js`)
-- **카카오 JavaScript 키**: 환경 변수 `NEXT_PUBLIC_KAKAO_JS_KEY`에 설정된 카카오 JavaScript 키 (`76464dc0c450e1a52df586f4bba35579`)
-- **백엔드 API**: 카카오 로그인을 위한 백엔드 API 엔드포인트 (`POST /api/auth/kakao`)
+- **백엔드 API**: 카카오 OAuth 시작 엔드포인트 (`GET /api/auth/kakao?redirect_uri=...`)
+- **프론트 콜백 라우트**: `/auth/callback?token=...`
 - **토큰 저장소**: `src/commons/utils/auth.ts`의 토큰 저장 함수 (`saveTokens()`)
 - **React Query**: 비동기 상태 관리 및 캐싱을 위한 React Query (`useMutation`, `useQueryClient`)
+
+### (참고) 카카오 JavaScript 키 (웹)
+- **키**: `f57869c7f0ef471103954086910311b1`
+- **주의**: 현재 로그인 구현은 SDK 미사용(OAuth 리다이렉트)이라서 프론트 로그인 플로우에서는 사용하지 않습니다.
 
 ### 파일 구조
 ```
@@ -436,13 +423,11 @@ src/
 - 사용자는 카카오 로그인에 필요한 권한에 동의할 수 있음
 
 ### 기술 환경
-- 카카오 JavaScript SDK가 `https://developers.kakao.com/sdk/js/kakao.js`에서 제공됨
-- 환경 변수 `NEXT_PUBLIC_KAKAO_JS_KEY`에 카카오 JavaScript 키가 설정되어 있음
-- 백엔드 API가 `POST /api/auth/kakao` 엔드포인트로 카카오 인증 코드를 받아 인증을 처리함
-- 백엔드 API가 카카오 인증 성공 시 `{ accessToken: string, refreshToken?: string, user?: User }` 형식의 JWT 토큰을 반환함
+- 웹은 카카오 JavaScript SDK를 사용하지 않음 (OAuth 리다이렉트 방식)
+- 백엔드가 카카오 인증을 처리하고, 성공 시 프론트 콜백으로 `token`을 전달하여 리다이렉트함
 - 기존 토큰 저장 및 관리 시스템(`src/commons/utils/auth.ts`)이 이미 구현되어 있음
 - 기존 자체 로그인 구조(`src/commons/apis/auth/login.ts`, `src/components/Login/hooks/useLoginMutation.ts`)를 참고하여 일관된 인증 플로우 유지
-- 카카오 개발자 센터 설정이 완료되어 있음 (JavaScript 키: `76464dc0c450e1a52df586f4bba35579`, 도메인: `http://localhost:3000`)
+- 카카오 개발자 센터 설정이 완료되어 있음 (웹 도메인 및 Redirect URI 설정 포함)
 
 ### 디자인 시스템
 - 제공된 Figma 디자인이 최종 디자인으로 확정됨
