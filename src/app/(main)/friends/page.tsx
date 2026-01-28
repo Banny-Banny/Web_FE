@@ -10,7 +10,7 @@
 
 import { useRouter } from 'next/navigation';
 import { Mypage } from '@/components/Mypage';
-import { FriendList } from '@/components/Mypage/activity-stats/friend';
+import { FriendList } from '@/components/Mypage/components/activity-stats/friend';
 
 export default function FriendsPage() {
   const router = useRouter();
