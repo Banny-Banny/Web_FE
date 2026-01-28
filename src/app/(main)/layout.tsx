@@ -31,12 +31,11 @@ export default function MainLayout({
   // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트 (예외: /room/join)
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !isRoomJoinPage) {
-      console.log('🔒 [MainLayout] 인증 필요 - 로그인 페이지로 이동');
       router.push('/login');
     }
   }, [isAuthenticated, isLoading, isRoomJoinPage, router]);
 
-  // /room/join 페이지는 인증 없이도 접근 가능 (자체적으로 리다이렉트 처리)
+  // /room/join: 인증 없이 접근 가능 (자체 리다이렉트)
   if (isRoomJoinPage) {
     return <>{children}</>;
   }
