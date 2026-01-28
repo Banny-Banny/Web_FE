@@ -15,7 +15,7 @@ import DualButton from '@/commons/components/dual-button';
 import { RiImageLine, RiMicLine, RiVideoLine, RiCloseLine } from '@remixicon/react';
 import { AudioAttachmentModal } from '@/commons/components/audio-attachment-modal';
 import { AudioPreview } from '@/commons/components/audio-preview';
-import { VideoPreview } from './components/video-preview';
+import { VideoPreview } from '@/commons/components/video-preview';
 import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
 import { useEasterEggSubmit } from '../../hooks/useEasterEggSubmit';
 import type { EasterEggBottomSheetProps, EasterEggFormData, Attachment, AttachmentType } from './types';
