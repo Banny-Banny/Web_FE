@@ -39,16 +39,19 @@ export function ParticipantList({
   onInviteFriend,
   onWriteMyContent,
 }: ParticipantListProps) {
-  // 빈 슬롯 개수 계산
-  const emptySlotsCount = maxHeadcount - currentHeadcount;
+  // participants가 없으면 빈 배열로 대체
+  const safeParticipants = participants ?? [];
+
+  // 빈 슬롯 개수 계산 (음수 방지)
+  const emptySlotsCount = Math.max(0, maxHeadcount - currentHeadcount);
 
   // 내 참여자 찾기
   const myParticipant = currentUserId
-    ? participants.find((p) => p.userId === currentUserId)
-    : participants.find((p) => p.role === 'HOST');
+    ? safeParticipants.find((p) => p.userId === currentUserId)
+    : safeParticipants.find((p) => p.role === 'HOST');
 
   // 다른 참여자들
-  const otherParticipants = participants.filter(
+  const otherParticipants = safeParticipants.filter(
     (p) => p.participantId !== myParticipant?.participantId
   );
 

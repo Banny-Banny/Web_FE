@@ -37,10 +37,17 @@ import type {
 export async function createOrder(
   data: CreateOrderRequest
 ): Promise<CreateOrderResponse> {
+  // 디버깅: 주문 생성 요청 데이터 확인
+  console.log('[createOrder] 주문 생성 요청 데이터:', data);
+
   const response = await apiClient.post<CreateOrderResponse>(
     ORDER_ENDPOINTS.CREATE,
     data
   );
+
+  // 디버깅: 주문 생성 응답 확인
+  console.log('[createOrder] 주문 생성 응답:', response.data);
+
   return response.data;
 }
 
@@ -61,6 +68,10 @@ export async function getOrder(orderId: string): Promise<GetOrderResponse> {
   const response = await apiClient.get<GetOrderResponse>(
     ORDER_ENDPOINTS.DETAIL(orderId)
   );
+
+  // 디버깅: 주문 상세 조회 응답 확인
+  console.log('[getOrder] 주문 상세 조회 응답:', response.data);
+
   return response.data;
 }
 

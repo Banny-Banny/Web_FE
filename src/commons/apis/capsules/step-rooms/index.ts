@@ -7,8 +7,67 @@ import { apiClient } from '@/commons/provider/api-provider/api-client';
 import { CAPSULE_ENDPOINTS } from '../../endpoints';
 import type {
   WaitingRoomSettingsResponse,
+  WaitingRoomSettingsApiResponse,
   WaitingRoomDetailResponse,
+  WaitingRoomDetailApiResponse,
+  Participant,
+  SlotApiResponse,
 } from './types';
+
+/**
+ * 슬롯 데이터를 참여자 데이터로 변환 (snake_case → camelCase)
+ */
+function transformSlotToParticipant(slot: SlotApiResponse): Participant {
+  return {
+    participantId: `slot-${slot.slot_number}`,
+    userId: slot.user_id,
+    userName: slot.nickname,
+    userAvatarUrl: slot.avatar_url,
+    slotNumber: slot.slot_number,
+    role: slot.is_host ? 'HOST' : 'PARTICIPANT',
+    status: slot.status,
+  };
+}
+
+/**
+ * 대기실 상세 정보 변환 (snake_case → camelCase)
+ */
+function transformWaitingRoomDetail(
+  data: WaitingRoomDetailApiResponse,
+  maxHeadcount?: number
+): WaitingRoomDetailResponse {
+  // slots 배열에서 참여자 목록 가져오기
+  const slots = data.slots || [];
+  const participants = slots.map(transformSlotToParticipant);
+
+  return {
+    waitingRoomId: data.room_id,
+    capsuleName: data.capsule_name,
+    openDate: data.open_date,
+    deadline: data.deadline,
+    status: data.status ?? 'WAITING',
+    currentHeadcount: participants.length,
+    maxHeadcount: maxHeadcount ?? participants.length,
+    participants,
+  };
+}
+
+/**
+ * 대기실 설정값 변환 (snake_case → camelCase)
+ */
+function transformWaitingRoomSettings(
+  data: WaitingRoomSettingsApiResponse
+): WaitingRoomSettingsResponse {
+  return {
+    roomId: data.room_id,
+    capsuleName: data.capsule_name,
+    openDate: data.open_date,
+    maxHeadcount: data.max_participants,
+    maxImagesPerPerson: data.max_images_per_person,
+    hasMusic: data.has_music,
+    hasVideo: data.has_video,
+  };
+}
 
 /**
  * 대기실 설정값 조회 API
@@ -31,10 +90,11 @@ import type {
 export async function getWaitingRoomSettings(
   capsuleId: string
 ): Promise<WaitingRoomSettingsResponse> {
-  const response = await apiClient.get<WaitingRoomSettingsResponse>(
+  const response = await apiClient.get<WaitingRoomSettingsApiResponse>(
     CAPSULE_ENDPOINTS.WAITING_ROOM_SETTINGS(capsuleId)
   );
-  return response.data;
+  // snake_case → camelCase 변환
+  return transformWaitingRoomSettings(response.data);
 }
 
 /**
@@ -58,8 +118,13 @@ export async function getWaitingRoomSettings(
 export async function getWaitingRoomDetail(
   capsuleId: string
 ): Promise<WaitingRoomDetailResponse> {
-  const response = await apiClient.get<WaitingRoomDetailResponse>(
+  const response = await apiClient.get<WaitingRoomDetailApiResponse>(
     CAPSULE_ENDPOINTS.WAITING_ROOM_DETAIL(capsuleId)
   );
-  return response.data;
+  // 디버깅: 실제 API 응답 확인
+  console.log('[getWaitingRoomDetail] API 응답 (원본):', response.data);
+  // snake_case → camelCase 변환 (maxHeadcount는 settings에서 가져와야 함)
+  const transformed = transformWaitingRoomDetail(response.data);
+  console.log('[getWaitingRoomDetail] API 응답 (변환됨):', transformed);
+  return transformed;
 }

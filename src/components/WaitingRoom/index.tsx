@@ -88,7 +88,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
             <ParticipantList
               participants={waitingRoom.participants}
               currentHeadcount={waitingRoom.currentHeadcount}
-              maxHeadcount={waitingRoom.maxHeadcount}
+              maxHeadcount={settings?.maxHeadcount ?? waitingRoom.maxHeadcount}
               currentUserId="user-1"
               onInviteFriend={handleInviteFriend}
               onWriteMyContent={handleWriteMyContent}

@@ -38,7 +38,7 @@ export function useWaitingRoom(capsuleId: string | null | undefined) {
     enabled: !!capsuleId,
     staleTime: 30000, // 30초간 캐시 유지
     gcTime: 1000 * 60 * 5, // 5분간 가비지 컬렉션 방지
-    refetchInterval: 5000, // 5초마다 자동 갱신 (참여자 목록 업데이트)
+    // refetchInterval: 5000, // 자동 갱신 비활성화
     retry: (failureCount, error) => {
       // 네트워크 오류(status가 없는 경우)는 재시도하지 않음
       if (!error.status) return false;
