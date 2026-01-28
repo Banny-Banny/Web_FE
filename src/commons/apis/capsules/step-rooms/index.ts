@@ -21,6 +21,11 @@ import type {
   MyContentResponse,
   SaveContentRequest,
   UpdateContentRequest,
+  CreateRoomRequest,
+  CreateRoomResponse,
+  InviteCodeQueryResponse,
+  JoinRoomRequest,
+  JoinRoomResponse,
 } from './types';
 
 /**
@@ -111,6 +116,7 @@ function transformWaitingRoomDetail(
     // settings가 없으면 slots 길이를 최대 인원으로 추론
     maxHeadcount: maxHeadcount ?? (slots.length || participants.length),
     participants,
+    inviteCode: data.invite_code,
   };
 }
 
@@ -138,6 +144,7 @@ function transformWaitingRoomSettings(
     maxImagesPerPerson: data.max_images_per_person,
     hasMusic: data.has_music,
     hasVideo: data.has_video,
+    inviteCode: data.invite_code,
   };
 }
 
@@ -350,8 +357,9 @@ export async function getMyContent(
     // snake_case → camelCase 변환
     return transformMyContent(data);
   } catch (error) {
-    // 404 에러는 "아직 작성하지 않았습니다"를 의미하는 정상적인 응답
     const apiError = error as ApiError;
+    
+    // 404 에러는 "아직 작성하지 않았습니다"를 의미하는 정상적인 응답
     if (apiError?.status === 404) {
       // 빈 응답 반환
       return {
@@ -457,4 +465,69 @@ export async function updateContent(
   );
   const updated = unwrapApiResponse<MyContentUpdateApiData>(response.data);
   return transformMyContentUpdate(updated);
+}
+
+/**
+ * 방 생성 API (타임캡슐 대기실 생성 + 초대 코드 발급)
+ *
+ * POST /api/capsules/step-rooms/create
+ *
+ * @param {CreateRoomRequest} data - 방 생성 요청 데이터
+ * @returns {Promise<CreateRoomResponse>} 방 생성 응답
+ */
+export async function createRoom(
+  data: CreateRoomRequest
+): Promise<CreateRoomResponse> {
+  const response = await apiClient.post(
+    CAPSULE_ENDPOINTS.CREATE_ROOM,
+    data
+  );
+  // 방 생성 응답은 래퍼 없이 내려온다고 가정
+  return unwrapApiResponse<CreateRoomResponse>(response.data);
+}
+
+/**
+ * 초대 코드로 방 정보 조회 API (Public API - 인증 불필요)
+ *
+ * GET /api/capsules/step-rooms/by-code?invite_code={code}
+ *
+ * @param {string} code - 초대 코드 (대소문자 구분 없이 입력 가능)
+ * @returns {Promise<InviteCodeQueryResponse>} 초대 코드 조회 응답
+ */
+export async function queryRoomByInviteCode(
+  code: string
+): Promise<InviteCodeQueryResponse> {
+  // Public API 이므로 Authorization 헤더를 제거하여 호출
+  const response = await apiClient.get(
+    CAPSULE_ENDPOINTS.INVITE_CODE_QUERY(code),
+    {
+      headers: {
+        Authorization: undefined,
+      },
+    }
+  );
+  return unwrapApiResponse<InviteCodeQueryResponse>(response.data);
+}
+
+/**
+ * 초대 코드로 방 참여 API
+ *
+ * POST /api/capsules/step-rooms/{capsuleId}/join
+ *
+ * @param {string} capsuleId - 대기실 ID (캡슐 ID)
+ * @param {JoinRoomRequest} data - 참여 요청 데이터
+ * @returns {Promise<JoinRoomResponse>} 방 참여 응답
+ *
+ * @note
+ * - 409 ALREADY_JOINED 는 상위에서 처리하기 위해 그대로 throw 합니다.
+ */
+export async function joinRoom(
+  capsuleId: string,
+  data: JoinRoomRequest
+): Promise<JoinRoomResponse> {
+  const response = await apiClient.post(
+    CAPSULE_ENDPOINTS.JOIN_ROOM(capsuleId),
+    data
+  );
+  return unwrapApiResponse<JoinRoomResponse>(response.data);
 }

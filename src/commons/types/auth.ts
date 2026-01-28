@@ -8,6 +8,7 @@ export interface User {
   profileImage?: string;
   createdAt: string;
   updatedAt: string;
+  onboardingCompleted?: boolean;  // 온보딩 완료 여부 (서버에서 제공하는 경우)
 }
 
 /**

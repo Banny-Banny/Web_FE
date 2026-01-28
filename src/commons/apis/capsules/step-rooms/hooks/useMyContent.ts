@@ -40,8 +40,22 @@ export function useMyContent(capsuleId: string | null | undefined) {
       if (apiError?.status === 404) {
         return false;
       }
+      // 403 에러는 방 참여 직후 서버 상태 동기화 지연으로 발생할 수 있으므로 1회 재시도
+      if (apiError?.status === 403 && failureCount < 1) {
+        return true;
+      }
       // 다른 에러는 기본 재시도 로직 사용 (최대 3회)
       return failureCount < 3;
+    },
+    // 재시도 간격 설정 (403 에러 시 빠른 재시도)
+    retryDelay: (attemptIndex, error) => {
+      const apiError = error as ApiError;
+      // 403 에러는 서버 상태 동기화 지연이므로 500ms 후 재시도
+      if (apiError?.status === 403) {
+        return 500;
+      }
+      // 다른 에러는 기본 exponential backoff (1000ms * 2^attemptIndex)
+      return Math.min(1000 * 2 ** attemptIndex, 30000);
     },
     // 404는 정상 응답이므로 에러로 간주하지 않음
     throwOnError: (error) => {
