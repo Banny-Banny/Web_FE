@@ -19,18 +19,20 @@
 import React from 'react';
 import Image from 'next/image';
 import { RiEyeLine, RiMapPinLine, RiImageLine, RiMicLine, RiVidiconLine } from '@remixicon/react';
+import { useKakaoAddress } from '@/commons/hooks/useKakaoAddress';
+import { default as BrokenEggSvg } from '@/assets/images/broken_egg.svg';
+import { default as FilledEggSvg } from '@/assets/images/filled_egg.svg';
 import styles from './styles.module.css';
-
-// 소멸된 알 이미지 경로
-const BROKEN_EGG_ICON = '/assets/images/broken_egg.svg';
 
 export interface ItemProps {
   id?: string;
   title: string;
   description: string;
   location?: string;
+  latitude?: number;
+  longitude?: number;
   date: string;
-  eggIcon?: string | number;
+  eggIcon?: string | number | React.ComponentType<{ className?: string; width?: number; height?: number }>;
   hasImage?: boolean;
   hasAudio?: boolean;
   hasVideo?: boolean;
@@ -44,6 +46,8 @@ export function Item({
   title,
   description,
   location,
+  latitude,
+  longitude,
   date,
   eggIcon,
   hasImage,
@@ -56,17 +60,63 @@ export function Item({
 }: ItemProps) {
   const isExpired = status === 'EXPIRED';
 
-  // 소멸된 알이면 broken_egg.svg 사용, 아니면 기존 eggIcon 사용
-  const displayIcon = isExpired ? BROKEN_EGG_ICON : eggIcon;
+  // 카카오 주소 조회 훅 사용
+  const { address: addressFromCoord } = useKakaoAddress({
+    lat: latitude,
+    lng: longitude,
+    existingAddress: location,
+  });
 
-  // Image src 타입 변환
-  const iconSrc = displayIcon 
-    ? (typeof displayIcon === 'string' 
-        ? displayIcon 
-        : typeof displayIcon === 'number' 
-          ? String(displayIcon)
-          : displayIcon)
-    : null;
+  // 주소 우선순위: location > addressFromCoord > 빈 문자열
+  // location이 없으면 API로 가져온 주소 사용
+  const displayLocation = addressFromCoord || location || '';
+
+  // 소멸된 알이면 broken_egg.svg 사용, 아니면 기존 eggIcon 사용
+  // eggIcon이 React 컴포넌트면 직접 사용, 문자열/숫자면 Image 컴포넌트 사용, 없으면 기본 filled_egg.svg 사용
+  const getIconContent = () => {
+    if (isExpired) {
+      return (
+        <BrokenEggSvg
+          className={styles.icon}
+          aria-label="소멸된 알"
+        />
+      );
+    }
+    
+    if (!eggIcon) {
+      return (
+        <FilledEggSvg
+          className={styles.icon}
+          aria-label="활성 알"
+        />
+      );
+    }
+    
+    // eggIcon이 React 컴포넌트인 경우
+    if (typeof eggIcon === 'function' || (typeof eggIcon === 'object' && '$$typeof' in eggIcon)) {
+      const IconComponent = eggIcon as React.ComponentType<{ className?: string }>;
+      return (
+        <IconComponent
+          className={styles.icon}
+        />
+      );
+    }
+    
+    // eggIcon이 문자열/숫자인 경우 Image 컴포넌트 사용
+    const iconSrc = typeof eggIcon === 'string' 
+      ? eggIcon 
+      : String(eggIcon);
+    
+    return (
+      <Image
+        src={iconSrc}
+        alt=""
+        width={52}
+        height={52}
+        className={styles.icon}
+      />
+    );
+  };
 
   return (
     <button
@@ -76,17 +126,9 @@ export function Item({
       aria-label={title}>
       <div className={styles.content}>
         <div className={styles.headerRow}>
-          {iconSrc && (
-            <div className={styles.iconContainer}>
-              <Image
-                src={iconSrc}
-                alt=""
-                width={52}
-                height={52}
-                className={styles.icon}
-              />
-            </div>
-          )}
+          <div className={styles.iconContainer}>
+            {getIconContent()}
+          </div>
           <div className={styles.textContainer}>
             <div className={styles.titleRow}>
               <h3 className={styles.titleText}>{title}</h3>
@@ -102,13 +144,13 @@ export function Item({
         </div>
         <div className={styles.footerRow}>
           <div className={styles.metaContainer}>
-            {location && (
+            {displayLocation && (
               <>
                 <div className={styles.locationContainer}>
                   <div className={styles.locationIconContainer}>
                     <RiMapPinLine size={13} className={styles.locationIcon} />
                   </div>
-                  <span className={styles.metaText}>{location}</span>
+                  <span className={styles.metaText}>{displayLocation}</span>
                 </div>
                 <div className={styles.divider} />
               </>

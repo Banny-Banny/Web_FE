@@ -23,16 +23,23 @@ import styles from './styles.module.css';
 interface ItemListProps {
   items?: ItemProps[];
   tabType?: 'discovered' | 'planted';
+  isLoading?: boolean;
   onItemPress?: (item: ItemProps, index: number) => void;
 }
 
 export function ItemList({
   items = [],
   tabType = 'discovered',
+  isLoading = false,
   onItemPress,
 }: ItemListProps) {
   // items가 없으면 빈 배열 사용
   const displayItems = items;
+  
+  // 빈 상태 메시지
+  const emptyMessage = tabType === 'discovered' 
+    ? '아직 발견한 이스터에그가 없습니다'
+    : '아직 심은 이스터에그가 없습니다';
 
   // 심은 알인 경우 활성/소멸 구분
   const { activeItems, expiredItems } = useMemo(() => {
@@ -54,11 +61,15 @@ export function ItemList({
     return { activeItems: active, expiredItems: expired };
   }, [displayItems, tabType]);
 
-  // 항상 같은 구조를 반환하여 React 내부 에러 방지
-  const showSections = tabType === 'planted' && expiredItems.length > 0;
+  // 심은 알 탭에서는 항상 활성/소멸 섹션 구분 표시
+  // 활성 알만 있어도, 소멸된 알만 있어도, 둘 다 있어도 섹션으로 구분
+  const showSections = tabType === 'planted';
 
   // 렌더링할 아이템 목록 준비
   const renderContent = useMemo(() => {
+    // showViewCount는 tabType이 'planted'일 때만 true
+    const shouldShowViewCount = tabType === 'planted';
+    
     if (showSections) {
       return (
         <>
@@ -74,7 +85,7 @@ export function ItemList({
                   <Item
                     key={item.id || `active-${item.title}-${index}`}
                     {...item}
-                    showViewCount={true}
+                    showViewCount={shouldShowViewCount}
                     onPress={() => onItemPress?.(item, originalIndex >= 0 ? originalIndex : index)}
                   />
                 );
@@ -94,7 +105,7 @@ export function ItemList({
                   <Item
                     key={item.id || `expired-${item.title}-${index}`}
                     {...item}
-                    showViewCount={true}
+                    showViewCount={shouldShowViewCount}
                     onPress={() => onItemPress?.(item, originalIndex >= 0 ? originalIndex : index)}
                   />
                 );
@@ -110,11 +121,22 @@ export function ItemList({
       <Item
         key={item.id || `${item.title}-${index}`}
         {...item}
-        showViewCount={tabType === 'planted'}
+        showViewCount={shouldShowViewCount}
         onPress={() => onItemPress?.(item, index)}
       />
     ));
   }, [showSections, activeItems, expiredItems, displayItems, tabType, onItemPress]);
+
+  // 빈 상태 처리
+  if (!isLoading && displayItems.length === 0) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.emptyContainer}>
+          <p className={styles.emptyMessage}>{emptyMessage}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

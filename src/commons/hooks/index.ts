@@ -10,3 +10,6 @@
 
 export { useGNB } from './useGNB';
 export type { UseGNBReturn } from './useGNB';
+
+export { useKakaoAddress } from './useKakaoAddress';
+export type { UseKakaoAddressProps, UseKakaoAddressReturn } from './useKakaoAddress';

@@ -39,3 +39,59 @@
   z-index: 999;
   position: relative;
 }
+
+/* ============================================
+   Loading Container
+   ============================================ */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 400px;
+  padding: var(--spacing-xl);
+}
+
+/* ============================================
+   Error Container
+   ============================================ */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 400px;
+  padding: var(--spacing-xl);
+  gap: var(--spacing-md);
+}
+
+.errorMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  color: var(--color-dark-grey-600);
+  text-align: center;
+  margin: 0;
+}
+
+.retryButton {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-blue-500);
+  color: var(--color-white-500);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: var(--color-blue-600);
+}
+
+.retryButton:active {
+  background-color: var(--color-blue-700);
+}

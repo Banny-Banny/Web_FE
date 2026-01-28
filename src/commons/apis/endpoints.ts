@@ -216,6 +216,14 @@ export const CAPSULE_ENDPOINTS = {
 } as const;
 
 /**
+ * 미디어 관련 엔드포인트
+ */
+export const MEDIA_ENDPOINTS = {
+  // 미디어 URL 조회
+  GET_MEDIA_URL: (id: string) => `${BASE_PATHS.API}/media/${id}/url`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -226,6 +234,7 @@ export const ENDPOINTS = {
   ORDER: ORDER_ENDPOINTS,
   PAYMENT: PAYMENT_ENDPOINTS,
   CAPSULE: CAPSULE_ENDPOINTS,
+  MEDIA: MEDIA_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,

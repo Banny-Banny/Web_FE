@@ -18,6 +18,10 @@ export type * from './payment/types';
 export * from './capsules';
 export type * from './capsules/types';
 
+// 미디어 API
+export * from './media';
+export type * from './media/types';
+
 // API 클라이언트 및 함수들이 여기에 추가됩니다
 // 예: export { apiClient } from './client';
 // 예: export * from './user';

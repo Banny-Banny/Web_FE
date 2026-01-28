@@ -81,7 +81,7 @@ function transformFormDataToApiRequest(formData: EasterEggFormData): CreateEaste
     latitude: formData.location!.latitude,
     longitude: formData.location!.longitude,
     title: formData.title.trim(),
-    message: formData.message?.trim() || undefined,
+    content: formData.message?.trim() || undefined,
     media_files: media_files.length > 0 ? media_files : undefined,
   };
 }
@@ -177,10 +177,10 @@ export function useEasterEggSubmit(): UseEasterEggSubmitReturn {
     onSuccess: () => {
       setProgress(100);
       setError(null);
-      // 이스터에그 생성 성공 시 슬롯 정보 쿼리 무효화
-      queryClient.invalidateQueries({ 
-        queryKey: SLOT_QUERY_KEYS.slotInfo() 
-      });
+      // 이스터에그 생성 성공 시 관련 쿼리 무효화 → 지도 마커·내 이스터에그 목록 즉시 반영
+      queryClient.invalidateQueries({ queryKey: SLOT_QUERY_KEYS.slotInfo() });
+      queryClient.invalidateQueries({ queryKey: ['capsules'] });
+      queryClient.invalidateQueries({ queryKey: ['myEggs'] });
     },
     onError: (err: unknown) => {
       // API 에러 처리

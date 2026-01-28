@@ -12,7 +12,9 @@ export interface CreateEasterEggRequest {
   longitude: number;
   /** 제목 (필수, 최대 100자) - 서버 요구사항 */
   title: string;
-  /** 메시지 (선택, 최대 500자) */
+  /** 내용 (선택, 최대 500자) */
+  content?: string;
+  /** 메시지 (선택, 최대 500자) - 레거시 호환성 */
   message?: string;
   /** 미디어 파일 배열 (선택, 최대 3개) */
   media_files?: File[];

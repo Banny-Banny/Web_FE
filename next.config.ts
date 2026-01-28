@@ -24,6 +24,32 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.timeegg.com',
       },
+      // 카카오 이미지 호스트
+      {
+        protocol: 'http',
+        hostname: 'img1.kakaocdn.net',
+      },
+      {
+        protocol: 'http',
+        hostname: 't1.kakaocdn.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'k.kakaocdn.net',
+      },
+      // AWS S3 이미지 호스트
+      {
+        protocol: 'https',
+        hostname: 's3.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.s3.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.s3.*.amazonaws.com',
+      },
     ],
     // 이미지 형식 최적화
     formats: ['image/webp', 'image/avif'],

@@ -144,7 +144,7 @@
 
 ### 3.1 useMyEggList 훅 구현
 
-- [ ] T008 src/components/my-egg-list/hooks/useMyEggList.ts 수정
+- [x] T008 src/components/my-egg-list/hooks/useMyEggList.ts 수정
   - React Query를 활용한 목록 데이터 조회
     - `useQuery`를 사용하여 `getMyEggs` API 호출
     - 쿼리 키: `['myEggs']`
@@ -173,7 +173,7 @@
     - 에러 메시지 처리
   - 파일: `src/components/my-egg-list/hooks/useMyEggList.ts`
 
-- [ ] T009 src/components/my-egg-list/hooks/useMyEggList.ts 수정
+- [x] T009 src/components/my-egg-list/hooks/useMyEggList.ts 수정
   - 상세 정보 조회 로직 추가
     - `useQuery`를 사용하여 `getEggDetail` API 호출
     - 쿼리 키: `['eggDetail', eggId]`
@@ -208,7 +208,7 @@
 
 ### 5.1 API 연동
 
-- [ ] T010 src/components/my-egg-list/index.tsx 수정
+- [x] T010 src/components/my-egg-list/index.tsx 수정
   - `useMyEggList` 훅에서 실제 API 호출 결과 사용
   - 로딩 상태 처리
     - `isLoading` 상태일 때 로딩 인디케이터 표시
@@ -221,7 +221,7 @@
 
 ### 5.2 컴포넌트 통합
 
-- [ ] T011 src/components/my-egg-list/components/item-list/index.tsx 수정
+- [x] T011 src/components/my-egg-list/components/item-list/index.tsx 수정
   - 로딩 상태 처리 추가
     - `isLoading` prop 받아서 로딩 인디케이터 표시
   - 빈 상태 처리 추가
@@ -231,7 +231,7 @@
     - 각 섹션별 개수 표시
   - 파일: `src/components/my-egg-list/components/item-list/index.tsx`
 
-- [ ] T012 src/components/my-egg-list/components/item/index.tsx 수정
+- [x] T012 src/components/my-egg-list/components/item/index.tsx 수정
   - 실제 데이터 Props 바인딩
     - API 응답 데이터를 컴포넌트 Props로 변환
     - 날짜 포맷팅 적용
@@ -240,12 +240,12 @@
     - 심은 알의 경우 `expiredAt` 기준으로 아이콘 변경
   - 파일: `src/components/my-egg-list/components/item/index.tsx`
 
-- [ ] T013 src/components/my-egg-list/components/modal/index.tsx 수정
+- [x] T013 src/components/my-egg-list/components/modal/index.tsx 수정
   - 실제 상세 데이터 바인딩
     - `EggDetailResponse` 데이터를 모달 Props로 변환
     - 작성자 정보 표시
     - FOUND/PLANTED 타입별 메시지 표시
-    - 위치 정보 배지 표시
+    - 위치 정보 배지 표시 (Kakao API로 주소 변환 추가)
     - 발견 날짜/시간 표시 (FOUND 타입)
   - 미디어 콘텐츠 표시
     - 이미지 표시 (next/image 사용)
@@ -263,7 +263,7 @@
 
 ### 6.1 빈 상태 처리
 
-- [ ] T014 src/components/my-egg-list/components/item-list/index.tsx 수정
+- [x] T014 src/components/my-egg-list/components/item-list/index.tsx 수정
   - 빈 상태 컴포넌트 추가
     - 목록이 비어있을 때 표시할 메시지
     - "발견한 알" 탭: "아직 발견한 이스터에그가 없습니다"
@@ -275,7 +275,7 @@
 
 ### 6.2 에러 처리
 
-- [ ] T015 src/components/my-egg-list/index.tsx 수정
+- [x] T015 src/components/my-egg-list/index.tsx 수정
   - 에러 상태 UI 추가
     - 네트워크 오류 메시지 표시
     - API 오류 메시지 표시
@@ -284,7 +284,7 @@
     - React Query의 `refetch` 함수 활용
   - 파일: `src/components/my-egg-list/index.tsx`
 
-- [ ] T016 src/components/my-egg-list/components/modal/index.tsx 수정
+- [x] T016 src/components/my-egg-list/components/modal/index.tsx 수정
   - 미디어 로딩 실패 처리
     - 이미지 로딩 실패 시 플레이스홀더 표시
     - 오디오/비디오 로딩 실패 시 에러 메시지 표시

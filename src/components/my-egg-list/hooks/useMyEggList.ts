@@ -15,6 +15,7 @@ import type {
   EggDetailResponse,
 } from '@/commons/apis/easter-egg/types';
 import type { ItemProps } from '../components/item';
+import type { ModalEggDetailData } from '../components/modal';
 
 interface UseMyEggListProps {
   onItemPress?: (item: { id: string; eggId: number }, index: number) => void;
@@ -78,56 +79,67 @@ function transformEggItemToItemProps(item: MyEggItem & { status?: 'ACTIVE' | 'EX
 
 /**
  * EggDetailResponse를 모달 데이터로 변환
- * 모달 컴포넌트가 기대하는 타입으로 변환 (camelCase와 snake_case 모두 지원)
+ * 새로운 데이터 구조에 맞게 변환
  */
-function transformEggDetailToModalData(detail: EggDetailResponse): Record<string, unknown> {
+function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEggDetailData {
   // message 필드 처리 (content 우선, 없으면 message)
   const message = detail.content || detail.message || '';
 
   // type 필드 처리 (viewers 길이로 PLANTED 판단)
+  // PLANTED: 내가 심은 알 (viewers가 있으면 PLANTED)
+  // FOUND: 내가 발견한 알 (viewers가 없거나 비어있으면 FOUND)
   const type = detail.type || (detail.viewers && detail.viewers.length > 0 ? 'PLANTED' : 'FOUND');
 
   // 미디어 항목에서 이미지/오디오/비디오 추출
-  const imageItem = detail.media_items?.find(item => item.type === 'IMAGE');
-  const audioItem = detail.media_items?.find(item => item.type === 'AUDIO');
-  const videoItem = detail.media_items?.find(item => item.type === 'VIDEO');
+  const imageItem = detail.media_items?.find((item: any) => item.type === 'IMAGE');
+  const audioItem = detail.media_items?.find((item: any) => item.type === 'AUDIO');
+  const videoItem = detail.media_items?.find((item: any) => item.type === 'VIDEO');
+
+  // eggId: id 필드 또는 eggId 필드 사용
+  const eggId = detail.id || detail.eggId || '';
+  
+  // 좌표: latitude, longitude 또는 location 객체에서 추출
+  const latitude = detail.latitude ?? detail.location?.latitude ?? undefined;
+  const longitude = detail.longitude ?? detail.location?.longitude ?? undefined;
+  
+  // 생성일: created_at 또는 createdAt 또는 createdDate
+  const createdAt = detail.created_at || detail.createdAt || detail.createdDate || '';
+  
+  // 발견일: found_at 또는 foundAt 또는 foundDate
+  const foundAt = detail.found_at || detail.foundAt || detail.foundDate || null;
 
   return {
-    id: detail.id,
-    title: detail.title,
-    message,
-    content: detail.content,
+    eggId,
     type,
-    imageObjectKey: imageItem?.object_key,
-    imageMediaId: imageItem?.media_id,
-    audioObjectKey: audioItem?.object_key,
-    audioMediaId: audioItem?.media_id,
-    videoObjectKey: videoItem?.object_key,
-    videoMediaId: videoItem?.media_id,
+    isMine: detail.isMine ?? false, // detail API에서 isMine 정보를 제공할 수도 있음
+    title: detail.title || '',
+    message,
+    imageMediaId: imageItem?.media_id || null,
+    imageObjectKey: imageItem?.object_key || null,
+    audioMediaId: audioItem?.media_id || null,
+    audioObjectKey: audioItem?.object_key || null,
+    videoMediaId: videoItem?.media_id || null,
+    videoObjectKey: videoItem?.object_key || null,
     location: {
-      address: '', // 주소는 useKakaoAddress 훅에서 변환
-      latitude: detail.latitude,
-      longitude: detail.longitude,
+      address: detail.location?.address || detail.address || null, // 주소는 모달에서 Kakao API로 변환
+      latitude: latitude, // undefined 허용 (모달에서 처리)
+      longitude: longitude, // undefined 허용 (모달에서 처리)
     },
     author: {
-      id: detail.author.id,
-      nickname: detail.author.nickname,
-      profileImg: detail.author.profile_img,
-      profile_img: detail.author.profile_img,
+      id: detail.author?.id || '',
+      nickname: detail.author?.nickname || '',
+      profileImg: detail.author?.profile_img || detail.author?.profileImg || null,
     },
-    viewers: detail.viewers?.map(viewer => ({
-      id: viewer.id,
-      nickname: viewer.nickname,
-      profileImg: viewer.profile_img,
-      profile_img: viewer.profile_img,
-      viewedAt: viewer.viewed_at,
-      viewed_at: viewer.viewed_at,
-    })),
-    createdAt: detail.created_at,
-    created_at: detail.created_at,
-    foundAt: detail.found_at || detail.foundAt,
-    found_at: detail.found_at,
-    open_at: detail.open_at,
+    createdAt,
+    foundAt,
+    expiredAt: detail.expiredAt || detail.expired_at || null,
+    discoveredCount: detail.view_count || detail.discoveredCount || detail.viewCount || 0,
+    viewers: detail.viewers?.map((viewer: any) => ({
+      id: viewer.id || '',
+      nickname: viewer.nickname || '',
+      profileImg: viewer.profile_img || viewer.profileImg || null,
+      viewedAt: viewer.viewed_at || viewer.viewedAt || '',
+    })) || [],
   };
 }
 
@@ -176,15 +188,22 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
   });
 
   // 상세 정보 조회 (모달 열기 시)
+  // 모달이 열릴 때마다 항상 최신 데이터를 가져오기 위해 staleTime을 0으로 설정
   const {
     data: eggDetailData,
     isLoading: isLoadingDetail,
     isError: isErrorDetail,
   } = useQuery({
     queryKey: ['eggDetail', selectedEggId],
-    queryFn: () => getEggDetail(selectedEggId!),
+    queryFn: () => {
+      if (!selectedEggId) {
+        throw new Error('Egg ID is required');
+      }
+      return getEggDetail(selectedEggId);
+    },
     enabled: !!selectedEggId && modalVisible, // 모달이 열려있고 ID가 있을 때만 조회
-    staleTime: 1000 * 60 * 5, // 5분
+    staleTime: 0, // 항상 최신 데이터를 가져오기 위해 캐시 사용 안 함
+    gcTime: 1000 * 60 * 5, // 5분 후 가비지 컬렉션
     retry: 2,
   });
 
@@ -330,8 +349,8 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
     };
   }, [foundEggsData, plantedEggsData, activeTab, selectedFilter]);
 
-  // 모달 데이터 변환
-  const selectedEggData = useMemo(() => {
+  // 모달 데이터 변환 (detail API 응답을 모달에서 사용할 수 있는 형태로 변환)
+  const selectedEggData = useMemo<ModalEggDetailData | null>(() => {
     if (!eggDetailData) return null;
     return transformEggDetailToModalData(eggDetailData);
   }, [eggDetailData]);
@@ -355,6 +374,10 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
 
   const handleModalClose = () => {
     setModalVisible(false);
+    // 모달이 닫힐 때 해당 쿼리 캐시를 무효화하여 다음에 열 때 최신 데이터를 가져오도록 함
+    if (selectedEggId) {
+      queryClient.removeQueries({ queryKey: ['eggDetail', selectedEggId] });
+    }
     setSelectedEggId(null);
   };
 
@@ -374,6 +397,8 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
     // 모달 관련
     modalVisible,
     selectedEggData,
+    isLoadingDetail,
+    isErrorDetail,
     handleItemPress,
     handleModalClose,
     // 헤더 관련

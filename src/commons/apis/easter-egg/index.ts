@@ -45,6 +45,9 @@ export async function createEasterEgg(
   formData.append('title', data.title);
   
   // 선택 필드
+  if (data.content) {
+    formData.append('content', data.content);
+  }
   if (data.message) {
     formData.append('message', data.message);
   }
