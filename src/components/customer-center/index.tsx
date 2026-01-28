@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { PageHeader } from '@/commons/components/page-header';
 import { Toast } from '@/commons/components/toast';
 import { InquiryList } from './components/inquiry-list';
-import { useInquiries } from './hooks/useInquiries';
+import { useInquiries } from '@/commons/apis/inquiries';
 import type { Inquiry } from './types';
 import styles from './styles.module.css';
 

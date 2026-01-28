@@ -1,20 +1,21 @@
 /**
- * WebSocket 연결 관리 훅 (한 유저당 채팅방 1개)
+ * 고객센터 채팅 WebSocket 연결 관리 훅 (한 유저당 채팅방 1개)
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { io, type Socket } from 'socket.io-client';
 import { getAccessToken } from '@/commons/utils/auth';
+import { getChatSocketUrl, CHAT_NAMESPACE } from '../socket';
 import type { ConnectionStatus } from '../types';
 
-interface UseSocketOptions {
+interface UseInquirySocketOptions {
   onConnectionChange?: (status: ConnectionStatus) => void;
   onRoomIdReceived?: (roomId: string) => void;
   onError?: (message: string) => void;
 }
 
-interface UseSocketReturn {
+interface UseInquirySocketReturn {
   connectionStatus: ConnectionStatus;
   roomId: string | null;
   isRoomEntered: boolean;
@@ -27,23 +28,12 @@ interface UseSocketReturn {
 
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_DELAY = 1000;
-const NAMESPACE = '/user-chat';
 
-/** Socket.IO 서버 URL (API 베이스에서 /api 제거, 유저 채팅 네임스페이스) */
-function getSocketUrl(): string | null {
-  if (typeof window === 'undefined') return null;
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-  if (!url || url === 'your_api_url' || url.includes('your_api')) return null;
-  let base = url.trim().replace(/\/+$/, '');
-  base = base.replace(/\/api$/i, '');
-  return base;
-}
-
-export function useSocket({
+export function useInquirySocket({
   onConnectionChange,
   onRoomIdReceived,
   onError,
-}: UseSocketOptions): UseSocketReturn {
+}: UseInquirySocketOptions = {}): UseInquirySocketReturn {
   const router = useRouter();
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected');
   const [roomId, setRoomId] = useState<string | null>(null);
@@ -87,7 +77,7 @@ export function useSocket({
 
     if (socketRef.current) disconnect();
 
-    const socketUrl = getSocketUrl();
+    const socketUrl = getChatSocketUrl();
     if (!socketUrl) {
       updateConnectionStatus('error');
       onError?.('서버 주소가 설정되지 않았습니다.');
@@ -105,7 +95,7 @@ export function useSocket({
     updateConnectionStatus('connecting');
 
     try {
-      const socket = io(`${socketUrl}${NAMESPACE}`, {
+      const socket = io(`${socketUrl}${CHAT_NAMESPACE}`, {
         auth: { token },
         transports: ['websocket'],
         reconnection: false,

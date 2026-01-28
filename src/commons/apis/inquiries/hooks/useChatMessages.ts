@@ -1,5 +1,5 @@
 /**
- * 채팅 메시지 송수신 관리 훅 (텍스트만, 파일 첨부 제외)
+ * 고객센터 채팅 메시지 송수신 훅 (텍스트만, 파일 첨부 제외)
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';

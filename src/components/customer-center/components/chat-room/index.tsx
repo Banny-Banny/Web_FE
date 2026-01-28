@@ -17,9 +17,11 @@ import {
 import { Toast } from '@/commons/components/toast';
 import { ChatMessageList } from '../chat-message';
 import { ChatInput } from '../chat-input';
-import { useSocket } from '../../hooks/useSocket';
-import { useChatMessages } from '../../hooks/useChatMessages';
-import { useChatHistory } from '../../hooks/useChatHistory';
+import {
+  useInquirySocket,
+  useChatMessages,
+  useChatHistory,
+} from '@/commons/apis/inquiries';
 import type { ConnectionStatus } from '../../types';
 import styles from './styles.module.css';
 
@@ -83,7 +85,7 @@ export function ChatRoom({ inquiryTitle = '고객센터', onBack }: ChatRoomProp
     joinRoom,
     socket,
     reconnect,
-  } = useSocket({
+  } = useInquirySocket({
     onRoomIdReceived: () => {},
     onError: showToast,
   });
