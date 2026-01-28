@@ -36,55 +36,11 @@ import { Spinner } from '@/commons/components/spinner';
 import { useAuth } from '@/commons/hooks/useAuth';
 import { useKakaoAddress } from '@/commons/hooks/useKakaoAddress';
 import { getMediaUrl } from '@/commons/apis';
+import { formatShortDateWithTime, formatLocaleDateShort } from '@/commons/utils';
+import type { EasterEggModalProps } from './types';
 import styles from './styles.module.css';
 
-// 모달에서 사용하는 데이터 타입 (변환된 데이터)
-export interface ModalEggDetailData {
-  eggId: string;
-  type: 'FOUND' | 'PLANTED';
-  isMine: boolean;
-  title: string;
-  message: string;
-  imageMediaId: string | null;
-  imageObjectKey: string | null;
-  audioMediaId: string | null;
-  audioObjectKey: string | null;
-  videoMediaId: string | null;
-  videoObjectKey: string | null;
-  location: {
-    address: string | null;
-    latitude: number | undefined;
-    longitude: number | undefined;
-  };
-  author: {
-    id: string;
-    nickname: string;
-    profileImg: string | null;
-  };
-  createdAt: string;
-  foundAt: string | null;
-  expiredAt: string | null;
-  discoveredCount: number;
-  viewers: Array<{
-    id: string;
-    nickname: string;
-    profileImg: string | null;
-    viewedAt: string;
-  }>;
-}
-
-export interface EasterEggModalProps {
-  /** 모달 표시 여부 */
-  visible: boolean;
-  /** 모달 닫기 함수 */
-  onClose: () => void;
-  /** 이스터에그 상세 데이터 (detail API 응답을 변환한 데이터) */
-  data: ModalEggDetailData | null;
-  /** 상세 정보 로딩 중 여부 */
-  isLoading?: boolean;
-  /** 상세 정보 로딩 에러 여부 */
-  isError?: boolean;
-}
+export type { ModalEggDetailData, EasterEggModalProps } from './types';
 
 export const EasterEggModal: React.FC<EasterEggModalProps> = ({ 
   visible, 
@@ -129,21 +85,39 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
     existingAddress: data?.location?.address,
   });
 
-  // 이미지 미디어 URL 조회 (imageObjectKey가 없고 imageMediaId가 있을 때만)
-  const { data: imageMediaData } = useQuery({
+  // 이미지 미디어 URL 조회 (imageMediaId가 있으면 API로 URL 가져옴)
+  const { data: imageMediaData, isLoading: isLoadingImageUrl, isError: isImageUrlError, error: imageUrlError } = useQuery({
     queryKey: ['mediaUrl', 'image', data?.imageMediaId],
-    queryFn: () => {
+    queryFn: async () => {
       if (!data?.imageMediaId) {
         return Promise.resolve(null);
       }
-      return getMediaUrl(data.imageMediaId);
+      console.log('[EasterEggModal] 이미지 URL API 호출:', data.imageMediaId);
+      const result = await getMediaUrl(data.imageMediaId);
+      console.log('[EasterEggModal] 이미지 URL API 응답:', result);
+      return result;
     },
-    enabled: !!data && !data.imageObjectKey && !!data.imageMediaId,
+    enabled: !!data && !!data.imageMediaId, // data와 imageMediaId가 있을 때 호출
     staleTime: 1000 * 60 * 60 * 24, // 24시간 캐시
     retry: 1,
   });
 
-  // 오디오 미디어 URL 조회 (audioObjectKey가 없고 audioMediaId가 있을 때만)
+  // 디버깅: API 호출 상태 확인
+  React.useEffect(() => {
+    console.log('[EasterEggModal] data:', data);
+    console.log('[EasterEggModal] data?.imageMediaId:', data?.imageMediaId);
+    console.log('[EasterEggModal] enabled 조건:', !!data && !!data.imageMediaId);
+    console.log('[EasterEggModal] visible:', visible);
+    if (data?.imageMediaId) {
+      console.log('[EasterEggModal] imageMediaId:', data.imageMediaId);
+      console.log('[EasterEggModal] isLoadingImageUrl:', isLoadingImageUrl);
+      console.log('[EasterEggModal] isImageUrlError:', isImageUrlError);
+      console.log('[EasterEggModal] imageUrlError:', imageUrlError);
+      console.log('[EasterEggModal] imageMediaData:', imageMediaData);
+    }
+  }, [data, data?.imageMediaId, visible, isLoadingImageUrl, isImageUrlError, imageUrlError, imageMediaData]);
+
+  // 오디오 미디어 URL 조회 (audioMediaId가 있으면 API로 URL 가져옴)
   const { data: audioMediaData } = useQuery({
     queryKey: ['mediaUrl', 'audio', data?.audioMediaId],
     queryFn: () => {
@@ -152,12 +126,12 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
       }
       return getMediaUrl(data.audioMediaId);
     },
-    enabled: !!data && !data.audioObjectKey && !!data.audioMediaId,
+    enabled: !!data && !!data.audioMediaId,
     staleTime: 1000 * 60 * 60 * 24, // 24시간 캐시
     retry: 1,
   });
 
-  // 비디오 미디어 URL 조회 (videoObjectKey가 없고 videoMediaId가 있을 때만)
+  // 비디오 미디어 URL 조회 (videoMediaId가 있으면 API로 URL 가져옴)
   const { data: videoMediaData } = useQuery({
     queryKey: ['mediaUrl', 'video', data?.videoMediaId],
     queryFn: () => {
@@ -166,42 +140,56 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
       }
       return getMediaUrl(data.videoMediaId);
     },
-    enabled: !!data && !data.videoObjectKey && !!data.videoMediaId,
+    enabled: !!data && !!data.videoMediaId,
     staleTime: 1000 * 60 * 60 * 24, // 24시간 캐시
     retry: 1,
   });
 
-  // 미디어 URL 생성 (모든 hooks는 early return 전에 호출되어야 함)
-  // imageObjectKey 우선, 없으면 getMediaUrl로 가져온 URL 사용
+  // 미디어 URL: imageMediaId가 있으면 API URL만 사용, 없으면 objectKey로 구성
   const imageUrl = useMemo(() => {
     if (!data) return null;
+    // imageMediaId가 있으면 API URL만 사용 (로딩 중이거나 실패해도 objectKey 사용 안 함)
+    if (data.imageMediaId) {
+      return imageMediaData?.url || null;
+    }
+    // imageMediaId가 없을 때만 objectKey 사용
     if (data.imageObjectKey) {
-      return data.imageObjectKey.startsWith('http') 
-        ? data.imageObjectKey 
+      return data.imageObjectKey.startsWith('http')
+        ? data.imageObjectKey
         : `${process.env.NEXT_PUBLIC_MEDIA_BASE_URL || ''}/${data.imageObjectKey}`;
     }
-    return imageMediaData?.url || null;
-  }, [data, imageMediaData?.url]);
-  
+    return null;
+  }, [data, imageMediaData]);
+
   const audioUrl = useMemo(() => {
     if (!data) return null;
+    // audioMediaId가 있으면 API URL만 사용
+    if (data.audioMediaId) {
+      return audioMediaData?.url || null;
+    }
+    // audioMediaId가 없을 때만 objectKey 사용
     if (data.audioObjectKey) {
-      return data.audioObjectKey.startsWith('http') 
-        ? data.audioObjectKey 
+      return data.audioObjectKey.startsWith('http')
+        ? data.audioObjectKey
         : `${process.env.NEXT_PUBLIC_MEDIA_BASE_URL || ''}/${data.audioObjectKey}`;
     }
-    return audioMediaData?.url || null;
-  }, [data, audioMediaData?.url]);
-  
+    return null;
+  }, [data, audioMediaData]);
+
   const videoUrl = useMemo(() => {
     if (!data) return null;
+    // videoMediaId가 있으면 API URL만 사용
+    if (data.videoMediaId) {
+      return videoMediaData?.url || null;
+    }
+    // videoMediaId가 없을 때만 objectKey 사용
     if (data.videoObjectKey) {
-      return data.videoObjectKey.startsWith('http') 
-        ? data.videoObjectKey 
+      return data.videoObjectKey.startsWith('http')
+        ? data.videoObjectKey
         : `${process.env.NEXT_PUBLIC_MEDIA_BASE_URL || ''}/${data.videoObjectKey}`;
     }
-    return videoMediaData?.url || null;
-  }, [data, videoMediaData?.url]);
+    return null;
+  }, [data, videoMediaData]);
 
   // 주소 우선순위: location.address > addressFromCoord > 로딩 중 > '위치 정보 없음'
   // addressFromCoord가 로딩 중이면 "위치 정보 조회 중..." 표시
@@ -274,20 +262,8 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
     );
   }
 
-  // 날짜 포맷팅
-  const createdDate = data.createdAt
-    ? new Date(data.createdAt).toLocaleDateString('ko-KR', {
-        month: '2-digit',
-        day: '2-digit',
-      })
-    : '';
-
-  // 발견 시간 포맷팅
-  const formatShortDateWithTime = (dateString?: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return `${date.getMonth() + 1}.${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-  };
+  // 날짜 포맷팅 (MM/DD)
+  const createdDate = formatLocaleDateShort(data.createdAt) || '';
 
   // 발견 순서 텍스트 (현재 사용자가 몇 번째로 발견했는지)
   const getDiscoveryOrderText = () => {

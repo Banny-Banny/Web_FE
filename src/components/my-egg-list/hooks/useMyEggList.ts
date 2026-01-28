@@ -8,6 +8,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMyEggs, getEggDetail } from '@/commons/apis/easter-egg';
+import { formatDate } from '@/commons/utils';
 import { default as BrokenEggSvg } from '@/assets/images/broken_egg.svg';
 import { default as FilledEggSvg } from '@/assets/images/filled_egg.svg';
 import type { 
@@ -20,17 +21,6 @@ import type { ModalEggDetailData } from '../components/modal';
 interface UseMyEggListProps {
   onItemPress?: (item: { id: string; eggId: number }, index: number) => void;
   onHeaderButtonPress?: () => void;
-}
-
-/**
- * 날짜 포맷팅 (YYYY-MM-DD)
- */
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }
 
 /**
@@ -94,6 +84,11 @@ function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEg
   const imageItem = detail.media_items?.find((item: any) => item.type === 'IMAGE');
   const audioItem = detail.media_items?.find((item: any) => item.type === 'AUDIO');
   const videoItem = detail.media_items?.find((item: any) => item.type === 'VIDEO');
+  
+  // 디버깅: 미디어 항목 확인
+  console.log('[transformEggDetailToModalData] detail.media_items:', detail.media_items);
+  console.log('[transformEggDetailToModalData] imageItem:', imageItem);
+  console.log('[transformEggDetailToModalData] imageItem?.media_id:', imageItem?.media_id);
 
   // eggId: id 필드 또는 eggId 필드 사용
   const eggId = detail.id || detail.eggId || '';
