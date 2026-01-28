@@ -322,6 +322,8 @@ apiClient.interceptors.response.use(
         endpoint: requestEndpoint,
         fullURL,
         method,
+        requestData: error.config?.data ? JSON.parse(error.config.data) : undefined,
+        headers: error.config?.headers,
         axiosRequestURL: error.request?.responseURL,
         configURL: error.config?.url,
         configBaseURL: error.config?.baseURL,
@@ -336,6 +338,14 @@ apiClient.interceptors.response.use(
         responseData: errorInfo.errorDetails,
         hasResponse: errorInfo.hasResponse,
         hasRequest: errorInfo.hasRequest,
+      });
+      
+      // 전체 에러 객체 출력 (디버깅용)
+      console.error('Raw Error Object:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        request: error.request ? 'Request exists' : 'No request',
       });
 
       // 에러 객체 표준화

@@ -65,9 +65,28 @@ export async function completePayment(
 export async function confirmPayment(
   data: ConfirmPaymentRequest
 ): Promise<ConfirmPaymentResponse> {
+  // 디버깅: 결제 승인 요청 데이터 확인
+  console.log('[confirmPayment] 요청 데이터:', {
+    endpoint: PAYMENT_ENDPOINTS.CONFIRM,
+    data,
+  });
+
+  // 백엔드가 snake_case를 기대하는 경우를 대비해 변환
+  const requestData = {
+    paymentKey: data.paymentKey,
+    orderId: data.orderId,
+    amount: data.amount,
+  };
+
+  console.log('[confirmPayment] 변환된 요청 데이터:', requestData);
+
   const response = await apiClient.post<ConfirmPaymentResponse>(
     PAYMENT_ENDPOINTS.CONFIRM,
-    data
+    requestData
   );
+
+  // 디버깅: 결제 승인 응답 확인
+  console.log('[confirmPayment] 응답 데이터:', response.data);
+
   return response.data;
 }
