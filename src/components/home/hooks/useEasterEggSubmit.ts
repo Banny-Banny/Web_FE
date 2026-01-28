@@ -178,10 +178,27 @@ export function useEasterEggSubmit(): UseEasterEggSubmitReturn {
     onSuccess: () => {
       setProgress(100);
       setError(null);
-      // 이스터에그 생성 성공 시 관련 쿼리 무효화 → 지도 마커·내 이스터에그 목록 즉시 반영
-      queryClient.invalidateQueries({ queryKey: SLOT_QUERY_KEYS.slotInfo() });
-      queryClient.invalidateQueries({ queryKey: ['capsules'] });
-      queryClient.invalidateQueries({ queryKey: ['myEggs'] });
+      // 이스터에그 생성 성공 시 관련 쿼리 무효화 및 즉시 refetch → 지도 마커·내 이스터에그 목록 즉시 반영
+      // React Query v5에서는 refetchQueries를 사용하여 활성 쿼리를 즉시 refetch
+      queryClient.invalidateQueries({ 
+        queryKey: SLOT_QUERY_KEYS.slotInfo(),
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['capsules'],
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['myEggs'],
+      });
+      // 활성 쿼리 즉시 refetch (staleTime 무시)
+      queryClient.refetchQueries({ 
+        queryKey: SLOT_QUERY_KEYS.slotInfo(),
+      });
+      queryClient.refetchQueries({ 
+        queryKey: ['capsules'],
+      });
+      queryClient.refetchQueries({ 
+        queryKey: ['myEggs'],
+      });
     },
     onError: (err: unknown) => {
       // API 에러 처리
