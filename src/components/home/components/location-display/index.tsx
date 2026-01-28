@@ -6,6 +6,7 @@
 'use client';
 
 import { useEffect, memo } from 'react';
+import { RiMapPinFill } from '@remixicon/react';
 import { useCurrentLocation } from '../../hooks/useCurrentLocation';
 import { useAddress } from '../../hooks/useAddress';
 import type { LocationDisplayProps } from './types';
@@ -136,11 +137,10 @@ export const LocationDisplay = memo(function LocationDisplay({
           </div>
         ) : address ? (
           <>
-            {/* 위치 아이콘 - Figma에서 가져온 SVG */}
-            <img 
+            {/* 위치 아이콘 - remixicon */}
+            <RiMapPinFill 
               className={styles.locationIcon}
-              src="http://localhost:3845/assets/8fc340e82b335cc3d4a93bf1b2d1dc8ed43e2cb2.svg"
-              alt=""
+              size={12}
               aria-hidden="true"
             />
             <p className={styles.addressText}>{address}</p>

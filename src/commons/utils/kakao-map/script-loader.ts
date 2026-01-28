@@ -52,7 +52,9 @@ export function loadKakaoMapScript(): Promise<void> {
           '카카오 지도 스크립트 로딩 시간이 초과되었습니다.\n' +
           '네트워크 연결 상태를 확인하거나 잠시 후 다시 시도해주세요.'
         );
-        console.error('[Kakao Map Script Loader]', timeoutError.message);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[Kakao Map Script Loader]', timeoutError.message);
+        }
         reject(timeoutError);
       }, 30000);
       
@@ -66,7 +68,9 @@ export function loadKakaoMapScript(): Promise<void> {
             window.kakao.maps.load(() => {
               isLoaded = true;
               isLoading = false;
-              console.log('[Kakao Map Script Loader] 카카오 지도 스크립트 로딩 완료');
+              if (process.env.NODE_ENV === 'development') {
+                console.log('[Kakao Map Script Loader] 카카오 지도 스크립트 로딩 완료');
+              }
               resolve();
             });
           } catch (loadError) {
@@ -75,7 +79,9 @@ export function loadKakaoMapScript(): Promise<void> {
               '카카오 지도 API 초기화에 실패했습니다.\n' +
               'API 키가 올바른지 확인해주세요.'
             );
-            console.error('[Kakao Map Script Loader]', error.message, loadError);
+            if (process.env.NODE_ENV === 'development') {
+              console.error('[Kakao Map Script Loader]', error.message, loadError);
+            }
             reject(error);
           }
         } else {
@@ -84,7 +90,9 @@ export function loadKakaoMapScript(): Promise<void> {
             '카카오 지도 API 객체를 찾을 수 없습니다.\n' +
             '스크립트가 올바르게 로드되지 않았습니다.'
           );
-          console.error('[Kakao Map Script Loader]', error.message);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('[Kakao Map Script Loader]', error.message);
+          }
           reject(error);
         }
       };
@@ -105,7 +113,9 @@ export function loadKakaoMapScript(): Promise<void> {
           '네트워크 연결을 확인하고 잠시 후 다시 시도해주세요.'
         );
         
-        console.error('[Kakao Map Script Loader]', error.message, event);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[Kakao Map Script Loader]', error.message, event);
+        }
         reject(error);
       };
       
@@ -115,7 +125,7 @@ export function loadKakaoMapScript(): Promise<void> {
       isLoading = false;
       loadPromise = null;
       
-      if (error instanceof Error) {
+      if (error instanceof Error && process.env.NODE_ENV === 'development') {
         console.error('[Kakao Map Script Loader] 초기화 실패:', error.message);
       }
       reject(error);

@@ -70,10 +70,20 @@ export const USER_ENDPOINTS = {
 export const TIMEEGG_ENDPOINTS = {
   // 타임캡슐 관련
   CAPSULES: `${BASE_PATHS.API}/capsules`,
+  GET_CAPSULES: `${BASE_PATHS.API}/capsules`,
   CAPSULE_DETAIL: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  GET_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   CREATE_CAPSULE: `${BASE_PATHS.API}/capsules`,
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
+  
+  // 캡슐 발견 관련
+  RECORD_CAPSULE_VIEW: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
+  GET_CAPSULE_VIEWERS: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
+  
+  // 슬롯 관리
+  GET_SLOTS: `${BASE_PATHS.API}/capsules/slots`,
+  RESET_SLOTS: `${BASE_PATHS.API}/capsules/slots/reset`,
   
   // 위치 관련
   LOCATIONS: `${BASE_PATHS.API}/locations`,
@@ -172,6 +182,8 @@ export const ORDER_ENDPOINTS = {
 export const PAYMENT_ENDPOINTS = {
   // 결제 완료 처리
   COMPLETE: `${BASE_PATHS.API}/payment/complete`,
+  // 토스페이먼츠 결제 승인 처리
+  CONFIRM: `${BASE_PATHS.API}/payments/toss/confirm`,
 } as const;
 
 /**
@@ -193,6 +205,14 @@ export const ONBOARDING_ENDPOINTS = {
 } as const;
 
 /**
+ * 캡슐 관련 엔드포인트
+ */
+export const CAPSULE_ENDPOINTS = {
+  // 타임캡슐 대기실 생성
+  CREATE_WAITING_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -202,6 +222,7 @@ export const ENDPOINTS = {
   ADMIN: ADMIN_ENDPOINTS,
   ORDER: ORDER_ENDPOINTS,
   PAYMENT: PAYMENT_ENDPOINTS,
+  CAPSULE: CAPSULE_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,

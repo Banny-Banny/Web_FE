@@ -8,6 +8,8 @@ import { PAYMENT_ENDPOINTS } from '../endpoints';
 import type {
   CompletePaymentRequest,
   CompletePaymentResponse,
+  ConfirmPaymentRequest,
+  ConfirmPaymentResponse,
 } from './types';
 
 /**
@@ -32,6 +34,39 @@ export async function completePayment(
 ): Promise<CompletePaymentResponse> {
   const response = await apiClient.post<CompletePaymentResponse>(
     PAYMENT_ENDPOINTS.COMPLETE,
+    data
+  );
+  return response.data;
+}
+
+/**
+ * 토스페이먼츠 결제 승인 API
+ * 
+ * 토스페이먼츠 결제 완료 후 최종 승인을 처리합니다.
+ * JWT Bearer 토큰이 자동으로 포함됩니다.
+ * 
+ * @param {ConfirmPaymentRequest} data - 결제 승인 요청 데이터
+ * @returns {Promise<ConfirmPaymentResponse>} 결제 승인 응답
+ * 
+ * @throws {ApiError} 에러 발생 시
+ * - 400: AMOUNT_MISMATCH, ORDER_ALREADY_PAID, TOSS_SECRET_KEY_REQUIRED, TOSS_CONFIRM_FAILED
+ * - 401: ORDER_NOT_OWNED, JWT 누락/만료
+ * - 404: ORDER_NOT_FOUND, PRODUCT_NOT_FOUND_OR_INVALID
+ * 
+ * @example
+ * ```typescript
+ * const result = await confirmPayment({
+ *   paymentKey: 'pay-1234-5678',
+ *   orderId: 'order-123',
+ *   amount: 10000,
+ * });
+ * ```
+ */
+export async function confirmPayment(
+  data: ConfirmPaymentRequest
+): Promise<ConfirmPaymentResponse> {
+  const response = await apiClient.post<ConfirmPaymentResponse>(
+    PAYMENT_ENDPOINTS.CONFIRM,
     data
   );
   return response.data;

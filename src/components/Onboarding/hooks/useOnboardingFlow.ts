@@ -3,7 +3,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { OnboardingState, OnboardingStep } from '../types';
+import type { OnboardingState } from '../types';
 
 /**
  * 온보딩 플로우 상태 관리 훅

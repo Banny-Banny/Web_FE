@@ -26,8 +26,6 @@ export {
 
 // 결제 관련 유틸리티
 export {
-  generatePaymentId,
-  generateOrderId,
-  formatAmount,
-  formatAmountWithCurrency,
+  extractPaymentInfoFromUrl,
+  convertErrorCodeToMessage,
 } from './payment';

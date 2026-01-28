@@ -27,9 +27,9 @@ import type { PaymentState } from '../types';
  * ```
  */
 export function usePayment(
-  orderId: string,
-  amount: number,
-  orderName: string
+  _orderId: string,
+  _amount: number,
+  _orderName: string
 ) {
   const [paymentState, setPaymentState] = useState<PaymentState>({
     status: 'idle',
@@ -60,8 +60,8 @@ export function usePayment(
         // 서버에 결제 완료 알림
         const result = await completePayment({
           paymentKey,
-          orderId,
-          amount,
+          orderId: _orderId,
+          amount: _amount,
         });
 
         if (result.success && result.orderStatus === 'PAID') {
@@ -102,7 +102,8 @@ export function usePayment(
         }
       }
     },
-    [orderId, amount]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   /**

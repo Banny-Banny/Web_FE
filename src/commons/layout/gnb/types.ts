@@ -10,7 +10,7 @@ export interface GNBProps {
 }
 
 export interface MenuItem {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: string | number; className?: string }>;
   label: string;
   path: string;
   ariaLabel: string;

@@ -17,12 +17,13 @@
 
 import type { EggSlotProps } from './types';
 import styles from './styles.module.css';
+import Image from 'next/image';
 
-// 알 아이콘 import (SVG as React Component)
-import { default as FilledEggSvg } from '@/assets/images/filled_egg.svg';
-import { default as UnfilledEggSvg } from '@/assets/images/unfilled_egg.svg';
+// 알 아이콘 경로
+const FILLED_EGG_SRC = '/assets/images/filled_egg.svg';
+const UNFILLED_EGG_SRC = '/assets/images/unfilled_egg.svg';
 
-export function EggSlot({ count, onClick, className }: EggSlotProps) {
+export function EggSlot({ count, onClick, className, isLoading }: EggSlotProps) {
   // 총 슬롯 개수 (고정값)
   const totalSlots = 3;
   
@@ -43,19 +44,23 @@ export function EggSlot({ count, onClick, className }: EggSlotProps) {
   };
 
   const content = (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="egg-slot">
       {Array.from({ length: totalSlots }, (_, index) => {
         // remaining slots를 기준으로 찬 알 표시
         // 앞에서부터 remainingCount만큼 꽉찬 알, 그 다음부터 빈 알
         const isFilled = index < safeRemainingCount;
         const slotNumber = index + 1;
-        const EggIcon = isFilled ? FilledEggSvg : UnfilledEggSvg;
+        const eggSrc = isFilled ? FILLED_EGG_SRC : UNFILLED_EGG_SRC;
 
         return (
           <div key={slotNumber} className={styles.eggSlotItem}>
-            <EggIcon
-              className={isFilled ? styles.eggSlotIcon : styles.eggSlotIconEmpty}
-              aria-label={`에그 슬롯 ${slotNumber} - ${isFilled ? '사용됨' : '비어있음'}`}
+            <Image
+              src={eggSrc}
+              alt={`에그 슬롯 ${slotNumber} - ${isFilled ? '사용됨' : '비어있음'}`}
+              className={`${isFilled ? styles.eggSlotIcon : styles.eggSlotIconEmpty} ${isLoading ? styles.loading : ''}`}
+              width={20}
+              height={25}
+              data-testid={isFilled ? 'filled-egg' : 'empty-egg'}
             />
           </div>
         );

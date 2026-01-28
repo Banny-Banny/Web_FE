@@ -16,6 +16,8 @@ export interface MapViewProps {
   isLoading?: boolean;
   /** 에러 메시지 */
   error?: string | null;
+  /** 재시도 콜백 */
+  onRetry?: () => void;
   /** 추가 CSS 클래스 */
   className?: string;
 }

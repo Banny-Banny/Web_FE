@@ -39,8 +39,8 @@ export function useLoginForm() {
     // 터치 상태 업데이트
     setTouched((prev) => ({ ...prev, [field]: true }));
     
-    // 에러 초기화
-    if (errors[field]) {
+    // 에러 초기화 (loginType은 에러가 없으므로 체크하지 않음)
+    if (field !== 'loginType' && errors[field as keyof LoginFormErrors]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
     if (errors.general) {
@@ -54,10 +54,12 @@ export function useLoginForm() {
   const handleBlur = useCallback((field: keyof LoginFormData) => () => {
     setTouched((prev) => ({ ...prev, [field]: true }));
     
-    // 해당 필드만 검증
-    const fieldErrors = validateLoginForm(formData);
-    if (fieldErrors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: fieldErrors[field] }));
+    // 해당 필드만 검증 (loginType은 검증하지 않음)
+    if (field !== 'loginType') {
+      const fieldErrors = validateLoginForm(formData);
+      if (fieldErrors[field as keyof LoginFormErrors]) {
+        setErrors((prev) => ({ ...prev, [field]: fieldErrors[field as keyof LoginFormErrors] }));
+      }
     }
   }, [formData]);
 
@@ -75,6 +77,7 @@ export function useLoginForm() {
    */
   const reset = useCallback(() => {
     setFormData({
+      loginType: 'phone',
       phoneNumber: '',
       email: '',
       password: '',

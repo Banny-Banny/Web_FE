@@ -153,6 +153,7 @@
 .mainButtonIcon {
   width: 36px;
   height: 36px;
+  color: #000000;
 }
 
 /* === Main Button Shadow Inset === */
@@ -186,6 +187,7 @@
   .mainButtonIcon {
     width: 28px;
     height: 28px;
+    color: #000000;
   }
 
   .subButtonsContainer {

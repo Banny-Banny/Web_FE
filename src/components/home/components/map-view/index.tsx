@@ -15,6 +15,7 @@ export const MapView = memo(function MapView({
   map,
   isLoading = false,
   error = null,
+  onRetry,
   className = '',
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,9 @@ export const MapView = memo(function MapView({
     try {
       onMapInit(containerRef.current);
     } catch (initError) {
-      console.error('[MapView] 지도 초기화 실패:', initError);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[MapView] 지도 초기화 실패:', initError);
+      }
     }
   }, [map, isLoading, onMapInit]);
 
@@ -39,6 +42,15 @@ export const MapView = memo(function MapView({
       <div className={`${styles.container} ${className}`} data-testid="map-error">
         <div className={styles.errorContainer} role="alert" aria-live="assertive">
           <p className={styles.errorText}>{error}</p>
+          {onRetry && (
+            <button
+              className={styles.retryButton}
+              onClick={onRetry}
+              type="button"
+            >
+              다시 시도
+            </button>
+          )}
         </div>
       </div>
     );
