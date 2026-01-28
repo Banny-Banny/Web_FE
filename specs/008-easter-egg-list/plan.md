@@ -78,7 +78,7 @@ src/app/(main)/
 
 ```
 src/commons/apis/
-└── capsules/
+└── easter-egg/
     ├── index.ts                # API 함수 export
     ├── myEggs.ts              # GET /api/capsules/my-eggs
     ├── detail.ts              # GET /api/capsules/{id}/detail
@@ -236,20 +236,20 @@ interface EasterEggModalProps {
 - 기본 레이아웃 구성
 
 #### 1.3 API 함수 작성
-- `src/commons/apis/capsules/myEggs.ts` - 목록 조회 API
-- `src/commons/apis/capsules/detail.ts` - 상세 조회 API
-- `src/commons/apis/capsules/types.ts` - 타입 정의
+- `src/commons/apis/easter-egg/myEggs.ts` - 목록 조회 API
+- `src/commons/apis/easter-egg/detail.ts` - 상세 조회 API
+- `src/commons/apis/easter-egg/types.ts` - 타입 정의
 - 에러 핸들링 및 인터셉터 설정
 
 ### Phase 2: API 연결 및 E2E 테스트
 
 #### 2.1 API 함수 구현
-- `src/commons/apis/capsules/myEggs.ts` 구현
+- `src/commons/apis/easter-egg/myEggs.ts` 구현
   - `GET /api/capsules/my-eggs` 호출
   - 인증 토큰 자동 추가 (인터셉터)
   - 응답 타입 정의
   - 에러 핸들링
-- `src/commons/apis/capsules/detail.ts` 구현
+- `src/commons/apis/easter-egg/detail.ts` 구현
   - `GET /api/capsules/{id}/detail` 호출
   - 인증 토큰 자동 추가
   - 응답 타입 정의
@@ -540,7 +540,7 @@ border-radius: var(--radius-lg);
 ## 다음 단계
 
 1. **공통 헤더 컴포넌트 생성** - `src/commons/components/page-header/` 생성 및 기존 헤더 이동 ✅
-2. **API 함수 작성** - `src/commons/apis/capsules/` 디렉토리에 API 함수 구현
+2. **API 함수 작성** - `src/commons/apis/easter-egg/` 디렉토리에 API 함수 구현
 3. **E2E 테스트 작성 (API 전용)** - API 함수를 직접 호출하여 검증하는 E2E 테스트 작성
    - 테스트 계정: `.env.local` 참고
    - `GET /api/capsules/my-eggs` API 테스트

@@ -14,8 +14,14 @@ import {
   GetCapsuleResponse,
   RecordCapsuleViewRequest,
   RecordCapsuleViewResponse,
-  GetCapsuleViewersResponse 
+  GetCapsuleViewersResponse,
+  GetMyEggsRequest,
+  MyEggsPlantedResponse,
+  MyEggsFoundResponse
 } from './types';
+
+// 타입 export
+export type * from './types';
 
 /**
  * 이스터에그 생성 API
@@ -183,5 +189,45 @@ export async function getCapsuleViewers(
   const response = await apiClient.get<GetCapsuleViewersResponse>(
     TIMEEGG_ENDPOINTS.GET_CAPSULE_VIEWERS(id)
   );
+  return response.data;
+}
+
+/**
+ * 내 이스터에그 목록 조회 API
+ * 
+ * @param params - 조회 파라미터 (type: PLANTED | FOUND, sort?: LATEST | OLDEST)
+ * @returns 이스터에그 목록 응답 (PLANTED 또는 FOUND 타입에 따라 다른 구조)
+ * 
+ * @example
+ * ```typescript
+ * // 심은 알 조회
+ * const plantedEggs = await getMyEggs({ type: 'PLANTED' });
+ * 
+ * // 발견한 알 조회 (최신순)
+ * const foundEggs = await getMyEggs({ type: 'FOUND', sort: 'LATEST' });
+ * 
+ * // 발견한 알 조회 (오래된순)
+ * const foundEggsOldest = await getMyEggs({ type: 'FOUND', sort: 'OLDEST' });
+ * ```
+ */
+export async function getMyEggs(
+  params: GetMyEggsRequest
+): Promise<MyEggsPlantedResponse | MyEggsFoundResponse> {
+  const queryParams: Record<string, string> = {
+    type: params.type,
+  };
+
+  // FOUND 타입일 때만 sort 파라미터 추가
+  if (params.type === 'FOUND' && params.sort) {
+    queryParams.sort = params.sort;
+  }
+
+  const response = await apiClient.get<MyEggsPlantedResponse | MyEggsFoundResponse>(
+    TIMEEGG_ENDPOINTS.GET_MY_EGGS,
+    {
+      params: queryParams,
+    }
+  );
+
   return response.data;
 }

@@ -33,20 +33,20 @@
 
 ### 1.1 페이지 라우팅 설정
 
-- [ ] T001 src/app/(main)/my-eggs/page.tsx 생성
+- [x] T001 src/app/(main)/my-eggs/page.tsx 생성
   - Next.js App Router 페이지 컴포넌트 생성
   - MyEggList 컴포넌트 import 및 렌더링
   - 라우팅 연결 확인
   - 파일: `src/app/(main)/my-eggs/page.tsx`
 
-- [ ] T002 src/components/Mypage/index.tsx 수정
+- [x] T002 src/components/Mypage/index.tsx 수정
   - 이스터에그 영역 클릭 시 `/my-eggs` 페이지로 라우팅 연결
   - Next.js router 사용하여 페이지 이동 구현
   - 파일: `src/components/Mypage/index.tsx`
 
 ### 1.2 API 타입 정의
 
-- [ ] T003 src/commons/apis/capsules/types.ts 생성
+- [x] T003 src/commons/apis/easter-egg/types.ts 수정
   - `MyEggsResponse` 인터페이스 추가
     - `eggs` (MyEggItem[])
   - `MyEggItem` 인터페이스 추가
@@ -77,7 +77,7 @@
     - `viewers` (array)
     - `type` ('FOUND' | 'PLANTED', optional)
     - `foundAt`, `found_at` (string, optional)
-  - 파일: `src/commons/apis/capsules/types.ts`
+  - 파일: `src/commons/apis/easter-egg/types.ts`
 
 ---
 
@@ -87,7 +87,7 @@
 
 **중요**: 모든 API 함수는 `src/commons/provider/api-provider/api-client.ts`에 있는 `apiClient`를 import하여 사용해야 합니다. `apiClient`는 이미 인증 토큰 인터셉터가 설정되어 있어 자동으로 토큰이 추가됩니다.
 
-- [ ] T004 src/commons/apis/capsules/myEggs.ts 생성
+- [ ] T004 src/commons/apis/easter-egg/index.ts 에 추가
   - `getMyEggs` 함수 구현
     - `apiClient`를 `@/commons/provider/api-provider/api-client`에서 import하여 사용
     - `GET /api/capsules/my-eggs` 엔드포인트 호출
@@ -95,9 +95,9 @@
     - 인증 토큰 자동 추가 (api-client.ts의 인터셉터 활용)
     - `MyEggsResponse` 타입 반환
     - 에러 핸들링 구현 (Axios 에러를 ApiError 형식으로 변환)
-  - 파일: `src/commons/apis/capsules/myEggs.ts`
+  - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T005 src/commons/apis/capsules/detail.ts 생성
+- [ ] T005 src/commons/apis/easter-egg/index.ts 에 추가
   - `getEggDetail` 함수 구현
     - `apiClient`를 `@/commons/provider/api-provider/api-client`에서 import하여 사용
     - `GET /api/capsules/{id}/detail` 엔드포인트 호출
@@ -106,13 +106,8 @@
     - 인증 토큰 자동 추가 (api-client.ts의 인터셉터 활용)
     - `EggDetailResponse` 타입 반환
     - 에러 핸들링 구현 (Axios 에러를 ApiError 형식으로 변환)
-  - 파일: `src/commons/apis/capsules/detail.ts`
+  - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T006 src/commons/apis/capsules/index.ts 수정
-  - `getMyEggs` 함수 export
-  - `getEggDetail` 함수 export
-  - 타입 export 추가
-  - 파일: `src/commons/apis/capsules/index.ts`
 
 ### 2.2 E2E 테스트 작성 (Playwright) - API 전용
 

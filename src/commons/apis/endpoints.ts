@@ -77,6 +77,9 @@ export const TIMEEGG_ENDPOINTS = {
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   
+  // 내 이스터에그 목록 조회
+  GET_MY_EGGS: `${BASE_PATHS.API}/capsules/my-eggs`,
+  
   // 캡슐 발견 관련
   RECORD_CAPSULE_VIEW: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
   GET_CAPSULE_VIEWERS: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
