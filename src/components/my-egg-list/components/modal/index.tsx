@@ -319,15 +319,15 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
       <div className={styles.mediaContainer}>
         {/* 이미지 렌더링 */}
         {hasImage && (
-          <div className={styles.imageContainer}>
+          <div className={styles.imageContainer} role="img" aria-label="이스터에그 이미지">
             {!imageUrl ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiImageLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
+                <RiImageLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>이미지를 불러오는 중...</p>
               </div>
             ) : imageError ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiImageLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="alert">
+                <RiImageLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>이미지를 불러올 수 없습니다</p>
               </div>
             ) : (
@@ -345,22 +345,23 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
         {/* 오디오 플레이어 렌더링 */}
         {hasAudio && (
-          <div className={styles.audioPlayerWrapper}>
+          <div className={styles.audioPlayerWrapper} role="region" aria-label="오디오 콘텐츠">
             {!audioUrl ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiMicLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
+                <RiMicLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>오디오를 불러오는 중...</p>
               </div>
             ) : audioError ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiMicLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="alert">
+                <RiMicLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>오디오를 불러올 수 없습니다</p>
               </div>
             ) : (
               <audio
                 controls
                 className={styles.audioPlayer}
-                onError={() => setAudioError(true)}>
+                onError={() => setAudioError(true)}
+                aria-label="이스터에그 오디오">
                 <source src={audioUrl} type="audio/mpeg" />
                 <source src={audioUrl} type="audio/mp3" />
                 <source src={audioUrl} type="audio/wav" />
@@ -372,22 +373,23 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
         {/* 비디오 플레이어 렌더링 */}
         {hasVideo && (
-          <div className={styles.videoPlayerWrapper}>
+          <div className={styles.videoPlayerWrapper} role="region" aria-label="비디오 콘텐츠">
             {!videoUrl ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiVidiconLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
+                <RiVidiconLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>비디오를 불러오는 중...</p>
               </div>
             ) : videoError ? (
-              <div className={styles.mediaErrorContainer}>
-                <RiVidiconLine size={32} className={styles.mediaErrorIcon} />
+              <div className={styles.mediaErrorContainer} role="alert">
+                <RiVidiconLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
                 <p className={styles.mediaErrorMessage}>비디오를 불러올 수 없습니다</p>
               </div>
             ) : (
               <video
                 controls
                 className={styles.videoPlayer}
-                onError={() => setVideoError(true)}>
+                onError={() => setVideoError(true)}
+                aria-label="이스터에그 비디오">
                 <source src={videoUrl} type="video/mp4" />
                 <source src={videoUrl} type="video/webm" />
                 비디오를 재생할 수 없습니다.
@@ -398,6 +400,10 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
       </div>
     );
   };
+
+  // 접근성을 위한 ID 생성
+  const modalTitleId = 'easter-egg-modal-title';
+  const modalDescriptionId = 'easter-egg-modal-description';
 
   return (
       <Modal
@@ -410,7 +416,12 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
         disableAnimation={true}>
       <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px`, height: `${maxHeight}px` }}>
         {/* 닫기 버튼 (우측 상단) */}
-        <button className={styles.closeButton} onClick={onClose} type="button" aria-label="닫기">
+        <button 
+          className={styles.closeButton} 
+          onClick={onClose} 
+          type="button" 
+          aria-label="모달 닫기"
+          aria-describedby={modalDescriptionId}>
           <RiCloseLine size={20} className={styles.closeIcon} />
         </button>
         <div className={styles.scrollView} style={{ maxHeight: `calc(${maxHeight}px - 0px)` }}>
@@ -425,9 +436,10 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
                   width={128}
                   height={128}
                   className={styles.profileImage}
+                  aria-hidden="false"
                 />
               ) : (
-                <div className={styles.profileImagePlaceholder}>
+                <div className={styles.profileImagePlaceholder} aria-hidden="true">
                   <RiGroupLine size={40} className={styles.profilePlaceholderIcon} />
                 </div>
               )}
@@ -435,7 +447,7 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
             {/* 서브타이틀 */}
             {data.type === 'FOUND' ? (
-              <div className={styles.subtitleContainer}>
+              <div className={styles.subtitleContainer} id={modalDescriptionId}>
                 <p className={styles.subtitle}>
                   <span className={styles.subtitleBold}>{data.author?.nickname || ''}</span>
                   <span>님의 소중한 추억을 </span>
@@ -446,7 +458,7 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
                 <p className={styles.subtitle}>(으)로 찾으셨군요!</p>
               </div>
             ) : (
-              <div className={styles.subtitleContainer}>
+              <div className={styles.subtitleContainer} id={modalDescriptionId}>
                 <p className={styles.subtitle}>다른 사람들이 발견한 내 이스터에그를</p>
                 <p className={styles.subtitle}>확인해보세요!</p>
               </div>
@@ -454,16 +466,16 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
             {/* 위치 정보 배지 (중앙 정렬) */}
             {locationAddress && (
-              <div className={styles.badgeContainer}>
-                <RiMapPinLine size={16} className={styles.badgeIcon} />
+              <div className={styles.badgeContainer} role="region" aria-label="위치 정보">
+                <RiMapPinLine size={16} className={styles.badgeIcon} aria-hidden="true" />
                 <span className={styles.badgeText}>{locationAddress}</span>
               </div>
             )}
 
             {/* 발견 날짜 정보 (FOUND 타입일 때만, 카드 밖) */}
             {data.type === 'FOUND' && getCurrentUserViewedAt() && (
-              <div className={styles.discovererInfoContainer}>
-                <RiTimeLine size={14} className={styles.discovererIcon} />
+              <div className={styles.discovererInfoContainer} role="region" aria-label="발견 시간">
+                <RiTimeLine size={14} className={styles.discovererIcon} aria-hidden="true" />
                 <span className={styles.discovererDateText}>
                   {getCurrentUserViewedAt()}에 발견함
                 </span>
@@ -474,9 +486,9 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
             <div className={styles.contentCard}>
               {/* 제목 헤더 */}
               <div className={styles.titleHeader}>
-                <h2 className={styles.contentTitle}>{data.title || '제목 없음'}</h2>
-                <div className={styles.dateBadge}>
-                  <RiCalendarLine size={14} className={styles.dateIcon} />
+                <h2 id={modalTitleId} className={styles.contentTitle}>{data.title || '제목 없음'}</h2>
+                <div className={styles.dateBadge} role="region" aria-label="생성 날짜">
+                  <RiCalendarLine size={14} className={styles.dateIcon} aria-hidden="true" />
                   <span className={styles.dateText}>{createdDate}</span>
                 </div>
               </div>
@@ -489,21 +501,25 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
               {/* 발견한 사람들 목록 (PLANTED 타입일 때만, 0명일 때도 공간 유지) */}
               {data.type === 'PLANTED' && (
-                <div className={styles.viewersSection}>
+                <div className={styles.viewersSection} role="region" aria-label="발견한 사람 목록">
                   <div className={styles.viewersHeader}>
-                    <RiGroupLine size={16} className={styles.viewersIcon} />
+                    <RiGroupLine size={16} className={styles.viewersIcon} aria-hidden="true" />
                     <h3 className={styles.viewersTitle}>
                       발견한 사람 ({data.viewers?.length || 0})
                     </h3>
                   </div>
-                  <div className={styles.viewersList}>
+                  <div className={styles.viewersList} role="list" aria-label={`${data.viewers?.length || 0}명이 발견함`}>
                     {data.viewers && data.viewers.length > 0 ? (
                       data.viewers.map((viewer) => {
                         const viewerProfileImg = viewer.profileImg || null;
                         const viewedDate = formatShortDateWithTime(viewer.viewedAt);
 
                         return (
-                          <div key={viewer.id || viewer.nickname} className={styles.viewerItem}>
+                          <div 
+                            key={viewer.id || viewer.nickname} 
+                            className={styles.viewerItem}
+                            role="listitem"
+                            aria-label={`${viewer.nickname || ''}님이 ${viewedDate}에 발견함`}>
                             <div className={styles.discovererViewerInfo}>
                               <div className={styles.discovererViewerAvatar}>
                                 {viewerProfileImg ? (
@@ -514,22 +530,23 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
                                     width={28}
                                     height={28}
                                     className={styles.discovererViewerAvatarImage}
+                                    aria-hidden="true"
                                   />
                                 ) : (
-                                  <RiGroupLine size={16} className={styles.viewerPlaceholderIcon} />
+                                  <RiGroupLine size={16} className={styles.viewerPlaceholderIcon} aria-hidden="true" />
                                 )}
                               </div>
                               <span className={styles.viewerName}>{viewer.nickname || ''}</span>
                             </div>
-                            <div className={styles.viewerDateBadge}>
-                              <RiTimeLine size={12} className={styles.viewerDateIcon} />
+                            <div className={styles.viewerDateBadge} aria-label={`발견 시간: ${viewedDate}`}>
+                              <RiTimeLine size={12} className={styles.viewerDateIcon} aria-hidden="true" />
                               <span className={styles.viewerDateText}>{viewedDate}</span>
                             </div>
                           </div>
                         );
                       })
                     ) : (
-                      <div className={styles.emptyViewersContainer}>
+                      <div className={styles.emptyViewersContainer} role="status" aria-live="polite">
                         <p className={styles.emptyViewersText}>아직 발견한 사람이 없습니다</p>
                       </div>
                     )}

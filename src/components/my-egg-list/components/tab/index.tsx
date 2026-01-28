@@ -30,14 +30,35 @@ export function Tab({
   discoveredCount = 5,
   plantedCount = 5,
 }: TabProps) {
+  // 키보드 네비게이션 핸들러
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, tab: 'discovered' | 'planted') => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onTabChange(tab);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      // 화살표 키로 탭 전환
+      if (e.key === 'ArrowLeft' && tab === 'planted') {
+        onTabChange('discovered');
+      } else if (e.key === 'ArrowRight' && tab === 'discovered') {
+        onTabChange('planted');
+      }
+    }
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} role="tablist" aria-label="이스터에그 목록 탭">
       <button
         className={styles.tabButton}
         onClick={() => onTabChange('discovered')}
+        onKeyDown={(e) => handleKeyDown(e, 'discovered')}
         type="button"
-        aria-label="발견한 알"
-        aria-pressed={activeTab === 'discovered'}>
+        role="tab"
+        aria-label={`발견한 알 ${discoveredCount}개`}
+        aria-selected={activeTab === 'discovered'}
+        aria-controls="egg-list-content"
+        id="tab-discovered"
+        tabIndex={activeTab === 'discovered' ? 0 : -1}>
         <span
           className={`${styles.tabText} ${
             activeTab === 'discovered' ? styles.tabTextActive : ''
@@ -49,9 +70,14 @@ export function Tab({
       <button
         className={styles.tabButton}
         onClick={() => onTabChange('planted')}
+        onKeyDown={(e) => handleKeyDown(e, 'planted')}
         type="button"
-        aria-label="심은 알"
-        aria-pressed={activeTab === 'planted'}>
+        role="tab"
+        aria-label={`심은 알 ${plantedCount}개`}
+        aria-selected={activeTab === 'planted'}
+        aria-controls="egg-list-content"
+        id="tab-planted"
+        tabIndex={activeTab === 'planted' ? 0 : -1}>
         <span
           className={`${styles.tabText} ${
             activeTab === 'planted' ? styles.tabTextActive : ''

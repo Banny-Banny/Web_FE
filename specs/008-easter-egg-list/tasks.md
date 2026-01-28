@@ -296,19 +296,19 @@
 
 ### 7.1 성능 최적화
 
-- [ ] T017 src/components/my-egg-list/components/item/index.tsx 수정
+- [x] T017 src/components/my-egg-list/components/item/index.tsx 수정
   - 이미지 지연 로딩 적용
     - `next/image`의 `loading="lazy"` 속성 사용
   - 메모이제이션 적용
     - `React.memo`로 컴포넌트 래핑
   - 파일: `src/components/my-egg-list/components/item/index.tsx`
 
-- [ ] T018 src/components/my-egg-list/components/item-list/index.tsx 수정
+- [x] T018 src/components/my-egg-list/components/item-list/index.tsx 수정
   - 리스트 가상화 고려 (필요시)
     - 목록이 매우 긴 경우 가상화 라이브러리 적용 검토
   - 파일: `src/components/my-egg-list/components/item-list/index.tsx`
 
-- [ ] T019 src/components/my-egg-list/hooks/useMyEggList.ts 수정
+- [x] T019 src/components/my-egg-list/hooks/useMyEggList.ts 수정
   - React Query 캐시 최적화
     - 적절한 `staleTime`, `cacheTime` 설정
     - 쿼리 무효화 전략 수립
@@ -316,7 +316,7 @@
 
 ### 7.2 접근성 개선
 
-- [ ] T020 src/components/my-egg-list/components/tab/index.tsx 수정
+- [x] T020 src/components/my-egg-list/components/tab/index.tsx 수정
   - 키보드 네비게이션 지원
     - Tab 키로 탭 전환 가능
     - Enter/Space 키로 탭 선택
@@ -325,7 +325,7 @@
     - `aria-selected` 속성 추가
   - 파일: `src/components/my-egg-list/components/tab/index.tsx`
 
-- [ ] T021 src/components/my-egg-list/components/filter/index.tsx 수정
+- [x] T021 src/components/my-egg-list/components/filter/index.tsx 수정
   - 키보드 네비게이션 지원
     - 드롭다운 메뉴 키보드 접근 가능
   - ARIA 속성 추가
@@ -333,7 +333,7 @@
     - `aria-expanded` 속성 추가
   - 파일: `src/components/my-egg-list/components/filter/index.tsx`
 
-- [ ] T022 src/components/my-egg-list/components/modal/index.tsx 수정
+- [x] T022 src/components/my-egg-list/components/modal/index.tsx 수정
   - 모달 접근성 개선
     - `role="dialog"` 추가
     - `aria-labelledby`, `aria-describedby` 추가
@@ -345,7 +345,7 @@
 
 ### 7.3 UI 테스트 (Playwright)
 
-- [ ] T023 tests/ui/my-egg-list/my-egg-list.ui.spec.ts 생성
+- [x] T023 tests/ui/my-egg-list/my-egg-list.ui.spec.ts 생성
   - 컴포넌트 렌더링 테스트
     - 페이지 진입 시 목록 표시 확인
     - 탭 기본 선택 상태 확인

@@ -212,8 +212,11 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
       type: 'FOUND', 
       sort: selectedFilter === 'latest' ? 'LATEST' : 'OLDEST' // 백엔드에서 정렬 처리
     }),
-    staleTime: 1000 * 60 * 5, // 5분
+    staleTime: 1000 * 60 * 5, // 5분간 fresh 상태 유지
+    gcTime: 1000 * 60 * 10, // 10분간 캐시 유지 (구 cacheTime)
     retry: 2,
+    refetchOnWindowFocus: false, // 윈도우 포커스 시 자동 재조회 방지
+    refetchOnMount: false, // 마운트 시 자동 재조회 방지 (staleTime 내에서는)
   });
 
   // 심은 알 목록 조회
@@ -225,8 +228,11 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
   } = useQuery({
     queryKey: ['myEggs', 'PLANTED'],
     queryFn: () => getMyEggs({ type: 'PLANTED' }),
-    staleTime: 1000 * 60 * 5, // 5분
+    staleTime: 1000 * 60 * 5, // 5분간 fresh 상태 유지
+    gcTime: 1000 * 60 * 10, // 10분간 캐시 유지 (구 cacheTime)
     retry: 2,
+    refetchOnWindowFocus: false, // 윈도우 포커스 시 자동 재조회 방지
+    refetchOnMount: false, // 마운트 시 자동 재조회 방지 (staleTime 내에서는)
   });
 
   // 상세 정보 조회 (모달 열기 시)
@@ -250,6 +256,7 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
     staleTime: 0, // 항상 최신 데이터를 가져오기 위해 캐시 사용 안 함
     gcTime: 1000 * 60 * 5, // 5분 후 가비지 컬렉션
     retry: 2,
+    refetchOnWindowFocus: false, // 윈도우 포커스 시 자동 재조회 방지 (모달이 열려있을 때만 조회)
   });
 
   // 데이터 변환 및 필터링

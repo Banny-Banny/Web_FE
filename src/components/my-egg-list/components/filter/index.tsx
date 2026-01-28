@@ -17,7 +17,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { RiArrowUpSLine, RiArrowDownSLine, RiCheckLine } from '@remixicon/react';
 import styles from './styles.module.css';
 
@@ -34,9 +34,64 @@ export function Filter({
   onPress,
   onOptionSelect,
 }: FilterProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const firstOptionRef = useRef<HTMLButtonElement>(null);
+
+  // 드롭다운이 열릴 때 첫 번째 옵션에 포커스
+  useEffect(() => {
+    if (isOpen && firstOptionRef.current) {
+      firstOptionRef.current.focus();
+    }
+  }, [isOpen]);
+
   const handleOptionSelect = (option: 'latest' | 'oldest') => {
     onOptionSelect?.(option);
     onPress?.(); // 드롭다운 닫기
+  };
+
+  // 키보드 네비게이션 핸들러
+  const handleButtonKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onPress?.();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      onPress?.(); // 드롭다운 열기
+    } else if (e.key === 'Escape' && isOpen) {
+      e.preventDefault();
+      onPress?.(); // 드롭다운 닫기
+    }
+  };
+
+  const handleOptionKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    option: 'latest' | 'oldest'
+  ) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleOptionSelect(option);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      // 다음 옵션으로 이동
+      if (option === 'latest') {
+        const nextOption = dropdownRef.current?.querySelector(
+          '[data-option="oldest"]'
+        ) as HTMLButtonElement;
+        nextOption?.focus();
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      // 이전 옵션으로 이동
+      if (option === 'oldest') {
+        const prevOption = dropdownRef.current?.querySelector(
+          '[data-option="latest"]'
+        ) as HTMLButtonElement;
+        prevOption?.focus();
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      onPress?.(); // 드롭다운 닫기
+    }
   };
 
   return (
@@ -45,8 +100,13 @@ export function Filter({
       <button
         className={styles.button}
         onClick={onPress}
+        onKeyDown={handleButtonKeyDown}
         type="button"
-        aria-label="필터">
+        role="combobox"
+        aria-label="정렬 필터"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-controls="filter-dropdown">
         <span className={styles.buttonText}>
           {selectedOption === 'latest' ? '최신발견순' : '오래된순'}
         </span>
@@ -62,14 +122,25 @@ export function Filter({
       {/* 드롭다운 메뉴 - 열림 상태일 때만 표시 */}
       {isOpen && (
         <div className={styles.dropdownWrapper}>
-          <div className={styles.dropdown}>
+          <div
+            ref={dropdownRef}
+            className={styles.dropdown}
+            role="listbox"
+            id="filter-dropdown"
+            aria-label="정렬 옵션">
             <button
+              ref={firstOptionRef}
               className={`${styles.dropdownItem} ${
                 selectedOption === 'latest' ? styles.dropdownItemSelected : ''
               }`}
               onClick={() => handleOptionSelect('latest')}
+              onKeyDown={(e) => handleOptionKeyDown(e, 'latest')}
               type="button"
-              aria-label="최신발견순">
+              role="option"
+              aria-label="최신발견순"
+              aria-selected={selectedOption === 'latest'}
+              data-option="latest"
+              tabIndex={0}>
               <span
                 className={`${styles.dropdownItemText} ${
                   selectedOption === 'latest' ? styles.dropdownItemTextSelected : ''
@@ -82,14 +153,19 @@ export function Filter({
                 </span>
               )}
             </button>
-            <div className={styles.divider} />
+            <div className={styles.divider} role="separator" />
             <button
               className={`${styles.dropdownItem} ${
                 selectedOption === 'oldest' ? styles.dropdownItemSelected : ''
               }`}
               onClick={() => handleOptionSelect('oldest')}
+              onKeyDown={(e) => handleOptionKeyDown(e, 'oldest')}
               type="button"
-              aria-label="오래된순">
+              role="option"
+              aria-label="오래된순"
+              aria-selected={selectedOption === 'oldest'}
+              data-option="oldest"
+              tabIndex={0}>
               <span
                 className={`${styles.dropdownItemText} ${
                   selectedOption === 'oldest' ? styles.dropdownItemTextSelected : ''

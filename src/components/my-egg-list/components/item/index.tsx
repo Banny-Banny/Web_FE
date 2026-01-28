@@ -114,6 +114,7 @@ export function Item({
         width={52}
         height={52}
         className={styles.icon}
+        loading="lazy"
       />
     );
   };
@@ -179,3 +180,6 @@ export function Item({
     </button>
   );
 }
+
+// 메모이제이션 적용: props가 변경되지 않으면 리렌더링 방지
+export default React.memo(Item);
