@@ -68,6 +68,12 @@ export function usePaymentSuccess() {
    * 결제 승인 처리
    */
   const handleConfirmPayment = useCallback(async () => {
+    // 중복 실행 방지 (가장 먼저 체크)
+    if (hasProcessedRef.current) {
+      console.log('[usePaymentSuccess] handleConfirmPayment 중복 실행 방지');
+      return;
+    }
+
     if (!paymentInfo) {
       setState({
         status: 'failed',
@@ -87,7 +93,8 @@ export function usePaymentSuccess() {
       return;
     }
 
-    console.log('[usePaymentSuccess] 결제 승인 시작:', { paymentKey, orderId, amount });
+    console.log('[usePaymentSuccess] 결제 승인 시작 (최초 1회):', { paymentKey, orderId, amount });
+    hasProcessedRef.current = true;
 
     // 이미 결제 완료된 주문인지 확인 (중복 처리 방지)
     if (orderStatus?.order_status === 'PAID') {
@@ -324,8 +331,9 @@ export function usePaymentSuccess() {
   
   // 초기 결제 승인 처리 (한 번만 실행)
   useEffect(() => {
-    if (paymentInfo && state.status === 'idle' && !hasProcessedRef.current) {
-      hasProcessedRef.current = true;
+    // paymentInfo가 있고 아직 처리하지 않았을 때만 실행
+    if (paymentInfo && !hasProcessedRef.current) {
+      console.log('[usePaymentSuccess] useEffect 트리거: 결제 승인 처리 시작');
       handleConfirmPayment();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
