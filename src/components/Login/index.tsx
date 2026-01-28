@@ -5,22 +5,29 @@
  * 실제 API를 사용한 로그인 플로우
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiArrowLeftLine } from '@remixicon/react';
 import { LoginForm } from './LoginForm';
+import { LoginMethodSelector } from './LoginMethodSelector';
 import type { LoginFormData } from './types';
 import { useLoginMutation, getLoginErrorMessage } from './hooks/useLoginMutation';
 import styles from './styles.module.css';
 
 /**
+ * 로그인 화면 타입
+ */
+type LoginView = 'selector' | 'email' | 'kakao';
+
+/**
  * LoginContainer 컴포넌트
  * 
- * 로그인 폼 상태 관리 및 실제 API 기반 로그인 처리
+ * 로그인 방법 선택 화면과 로그인 폼을 관리하는 컨테이너 컴포넌트
  */
 export function LoginContainer() {
   const router = useRouter();
   const loginMutation = useLoginMutation();
+  const [currentView, setCurrentView] = useState<LoginView>('selector');
 
   /**
    * 로그인 폼 제출 핸들러
@@ -41,31 +48,72 @@ export function LoginContainer() {
     ? getLoginErrorMessage(loginMutation.error)
     : undefined;
 
+  /**
+   * 뒤로가기 핸들러
+   * 선택 화면에서는 라우터 뒤로가기, 로그인 폼에서는 선택 화면으로 돌아감
+   */
   const handleBack = () => {
-    router.back();
+    if (currentView === 'selector') {
+      router.back();
+    } else {
+      setCurrentView('selector');
+    }
   };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <button
-          type="button"
-          className={styles.backButton}
-          onClick={handleBack}
-          aria-label="뒤로가기"
-        >
-          <RiArrowLeftLine size={24} />
-        </button>
-        <div className={styles.titleSection}>
-          <h1 className={styles.title}>로그인</h1>
-          <p className={styles.subtitle}>이메일과 비밀번호로 로그인하세요</p>
-        </div>
-      </div>
-      <LoginForm
-        onSubmit={handleLogin}
-        isLoading={loginMutation.isPending}
-        error={errorMessage}
+  /**
+   * 카카오 로그인 선택 핸들러
+   */
+  const handleSelectKakao = () => {
+    // TODO: 카카오 소셜 로그인 구현
+    console.log('카카오 로그인 선택');
+    // 임시로 에러 처리 (나중에 실제 카카오 로그인 플로우로 교체)
+    alert('카카오 로그인은 준비 중입니다.');
+  };
+
+  /**
+   * 이메일 로그인 선택 핸들러
+   */
+  const handleSelectEmail = () => {
+    setCurrentView('email');
+  };
+
+  // 로그인 방법 선택 화면
+  if (currentView === 'selector') {
+    return (
+      <LoginMethodSelector
+        onSelectKakao={handleSelectKakao}
+        onSelectEmail={handleSelectEmail}
       />
-    </div>
-  );
+    );
+  }
+
+  // 이메일 로그인 폼
+  if (currentView === 'email') {
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={handleBack}
+            aria-label="뒤로가기"
+          >
+            <RiArrowLeftLine size={24} />
+          </button>
+          <div className={styles.titleSection}>
+            <h1 className={styles.title}>로그인</h1>
+            <p className={styles.subtitle}>이메일과 비밀번호로 로그인하세요</p>
+          </div>
+        </div>
+        <LoginForm
+          onSubmit={handleLogin}
+          isLoading={loginMutation.isPending}
+          error={errorMessage}
+        />
+      </div>
+    );
+  }
+
+  // 카카오 로그인 화면 (향후 구현)
+  return null;
 }

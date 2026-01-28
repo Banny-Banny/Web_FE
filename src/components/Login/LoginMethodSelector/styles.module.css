@@ -1,0 +1,200 @@
+/**
+ * 로그인 방법 선택 화면 스타일
+ * 375px 모바일 프레임 기준
+ * Figma 디자인 기반
+ */
+
+/* 컨테이너 */
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white-500, #FAFAFA);
+  padding: var(--spacing-xl, 24px) var(--spacing-lg, 16px);
+  box-sizing: border-box;
+}
+
+/* 상단 섹션 */
+.topSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl, 24px);
+  width: 100%;
+}
+
+/* 환영 섹션 */
+.welcomeSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  text-align: center;
+}
+
+.welcomeTitle {
+  font-family: var(--font-dunggeunmo, 'DungGeunMo', monospace);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+}
+
+.welcomeSubtitle {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--color-grey-600, #4b5563);
+  margin: 0;
+}
+
+/* 기능 설명 카드들 */
+.featureCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  width: 100%;
+}
+
+.featureCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  padding: var(--spacing-md, 12px);
+  background-color: var(--color-white-grey-100, #F7F7F7);
+  border-radius: var(--radius-lg, 12px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.featureCardReverse {
+  flex-direction: row-reverse;
+}
+
+/* 친구와 함께 카드의 텍스트는 오른쪽 정렬 */
+.featureCardReverse .featureContent {
+  text-align: right;
+}
+
+.featureCardReverse .featureTitle {
+  text-align: right;
+}
+
+.featureCardReverse .featureDescription {
+  text-align: right;
+}
+
+.featureIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.featureIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white-grey-300, #EDEDED);
+  border-radius: 50%;
+  color: var(--color-dark-grey-800, #1f2937);
+}
+
+.featureContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+  flex: 1;
+}
+
+.featureTitle {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--color-black-500, #0A0A0A);
+  margin: 0;
+  text-align: left;
+}
+
+.featureDescription {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--color-grey-600, #4b5563);
+  margin: 0;
+  text-align: left;
+}
+
+/* 일러스트레이션 섹션 */
+.illustrationSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  margin: var(--spacing-xl, 24px) 0;
+  min-height: 200px;
+}
+
+.illustrationWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.illustrationImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 하단 섹션 */
+.bottomSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 16px);
+  width: 100%;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  width: 100%;
+}
+
+/* 카카오 버튼 커스텀 스타일 */
+/* 피그마 디자인: background: rgba(255, 193, 7, 0.88), border-radius: 20px */
+.kakaoButton {
+  background-color: rgba(255, 193, 7, 0.88) !important;
+  color: var(--color-black-500, #0A0A0A) !important;
+  border-radius: 20px !important;
+}
+
+.kakaoButton:hover {
+  background-color: rgba(255, 193, 7, 0.95) !important;
+}
+
+/* 이메일 버튼은 기본 primary 스타일 사용 (검은색) */
+.emailButton {
+  /* 기본 Button 컴포넌트의 primary variant 사용 (검은색 배경) */
+}
+
+/* 저작권 정보 */
+.copyright {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  color: var(--color-grey-500, #9ca3af);
+  text-align: center;
+  margin: 0;
+}
