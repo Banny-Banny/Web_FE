@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
-import { getAccessToken, clearTokens, isTokenExpired } from '@/commons/utils/auth';
+import { getAccessToken, clearTokens } from '@/commons/utils/auth';
 import { localLogin } from '@/commons/apis/auth/login';
 import { verifyAuth } from '@/commons/apis/auth/verify';
 
@@ -29,13 +29,11 @@ export function useAuth(): AuthContextType {
         const token = getAccessToken();
         
         if (!token) {
-          console.log('🔐 [useAuth] 토큰이 없습니다.');
+          // 토큰이 없으면 인증되지 않은 상태
           setUser(null);
           setIsLoading(false);
           return;
         }
-
-        console.log('🔐 [useAuth] 토큰 발견, 검증 시작...');
 
         // 캐시에서 사용자 정보 확인
         const cachedUser = queryClient.getQueryData<User>(['auth', 'user']);
@@ -43,7 +41,6 @@ export function useAuth(): AuthContextType {
         if (cachedUser) {
           // 캐시된 사용자 정보가 있으면 그대로 사용
           // 토큰 만료 여부는 API 검증 시 확인
-          console.log('🔐 [useAuth] 캐시된 사용자 정보 사용');
           setUser(cachedUser);
           setIsLoading(false);
           return;
@@ -52,12 +49,9 @@ export function useAuth(): AuthContextType {
         // 토큰 검증 API 호출하여 사용자 정보 가져오기
         // 토큰 파싱 실패나 만료 여부는 서버 검증을 통해 확인
         try {
-          console.log('🔐 [useAuth] API 검증 시작...');
           const verifyResult = await verifyAuth();
-          console.log('🔐 [useAuth] API 검증 응답:', { valid: verifyResult.valid, hasUser: !!verifyResult.user });
           
           if (verifyResult.valid && verifyResult.user) {
-            console.log('✅ [useAuth] 토큰 유효, 사용자 정보 저장');
             setUser(verifyResult.user);
             queryClient.setQueryData(['auth', 'user'], verifyResult.user);
           } else if (verifyResult.valid === false) {
@@ -71,12 +65,14 @@ export function useAuth(): AuthContextType {
             console.warn('⚠️ [useAuth] 검증 응답에 사용자 정보가 없습니다. 토큰은 유지합니다.');
             setUser(null);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           // 토큰 검증 실패 시
-          const errorStatus = err.status || err.statusCode;
+          const errorStatus = (err as { status?: number; statusCode?: number }).status 
+            || (err as { statusCode?: number }).statusCode;
+          const errorMessage = (err as { message?: string }).message || '알 수 없는 오류';
           console.error('❌ [useAuth] 토큰 검증 실패:', {
             status: errorStatus,
-            message: err.message,
+            message: errorMessage,
             error: err,
           });
           
@@ -93,15 +89,15 @@ export function useAuth(): AuthContextType {
             setUser(null);
           }
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('❌ [useAuth] 예상치 못한 오류:', err);
-        setError(err.message || '인증 상태 확인 중 오류가 발생했습니다.');
+        const errorMessage = (err as { message?: string }).message || '인증 상태 확인 중 오류가 발생했습니다.';
+        setError(errorMessage);
         // 예상치 못한 오류는 토큰을 유지
         setUser(null);
-      } finally {
-        console.log('🔐 [useAuth] 인증 확인 완료');
-        setIsLoading(false);
-      }
+        } finally {
+          setIsLoading(false);
+        }
     };
 
     checkAuth();
@@ -122,8 +118,8 @@ export function useAuth(): AuthContextType {
         setUser(response.user);
         queryClient.setQueryData(['auth', 'user'], response.user);
       }
-    } catch (err: any) {
-      const errorMessage = err.message || '로그인 중 오류가 발생했습니다.';
+    } catch (err: unknown) {
+      const errorMessage = (err as { message?: string }).message || '로그인 중 오류가 발생했습니다.';
       setError(errorMessage);
       throw err;
     } finally {
@@ -136,7 +132,7 @@ export function useAuth(): AuthContextType {
    */
   const signup = useCallback(async () => {
     // TODO: 회원가입 로직 구현
-    console.log('Signup function - to be implemented');
+    console.warn('Signup function - to be implemented');
   }, []);
 
   /**
@@ -175,14 +171,15 @@ export function useAuth(): AuthContextType {
           clearTokens();
           setUser(null);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         // 토큰 검증 실패 시 토큰 제거
         console.error('토큰 검증 실패:', err);
         clearTokens();
         setUser(null);
       }
-    } catch (err: any) {
-      setError(err.message || '인증 상태 갱신 중 오류가 발생했습니다.');
+    } catch (err: unknown) {
+      const errorMessage = (err as { message?: string }).message || '인증 상태 갱신 중 오류가 발생했습니다.';
+      setError(errorMessage);
       setUser(null);
     } finally {
       setIsLoading(false);
