@@ -214,6 +214,8 @@ export const CAPSULE_ENDPOINTS = {
   WAITING_ROOM_SETTINGS: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/settings`,
   // 대기실 상세 조회
   WAITING_ROOM_DETAIL: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}`,
+  // 본인 컨텐츠 조회 및 저장
+  MY_CONTENT: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/my-content`,
 } as const;
 
 /**

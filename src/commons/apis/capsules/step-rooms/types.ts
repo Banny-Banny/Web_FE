@@ -49,11 +49,13 @@ export interface WaitingRoomSettingsResponse {
  */
 export interface SlotApiResponse {
   slot_number: number;
-  user_id: string;
+  user_id: string | null;
   is_host: boolean;
   status: 'ACCEPTED' | 'PENDING' | 'REJECTED';
-  nickname: string;
-  avatar_url?: string;
+  nickname: string | null;
+  avatar_url?: string | null;
+  /** 참여자 컨텐츠 작성 여부 (백엔드/앱 스펙: has_content) */
+  has_content?: boolean;
 }
 
 /**
@@ -74,6 +76,8 @@ export interface Participant {
   role: 'HOST' | 'PARTICIPANT';
   /** 슬롯 상태 */
   status: 'ACCEPTED' | 'PENDING' | 'REJECTED';
+  /** 컨텐츠 작성 여부 (앱 StepRoom 기준 표시용) */
+  hasContent?: boolean;
 }
 
 /**
@@ -110,4 +114,135 @@ export interface WaitingRoomDetailResponse {
   maxHeadcount: number;
   /** 참여자 목록 */
   participants: Participant[];
+}
+
+/**
+ * 개인 컨텐츠 API 응답 타입 (백엔드 snake_case)
+ *
+ * 응답 예시: { text, images, music, video, created_at, updated_at }
+ */
+export interface MyContentApiResponse {
+  // GET /my-content 응답 스펙(문서 기준) + 레거시 호환
+  slot_id?: string;
+  user_id?: string;
+  // 문서 예시에선 {}로 표시되지만 실제로는 string이어야 함
+  text_message?: unknown;
+  // 레거시 호환 (일부 환경에서 text로 내려오는 경우)
+  text?: unknown;
+  status?: string;
+  // 문서: images: [{ media_id, url, order }]
+  images?: Array<{ media_id: string; url: string; order: number }> | string[];
+  // 문서: music/video: { media_id, url, order }
+  music?: { media_id: string; url: string; order: number } | string;
+  video?: { media_id: string; url: string; order: number } | string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * 개인 컨텐츠 응답 타입 (프론트엔드 camelCase)
+ */
+export interface MyContentResponse {
+  /** 텍스트 내용 */
+  text?: string;
+  /** 이미지 URL 배열 */
+  images?: string[];
+  /** 음악 URL */
+  music?: string;
+  /** 영상 URL */
+  video?: string;
+  /** 작성 일시 (ISO 8601 형식) */
+  createdAt?: string;
+  /** 수정 일시 (ISO 8601 형식) */
+  updatedAt?: string;
+}
+
+/**
+ * 스텝룸 콘텐츠 저장(재저장) API 응답 data (백엔드 snake_case)
+ *
+ * 문서 예시:
+ * { user_id, nickname, status, saved_at, uploaded_images, uploaded_music, uploaded_video }
+ */
+export interface MyContentSaveApiData {
+  user_id: string;
+  nickname: string;
+  status: 'COMPLETED' | 'PENDING' | 'FAILED' | string;
+  saved_at: string;
+  uploaded_images: number;
+  uploaded_music: boolean;
+  uploaded_video: boolean;
+}
+
+/**
+ * 스텝룸 콘텐츠 저장(재저장) API 응답 data (프론트 camelCase)
+ */
+export interface MyContentSaveResponse {
+  userId: string;
+  nickname: string;
+  status: 'COMPLETED' | 'PENDING' | 'FAILED' | string;
+  savedAt: string;
+  uploadedImages: number;
+  uploadedMusic: boolean;
+  uploadedVideo: boolean;
+}
+
+/**
+ * 스텝룸 콘텐츠 부분 수정(PATCH) API 응답 data (백엔드 snake_case)
+ *
+ * 문서 예시:
+ * { user_id, nickname, status, updated_at, uploaded_images, uploaded_music, uploaded_video }
+ */
+export interface MyContentUpdateApiData {
+  user_id: string;
+  nickname: string;
+  status: 'COMPLETED' | 'PENDING' | 'FAILED' | string;
+  updated_at: string;
+  uploaded_images: number;
+  uploaded_music: boolean;
+  uploaded_video: boolean;
+}
+
+/**
+ * 스텝룸 콘텐츠 부분 수정(PATCH) API 응답 data (프론트 camelCase)
+ */
+export interface MyContentUpdateResponse {
+  userId: string;
+  nickname: string;
+  status: 'COMPLETED' | 'PENDING' | 'FAILED' | string;
+  updatedAt: string;
+  uploadedImages: number;
+  uploadedMusic: boolean;
+  uploadedVideo: boolean;
+}
+
+/**
+ * 컨텐츠 저장 요청 타입
+ */
+export interface SaveContentRequest {
+  /** 텍스트 내용 */
+  text?: string;
+  /** 초대 코드 (선택) */
+  inviteCode?: string;
+  /** 이미지 파일 배열 */
+  images?: File[];
+  /** 음악 파일 */
+  music?: File;
+  /** 영상 파일 */
+  video?: File;
+}
+
+/**
+ * 컨텐츠 수정 요청 타입
+ */
+export interface UpdateContentRequest {
+  /** 텍스트 내용 */
+  text?: string;
+  /** 이미지 파일 배열 */
+  images?: File[];
+  /** 유지할 기존 이미지 URL 배열 (전달 시 해당 URL만 유지) */
+  existingImageUrls?: string[];
+  /** 음악 파일 */
+  music?: File;
+  /** 영상 파일 */
+  video?: File;
 }

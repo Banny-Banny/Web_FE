@@ -1,9 +1,10 @@
 /**
  * @fileoverview ParticipantList 컴포넌트 스타일
- * @description 참여자 목록 컴포넌트의 스타일 (375px 고정 레이아웃)
+ * @description 참여자 목록 컴포넌트의 스타일 (앱 버전 기준)
  * 
  * @version 1.0.0
  * @created 2026-01-28
+ * @updated 2026-01-28 - 앱 버전 기준으로 스타일 수정
  * 
  * 규칙 준수 체크리스트:
  * - [x] CSS Module 사용
@@ -16,18 +17,18 @@
 /* 컨테이너 */
 .container {
   width: 100%;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-lg);
   background-color: var(--color-white-500);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 /* 섹션 제목 */
 .sectionTitle {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: var(--font-weight-normal);
   color: var(--color-black-500);
   margin: 0;
   padding: 0;
@@ -37,49 +38,78 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
 }
 
-/* 내 참여자 항목 */
-.myParticipantItem {
+/* 참여자 카드 (본인) */
+.participantCardMe {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border: 2px solid var(--color-grey-400);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-white-500);
+  justify-content: space-between;
+  height: 78px;
+  padding: 0 21px;
+  background-color: var(--color-white-100);
+  border: 1px solid var(--color-black-500);
+  border-radius: 16px;
+  cursor: pointer;
+  text-align: left;
 }
 
-/* 일반 참여자 항목 */
-.participantItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
+.participantCardMe:disabled {
+  cursor: default;
 }
 
-/* 빈 슬롯 */
-.emptySlot {
+.participantCardMe:focus {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* 참여자 카드 (다른 사람) */
+.participantCardOther {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 78px;
+  padding: 0 21px;
+  background-color: var(--color-white-grey-200);
+  border-radius: 16px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+}
+
+.participantCardOther:focus {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* 참여자 정보 영역 */
+.participantInfo {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-grey-50);
+  flex: 1;
 }
 
 /* 참여자 아바타 */
 .participantAvatar {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-white-500);
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-white-grey-500);
+  background-color: var(--color-white-100);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.participantAvatarActive {
+  border-color: var(--color-light-black-500);
 }
 
 .avatarImage {
@@ -89,12 +119,11 @@
 }
 
 .avatarIcon {
-  color: var(--color-grey-500);
+  color: var(--color-grey-400);
 }
 
-/* 참여자 정보 */
-.participantInfo {
-  flex: 1;
+/* 참여자 상세 정보 */
+.participantDetails {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -103,93 +132,73 @@
 /* 참여자 이름 행 */
 .participantNameRow {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: var(--spacing-xs);
 }
 
 /* 참여자 이름 */
 .participantName {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  letter-spacing: -0.612500011920929px;
   color: var(--color-black-500);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
 }
 
-/* 왕관 아이콘 */
-.crownIcon {
-  font-size: var(--font-size-base);
-  line-height: 1;
-}
-
-/* 방장 배지 */
-.hostBadge {
-  display: inline-block;
-  padding: 2px var(--spacing-xs);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
-  background-color: var(--color-blue-100);
-  color: var(--color-blue-700);
-}
-
-/* 작성하기 버튼 */
-.writeButton {
-  font-size: var(--font-size-sm);
+/* 참여자 상태 */
+.participantStatus {
+  font-size: 12px;
+  line-height: 18px;
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
+}
+
+.statusCompleted {
+  color: var(--color-grey-400);
+}
+
+.statusPending {
   color: var(--color-blue-500);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-  transition: color 0.2s ease;
 }
 
-.writeButton:hover {
-  color: var(--color-blue-600);
+.statusWaiting {
+  color: var(--color-dark-grey-500);
 }
 
-.writeButton:focus {
-  outline: 2px solid var(--color-blue-500);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* 빈 슬롯 정보 */
-.emptySlotInfo {
-  flex: 1;
+/* 빈 슬롯 */
+.emptySlot {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 78px;
+  padding: 0 21px;
 }
 
 /* 빈 슬롯 텍스트 */
 .emptySlotText {
-  font-size: var(--font-size-sm);
+  font-size: 12px;
+  line-height: 18px;
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
   color: var(--color-grey-600);
 }
 
 /* 초대 버튼 */
 .inviteButton {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   background: none;
   cursor: pointer;
-  color: var(--color-grey-600);
-  transition: color 0.2s ease;
+  color: var(--color-black-500);
+  padding: 0;
 }
 
 .inviteButton:hover {
-  color: var(--color-black-500);
+  opacity: 0.7;
 }
 
 .inviteButton:focus {
@@ -198,12 +207,35 @@
   border-radius: var(--radius-sm);
 }
 
-/* 체크박스 플레이스홀더 */
-.checkboxPlaceholder {
+/* 체크박스 */
+.checkbox {
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--color-grey-300);
-  background-color: var(--color-white-500);
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background-color: var(--color-white-100);
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkboxActive {
+  border-color: var(--color-grey-600);
+}
+
+.checkboxInactive {
+  border-color: var(--color-grey-200);
+  background-color: var(--color-white-100);
+}
+
+.checkboxChecked {
+  border-color: var(--color-grey-600);
+}
+
+.checkboxCheckmark {
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 700;
+  color: var(--color-green-500);
 }

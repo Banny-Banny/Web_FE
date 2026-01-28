@@ -17,8 +17,14 @@ export interface ParticipantListProps {
   maxHeadcount: number;
   /** 현재 사용자 ID (내 참여자 항목 강조용) */
   currentUserId?: string;
+  /** 현재 사용자 닉네임 (userId 매칭 실패 시 보조 식별용) */
+  currentUserName?: string;
+  /** 내 콘텐츠 작성/저장 완료 여부 (체크 표시용) */
+  isMyContentSaved?: boolean;
   /** 친구 초대 핸들러 */
   onInviteFriend?: () => void;
   /** 내 글 작성하기 핸들러 */
   onWriteMyContent?: () => void;
+  /** (방장) 최종제출 핸들러 */
+  onFinalSubmit?: () => void;
 }
