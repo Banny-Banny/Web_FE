@@ -1,0 +1,242 @@
+/**
+ * components/my-egg-list/components/item/styles.module.css
+ * 이스터에그 목록 아이템 스타일 정의
+ *
+ * 체크리스트:
+ * - [✓] CSS Module 사용
+ * - [✓] 색상 토큰만 사용 (하드코딩 0건)
+ * - [✓] 인라인 스타일 0건
+ * - [✓] 피그마 디자인 1:1 대응
+ * - [✓] Typography 토큰 활용
+ * - [✓] Figma 디자인 사이즈 정확히 반영 (소수점 반올림)
+ *
+ * Figma 노드 ID: 585:2856
+ * 생성 시각: 2026-01-28
+ */
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  width: 100%;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-border-light);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.container:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.container:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.containerExpired {
+  background-color: var(--color-white-grey-100);
+  border-color: var(--color-border-lighter);
+}
+
+/* ============================================
+   Content
+   ============================================ */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  gap: 16px;
+}
+
+/* ============================================
+   Header Row
+   ============================================ */
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.iconContainer {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.textContainer {
+  flex: 1;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.titleRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.titleText {
+  flex: 1;
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: var(--font-weight-extrabold, 800);
+  color: var(--color-black-500);
+  letter-spacing: -0.5px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewCountContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 12px;
+  background-color: var(--color-white-grey-200);
+}
+
+.viewCountIcon {
+  color: var(--color-dark-grey-700);
+  flex-shrink: 0;
+}
+
+.viewCountText {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-dark-grey-700);
+}
+
+.descriptionText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  color: var(--color-dark-grey-600);
+  letter-spacing: -0.2px;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   Footer Row
+   ============================================ */
+.footerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border-lighter);
+}
+
+.metaContainer {
+  flex: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.locationContainer {
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.locationIconContainer {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.locationIcon {
+  color: var(--color-dark-grey-600);
+  flex-shrink: 0;
+}
+
+.metaText {
+  flex-shrink: 1;
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-dark-grey-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-grey-400);
+  flex-shrink: 0;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.actionButton {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionIcon {
+  color: var(--color-dark-grey-700);
+  flex-shrink: 0;
+}

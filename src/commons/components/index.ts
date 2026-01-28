@@ -23,6 +23,10 @@ export type { IconProps, IconName, IconSize } from './icon/types';
 export { TimeCapsuleHeader } from './timecapsule-header';
 export type { TimeCapsuleHeaderProps, RightIcon, HeaderIconName } from './timecapsule-header/types';
 
+// PageHeader 컴포넌트
+export { PageHeader } from './page-header';
+export type { PageHeaderProps } from './page-header/types';
+
 // Toast 컴포넌트
 export { Toast } from './toast';
 export type { ToastProps, ToastType } from './toast/types';
@@ -34,6 +38,26 @@ export type { ModalProps, ModalConfig, ModalState } from './modal/types';
 // BottomSheet 컴포넌트
 export { BottomSheet } from './bottom-sheet';
 export type { BottomSheetProps } from './bottom-sheet/types';
+
+// AudioPlayer 컴포넌트
+export { AudioPlayer } from './audio-player';
+export type { AudioPlayerProps } from './audio-player/types';
+
+// VideoPlayer 컴포넌트
+export { VideoPlayer } from './video-player';
+export type { VideoPlayerProps } from './video-player/types';
+
+// AudioAttachmentModal 컴포넌트
+export { AudioAttachmentModal } from './audio-attachment-modal';
+export type { AudioAttachmentModalProps } from './audio-attachment-modal/types';
+
+// AudioPreview 컴포넌트
+export { AudioPreview } from './audio-preview';
+export type { AudioPreviewProps } from './audio-preview/types';
+
+// VideoPreview 컴포넌트
+export { VideoPreview } from './video-preview';
+export type { VideoPreviewProps } from './video-preview/types';
 
 // 향후 추가될 컴포넌트들
 // 예: export { Input } from './Input';

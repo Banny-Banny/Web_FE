@@ -1,0 +1,552 @@
+/**
+ * components/my-egg-list/components/modal/styles.module.css
+ * 이스터에그 모달 컴포넌트 스타일
+ *
+ * Checklist:
+ * - [x] tailwind.config.js 수정 안 함
+ * - [x] 색상값 직접 입력 0건 (Colors 토큰만 사용)
+ * - [x] 인라인 스타일 0건
+ * - [x] 모든 스타일은 styles.module.css에만 정의
+ * - [x] 토큰 기반 스타일 사용
+ * - [x] Figma 디자인 1:1 대응
+ */
+
+/* ScrollView를 감싸는 래퍼 (Modal 내부 높이 확보용) */
+.scrollViewWrapper {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ScrollView 컨테이너 */
+.scrollView {
+  width: 100%;
+  max-width: 100%;
+  align-self: stretch;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0; /* flexbox에서 스크롤 작동을 위한 필수 속성 */
+}
+
+/* 모달 컨텐츠 컨테이너 */
+.modalContent {
+  padding-left: var(--spacing-xl);
+  padding-right: var(--spacing-xl);
+  padding-top: 48px;
+  padding-bottom: 48px;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  align-self: stretch;
+}
+
+/* 닫기 버튼 (우측 상단) */
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-white-500);
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
+}
+
+.closeButton:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.closeButton:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.closeIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 상단 프로필 이미지 컨테이너 */
+.profileImageContainer {
+  width: 128px;
+  height: 128px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background-color: var(--color-white-grey-200);
+}
+
+/* 프로필 이미지 */
+.profileImage {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+/* 프로필 이미지 플레이스홀더 (이미지가 없을 때) */
+.profileImagePlaceholder {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white-grey-200);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profilePlaceholderIcon {
+  color: var(--color-grey-400);
+}
+
+/* 서브타이틀 컨테이너 */
+.subtitleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* 서브타이틀 */
+.subtitle {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-600);
+  text-align: center;
+  margin: 0;
+}
+
+/* 서브타이틀 bold (닉네임 및 발견 순서 부분) */
+.subtitleBold {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-700);
+  font-weight: var(--font-weight-bold, 700);
+}
+
+/* 발견자 배지 컨테이너 */
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  height: 24px;
+  background-color: var(--color-white-grey-100);
+  border: 1px solid var(--color-white-grey-400);
+  border-radius: var(--radius-full);
+}
+
+.badgeIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 배지 텍스트 */
+.badgeText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-dark-grey-800);
+  font-weight: var(--font-weight-extrabold, 800);
+}
+
+/* 발견자 정보 컨테이너 (첫 번째 발견자 등, 카드 밖) */
+.discovererInfoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.discovererIcon {
+  color: var(--color-grey-600);
+  flex-shrink: 0;
+}
+
+/* 발견자 날짜 텍스트 */
+.discovererDateText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-600);
+  font-weight: var(--font-weight-regular, 400);
+}
+
+/* 메인 컨텐츠 카드 */
+.contentCard {
+  width: 100%;
+  max-width: 100%;
+  flex-shrink: 1;
+  background-color: var(--color-white-500);
+  border: 2px solid var(--color-white-grey-300);
+  border-radius: var(--radius-2xl);
+  padding: 20px;
+  gap: 20px;
+  min-height: 200px;
+  overflow: hidden;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--color-black-500) 10%, transparent);
+}
+
+/* 제목 헤더 */
+.titleHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-white-grey-300);
+}
+
+/* 컨텐츠 제목 */
+.contentTitle {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-dark-grey-900);
+  font-weight: var(--font-weight-bold, 700);
+  flex: 1;
+  margin: 0;
+}
+
+.dateBadge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-left: 11px;
+  padding-right: 11px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 21px;
+  background-color: var(--color-white-500);
+  border: 2px solid var(--color-white-grey-200);
+  border-radius: var(--radius-full);
+}
+
+.dateIcon {
+  color: var(--color-grey-600);
+  flex-shrink: 0;
+}
+
+.dateText {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-grey-600);
+}
+
+/* 본문 텍스트 */
+.contentText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-dark-grey-800);
+  font-weight: var(--font-weight-regular, 400);
+  margin: 0;
+}
+
+/* 미디어 컨테이너 */
+.mediaContainer {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* 오디오 플레이어 래퍼 (너비 제한) */
+.audioPlayerWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 40px;
+}
+
+/* 비디오 플레이어 래퍼 */
+.videoPlayerWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.videoPlayer {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+/* 이미지 컨테이너 */
+.imageContainer {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* 이미지 */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 발견한 사람들 섹션 (PLANTED 타입) */
+.viewersSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 2px solid var(--color-white-grey-300);
+}
+
+/* 발견한 사람들 헤더 */
+.viewersHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.viewersIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 발견한 사람들 제목 */
+.viewersTitle {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-dark-grey-800);
+  font-weight: var(--font-weight-semibold, 600);
+  margin: 0;
+}
+
+/* 발견한 사람들 목록 */
+.viewersList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* 발견한 사람 아이템 */
+.viewerItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
+}
+
+/* 발견한 사람 정보 (아바타 + 이름) */
+.discovererViewerInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* 발견한 사람 아바타 */
+.discovererViewerAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-white-grey-300);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 발견한 사람 아바타 이미지 */
+.discovererViewerAvatarImage {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.viewerPlaceholderIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 발견한 사람 이름 */
+.viewerName {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-regular, 400);
+}
+
+/* 발견한 사람 날짜 배지 */
+.viewerDateBadge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-white-grey-200);
+  border-radius: var(--radius-full);
+}
+
+.viewerDateIcon {
+  color: var(--color-grey-600);
+  flex-shrink: 0;
+}
+
+/* 발견한 사람 날짜 텍스트 */
+.viewerDateText {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--color-grey-600);
+}
+
+/* 빈 발견자 목록 컨테이너 */
+.emptyViewersContainer {
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 빈 발견자 목록 텍스트 */
+.emptyViewersText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-500);
+  text-align: center;
+  margin: 0;
+}
+
+/* 로딩 컨테이너 */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.loadingMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-600);
+  text-align: center;
+  margin: 0;
+}
+
+/* 에러 컨테이너 */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.errorMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-dark-grey-600);
+  text-align: center;
+  margin: 0;
+}
+
+.retryButton {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-blue-500);
+  color: var(--color-white-500);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: var(--color-blue-600);
+}
+
+.retryButton:active {
+  background-color: var(--color-blue-700);
+}
+
+/* 미디어 에러 컨테이너 */
+.mediaErrorContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  background-color: var(--color-white-grey-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+}
+
+.mediaErrorIcon {
+  color: var(--color-grey-400);
+  flex-shrink: 0;
+}
+
+.mediaErrorMessage {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-500);
+  text-align: center;
+  margin: 0;
+}

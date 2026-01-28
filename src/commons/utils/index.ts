@@ -30,6 +30,12 @@ export {
   convertErrorCodeToMessage,
 } from './payment';
 
+// 날짜 포맷팅 유틸리티
+export {
+  formatDate,
+  formatShortDateWithTime,
+  formatLocaleDateShort,
+} from './date';
 // 컨텐츠 관련 유틸리티
 export {
   formatFileSize,

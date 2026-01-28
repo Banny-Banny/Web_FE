@@ -1,0 +1,86 @@
+/**
+ * components/my-egg-list/components/tab/styles.module.css
+ * 이스터에그 목록 탭 스타일 정의
+ *
+ * 체크리스트:
+ * - [✓] CSS Module 사용
+ * - [✓] 색상 토큰만 사용 (하드코딩 0건)
+ * - [✓] 인라인 스타일 0건
+ * - [✓] Typography 토큰 활용
+ * - [✓] 페이지와 조화로운 세련된 탭 UI 디자인
+ *
+ * 생성 시각: 2026-01-28
+ */
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
+  background-color: var(--color-white-500);
+  min-height: 48px;
+}
+
+/* ============================================
+   Tab Button
+   ============================================ */
+.tabButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  margin-right: var(--spacing-md);
+  position: relative;
+  min-height: 48px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.tabButton:hover {
+  opacity: 0.8;
+}
+
+.tabButton:active {
+  opacity: 0.6;
+}
+
+/* ============================================
+   Tab Text
+   ============================================ */
+.tabText {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-grey-500);
+  letter-spacing: -0.3125px;
+}
+
+.tabTextActive {
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+/* ============================================
+   Underline
+   ============================================ */
+.underline {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--color-black-500);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}

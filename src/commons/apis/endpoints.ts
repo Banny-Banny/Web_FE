@@ -77,6 +77,9 @@ export const TIMEEGG_ENDPOINTS = {
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   
+  // 내 이스터에그 목록 조회
+  GET_MY_EGGS: `${BASE_PATHS.API}/capsules/my-eggs`,
+  
   // 캡슐 발견 관련
   RECORD_CAPSULE_VIEW: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
   GET_CAPSULE_VIEWERS: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
@@ -227,6 +230,14 @@ export const CAPSULE_ENDPOINTS = {
 } as const;
 
 /**
+ * 미디어 관련 엔드포인트
+ */
+export const MEDIA_ENDPOINTS = {
+  // 미디어 URL 조회
+  GET_MEDIA_URL: (id: string) => `${BASE_PATHS.API}/media/${id}/url`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -237,6 +248,7 @@ export const ENDPOINTS = {
   ORDER: ORDER_ENDPOINTS,
   PAYMENT: PAYMENT_ENDPOINTS,
   CAPSULE: CAPSULE_ENDPOINTS,
+  MEDIA: MEDIA_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,

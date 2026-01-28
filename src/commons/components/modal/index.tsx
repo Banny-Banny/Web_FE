@@ -64,32 +64,39 @@ export function Modal({
       setShouldRender(true);
       // 이전 포커스 위치 저장
       previousActiveElement.current = document.activeElement as HTMLElement;
-      // 다음 틱에서 애니메이션 시작
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      const timer = setTimeout(() => {
+      
+      if (disableAnimation) {
+        // 애니메이션이 비활성화된 경우 즉시 표시
         setIsAnimating(true);
-      }, 0);
+      } else {
+        // 다음 틱에서 애니메이션 시작
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        const timer = setTimeout(() => {
+          setIsAnimating(true);
+        }, 0);
 
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      }
     } else {
       setIsAnimating(false);
     }
-  }, [visible]);
+  }, [visible, disableAnimation]);
 
   // 애니메이션 종료 후 컴포넌트 제거
   useEffect(() => {
     if (!isAnimating && shouldRender && !visible) {
+      const delay = disableAnimation ? 0 : 100; // 애니메이션 비활성화 시 즉시 제거
       const timer = setTimeout(() => {
         setShouldRender(false);
         // 포커스 복원
         if (previousActiveElement.current) {
           previousActiveElement.current.focus();
         }
-      }, 100); // 애니메이션 duration과 동일
+      }, delay);
 
       return () => clearTimeout(timer);
     }
-  }, [isAnimating, shouldRender, visible]);
+  }, [isAnimating, shouldRender, visible, disableAnimation]);
 
   // 포커스 트랩 구현
   useEffect(() => {

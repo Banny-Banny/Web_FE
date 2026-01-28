@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
-import { getAccessToken, clearTokens, isTokenExpired } from '@/commons/utils/auth';
+import { getAccessToken, clearTokens } from '@/commons/utils/auth';
 import { localLogin } from '@/commons/apis/auth/login';
 import { verifyAuth } from '@/commons/apis/auth/verify';
 

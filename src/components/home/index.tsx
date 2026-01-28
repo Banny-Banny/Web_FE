@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
@@ -68,10 +68,16 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [showDiscoveryModal, setShowDiscoveryModal] = useState(false);
   const [showHintModal, setShowHintModal] = useState(false);
   
-  // Toast 상태 관리
-  const [toastMessage, setToastMessage] = useState<string>('');
-  const [showToast, setShowToast] = useState(false);
-  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('info');
+  // Toast 상태 관리 (단일 객체로 통합)
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info' | 'warning';
+    visible: boolean;
+  }>({
+    message: '',
+    type: 'info',
+    visible: false,
+  });
   
   const geolocation = useGeolocation();
   
@@ -109,9 +115,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       if (isCapsulesLoading) {
-        console.log('[HomeFeature] 캡슐 목록 로딩 중...');
+        console.warn('[HomeFeature] 캡슐 목록 로딩 중...');
       } else if (capsules.length > 0) {
-        console.log('[HomeFeature] 캡슐 목록 로드 완료:', {
+        console.warn('[HomeFeature] 캡슐 목록 로드 완료:', {
           count: capsules.length,
           types: {
             easter_egg: capsules.filter(c => c.type === 'EASTER_EGG').length,
@@ -127,7 +133,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   useEffect(() => {
     if (map && !locationTracking.isTracking) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[HomeFeature] 지도 로드 완료 - 위치 추적 시작');
+        console.warn('[HomeFeature] 지도 로드 완료 - 위치 추적 시작');
       }
       locationTracking.startTracking();
     }
@@ -138,7 +144,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         locationTracking.stopTracking();
       }
     };
-  }, [map]); // locationTracking을 의존성에서 제거하여 무한 루프 방지
+  }, [map, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]); // startTracking, stopTracking은 useCallback으로 메모이제이션됨
 
   // 지도 진입 시 초기 위치로 즉시 자동 발견 감지
   // 위치 업데이트를 기다리지 않고 초기 위치(geolocation)로 바로 체크
@@ -151,7 +157,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       geolocation.longitude !== null
     ) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[HomeFeature] 지도 진입 시 초기 위치로 자동 발견 체크:', {
+        console.warn('[HomeFeature] 지도 진입 시 초기 위치로 자동 발견 체크:', {
           lat: geolocation.latitude,
           lng: geolocation.longitude,
           capsuleCount: capsules.length,
@@ -173,7 +179,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       capsules.length > 0
     ) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[HomeFeature] 위치 업데이트로 자동 발견 체크:', {
+        console.warn('[HomeFeature] 위치 업데이트로 자동 발견 체크:', {
           lat: locationTracking.latitude,
           lng: locationTracking.longitude,
         });
@@ -191,7 +197,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     if (discoveredCapsule) {
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.log('[HomeFeature] 자동 발견:', {
+        console.warn('[HomeFeature] 자동 발견:', {
           id: discoveredCapsule.id,
           title: discoveredCapsule.title,
           distance_m: discoveredCapsule.distance_m,
@@ -222,7 +228,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
 
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      console.log('[HomeFeature] 캡슐 정보 조회 완료:', {
+      console.warn('[HomeFeature] 캡슐 정보 조회 완료:', {
         id: capsuleDetail.id,
         is_mine: selectedCapsule.is_mine,
         distance_m: selectedCapsule.distance_m,
@@ -234,7 +240,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       // 내 캡슐: 발견자 목록 표시
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.log('[HomeFeature] 내 캡슐 모달 표시');
+        console.warn('[HomeFeature] 내 캡슐 모달 표시');
       }
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowMyCapsuleModal(true);
@@ -246,7 +252,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         // 30m 이내: 발견 성공 모달 표시
         if (process.env.NODE_ENV === 'development') {
           // eslint-disable-next-line no-console
-          console.log('[HomeFeature] 발견 성공 모달 표시');
+          console.warn('[HomeFeature] 발견 성공 모달 표시');
         }
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setShowDiscoveryModal(true);
@@ -254,7 +260,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         // 30m 밖: 힌트 모달 표시
         if (process.env.NODE_ENV === 'development') {
           // eslint-disable-next-line no-console
-          console.log('[HomeFeature] 힌트 모달 표시');
+          console.warn('[HomeFeature] 힌트 모달 표시');
         }
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setShowHintModal(true);
@@ -272,11 +278,11 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     
     // Toast로 에러 메시지 표시
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setToastMessage('캡슐 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setToastType('error');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setShowToast(true);
+    setToast({
+      message: '캡슐 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.',
+      type: 'error',
+      visible: true,
+    });
     
     // 모든 모달 닫기
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -296,18 +302,18 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
 
   // 마커 클릭 핸들러
   // ⚠️ 참고: 이 task 내 기능은 이스터에그만 대상입니다. 타임캡슐은 마커 표시만 됩니다.
-  const handleMarkerClick = (capsule: CapsuleItem) => {
+  const handleMarkerClick = useCallback((capsule: CapsuleItem) => {
     // 타임캡슐은 기능 대상이 아니므로 무시
     if (capsule.type === 'TIME_CAPSULE') {
       if (process.env.NODE_ENV === 'development') {
-        console.log('[HomeFeature] 타임캡슐은 이 task에서 기능 대상이 아닙니다.');
+        console.warn('[HomeFeature] 타임캡슐은 이 task에서 기능 대상이 아닙니다.');
       }
       return;
     }
     
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      console.log('[HomeFeature] 마커 클릭:', {
+      console.warn('[HomeFeature] 마커 클릭:', {
         id: capsule.id,
         title: capsule.title,
         type: capsule.type,
@@ -324,69 +330,69 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     // 캡슐 정보 조회 시작
     setSelectedCapsule(capsule);
     setSelectedCapsuleId(capsule.id);
-  };
+  }, []);
 
   // 재시도 핸들러
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     setRetryCount(prev => prev + 1);
     setScriptError(null);
     setScriptLoaded(false);
-  };
+  }, []);
 
   // 이스터에그 선택 핸들러
-  const handleEasterEggClick = () => {
+  const handleEasterEggClick = useCallback(() => {
     setEasterEggSheetOpen(true);
-  };
+  }, []);
 
   // 타임캡슐 선택 핸들러
-  const handleTimeCapsuleClick = () => {
+  const handleTimeCapsuleClick = useCallback(() => {
     router.push('/timecapsule/create');
-  };
+  }, [router]);
 
   // 이스터에그 바텀시트 닫기 핸들러
-  const handleEasterEggSheetClose = () => {
+  const handleEasterEggSheetClose = useCallback(() => {
     setEasterEggSheetOpen(false);
-  };
+  }, []);
 
   // 이스터에그 작성 완료 핸들러
-  const handleEasterEggConfirm = (_formData: import('./components/easter-egg-bottom-sheet/types').EasterEggFormData) => {
+  const handleEasterEggConfirm = useCallback((_formData: import('./components/easter-egg-bottom-sheet/types').EasterEggFormData) => {
     // 제출 로직은 바텀시트 컴포넌트 내부에서 처리됨
     // 성공 시 지도 업데이트 등 추가 작업이 필요하면 여기서 처리
     setEasterEggSheetOpen(false);
-  };
+  }, []);
 
   // 알 슬롯 클릭 핸들러 (슬롯 모달 열기)
-  const handleEggSlotClick = () => {
+  const handleEggSlotClick = useCallback(() => {
     setSlotModalOpen(true);
-  };
+  }, []);
 
   // 슬롯 모달 닫기 핸들러
-  const handleSlotModalClose = () => {
+  const handleSlotModalClose = useCallback(() => {
     setSlotModalOpen(false);
-  };
+  }, []);
 
   // 내 캡슐 모달 닫기 핸들러
-  const handleMyCapsuleModalClose = () => {
+  const handleMyCapsuleModalClose = useCallback(() => {
     setShowMyCapsuleModal(false);
     setSelectedCapsuleId(null);
     setSelectedCapsule(null);
-  };
+  }, []);
 
   // 발견 성공 모달 닫기 핸들러
-  const handleDiscoveryModalClose = () => {
+  const handleDiscoveryModalClose = useCallback(() => {
     setShowDiscoveryModal(false);
     setSelectedCapsuleId(null);
     setSelectedCapsule(null);
     // 자동 발견 상태도 초기화
     clearDiscovery();
-  };
+  }, [clearDiscovery]);
 
   // 힌트 모달 닫기 핸들러
-  const handleHintModalClose = () => {
+  const handleHintModalClose = useCallback(() => {
     setShowHintModal(false);
     setSelectedCapsuleId(null);
     setSelectedCapsule(null);
-  };
+  }, []);
 
   // 카카오 지도 스크립트 로딩
   useEffect(() => {
@@ -590,10 +596,10 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
 
       {/* Toast 메시지 */}
       <Toast
-        message={toastMessage}
-        visible={showToast}
-        onHide={() => setShowToast(false)}
-        type={toastType}
+        message={toast.message}
+        visible={toast.visible}
+        onHide={() => setToast(prev => ({ ...prev, visible: false }))}
+        type={toast.type}
         duration={3000}
         position="bottom"
       />
