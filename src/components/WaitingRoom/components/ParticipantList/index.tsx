@@ -21,6 +21,7 @@ import {
   RiUserLine,
   RiShareLine,
 } from '@remixicon/react';
+import { Button } from '@/commons/components/button';
 import type { ParticipantListProps } from './types';
 import styles from './styles.module.css';
 
@@ -42,9 +43,10 @@ export function ParticipantList({
   currentUserId,
   currentUserName,
   isMyContentSaved,
+  isHost = false,
   onInviteFriend,
   onWriteMyContent,
-  onFinalSubmit: _onFinalSubmit,
+  onFinalSubmit,
 }: ParticipantListProps) {
   // participants가 없으면 빈 배열로 대체
   const safeParticipants = participants ?? [];
@@ -146,23 +148,11 @@ export function ParticipantList({
       );
     }
 
-    // 다른 참여자 카드
-    // 앱에서는 다른 사람 카드를 눌러도 액션이 없지만,
-    // 웹 마이그레이션 환경에서는 "내 카드 식별 실패" 케이스가 있어
-    // 사용자가 자신의 슬롯을 눌렀을 때 바텀시트가 열리도록 최소한의 UX 보정으로 버튼 처리합니다.
-    const handleOtherClick = () => {
-      if (!isRejected && onWriteMyContent) {
-        onWriteMyContent();
-      }
-    };
-
+    // 다른 참여자 카드 (클릭 불가)
     return (
-      <button
+      <div
         key={participant.participantId}
-        type="button"
         className={styles.participantCardOther}
-        onClick={handleOtherClick}
-        aria-label="내 글 작성하기"
       >
         <div className={styles.participantInfo}>
           <div className={avatarClassName}>
@@ -190,7 +180,7 @@ export function ParticipantList({
         <div className={`${styles.checkbox} ${checkboxClassName}`}>
           {isCompleted && <span className={styles.checkboxCheckmark}>✓</span>}
         </div>
-      </button>
+      </div>
     );
   };
 
@@ -217,11 +207,11 @@ export function ParticipantList({
               </div>
               <div className={styles.participantDetails}>
                 <span className={styles.emptySlotText}>
-                  친구를 초대해 남은 슬롯을 채워주세요!
+                  {isHost ? '친구를 초대해 남은 슬롯을 채워주세요!' : '친구를 기다리는 중...'}
                 </span>
               </div>
             </div>
-            {onInviteFriend && (
+            {isHost && onInviteFriend && (
               <button
                 type="button"
                 className={styles.inviteButton}
@@ -234,6 +224,20 @@ export function ParticipantList({
           </div>
         ))}
       </div>
+
+      {/* 방장 전용 최종 제출 버튼 */}
+      {isHost && onFinalSubmit && (
+        <div className={styles.submitButtonContainer}>
+          <Button
+            label="최종 제출"
+            variant="primary"
+            size="M"
+            fullWidth
+            onPress={onFinalSubmit}
+            aria-label="최종 제출하기"
+          />
+        </div>
+      )}
     </div>
   );
 }

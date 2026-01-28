@@ -56,6 +56,7 @@ export interface LoginErrorResponse {
  */
 export interface VerifyResponse {
   valid: boolean;         // 토큰 유효성 여부
-  user?: User;            // 사용자 정보 (토큰이 유효한 경우)
+  userId?: string;        // 사용자 ID (토큰이 유효한 경우)
+  user?: User;            // 사용자 정보 (토큰이 유효한 경우) - 선택적
   expiresAt?: string;    // 토큰 만료 시간 (선택)
 }

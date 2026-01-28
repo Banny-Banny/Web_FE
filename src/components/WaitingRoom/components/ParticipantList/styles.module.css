@@ -65,7 +65,7 @@
   outline-offset: 2px;
 }
 
-/* 참여자 카드 (다른 사람) */
+/* 참여자 카드 (다른 사람) - 클릭 불가 */
 .participantCardOther {
   display: flex;
   flex-direction: row;
@@ -75,14 +75,8 @@
   padding: 0 21px;
   background-color: var(--color-white-grey-200);
   border-radius: 16px;
-  cursor: pointer;
-  border: none;
-  text-align: left;
-}
-
-.participantCardOther:focus {
-  outline: 2px solid var(--color-blue-500);
-  outline-offset: 2px;
+  cursor: default;
+  pointer-events: none;
 }
 
 /* 참여자 정보 영역 */
@@ -238,4 +232,10 @@
   line-height: 14px;
   font-weight: 700;
   color: var(--color-green-500);
+}
+
+/* 최종 제출 버튼 컨테이너 */
+.submitButtonContainer {
+  width: 100%;
+  margin-top: var(--spacing-lg);
 }

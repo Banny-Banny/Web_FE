@@ -21,6 +21,8 @@ export interface ParticipantListProps {
   currentUserName?: string;
   /** 내 콘텐츠 작성/저장 완료 여부 (체크 표시용) */
   isMyContentSaved?: boolean;
+  /** 현재 사용자가 방장인지 여부 */
+  isHost?: boolean;
   /** 친구 초대 핸들러 */
   onInviteFriend?: () => void;
   /** 내 글 작성하기 핸들러 */

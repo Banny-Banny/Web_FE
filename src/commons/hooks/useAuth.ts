@@ -54,19 +54,26 @@ export function useAuth(): AuthContextType {
         try {
           console.log('🔐 [useAuth] API 검증 시작...');
           const verifyResult = await verifyAuth();
-          console.log('🔐 [useAuth] API 검증 응답:', { valid: verifyResult.valid, hasUser: !!verifyResult.user });
-          
-          if (verifyResult.valid && verifyResult.user) {
-            console.log('✅ [useAuth] 토큰 유효, 사용자 정보 저장');
-            setUser(verifyResult.user);
-            queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+
+          if (verifyResult.valid && (verifyResult.user || verifyResult.userId)) {
+            console.log('✅ [useAuth] 토큰 유효');
+
+            // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
+            const userInfo = verifyResult.user || {
+              id: verifyResult.userId!,
+              email: '',
+              nickname: ''
+            };
+
+            setUser(userInfo);
+            queryClient.setQueryData(['auth', 'user'], userInfo);
           } else if (verifyResult.valid === false) {
             // 서버가 명시적으로 토큰이 유효하지 않다고 응답한 경우에만 토큰 제거
             console.warn('❌ [useAuth] 서버가 토큰을 유효하지 않다고 응답. 토큰 제거.');
             clearTokens();
             setUser(null);
           } else {
-            // valid가 undefined이거나 user가 없는 경우
+            // valid가 undefined이거나 userId도 없는 경우
             // 토큰은 유지하고 사용자 정보만 null로 설정
             console.warn('⚠️ [useAuth] 검증 응답에 사용자 정보가 없습니다. 토큰은 유지합니다.');
             setUser(null);
@@ -166,10 +173,17 @@ export function useAuth(): AuthContextType {
       // 토큰 검증 API 호출
       try {
         const verifyResult = await verifyAuth();
-        
-        if (verifyResult.valid && verifyResult.user) {
-          setUser(verifyResult.user);
-          queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+
+        if (verifyResult.valid && (verifyResult.user || verifyResult.userId)) {
+          // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
+          const userInfo = verifyResult.user || {
+            id: verifyResult.userId!,
+            email: '',
+            nickname: ''
+          };
+
+          setUser(userInfo);
+          queryClient.setQueryData(['auth', 'user'], userInfo);
         } else {
           // 토큰이 유효하지 않은 경우
           clearTokens();

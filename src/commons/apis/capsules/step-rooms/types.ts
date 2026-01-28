@@ -10,7 +10,7 @@
 /**
  * 대기실 설정값 API 응답 타입 (백엔드 snake_case)
  *
- * 응답 예시: { room_id, capsule_name, open_date, max_participants, max_images_per_person, has_music, has_video }
+ * 응답 예시: { room_id, capsule_name, open_date, max_participants, max_images_per_person, has_music, has_video, invite_code }
  */
 export interface WaitingRoomSettingsApiResponse {
   room_id: string;
@@ -20,6 +20,7 @@ export interface WaitingRoomSettingsApiResponse {
   max_images_per_person?: number;
   has_music?: boolean;
   has_video?: boolean;
+  invite_code?: string;
 }
 
 /**
@@ -40,6 +41,8 @@ export interface WaitingRoomSettingsResponse {
   hasMusic?: boolean;
   /** 비디오 포함 여부 */
   hasVideo?: boolean;
+  /** 초대 코드 (6자리 영숫자) */
+  inviteCode?: string;
 }
 
 /**
@@ -92,6 +95,7 @@ export interface WaitingRoomDetailApiResponse {
   deadline?: string;
   status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED';
   slots?: SlotApiResponse[];
+  invite_code?: string;
 }
 
 /**
@@ -114,6 +118,8 @@ export interface WaitingRoomDetailResponse {
   maxHeadcount: number;
   /** 참여자 목록 */
   participants: Participant[];
+  /** 초대 코드 (6자리 영숫자) */
+  inviteCode?: string;
 }
 
 /**
@@ -245,4 +251,125 @@ export interface UpdateContentRequest {
   music?: File;
   /** 영상 파일 */
   video?: File;
+}
+
+/**
+ * 방 생성 요청 타입 (서버 스펙 준수)
+ *
+ * POST /api/capsules/step-rooms/create
+ */
+export interface CreateRoomRequest {
+  /** 주문 ID */
+  order_id: string;
+}
+
+/**
+ * 방 생성 응답 타입 (서버 스펙 준수)
+ *
+ * {
+ *   "capsule_id": "UUID-OF-CAPSULE",
+ *   "created_at": "2025-01-01T10:00:00Z",
+ *   "current_participants": 1,
+ *   "deadline": "2025-01-02T10:00:00Z",
+ *   "invite_code": "ABC123",
+ *   "max_participants": 4,
+ *   "open_date": "2025-06-10T00:00:00Z",
+ *   "status": "WAITING",
+ *   "title": "우리의 첫 타임캡슐",
+ *   "capsule_title": "우리의 첫 타임캡슐",
+ *   "deep_link": "timeegg://room/join?invite_code=ABC123"
+ * }
+ */
+export interface CreateRoomResponse {
+  capsule_id: string;
+  created_at: string;
+  current_participants: number;
+  deadline: string;
+  invite_code: string;
+  max_participants: number;
+  open_date: string;
+  status: 'WAITING' | 'COMPLETED' | 'EXPIRED';
+  title: string;
+  capsule_title?: string;
+  deep_link?: string;
+}
+
+/**
+ * 초대 코드로 방 조회 요청 타입
+ *
+ * GET /api/capsules/step-rooms/by-code?invite_code={code}
+ */
+export interface InviteCodeQueryRequest {
+  /** 초대 코드 (6자리 영숫자) */
+  invite_code: string;
+}
+
+/**
+ * 초대 코드로 방 조회 응답 타입 (서버 스펙 준수)
+ *
+ * {
+ *   "room_id": "UUID-OF-CAPSULE",
+ *   "capsule_name": "우리의 첫 타임캡슐",
+ *   "open_date": "2025-06-10T00:00:00Z",
+ *   "deadline": "2025-01-02T10:00:00Z",
+ *   "participant_count": 4,
+ *   "current_participants": 2,
+ *   "status": "WAITING",
+ *   "is_joinable": true
+ * }
+ */
+export interface InviteCodeQueryResponse {
+  room_id: string;
+  capsule_name: string;
+  open_date: string;
+  deadline: string;
+  participant_count: number;
+  current_participants: number;
+  status: 'WAITING' | 'COMPLETED' | 'EXPIRED';
+  is_joinable: boolean;
+}
+
+/**
+ * 방 참여 요청 타입 (서버 스펙 준수)
+ *
+ * POST /api/capsules/step-rooms/{capsuleId}/join
+ */
+export interface JoinRoomRequest {
+  invite_code: string;
+}
+
+/**
+ * 방 참여 응답 타입 (서버 스펙 준수)
+ *
+ * {
+ *   "success": true,
+ *   "room_id": "UUID-OF-CAPSULE",
+ *   "slot_number": 3,
+ *   "nickname": "친구닉네임",
+ *   "joined_at": "2025-01-01T11:00:00Z"
+ * }
+ */
+export interface JoinRoomResponse {
+  success: boolean;
+  room_id: string;
+  slot_number: number;
+  nickname: string;
+  joined_at: string;
+}
+
+/**
+ * 409 ALREADY_JOINED 응답 타입 (서버 스펙 준수)
+ *
+ * {
+ *   "error": "ALREADY_JOINED",
+ *   "data": {
+ *     "slot_number": 2
+ *   }
+ * }
+ */
+export interface AlreadyJoinedResponse {
+  error: 'ALREADY_JOINED';
+  data: {
+    slot_number: number;
+  };
 }

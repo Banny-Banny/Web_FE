@@ -61,6 +61,8 @@ export function useLoginMutation() {
       return localLogin(request);
     },
     onSuccess: (data) => {
+      console.log('🔐 로그인 성공:', { user: data.user });
+
       // 회원가입에서 넘어온 경우 세션 스토리지의 정보 삭제
       if (typeof window !== 'undefined') {
         try {
@@ -76,21 +78,49 @@ export function useLoginMutation() {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken || '',
         });
+        console.log('✅ 토큰 저장 완료');
       }
 
       // 인증 상태 업데이트 (사용자 정보가 있는 경우)
       if (data.user) {
         queryClient.setQueryData(['auth', 'user'], data.user);
+        console.log('✅ 사용자 정보 캐시 업데이트 완료');
       }
+
+      // 초대 코드 확인
+      const pendingInviteCode = typeof window !== 'undefined'
+        ? localStorage.getItem('pending_invite_code')
+        : null;
+
+      console.log('🔍 초대 코드 확인:', { pendingInviteCode });
 
       // 온보딩 완료 여부 확인
       const onboardingStatus = queryClient.getQueryData<{ completed: boolean }>(['onboarding', 'status']);
-      const isOnboardingCompleted = onboardingStatus?.completed === true;
+      const isOnboardingCompleted = data.user?.onboardingCompleted ?? onboardingStatus?.completed ?? false;
 
-      // 온보딩이 완료되지 않았다면 온보딩 페이지로, 완료되었다면 홈으로 리다이렉트
+      console.log('🔍 온보딩 완료 여부:', { isOnboardingCompleted });
+
+      // 초대 코드가 있으면서 온보딩이 완료된 경우: 바로 대기실 참여 페이지로 이동
+      if (pendingInviteCode && isOnboardingCompleted) {
+        console.log('✅ 초대 코드 발견 + 온보딩 완료 - 대기실 참여 페이지로 이동');
+        // 주의: 로컬스토리지는 room/join 페이지에서 삭제됨
+        router.push(`/room/join?invite_code=${pendingInviteCode}`);
+        return;
+      }
+
+      // 초대 코드가 있지만 온보딩이 미완료: 온보딩 페이지로 이동 (초대 코드 유지)
+      if (pendingInviteCode && !isOnboardingCompleted) {
+        console.log('➡️ 초대 코드 있음 + 온보딩 미완료 - 온보딩 페이지로 이동 (초대 코드 유지)');
+        router.push('/onboarding');
+        return;
+      }
+
+      // 초대 코드가 없는 경우: 온보딩 완료 여부에 따라 리다이렉트
       if (!isOnboardingCompleted) {
+        console.log('➡️ 온보딩 페이지로 이동');
         router.push('/onboarding');
       } else {
+        console.log('➡️ 홈으로 이동');
         router.push('/');
       }
     },

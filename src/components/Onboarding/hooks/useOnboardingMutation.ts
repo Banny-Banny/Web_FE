@@ -23,8 +23,19 @@ export function useOnboardingMutation() {
     onSuccess: () => {
       // 온보딩 완료 상태 업데이트 (필요시)
       queryClient.setQueryData(['onboarding', 'status'], { completed: true });
-      
-      // 메인 페이지로 리다이렉트
+
+      // 초대 코드가 저장되어 있으면 대기실 참여 페이지로 리다이렉트
+      const pendingInviteCode = typeof window !== 'undefined'
+        ? localStorage.getItem('pending_invite_code')
+        : null;
+
+      if (pendingInviteCode) {
+        localStorage.removeItem('pending_invite_code');
+        router.push(`/room/join?invite_code=${pendingInviteCode}`);
+        return;
+      }
+
+      // 초대 코드가 없으면 메인 페이지로 리다이렉트
       router.push('/');
     },
     onError: (error) => {
