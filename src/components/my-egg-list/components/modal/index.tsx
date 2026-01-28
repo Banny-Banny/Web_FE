@@ -28,11 +28,12 @@ import {
   RiCalendarLine,
   RiGroupLine,
   RiImageLine,
-  RiMicLine,
   RiVidiconLine,
 } from '@remixicon/react';
 import { Modal } from '@/commons/components/modal';
 import { Spinner } from '@/commons/components/spinner';
+import { AudioPlayer } from '@/commons/components/audio-player';
+import { VideoPlayer } from '@/commons/components/video-player';
 import { useAuth } from '@/commons/hooks/useAuth';
 import { useKakaoAddress } from '@/commons/hooks/useKakaoAddress';
 import { getMediaUrl } from '@/commons/apis';
@@ -54,23 +55,28 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
 
   // 미디어 로딩 실패 상태 관리
   const [imageError, setImageError] = React.useState(false);
-  const [audioError, setAudioError] = React.useState(false);
-  const [videoError, setVideoError] = React.useState(false);
 
-  // 화면 높이의 80%를 계산하여 최대 높이 제한
+  // 미디어 존재 여부 확인
+  const hasMedia = useMemo(() => {
+    if (!data) return false;
+    const hasImage = !!(data.imageMediaId || data.imageObjectKey);
+    const hasAudio = !!(data.audioMediaId || data.audioObjectKey);
+    const hasVideo = !!(data.videoMediaId || data.videoObjectKey);
+    return hasImage || hasAudio || hasVideo;
+  }, [data]);
+
+  // 화면 높이의 80% 또는 60%를 계산하여 최대 높이 제한 (미디어가 없으면 60%)
   const maxHeight = useMemo(() => {
     if (typeof window !== 'undefined') {
-      return window.innerHeight * 0.8;
+      return window.innerHeight * (hasMedia ? 0.8 : 0.6);
     }
-    return 600;
-  }, []);
+    return hasMedia ? 600 : 450;
+  }, [hasMedia]);
 
   // 데이터가 변경되면 에러 상태 초기화
   React.useEffect(() => {
     if (data) {
       setImageError(false);
-      setAudioError(false);
-      setVideoError(false);
     }
   }, [data]);
 
@@ -274,18 +280,7 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
       const currentUserIndex = data.viewers.findIndex((v) => v.id === user.id);
       if (currentUserIndex >= 0) {
         const order = currentUserIndex + 1;
-        const maxViewCount = data.discoveredCount || data.viewers.length;
-        
-        // 첫 번째, 두 번째, 마지막 처리
-        if (order === 1) {
-          return '첫 번째';
-        } else if (order === 2) {
-          return '두 번째';
-        } else if (order === maxViewCount) {
-          return '마지막';
-        } else {
-          return `${order}번째`;
-        }
+        return `${order}번째`;
       }
     }
     return null;
@@ -346,57 +341,40 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
         {/* 오디오 플레이어 렌더링 */}
         {hasAudio && (
           <div className={styles.audioPlayerWrapper} role="region" aria-label="오디오 콘텐츠">
-            {!audioUrl ? (
-              <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
-                <RiMicLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
-                <p className={styles.mediaErrorMessage}>오디오를 불러오는 중...</p>
-              </div>
-            ) : audioError ? (
-              <div className={styles.mediaErrorContainer} role="alert">
-                <RiMicLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
-                <p className={styles.mediaErrorMessage}>오디오를 불러올 수 없습니다</p>
-              </div>
-            ) : (
-              <audio
-                controls
-                className={styles.audioPlayer}
-                onError={() => setAudioError(true)}
-                aria-label="이스터에그 오디오">
-                <source src={audioUrl} type="audio/mpeg" />
-                <source src={audioUrl} type="audio/mp3" />
-                <source src={audioUrl} type="audio/wav" />
-                오디오를 재생할 수 없습니다.
-              </audio>
-            )}
+            <AudioPlayer
+              mediaId={data.audioMediaId || audioUrl}
+              onError={(error) => {
+                console.error('[EasterEggModal] 오디오 플레이어 에러:', error);
+              }}
+            />
           </div>
         )}
 
         {/* 비디오 플레이어 렌더링 */}
-        {hasVideo && (
-          <div className={styles.videoPlayerWrapper} role="region" aria-label="비디오 콘텐츠">
-            {!videoUrl ? (
-              <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
-                <RiVidiconLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
-                <p className={styles.mediaErrorMessage}>비디오를 불러오는 중...</p>
+        {hasVideo && (() => {
+          // mediaId가 유효한 값일 때만 VideoPlayer 렌더링
+          const videoMediaId = data.videoMediaId || videoUrl;
+          if (!videoMediaId) {
+            return (
+              <div className={styles.videoPlayerWrapper} role="region" aria-label="비디오 콘텐츠">
+                <div className={styles.mediaErrorContainer} role="status" aria-live="polite">
+                  <RiVidiconLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
+                  <p className={styles.mediaErrorMessage}>비디오를 불러오는 중...</p>
+                </div>
               </div>
-            ) : videoError ? (
-              <div className={styles.mediaErrorContainer} role="alert">
-                <RiVidiconLine size={32} className={styles.mediaErrorIcon} aria-hidden="true" />
-                <p className={styles.mediaErrorMessage}>비디오를 불러올 수 없습니다</p>
-              </div>
-            ) : (
-              <video
-                controls
-                className={styles.videoPlayer}
-                onError={() => setVideoError(true)}
-                aria-label="이스터에그 비디오">
-                <source src={videoUrl} type="video/mp4" />
-                <source src={videoUrl} type="video/webm" />
-                비디오를 재생할 수 없습니다.
-              </video>
-            )}
-          </div>
-        )}
+            );
+          }
+          return (
+            <div className={styles.videoPlayerWrapper} role="region" aria-label="비디오 콘텐츠">
+              <VideoPlayer
+                mediaId={videoMediaId}
+                onError={(error) => {
+                  console.error('[EasterEggModal] 비디오 플레이어 에러:', error);
+                }}
+              />
+            </div>
+          );
+        })()}
       </div>
     );
   };
