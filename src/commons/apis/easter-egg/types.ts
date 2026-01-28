@@ -310,6 +310,79 @@ export interface MyEggFoundItem {
 export type MyEggsResponse = MyEggsPlantedResponse | MyEggsFoundResponse;
 
 /**
+ * 이스터에그 목록 항목 타입 (tasks.md T003 요구사항)
+ */
+export interface MyEggItem {
+  /** 이스터에그 ID */
+  eggId: string;
+  /** 이스터에그 유형 */
+  type: 'FOUND' | 'PLANTED';
+  /** 내가 생성한 알인지 여부 */
+  isMine: boolean;
+  /** 제목 */
+  title: string;
+  /** 메시지 */
+  message: string;
+  /** 이미지 미디어 ID */
+  imageMediaId?: string;
+  /** 이미지 객체 키 */
+  imageObjectKey?: string;
+  /** 오디오 미디어 ID */
+  audioMediaId?: string;
+  /** 오디오 객체 키 */
+  audioObjectKey?: string;
+  /** 비디오 미디어 ID */
+  videoMediaId?: string;
+  /** 비디오 객체 키 */
+  videoObjectKey?: string;
+  /** 위치 정보 */
+  location: {
+    /** 주소 */
+    address: string;
+    /** 위도 */
+    latitude: number;
+    /** 경도 */
+    longitude: number;
+  };
+  /** 작성자 정보 */
+  author: {
+    /** 작성자 ID */
+    id: string;
+    /** 닉네임 */
+    nickname: string;
+    /** 프로필 이미지 */
+    profileImg?: string;
+  };
+  /** 생성 일시 */
+  createdAt: string;
+  /** 발견 일시 (FOUND 타입일 때) */
+  foundAt?: string;
+  /** 만료 일시 (PLANTED 타입일 때) */
+  expiredAt?: string;
+  /** 발견된 횟수 */
+  discoveredCount: number;
+  /** 발견자 목록 */
+  viewers?: Array<{
+    /** 발견자 ID */
+    id: string;
+    /** 닉네임 */
+    nickname: string;
+    /** 프로필 이미지 */
+    profileImg?: string;
+    /** 발견 일시 */
+    viewedAt: string;
+  }>;
+}
+
+/**
+ * 이스터에그 목록 조회 응답 타입 (tasks.md T003 요구사항)
+ */
+export interface MyEggsResponseSimple {
+  /** 이스터에그 목록 */
+  eggs: MyEggItem[];
+}
+
+/**
  * 알 상세 정보 조회 응답 타입
  */
 export interface EggDetailResponse {

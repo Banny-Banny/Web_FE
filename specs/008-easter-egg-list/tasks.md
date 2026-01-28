@@ -87,17 +87,17 @@
 
 **중요**: 모든 API 함수는 `src/commons/provider/api-provider/api-client.ts`에 있는 `apiClient`를 import하여 사용해야 합니다. `apiClient`는 이미 인증 토큰 인터셉터가 설정되어 있어 자동으로 토큰이 추가됩니다.
 
-- [ ] T004 src/commons/apis/easter-egg/index.ts 에 추가
+- [x] T004 src/commons/apis/easter-egg/index.ts 에 추가
   - `getMyEggs` 함수 구현
     - `apiClient`를 `@/commons/provider/api-provider/api-client`에서 import하여 사용
     - `GET /api/capsules/my-eggs` 엔드포인트 호출
     - `apiClient.get` 메서드 사용
     - 인증 토큰 자동 추가 (api-client.ts의 인터셉터 활용)
-    - `MyEggsResponse` 타입 반환
+    - `MyEggsResponse` 타입 반환 (오버로드로 파라미터 없는 버전 추가)
     - 에러 핸들링 구현 (Axios 에러를 ApiError 형식으로 변환)
   - 파일: `src/commons/apis/easter-egg/index.ts`
 
-- [ ] T005 src/commons/apis/easter-egg/index.ts 에 추가
+- [x] T005 src/commons/apis/easter-egg/index.ts 에 추가
   - `getEggDetail` 함수 구현
     - `apiClient`를 `@/commons/provider/api-provider/api-client`에서 import하여 사용
     - `GET /api/capsules/{id}/detail` 엔드포인트 호출
@@ -111,7 +111,7 @@
 
 ### 2.2 E2E 테스트 작성 (Playwright) - API 전용
 
-- [ ] T007 tests/e2e/my-egg-list/my-egg-list.e2e.spec.ts 생성
+- [x] T007 tests/e2e/my-egg-list/my-egg-list.e2e.spec.ts 생성
   - Playwright 테스트 파일 생성
   - 테스트 계정 정보 설정 (`.env.local` 참고)
     - 전화번호: `01030728535`
