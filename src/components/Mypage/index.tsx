@@ -32,6 +32,10 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/my-eggs');
   };
 
+  const handleCustomerCenterClick = () => {
+    router.push('/customer-center');
+  };
+
   return (
     <div className={`${styles.container} ${className}`}>
       {/* 헤더 */}
@@ -106,7 +110,12 @@ export function Mypage({ className = '' }: MypageProps) {
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
         <div className={styles.navDivider}></div>
-        <button className={styles.navItem}>
+        <button
+          className={styles.navItem}
+          onClick={handleCustomerCenterClick}
+          type="button"
+          aria-label="고객 센터"
+        >
           <span className={styles.navItemText}>고객 센터</span>
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
