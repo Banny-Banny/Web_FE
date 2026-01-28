@@ -12,13 +12,13 @@
  * - 파일 업로드: node-id=599:6504
  * - 지원 형식: MPEG, AAC (Max 10MB)
  * 
- * @module components/home/components/easter-egg-bottom-sheet/components/audio-attachment-modal
+ * @module commons/components/audio-attachment-modal
  */
 
 import React, { useState, useRef, useEffect } from 'react';
 import { RiCloseLine, RiUploadLine, RiMicLine, RiStopCircleLine, RiPlayCircleLine, RiPauseCircleLine } from '@remixicon/react';
 import { SIZE_LIMITS, validateFileMimeType, validateFileSize, getAcceptString } from '@/commons/constants/media';
-import type { AudioAttachmentModalProps } from '../../types';
+import type { AudioAttachmentModalProps } from './types';
 import styles from './styles.module.css';
 
 type TabType = 'record' | 'upload';

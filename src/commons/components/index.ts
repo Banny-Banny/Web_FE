@@ -47,6 +47,14 @@ export type { AudioPlayerProps } from './audio-player/types';
 export { VideoPlayer } from './video-player';
 export type { VideoPlayerProps } from './video-player/types';
 
+// AudioAttachmentModal 컴포넌트
+export { AudioAttachmentModal } from './audio-attachment-modal';
+export type { AudioAttachmentModalProps } from './audio-attachment-modal/types';
+
+// AudioPreview 컴포넌트
+export { AudioPreview } from './audio-preview';
+export type { AudioPreviewProps } from './audio-preview/types';
+
 // 향후 추가될 컴포넌트들
 // 예: export { Input } from './Input';
 // 예: export { Card } from './Card';

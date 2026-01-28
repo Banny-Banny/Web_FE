@@ -197,6 +197,8 @@ export function useEasterEggSubmit(): UseEasterEggSubmitReturn {
         setError(ERROR_MESSAGES.SERVER_ERROR);
       } else if (apiError.message?.includes('network') || apiError.message?.includes('Network')) {
         setError(ERROR_MESSAGES.NETWORK_ERROR);
+      } else if (apiError.message?.includes('timeout') || apiError.message?.includes('ECONNABORTED')) {
+        setError('요청 시간이 초과되었습니다. 파일 크기가 크거나 네트워크가 느릴 수 있습니다. 다시 시도해주세요.');
       } else {
         setError(apiError.message || ERROR_MESSAGES.UNKNOWN_ERROR);
       }

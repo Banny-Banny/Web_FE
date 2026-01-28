@@ -80,7 +80,7 @@ export async function createEasterEgg(
           onProgress(progress);
         }
       },
-      timeout: 30000, // 30초 타임아웃
+      timeout: 120000, // 120초 타임아웃 (파일 업로드 포함 요청은 시간이 더 걸릴 수 있음)
     }
   );
   
