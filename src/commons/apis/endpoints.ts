@@ -78,6 +78,9 @@ export const TIMEEGG_ENDPOINTS = {
   UPDATE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   DELETE_CAPSULE: (id: string) => `${BASE_PATHS.API}/capsules/${id}`,
   
+  // 내 이스터에그 목록 조회
+  GET_MY_EGGS: `${BASE_PATHS.API}/capsules/my-eggs`,
+  
   // 캡슐 발견 관련
   RECORD_CAPSULE_VIEW: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
   GET_CAPSULE_VIEWERS: (id: string) => `${BASE_PATHS.API}/capsules/${id}/viewers`,
@@ -209,12 +212,30 @@ export const ONBOARDING_ENDPOINTS = {
  * 캡슐 관련 엔드포인트
  */
 export const CAPSULE_ENDPOINTS = {
-  // 타임캡슐 대기실 생성
+  // 타임캡슐 대기실 생성 (방 생성 + 초대 코드 발급)
   CREATE_WAITING_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+  // 009 스펙 호환을 위한 별칭 (동일 엔드포인트)
+  CREATE_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
   // 대기실 설정값 조회
   WAITING_ROOM_SETTINGS: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/settings`,
   // 대기실 상세 조회
   WAITING_ROOM_DETAIL: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}`,
+  // 본인 컨텐츠 조회 및 저장
+  MY_CONTENT: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/my-content`,
+  // 초대 코드로 방 조회 (Public API)
+  INVITE_CODE_QUERY: (code: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/by-code?invite_code=${code}`,
+  // 초대 코드로 방 참여
+  JOIN_ROOM: (capsuleId: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/join`,
+} as const;
+
+/**
+ * 미디어 관련 엔드포인트
+ */
+export const MEDIA_ENDPOINTS = {
+  // 미디어 URL 조회
+  GET_MEDIA_URL: (id: string) => `${BASE_PATHS.API}/media/${id}/url`,
 } as const;
 
 /**
@@ -228,6 +249,7 @@ export const ENDPOINTS = {
   ORDER: ORDER_ENDPOINTS,
   PAYMENT: PAYMENT_ENDPOINTS,
   CAPSULE: CAPSULE_ENDPOINTS,
+  MEDIA: MEDIA_ENDPOINTS,
   UPLOAD: UPLOAD_ENDPOINTS,
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,

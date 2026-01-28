@@ -81,8 +81,9 @@ function transformFormDataToApiRequest(formData: EasterEggFormData): CreateEaste
     latitude: formData.location!.latitude,
     longitude: formData.location!.longitude,
     title: formData.title.trim(),
-    message: formData.message?.trim() || undefined,
+    content: formData.message?.trim() || undefined,
     media_files: media_files.length > 0 ? media_files : undefined,
+    view_limit: 3, // 무조건 3으로 설정
   };
 }
 
@@ -177,9 +178,26 @@ export function useEasterEggSubmit(): UseEasterEggSubmitReturn {
     onSuccess: () => {
       setProgress(100);
       setError(null);
-      // 이스터에그 생성 성공 시 슬롯 정보 쿼리 무효화
+      // 이스터에그 생성 성공 시 관련 쿼리 무효화 및 즉시 refetch → 지도 마커·내 이스터에그 목록 즉시 반영
+      // React Query v5에서는 refetchQueries를 사용하여 활성 쿼리를 즉시 refetch
       queryClient.invalidateQueries({ 
-        queryKey: SLOT_QUERY_KEYS.slotInfo() 
+        queryKey: SLOT_QUERY_KEYS.slotInfo(),
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['capsules'],
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['myEggs'],
+      });
+      // 활성 쿼리 즉시 refetch (staleTime 무시)
+      queryClient.refetchQueries({ 
+        queryKey: SLOT_QUERY_KEYS.slotInfo(),
+      });
+      queryClient.refetchQueries({ 
+        queryKey: ['capsules'],
+      });
+      queryClient.refetchQueries({ 
+        queryKey: ['myEggs'],
       });
     },
     onError: (err: unknown) => {
@@ -196,6 +214,8 @@ export function useEasterEggSubmit(): UseEasterEggSubmitReturn {
         setError(ERROR_MESSAGES.SERVER_ERROR);
       } else if (apiError.message?.includes('network') || apiError.message?.includes('Network')) {
         setError(ERROR_MESSAGES.NETWORK_ERROR);
+      } else if (apiError.message?.includes('timeout') || apiError.message?.includes('ECONNABORTED')) {
+        setError('요청 시간이 초과되었습니다. 파일 크기가 크거나 네트워크가 느릴 수 있습니다. 다시 시도해주세요.');
       } else {
         setError(apiError.message || ERROR_MESSAGES.UNKNOWN_ERROR);
       }

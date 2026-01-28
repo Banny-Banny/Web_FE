@@ -7,6 +7,7 @@ import type {
   WaitingRoomDetailResponse,
   WaitingRoomSettingsResponse,
   Participant,
+  MyContentResponse,
 } from '@/commons/apis/capsules/step-rooms/types';
 
 /**
@@ -17,6 +18,22 @@ export const mockWaitingRoomSettings: WaitingRoomSettingsResponse = {
   capsuleName: '우리의 추억',
   maxHeadcount: 5,
   openDate: '2026-12-31T00:00:00Z',
+  maxImagesPerPerson: 5,
+  hasMusic: true,
+  hasVideo: true,
+};
+
+/**
+ * Mock 대기실 설정값 (소규모 - 3명)
+ */
+export const mockWaitingRoomSettingsSmall: WaitingRoomSettingsResponse = {
+  roomId: 'waiting-room-456',
+  capsuleName: '빈 대기실',
+  maxHeadcount: 3,
+  openDate: '2026-12-31T00:00:00Z',
+  maxImagesPerPerson: 5,
+  hasMusic: true,
+  hasVideo: true,
 };
 
 /**
@@ -31,6 +48,7 @@ export const mockParticipants: Participant[] = [
     slotNumber: 1,
     role: 'HOST',
     status: 'ACCEPTED',
+    hasContent: true,
   },
   {
     participantId: 'participant-2',
@@ -40,6 +58,7 @@ export const mockParticipants: Participant[] = [
     slotNumber: 2,
     role: 'PARTICIPANT',
     status: 'ACCEPTED',
+    hasContent: false,
   },
 ];
 
@@ -75,6 +94,7 @@ export const mockWaitingRoomDetailEmpty: WaitingRoomDetailResponse = {
       slotNumber: 1,
       role: 'HOST',
       status: 'ACCEPTED',
+      hasContent: false,
     },
   ],
 };
@@ -104,4 +124,31 @@ export const mockErrorResponses = {
       message: '대기실에 접근할 수 있는 권한이 없습니다.',
     },
   },
+};
+
+/**
+ * Mock 본인 컨텐츠 응답
+ */
+export const mockMyContent: MyContentResponse = {
+  text: '타임캡슐에 담을 메시지입니다.',
+  images: [
+    'https://example.com/image1.jpg',
+    'https://example.com/image2.jpg',
+  ],
+  music: 'https://example.com/music.mp3',
+  video: undefined,
+  createdAt: '2026-01-28T10:00:00Z',
+  updatedAt: '2026-01-28T12:00:00Z',
+};
+
+/**
+ * Mock 빈 컨텐츠 응답
+ */
+export const mockEmptyContent: MyContentResponse = {
+  text: undefined,
+  images: undefined,
+  music: undefined,
+  video: undefined,
+  createdAt: undefined,
+  updatedAt: undefined,
 };

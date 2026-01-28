@@ -1,0 +1,159 @@
+/**
+ * AudioPlayer Component Styles
+ *
+ * Checklist:
+ * - [✓] CSS Modules 사용
+ * - [✓] 인라인 스타일 0건 (progress bar width 제외)
+ * - [✓] 색상 토큰만 사용 (하드코딩 0건)
+ * - [✓] Typography, Spacing, BorderRadius 토큰 사용 (가능한 부분)
+ * - [✓] Figma 디자인 1:1 대응
+ */
+
+/* 오디오 플레이어 컨테이너 */
+.audioPlayerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-lg); /* 16px */
+  padding-left: 18px; /* Figma 정확한 값 (Spacing.md=16, Spacing.lg=24 사이) */
+  padding-right: 18px; /* Figma 정확한 값 */
+  padding-top: 2px; /* Figma 정확한 값 */
+  padding-bottom: 2px; /* Figma 정확한 값 */
+  height: 83px; /* Figma 정확한 값 */
+  width: 100%;
+  max-width: 100%;
+  background-color: var(--color-white-500);
+  border: 2px solid var(--color-white-grey-300);
+  border-radius: var(--radius-lg);
+}
+
+/* 재생 버튼 */
+.playButton {
+  width: var(--spacing-3xl); /* 48px (Figma 정확한 값) */
+  height: var(--spacing-3xl); /* 48px (Figma 정확한 값) */
+  min-width: var(--spacing-3xl);
+  min-height: var(--spacing-3xl);
+  border-radius: var(--radius-full);
+  background-color: var(--color-black-500);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+  padding: 0;
+}
+
+.playButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.playButton:active:not(:disabled) {
+  opacity: 0.8;
+}
+
+.playButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* 재생 버튼 아이콘 */
+.playButtonIcon {
+  color: var(--color-white-50);
+  flex-shrink: 0;
+}
+
+/* 오디오 컨트롤 영역 */
+.audioControls {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm); /* 8px */
+  min-width: 0; /* flex item이 축소될 수 있도록 */
+}
+
+/* 프로그레스 바 컨테이너 */
+.progressBarContainer {
+  flex: 1;
+  height: 6px; /* Figma 정확한 값 */
+  background-color: var(--color-white-grey-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 프로그레스 바 */
+.progressBar {
+  height: 6px; /* Figma 정확한 값 */
+  background-color: var(--color-black-500);
+  border-radius: var(--radius-full);
+  transition: width 0.1s linear;
+  will-change: width;
+}
+
+/* 오디오 시간 "0:00" */
+/* Figma: fontSize 11, lineHeight 16.5, fontWeight SemiBold, letterSpacing -0.1 */
+/* 가장 유사: body8 (fontSize 12, lineHeight 16, fontWeight semibold, letterSpacing 0) */
+.audioTime {
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 12px; /* body8과 유사 */
+  line-height: 16px;
+  font-weight: 600; /* semibold */
+  letter-spacing: 0;
+  color: var(--color-grey-600);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 오디오 에러 컨테이너 */
+.audioErrorContainer {
+  width: 100%;
+  padding-top: var(--spacing-xl); /* 24px */
+  padding-bottom: var(--spacing-xl); /* 24px */
+  padding-left: var(--spacing-lg); /* 16px */
+  padding-right: var(--spacing-lg); /* 16px */
+  background-color: var(--color-white-grey-100);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-white-grey-300);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm); /* 8px */
+  min-height: 83px; /* 플레이어와 동일한 높이 */
+}
+
+/* 오디오 에러 아이콘 컨테이너 */
+.audioErrorIconContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white-grey-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 오디오 에러 아이콘 */
+.audioErrorIcon {
+  color: var(--color-grey-500);
+}
+
+/* 오디오 에러 텍스트 */
+.audioErrorText {
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 12px; /* body11과 유사 */
+  line-height: 16px;
+  font-weight: 600; /* semibold */
+  letter-spacing: 0;
+  color: var(--color-grey-600);
+  text-align: center;
+  margin: 0;
+}

@@ -8,19 +8,13 @@
  * Figma 디자인 스펙:
  * - 음원 미리보기: node-id=599:5660
  * 
- * @module components/home/components/easter-egg-bottom-sheet/components/audio-preview
+ * @module commons/components/audio-preview
  */
 
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { RiPlayCircleFill, RiPauseCircleFill, RiCloseLine } from '@remixicon/react';
+import type { AudioPreviewProps } from './types';
 import styles from './styles.module.css';
-
-interface AudioPreviewProps {
-  /** 오디오 파일 URL */
-  audioUrl: string;
-  /** 삭제 버튼 클릭 핸들러 */
-  onDelete: () => void;
-}
 
 /**
  * 음원 미리보기 컴포넌트

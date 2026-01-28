@@ -29,6 +29,10 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/friends');
   };
 
+  const handleEasterEggClick = () => {
+    router.push('/my-eggs');
+  };
+
   return (
     <div className={`${styles.container} ${className}`}>
       {/* 헤더 */}
@@ -55,10 +59,15 @@ export function Mypage({ className = '' }: MypageProps) {
           <div className={styles.activityLabel}>캡슐</div>
         </div>
         <div className={styles.activityDivider}></div>
-        <div className={styles.activityItem}>
+        <button 
+          className={styles.activityItem}
+          onClick={handleEasterEggClick}
+          type="button"
+          aria-label="이스터에그 목록 보기"
+        >
           <div className={styles.activityNumber}>12</div>
           <div className={styles.activityLabel}>이스터에그</div>
-        </div>
+        </button>
         <div className={styles.activityDivider}></div>
         <button 
           className={styles.activityItem}

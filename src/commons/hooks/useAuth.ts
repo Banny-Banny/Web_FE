@@ -50,17 +50,28 @@ export function useAuth(): AuthContextType {
         // 토큰 파싱 실패나 만료 여부는 서버 검증을 통해 확인
         try {
           const verifyResult = await verifyAuth();
-          
-          if (verifyResult.valid && verifyResult.user) {
-            setUser(verifyResult.user);
-            queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+
+          if (verifyResult.valid && (verifyResult.user || verifyResult.userId)) {
+            console.log('✅ [useAuth] 토큰 유효');
+
+            // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
+            const userInfo: User = verifyResult.user || {
+              id: verifyResult.userId!,
+              email: '',
+              nickname: '',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+
+            setUser(userInfo);
+            queryClient.setQueryData(['auth', 'user'], userInfo);
           } else if (verifyResult.valid === false) {
             // 서버가 명시적으로 토큰이 유효하지 않다고 응답한 경우에만 토큰 제거
             console.warn('❌ [useAuth] 서버가 토큰을 유효하지 않다고 응답. 토큰 제거.');
             clearTokens();
             setUser(null);
           } else {
-            // valid가 undefined이거나 user가 없는 경우
+            // valid가 undefined이거나 userId도 없는 경우
             // 토큰은 유지하고 사용자 정보만 null로 설정
             console.warn('⚠️ [useAuth] 검증 응답에 사용자 정보가 없습니다. 토큰은 유지합니다.');
             setUser(null);
@@ -162,10 +173,19 @@ export function useAuth(): AuthContextType {
       // 토큰 검증 API 호출
       try {
         const verifyResult = await verifyAuth();
-        
-        if (verifyResult.valid && verifyResult.user) {
-          setUser(verifyResult.user);
-          queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+
+        if (verifyResult.valid && (verifyResult.user || verifyResult.userId)) {
+          // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
+          const userInfo: User = verifyResult.user || {
+            id: verifyResult.userId!,
+            email: '',
+            nickname: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+          setUser(userInfo);
+          queryClient.setQueryData(['auth', 'user'], userInfo);
         } else {
           // 토큰이 유효하지 않은 경우
           clearTokens();

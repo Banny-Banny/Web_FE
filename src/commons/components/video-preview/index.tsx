@@ -14,19 +14,13 @@
  * - 재생 바 (progress bar)
  * - 재생 시간 표시
  * 
- * @module components/home/components/easter-egg-bottom-sheet/components/video-preview
+ * @module commons/components/video-preview
  */
 
 import React, { useState, useEffect } from 'react';
 import { RiCloseLine, RiVideoLine } from '@remixicon/react';
+import type { VideoPreviewProps } from './types';
 import styles from './styles.module.css';
-
-interface VideoPreviewProps {
-  /** 비디오 파일 URL */
-  videoUrl: string;
-  /** 삭제 버튼 클릭 핸들러 */
-  onDelete: () => void;
-}
 
 /**
  * 비디오에서 썸네일 생성 (Canvas API 사용)

@@ -14,8 +14,17 @@ import {
   GetCapsuleResponse,
   RecordCapsuleViewRequest,
   RecordCapsuleViewResponse,
-  GetCapsuleViewersResponse 
+  GetCapsuleViewersResponse,
+  GetMyEggsRequest,
+  MyEggsPlantedResponse,
+  MyEggsFoundResponse,
+  MyEggsResponseSimple,
+  EggDetailResponse
 } from './types';
+import type { ApiError } from '@/commons/provider/api-provider/api-client';
+
+// 타입 export
+export type * from './types';
 
 /**
  * 이스터에그 생성 API
@@ -36,6 +45,9 @@ export async function createEasterEgg(
   formData.append('title', data.title);
   
   // 선택 필드
+  if (data.content) {
+    formData.append('content', data.content);
+  }
   if (data.message) {
     formData.append('message', data.message);
   }
@@ -68,7 +80,7 @@ export async function createEasterEgg(
           onProgress(progress);
         }
       },
-      timeout: 30000, // 30초 타임아웃
+      timeout: 120000, // 120초 타임아웃 (파일 업로드 포함 요청은 시간이 더 걸릴 수 있음)
     }
   );
   
@@ -184,4 +196,99 @@ export async function getCapsuleViewers(
     TIMEEGG_ENDPOINTS.GET_CAPSULE_VIEWERS(id)
   );
   return response.data;
+}
+
+/**
+ * 내 이스터에그 목록 조회 API (tasks.md T004 요구사항 - 파라미터 없음)
+ * 
+ * @returns 이스터에그 목록 응답 (MyEggsResponseSimple)
+ * @throws ApiError API 호출 실패 시
+ */
+export async function getMyEggs(): Promise<MyEggsResponseSimple>;
+/**
+ * 내 이스터에그 목록 조회 API (파라미터 버전)
+ * 
+ * @param params - 조회 파라미터 (type: PLANTED | FOUND, sort?: LATEST | OLDEST)
+ * @returns 이스터에그 목록 응답 (PLANTED 또는 FOUND 타입에 따라 다른 구조)
+ * 
+ * @example
+ * ```typescript
+ * // 심은 알 조회
+ * const plantedEggs = await getMyEggs({ type: 'PLANTED' });
+ * 
+ * // 발견한 알 조회 (최신순)
+ * const foundEggs = await getMyEggs({ type: 'FOUND', sort: 'LATEST' });
+ * 
+ * // 발견한 알 조회 (오래된순)
+ * const foundEggsOldest = await getMyEggs({ type: 'FOUND', sort: 'OLDEST' });
+ * ```
+ */
+export async function getMyEggs(
+  params: GetMyEggsRequest
+): Promise<MyEggsPlantedResponse | MyEggsFoundResponse>;
+export async function getMyEggs(
+  params?: GetMyEggsRequest
+): Promise<MyEggsResponseSimple | MyEggsPlantedResponse | MyEggsFoundResponse> {
+  try {
+    // 파라미터가 없으면 tasks.md T004 요구사항에 맞게 단순 조회
+    if (!params) {
+      const response = await apiClient.get<MyEggsResponseSimple>(
+        TIMEEGG_ENDPOINTS.GET_MY_EGGS
+      );
+      return response.data;
+    }
+
+    // 파라미터가 있으면 기존 로직 사용
+    const queryParams: Record<string, string> = {
+      type: params.type,
+    };
+
+    // FOUND 타입일 때만 sort 파라미터 추가
+    if (params.type === 'FOUND' && params.sort) {
+      queryParams.sort = params.sort;
+    }
+
+    const response = await apiClient.get<MyEggsPlantedResponse | MyEggsFoundResponse>(
+      TIMEEGG_ENDPOINTS.GET_MY_EGGS,
+      {
+        params: queryParams,
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    // Axios 에러를 ApiError 형식으로 변환
+    const apiError: ApiError = {
+      message: error.message || error.response?.data?.message || '이스터에그 목록 조회 중 오류가 발생했습니다.',
+      status: error.response?.status || error.status,
+      code: error.response?.data?.code || error.code,
+      details: error.response?.data || error.details,
+    };
+    throw apiError;
+  }
+}
+
+/**
+ * 알 상세 정보 조회 API (tasks.md T005 요구사항)
+ * 
+ * @param id - 이스터에그 ID
+ * @returns 알 상세 정보 응답 (EggDetailResponse)
+ * @throws ApiError API 호출 실패 시
+ */
+export async function getEggDetail(id: string): Promise<EggDetailResponse> {
+  try {
+    const response = await apiClient.get<EggDetailResponse>(
+      `${TIMEEGG_ENDPOINTS.GET_CAPSULE(id)}/detail`
+    );
+    return response.data;
+  } catch (error: any) {
+    // Axios 에러를 ApiError 형식으로 변환
+    const apiError: ApiError = {
+      message: error.message || error.response?.data?.message || '이스터에그 상세 정보 조회 중 오류가 발생했습니다.',
+      status: error.response?.status || error.status,
+      code: error.response?.data?.code || error.code,
+      details: error.response?.data || error.details,
+    };
+    throw apiError;
+  }
 }

@@ -38,7 +38,9 @@ export function useWaitingRoom(capsuleId: string | null | undefined) {
     enabled: !!capsuleId,
     staleTime: 30000, // 30초간 캐시 유지
     gcTime: 1000 * 60 * 5, // 5분간 가비지 컬렉션 방지
-    // refetchInterval: 5000, // 자동 갱신 비활성화
+    // 백엔드 부하 방지를 위해 자동 폴링(refetchInterval)은 사용하지 않습니다.
+    // 필요한 경우 유저 액션(새로고침 버튼 등) 또는 화면 포커스 기반으로만 갱신합니다.
+    // refetchOnWindowFocus 기본값(true)에 의해, 탭 전환 후 돌아올 때 최신화될 수 있습니다.
     retry: (failureCount, error) => {
       // 네트워크 오류(status가 없는 경우)는 재시도하지 않음
       if (!error.status) return false;

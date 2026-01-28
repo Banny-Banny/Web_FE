@@ -8,13 +8,15 @@ import { test, expect } from '@playwright/test';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`
   : 'http://localhost:3000/api';
-const DEV_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
+// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
+const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
 const PRODUCT_ID = process.env.NEXT_PUBLIC_TIMECAPSULE_PRODUCT_ID || 'time-capsule-product-1';
 
 test.describe('타임캡슐 주문 관리 API', () => {
   test.beforeEach(() => {
     // 각 테스트 전에 인증 토큰 확인
-    if (!DEV_TOKEN) {
+    if (!TEST_TOKEN) {
+      console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
       test.skip();
     }
     if (!PRODUCT_ID) {
@@ -26,7 +28,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('주문 생성 성공', async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -71,7 +73,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('필수 필드 누락 시 400 에러', async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -102,7 +104,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('CUSTOM 타임 옵션에서 custom_open_at 누락 시 400 에러', async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -122,7 +124,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
 
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -139,7 +141,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('headcount가 1~10 범위를 벗어날 때 400 에러', async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -155,7 +157,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('photo_count가 headcount를 초과할 때 400 에러', async ({ request }) => {
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -177,7 +179,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
       // 테스트용 주문 생성
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -203,7 +205,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('주문 상세 조회 성공', async ({ request }) => {
       const response = await request.get(`${API_BASE_URL}/orders/${createdOrderId}`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
         },
       });
 
@@ -221,7 +223,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('존재하지 않는 주문 조회 시 에러', async ({ request }) => {
       const response = await request.get(`${API_BASE_URL}/orders/non-existent-order-id`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
         },
       });
 
@@ -243,7 +245,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
       // 테스트용 주문 생성
       const response = await request.post(`${API_BASE_URL}/orders`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -269,7 +271,7 @@ test.describe('타임캡슐 주문 관리 API', () => {
     test('주문 상태 조회 성공', async ({ request }) => {
       const response = await request.get(`${API_BASE_URL}/orders/${createdOrderId}/status`, {
         headers: {
-          'Authorization': `Bearer ${DEV_TOKEN}`,
+          'Authorization': `Bearer ${TEST_TOKEN}`,
         },
       });
 

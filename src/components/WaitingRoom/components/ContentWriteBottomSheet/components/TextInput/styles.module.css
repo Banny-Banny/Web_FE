@@ -1,0 +1,44 @@
+/**
+ * @fileoverview TextInput 컴포넌트 스타일
+ * @description Figma 디자인 기반 스타일 (375px 고정 레이아웃)
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm); /* 8px */
+  padding: 0 var(--spacing-lg); /* 0 24px */
+}
+
+.label {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-sm); /* 12px */
+  font-weight: var(--font-weight-bold); /* 700 */
+  line-height: var(--line-height-normal); /* 18px */
+  color: var(--color-black-500);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--spacing-md); /* 16px */
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-base); /* 16px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  line-height: var(--line-height-relaxed); /* 24px */
+  color: var(--color-black-500);
+  background-color: var(--color-white-grey-100);
+  border: none;
+  border-radius: var(--radius-lg); /* 12px */
+  resize: vertical;
+  outline: none;
+}
+
+.textarea::placeholder {
+  color: var(--color-grey-400);
+}
+
+.textarea:focus {
+  background-color: var(--color-white-100);
+  box-shadow: 0 0 0 2px var(--color-blue-500);
+}

@@ -1,10 +1,10 @@
 /**
  * @fileoverview WaitingRoomInfo 컴포넌트 스타일
- * @description 대기실 정보 표시 컴포넌트의 스타일 (375px 고정 레이아웃)
+ * @description 대기실 정보 표시 컴포넌트의 스타일 (앱 버전 기준)
  * 
  * @version 1.0.0
  * @created 2026-01-28
- * @updated 2026-01-28 - Figma 디자인 기반으로 재구현
+ * @updated 2026-01-28 - 앱 버전 기준으로 레이아웃 수정 (개봉일/참여자 가로 배치)
  * 
  * 규칙 준수 체크리스트:
  * - [x] CSS Module 사용
@@ -17,73 +17,90 @@
 /* 컨테이너 */
 .container {
   width: 100%;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-lg);
   background-color: var(--color-white-500);
 }
 
 /* 카드 */
 .card {
   width: 100%;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  border: 1px solid var(--color-grey-200);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-white-500);
+  padding: 25px;
+  border: 1px solid var(--color-grey-500);
+  border-radius: 16px;
+  background-color: var(--color-white-100);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: 40px;
 }
 
 /* 캡슐 이름 레이블 */
 .capsuleNameLabel {
-  font-size: var(--font-size-sm);
+  font-size: 12px;
+  line-height: 18px;
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
   color: var(--color-grey-600);
 }
 
 /* 캡슐 이름 */
 .capsuleName {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-normal);
+  font-size: 26px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: 0.3955078125px;
   color: var(--color-black-500);
   margin: 0;
   padding: 0;
 }
 
-/* 정보 섹션 */
+/* 정보 섹션 (가로 배치) */
 .infoSection {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  flex-direction: row;
+  gap: 40px;
 }
 
 /* 정보 아이템 */
 .infoItem {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 10px;
+}
+
+/* 정보 아이콘 래퍼 */
+.infoIconWrapper {
+  width: 28px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 정보 아이콘 */
 .infoIcon {
   flex-shrink: 0;
-  color: var(--color-grey-600);
+  color: var(--color-grey-500);
+}
+
+/* 정보 콘텐츠 */
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* 정보 레이블 */
 .infoLabel {
-  font-size: var(--font-size-sm);
+  font-size: 12px;
+  line-height: 12px;
   font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
   color: var(--color-grey-600);
 }
 
 /* 정보 값 */
 .infoValue {
-  margin-left: auto;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: var(--font-weight-normal);
   color: var(--color-black-500);
 }

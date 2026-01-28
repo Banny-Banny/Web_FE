@@ -98,16 +98,9 @@ export const apiClient: AxiosInstance = axios.create({
 /**
  * 토큰 가져오기
  * 
- * 개발 환경에서는 NEXT_PUBLIC_DEV_TOKEN을 우선적으로 사용합니다.
- * 프로덕션 환경에서는 localStorage의 토큰을 사용합니다.
+ * localStorage에서 액세스 토큰을 가져옵니다.
  */
 function getAccessToken(): string | null {
-  // 개발 환경에서 NEXT_PUBLIC_DEV_TOKEN 우선 사용
-  if (process.env.NEXT_PUBLIC_DEV_TOKEN) {
-    return process.env.NEXT_PUBLIC_DEV_TOKEN;
-  }
-  
-  // 프로덕션 환경에서는 localStorage에서 토큰 가져오기
   if (typeof window === 'undefined') return null;
   return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 }
@@ -320,10 +313,24 @@ apiClient.interceptors.response.use(
                           errorInfo.message?.includes('기존 요청을 처리중입니다') ||
                           errorInfo.message?.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING');
 
+      // /my-content 엔드포인트의 404는 "아직 작성하지 않았습니다"를 의미하는 정상적인 응답
+      const isMyContent404 = errorInfo.statusCode === 404 &&
+                              (fullURL.includes('/my-content') || requestEndpoint.includes('/my-content'));
+
+      // 대기실 참여 409는 "이미 참여 중"을 의미하는 정상적인 응답
+      const isJoinRoomConflict = errorInfo.statusCode === 409 &&
+                                  (fullURL.includes('/join') || requestEndpoint.includes('/join'));
+
       if (isS008Error) {
         // S008: 토스 결제 처리 중 - 정상 상황이므로 info 로그
         console.log(`⏳ 결제 처리 중: ${method} ${fullURL}`);
         console.log('토스페이먼츠가 결제를 처리하고 있습니다. 잠시만 기다려주세요...');
+      } else if (isMyContent404) {
+        // /my-content 404: 아직 작성하지 않음 - 정상 상황이므로 로그 출력하지 않음
+        // 에러는 그대로 throw하되, 콘솔에는 로그하지 않음
+      } else if (isJoinRoomConflict) {
+        // 대기실 참여 409: 이미 참여 중 - 정상 상황이므로 간단한 로그만
+        console.log(`✅ 이미 대기실에 참여 중입니다.`);
       } else {
         // 실제 에러인 경우만 error 로그
         console.error(`❌ API Error: ${method} ${fullURL}`);

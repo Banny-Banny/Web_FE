@@ -12,12 +12,16 @@
  * Phase 6에서 실제 API 호출로 교체됩니다.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TimeCapsuleHeader } from '@/commons/components/timecapsule-header';
 import { Spinner } from '@/commons/components/spinner';
+import { useAuthState } from '@/commons/hooks/useAuth';
+import { useMyContent } from '@/commons/apis/capsules/step-rooms/hooks/useMyContent';
+import { generateInviteLink } from '@/commons/utils/invite';
 import { WaitingRoomInfo } from './components/WaitingRoomInfo';
 import { ParticipantList } from './components/ParticipantList';
+import { ContentWriteBottomSheet } from './components/ContentWriteBottomSheet';
 import { useWaitingRoom } from './hooks/useWaitingRoom';
 import styles from './styles.module.css';
 
@@ -36,6 +40,31 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   const router = useRouter();
   const { state, waitingRoom, settings, isLoading, error } =
     useWaitingRoom(capsuleId);
+  const { user } = useAuthState();
+  const [isContentWriteOpen, setIsContentWriteOpen] = useState(false);
+  const [isMyContentJustSaved, setIsMyContentJustSaved] = useState(false);
+
+  const { data: myContent } = useMyContent(user?.id ? capsuleId : null);
+  const isMyContentSavedFromServer = Boolean(
+    (myContent?.text ?? '').trim().length > 0 ||
+      (myContent?.images?.length ?? 0) > 0 ||
+      !!myContent?.music ||
+      !!myContent?.video
+  );
+
+  // 서버 응답 외에, 방금 저장 완료된 상태를 즉시 반영하기 위한 플래그
+  const isMyContentSaved = isMyContentJustSaved || isMyContentSavedFromServer;
+
+  // 현재 사용자가 방장인지 판단
+  const isHost = waitingRoom?.participants.some(
+    (p) => {
+      const normalize = (value?: string) => (value ?? '').trim().toLowerCase();
+      const isCurrentUser =
+        (user?.id && normalize(p.userId) === normalize(user.id)) ||
+        (user?.nickname && p.userName && normalize(p.userName) === normalize(user.nickname));
+      return isCurrentUser && p.role === 'HOST';
+    }
+  ) ?? false;
 
   const handleBack = () => {
     router.back();
@@ -45,14 +74,57 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
     router.back();
   };
 
-  const handleInviteFriend = () => {
-    // TODO: Phase 6에서 실제 초대 기능 구현
-    console.log('친구 초대하기');
+  const handleInviteFriend = async () => {
+    // settings API에서 invite_code를 제공하므로, settings에서 가져옴
+    const inviteCode = settings?.inviteCode || waitingRoom?.inviteCode;
+    if (!inviteCode) {
+      alert('초대 코드를 불러올 수 없습니다.');
+      return;
+    }
+
+    const inviteLink = generateInviteLink(inviteCode);
+
+    try {
+      // Web Share API 사용 가능 여부 확인
+      if (navigator.share) {
+        await navigator.share({
+          url: inviteLink,
+        });
+      } else {
+        // Web Share API를 사용할 수 없으면 클립보드에 복사
+        await navigator.clipboard.writeText(inviteLink);
+        alert('초대 링크가 클립보드에 복사되었습니다!');
+      }
+    } catch (error) {
+      console.error('초대 링크 공유 실패:', error);
+      // 공유 실패 시 클립보드 복사 시도
+      try {
+        await navigator.clipboard.writeText(inviteLink);
+        alert('초대 링크가 클립보드에 복사되었습니다!');
+      } catch (clipboardError) {
+        console.error('클립보드 복사 실패:', clipboardError);
+        alert('초대 링크 공유에 실패했습니다.');
+      }
+    }
   };
 
   const handleWriteMyContent = () => {
-    // TODO: Phase 6에서 실제 작성 기능 구현
-    console.log('내 글 작성하기');
+    // 다시 열 때도 이미 작성 완료 상태는 유지
+    setIsContentWriteOpen(true);
+  };
+
+  const handleFinalSubmit = () => {
+    // TODO: 대기실 이후 단계(타임캡슐 최종 생성/제출) 연결 시 구현
+    console.log('최종제출');
+  };
+
+  const handleContentWriteClose = () => {
+    setIsContentWriteOpen(false);
+  };
+
+  const handleContentSaved = () => {
+    // 저장 성공 시 즉시 "작성 완료"로 표시되도록 플래그 설정
+    setIsMyContentJustSaved(true);
   };
 
   return (
@@ -88,13 +160,27 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
               participants={waitingRoom.participants}
               currentHeadcount={waitingRoom.currentHeadcount}
               maxHeadcount={settings?.maxHeadcount ?? waitingRoom.maxHeadcount}
-              currentUserId="user-1"
+              currentUserId={user?.id}
+              currentUserName={user?.nickname}
+              isMyContentSaved={isMyContentSaved}
+              isHost={isHost}
               onInviteFriend={handleInviteFriend}
               onWriteMyContent={handleWriteMyContent}
+              onFinalSubmit={handleFinalSubmit}
             />
           </>
         )}
       </div>
+
+      {state.status === 'success' && (
+        <ContentWriteBottomSheet
+          isOpen={isContentWriteOpen}
+          onClose={handleContentWriteClose}
+          onSaved={handleContentSaved}
+          capsuleId={capsuleId}
+          settings={settings}
+        />
+      )}
     </div>
   );
 }

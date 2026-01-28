@@ -140,18 +140,6 @@ export interface AttachmentButtonsProps {
 }
 
 /**
- * 오디오 첨부 모달 Props
- */
-export interface AudioAttachmentModalProps {
-  /** 모달 표시 여부 */
-  visible: boolean;
-  /** 모달 닫기 핸들러 */
-  onClose: () => void;
-  /** 오디오 파일 선택 완료 콜백 */
-  onSelectAudio: (file: File) => void;
-}
-
-/**
  * 제출 상태 타입
  * 
  * 이스터에그 폼 제출 시의 상태를 나타냅니다.
