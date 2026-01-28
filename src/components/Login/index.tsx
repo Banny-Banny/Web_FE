@@ -12,6 +12,7 @@ import { LoginForm } from './LoginForm';
 import { LoginMethodSelector } from './LoginMethodSelector';
 import type { LoginFormData } from './types';
 import { useLoginMutation, getLoginErrorMessage } from './hooks/useLoginMutation';
+import { useKakaoLogin } from './hooks/useKakaoLogin';
 import styles from './styles.module.css';
 
 /**
@@ -27,6 +28,7 @@ type LoginView = 'selector' | 'email' | 'kakao';
 export function LoginContainer() {
   const router = useRouter();
   const loginMutation = useLoginMutation();
+  const { loginWithKakao } = useKakaoLogin();
   const [currentView, setCurrentView] = useState<LoginView>('selector');
 
   /**
@@ -64,10 +66,13 @@ export function LoginContainer() {
    * 카카오 로그인 선택 핸들러
    */
   const handleSelectKakao = () => {
-    // TODO: 카카오 소셜 로그인 구현
-    console.log('카카오 로그인 선택');
-    // 임시로 에러 처리 (나중에 실제 카카오 로그인 플로우로 교체)
-    alert('카카오 로그인은 준비 중입니다.');
+    try {
+      loginWithKakao();
+    } catch (error) {
+      console.error('카카오 로그인 시작 실패:', error);
+      // 에러 발생 시 사용자에게 알림 (선택적)
+      // alert('카카오 로그인을 시작할 수 없습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   /**
