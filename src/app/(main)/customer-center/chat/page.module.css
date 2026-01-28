@@ -1,0 +1,16 @@
+/**
+ * 채팅방 페이지 래퍼 (GNB 고려 하단 여백)
+ * GNB min-height: 60px → padding-bottom으로 입력창이 GNB에 가리지 않도록
+ */
+
+.wrapper {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white-50);
+  padding-bottom: 60px;
+}

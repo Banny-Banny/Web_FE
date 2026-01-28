@@ -239,6 +239,16 @@ export const MEDIA_ENDPOINTS = {
 } as const;
 
 /**
+ * 문의(고객센터) 관련 엔드포인트
+ */
+export const INQUIRY_ENDPOINTS = {
+  // 내 문의 목록 조회
+  LIST: `${AUTH_ENDPOINTS.ME}/inquiries`,
+  // 문의별 채팅 내역 조회
+  CHAT_HISTORY: (inquiryId: string) => `${AUTH_ENDPOINTS.ME}/inquiries/${inquiryId}`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -254,6 +264,7 @@ export const ENDPOINTS = {
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,
   ONBOARDING: ONBOARDING_ENDPOINTS,
+  INQUIRY: INQUIRY_ENDPOINTS,
 } as const;
 
 /**

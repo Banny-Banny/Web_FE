@@ -22,6 +22,10 @@ export type * from './capsules/types';
 export * from './media';
 export type * from './media/types';
 
+// 문의(고객센터) API
+export * from './inquiries';
+export type * from './inquiries/types';
+
 // API 클라이언트 및 함수들이 여기에 추가됩니다
 // 예: export { apiClient } from './client';
 // 예: export * from './user';
