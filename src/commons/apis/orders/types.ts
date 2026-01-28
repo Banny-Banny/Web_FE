@@ -23,6 +23,8 @@ export type TimeOption = '1_WEEK' | '1_MONTH' | '1_YEAR' | 'CUSTOM';
 export interface CreateOrderRequest {
   /** 상품 ID (TIME_CAPSULE 타입, 활성화된 상품) */
   product_id: string;
+  /** 캡슐 제목 (타임캡슐 이름) - 백엔드가 capsule_title로 받음 */
+  capsule_title?: string;
   /** 타임 옵션 */
   time_option: TimeOption;
   /** 커스텀 오픈 날짜 (CUSTOM일 때만 필수, 미래 날짜) */
@@ -67,6 +69,8 @@ export interface CreateOrderResponse {
 export interface OrderDetail {
   /** 주문 ID */
   order_id: string;
+  /** 캡슐명 (타임캡슐 이름) */
+  capsule_name?: string | null;
   /** 타임 옵션 */
   time_option: TimeOption;
   /** 커스텀 오픈 날짜 */

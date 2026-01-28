@@ -2,26 +2,31 @@
  * 토큰 검증 API 함수
  */
 
-import { apiClient } from '@/commons/provider/api-provider/api-client';
+import { apiClient, ApiResponse } from '@/commons/provider/api-provider/api-client';
 import { AUTH_ENDPOINTS } from '@/commons/apis/endpoints';
 import type { VerifyResponse } from './types';
 
 /**
  * 토큰 검증 API 호출
- * 
+ *
  * 현재 저장된 액세스 토큰을 서버에 전송하여 유효성을 검증하고,
  * 유효한 경우 사용자 정보를 반환합니다.
- * 
+ *
  * @returns 토큰 검증 응답 데이터
  * @throws ApiError 토큰이 유효하지 않거나 서버 오류 시
  */
 export async function verifyAuth(): Promise<VerifyResponse> {
   try {
-    const response = await apiClient.get<VerifyResponse>(
+    const response = await apiClient.get<ApiResponse<VerifyResponse>>(
       AUTH_ENDPOINTS.VERIFY
     );
 
-    return response.data;
+    // 서버 응답 구조:
+    // Case 1: { data: { valid: true, userId: '...' } } - API Response 래핑
+    // Case 2: { valid: true, userId: '...' } - 직접 반환
+    const verifyData = response.data.data || response.data;
+
+    return verifyData as VerifyResponse;
   } catch (error: any) {
     // Axios 에러를 ApiError 형식으로 변환
     const apiError = {

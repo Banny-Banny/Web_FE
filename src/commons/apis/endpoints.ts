@@ -211,8 +211,22 @@ export const ONBOARDING_ENDPOINTS = {
  * 캡슐 관련 엔드포인트
  */
 export const CAPSULE_ENDPOINTS = {
-  // 타임캡슐 대기실 생성
+  // 타임캡슐 대기실 생성 (방 생성 + 초대 코드 발급)
   CREATE_WAITING_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+  // 009 스펙 호환을 위한 별칭 (동일 엔드포인트)
+  CREATE_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+  // 대기실 설정값 조회
+  WAITING_ROOM_SETTINGS: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/settings`,
+  // 대기실 상세 조회
+  WAITING_ROOM_DETAIL: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}`,
+  // 본인 컨텐츠 조회 및 저장
+  MY_CONTENT: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/my-content`,
+  // 초대 코드로 방 조회 (Public API)
+  INVITE_CODE_QUERY: (code: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/by-code?invite_code=${code}`,
+  // 초대 코드로 방 참여
+  JOIN_ROOM: (capsuleId: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/join`,
 } as const;
 
 /**

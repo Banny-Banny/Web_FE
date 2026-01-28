@@ -158,6 +158,8 @@ export function Payment() {
           <TossPaymentWidget
             orderId={orderId || ''}
             amount={orderSummaryData.totalAmount}
+            orderName="타임캡슐 생성"
+            customerName={orderSummaryData.capsuleName}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
             disabled={!isAllAgreed}

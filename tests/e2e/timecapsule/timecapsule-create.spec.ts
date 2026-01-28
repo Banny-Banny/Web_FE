@@ -5,15 +5,22 @@
 
 import { test, expect } from '@playwright/test';
 
-const DEV_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
+// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
+const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
 
 test.describe('타임캡슐 생성 페이지', () => {
   test.beforeEach(async ({ page, context }) => {
+    if (!TEST_TOKEN) {
+      console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
+      test.skip();
+      return;
+    }
+
     // 인증 토큰 설정
     await context.addCookies([
       {
         name: 'timeEgg_accessToken',
-        value: DEV_TOKEN,
+        value: TEST_TOKEN,
         domain: 'localhost',
         path: '/',
       },
@@ -23,7 +30,7 @@ test.describe('타임캡슐 생성 페이지', () => {
     await page.goto('/timecapsule/create');
     await page.evaluate((token) => {
       localStorage.setItem('timeEgg_accessToken', token);
-    }, DEV_TOKEN);
+    }, TEST_TOKEN);
   });
 
   test('페이지 로드 및 기본 UI 확인', async ({ page }) => {

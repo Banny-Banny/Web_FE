@@ -15,12 +15,14 @@ import {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`
   : 'http://localhost:3000/api';
-const DEV_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
+// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
+const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
 
 test.describe('결제 승인 및 콜백 처리', () => {
   test.beforeEach(() => {
     // 각 테스트 전에 인증 토큰 확인
-    if (!DEV_TOKEN) {
+    if (!TEST_TOKEN) {
+      console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
       test.skip();
     }
   });
@@ -49,7 +51,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -84,7 +86,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/capsules/step-rooms/create`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -198,7 +200,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -227,7 +229,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -253,7 +255,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -279,7 +281,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/capsules/step-rooms/create`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -317,7 +319,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -333,7 +335,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/payments/toss/confirm`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
             'Content-Type': 'application/json',
           },
           data: {
@@ -362,7 +364,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
         `${API_BASE_URL}/orders/${mockPaymentSuccessParams.orderId}/status`,
         {
           headers: {
-            Authorization: `Bearer ${DEV_TOKEN}`,
+            Authorization: `Bearer ${TEST_TOKEN}`,
           },
         }
       );
@@ -376,7 +378,7 @@ test.describe('결제 승인 및 콜백 처리', () => {
             `${API_BASE_URL}/payments/toss/confirm`,
             {
               headers: {
-                Authorization: `Bearer ${DEV_TOKEN}`,
+                Authorization: `Bearer ${TEST_TOKEN}`,
                 'Content-Type': 'application/json',
               },
               data: {

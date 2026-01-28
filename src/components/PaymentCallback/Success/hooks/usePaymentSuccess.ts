@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useConfirmPayment } from '@/commons/apis/payment/hooks/useConfirmPayment';
 import { useCreateWaitingRoom } from '@/commons/apis/capsules/hooks/useCreateWaitingRoom';
 import { useOrderStatus } from '@/commons/apis/orders/hooks/useOrderStatus';
+import { getOrder } from '@/commons/apis/orders';
 import { extractPaymentInfoFromUrl, convertErrorCodeToMessage } from '@/commons/utils/payment';
 import type { PaymentSuccessState } from '../types';
 import type { ApiError } from '@/commons/provider/api-provider/api-client';
@@ -46,16 +47,17 @@ export function usePaymentSuccess() {
   const [state, setState] = useState<PaymentSuccessState>({
     status: 'idle',
   });
-  
+
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRY_COUNT = 3;
   const hasProcessedRef = useRef(false);
   
+  // URL에서 orderId를 가져와서 고유 키 생성
+  const paymentInfo = extractPaymentInfoFromUrl(searchParams);
+  const processingKey = paymentInfo?.orderId ? `payment_processing_${paymentInfo.orderId}` : null;
+  
   const confirmPaymentMutation = useConfirmPayment();
   const createWaitingRoomMutation = useCreateWaitingRoom();
-  
-  // URL 파라미터에서 결제 정보 추출
-  const paymentInfo = extractPaymentInfoFromUrl(searchParams);
   
   // 주문 상태 조회 (중복 처리 방지)
   const { data: orderStatus } = useOrderStatus(
@@ -74,9 +76,9 @@ export function usePaymentSuccess() {
       });
       return;
     }
-    
+
     const { paymentKey, orderId, amount } = paymentInfo;
-    
+
     // 필수 파라미터 확인
     if (!paymentKey || !orderId || !amount) {
       setState({
@@ -85,12 +87,52 @@ export function usePaymentSuccess() {
       });
       return;
     }
-    
+
+    // sessionStorage로 중복 처리 방지 (Strict Mode 대응)
+    if (processingKey && typeof window !== 'undefined') {
+      const isProcessing = sessionStorage.getItem(processingKey);
+      if (isProcessing === 'true') {
+        console.log('[usePaymentSuccess] 이미 처리 중인 결제 (sessionStorage)');
+        return;
+      }
+      sessionStorage.setItem(processingKey, 'true');
+    }
+
+    console.log('[usePaymentSuccess] 결제 승인 시작:', { paymentKey, orderId, amount });
+
     // 이미 결제 완료된 주문인지 확인 (중복 처리 방지)
     if (orderStatus?.order_status === 'PAID') {
-      // 이미 결제 완료된 경우, capsule_id로 대기실 페이지로 이동
-      const capsuleId = orderStatus.payment_key || orderId;
-      router.push(`/waiting-room/${capsuleId}`);
+      console.log('[usePaymentSuccess] 이미 결제 완료된 주문:', orderStatus);
+      // 이미 결제 완료된 경우, 주문 상세 조회로 capsule_id 확인
+      try {
+        const orderDetail = await getOrder(orderId);
+        if (orderDetail.order.capsule_id) {
+          console.log('[usePaymentSuccess] 대기실로 이동:', orderDetail.order.capsule_id);
+          
+          // sessionStorage 정리
+          if (processingKey && typeof window !== 'undefined') {
+            sessionStorage.removeItem(processingKey);
+          }
+          
+          router.push(`/waiting-room/${orderDetail.order.capsule_id}`);
+        } else {
+          console.log('[usePaymentSuccess] capsule_id 없음, 대기실 생성 필요');
+          // capsule_id가 없으면 대기실 생성
+          const waitingRoomResult = await createWaitingRoomMutation.mutateAsync({
+            order_id: orderId,
+          });
+          if (waitingRoomResult.room_id) {
+            // sessionStorage 정리
+            if (processingKey && typeof window !== 'undefined') {
+              sessionStorage.removeItem(processingKey);
+            }
+            
+            router.push(`/waiting-room/${waitingRoomResult.room_id}`);
+          }
+        }
+      } catch (error) {
+        console.error('[usePaymentSuccess] 주문 조회/대기실 생성 실패:', error);
+      }
       return;
     }
     
@@ -118,6 +160,11 @@ export function usePaymentSuccess() {
       // 백엔드 구현에 따라 대기실 생성이 별도로 필요한지 확인 필요
       // 현재는 capsule_id를 사용하여 바로 이동
       if (confirmResult.capsule_id) {
+        // sessionStorage 정리
+        if (processingKey && typeof window !== 'undefined') {
+          sessionStorage.removeItem(processingKey);
+        }
+        
         router.push(`/waiting-room/${confirmResult.capsule_id}`);
         setState({
           status: 'success',
@@ -136,7 +183,117 @@ export function usePaymentSuccess() {
       }
     } catch (error) {
       const apiError = error as ApiError;
-      
+      const errorMessage = apiError.message || '';
+      const errorCode = apiError.code || '';
+
+      // 에러 메시지를 문자열로 변환 (혹시 객체인 경우를 대비)
+      const errorString = typeof errorMessage === 'string' 
+        ? errorMessage 
+        : JSON.stringify(errorMessage);
+
+      // 토스 "기존 요청을 처리중입니다" 에러 - 결제는 이미 처리됨
+      // 주문 상태를 폴링하면서 capsule_id가 생성될 때까지 대기
+      const isProcessingError = 
+        errorString.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING') ||
+        errorString.includes('기존 요청을 처리중입니다') ||
+        errorString.includes('ALREADY_PROCESSED') ||
+        errorString.includes('S008');
+
+      if (isProcessingError) {
+        // S008은 정상 처리 흐름이므로 일반 로그로 출력
+        console.log('⏳ [usePaymentSuccess] 토스 결제 처리 중 (S008) - 주문 상태 폴링 시작...');
+
+        setState({ status: 'confirming', orderId });
+
+        // 주문 상태 폴링 (최대 30초, 2초 간격)
+        const pollOrderStatus = async (maxAttempts = 15, interval = 2000) => {
+          for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+            console.log(`[usePaymentSuccess] 주문 상태 확인 시도 ${attempt}/${maxAttempts}...`);
+
+            try {
+              const orderDetail = await getOrder(orderId);
+              console.log('[usePaymentSuccess] 주문 상세:', orderDetail);
+
+              // capsule_id가 생성되었으면 대기실로 이동
+              if (orderDetail.order.capsule_id) {
+                console.log('[usePaymentSuccess] capsule_id 발견, 대기실로 이동:', orderDetail.order.capsule_id);
+                
+                // sessionStorage 정리
+                if (processingKey && typeof window !== 'undefined') {
+                  sessionStorage.removeItem(processingKey);
+                }
+                
+                router.push(`/waiting-room/${orderDetail.order.capsule_id}`);
+                setState({
+                  status: 'success',
+                  orderId,
+                  waitingRoomId: orderDetail.order.capsule_id,
+                });
+                return true;
+              }
+
+              // 주문 상태가 PAID인데 capsule_id가 없으면 대기실 생성 시도
+              if (orderDetail.order.status === 'PAID' && !orderDetail.order.capsule_id) {
+                console.log('[usePaymentSuccess] 결제 완료, capsule_id 없음. 대기실 생성 시도...');
+                try {
+                  const waitingRoomResult = await createWaitingRoomMutation.mutateAsync({
+                    order_id: orderId,
+                  });
+                  console.log('[usePaymentSuccess] 대기실 생성 결과:', waitingRoomResult);
+
+                  if (waitingRoomResult.room_id) {
+                    console.log('[usePaymentSuccess] 대기실 생성 성공, 대기실로 이동:', waitingRoomResult.room_id);
+                    
+                    // sessionStorage 정리
+                    if (processingKey && typeof window !== 'undefined') {
+                      sessionStorage.removeItem(processingKey);
+                    }
+                    
+                    router.push(`/waiting-room/${waitingRoomResult.room_id}`);
+                    setState({
+                      status: 'success',
+                      orderId,
+                      waitingRoomId: waitingRoomResult.room_id,
+                    });
+                    return true;
+                  }
+                } catch (createError) {
+                  console.error('[usePaymentSuccess] 대기실 생성 실패:', createError);
+                  // 대기실 생성 실패 시 다음 폴링 시도
+                }
+              }
+
+              // 아직 처리 중이면 대기
+              if (attempt < maxAttempts) {
+                console.log(`[usePaymentSuccess] ${interval}ms 후 재시도...`);
+                await new Promise((resolve) => setTimeout(resolve, interval));
+              }
+            } catch (error) {
+              console.error(`[usePaymentSuccess] 주문 조회 실패 (${attempt}/${maxAttempts}):`, error);
+              if (attempt < maxAttempts) {
+                await new Promise((resolve) => setTimeout(resolve, interval));
+              }
+            }
+          }
+
+          // 최대 시도 횟수 초과
+          console.error('[usePaymentSuccess] 주문 상태 폴링 타임아웃');
+          return false;
+        };
+
+        const success = await pollOrderStatus();
+
+        if (!success) {
+          setState({
+            status: 'failed',
+            orderId,
+            error: '결제 처리가 지연되고 있습니다. 잠시 후 다시 시도해주세요.',
+          });
+        }
+
+        return;
+      }
+
       // 네트워크 오류인 경우 자동 재시도 (US3)
       if (isNetworkError(error) && retryCount < MAX_RETRY_COUNT) {
         setRetryCount((prev) => prev + 1);
@@ -146,20 +303,20 @@ export function usePaymentSuccess() {
         }, 2000);
         return;
       }
-      
+
       // 에러 코드를 사용자 친화적인 메시지로 변환
-      const errorMessage = convertErrorCodeToMessage(
+      const userErrorMessage = convertErrorCodeToMessage(
         apiError.code || apiError.message,
         apiError.message
       );
-      
+
       setState({
         status: 'failed',
         orderId,
-        error: errorMessage,
+        error: userErrorMessage,
       });
     }
-  }, [paymentInfo, orderStatus, confirmPaymentMutation, router, retryCount]);
+  }, [paymentInfo, orderStatus, confirmPaymentMutation, createWaitingRoomMutation, router, retryCount, processingKey]);
   
   /**
    * 재시도 핸들러
@@ -192,12 +349,15 @@ export function usePaymentSuccess() {
   
   // 초기 결제 승인 처리 (한 번만 실행)
   useEffect(() => {
-    if (paymentInfo && state.status === 'idle' && !hasProcessedRef.current) {
+    // 상태가 idle이고, paymentInfo가 있을 때만 실행
+    // state.status를 체크하여 중복 실행 방지
+    if (state.status === 'idle' && paymentInfo && !hasProcessedRef.current) {
+      console.log('[usePaymentSuccess] useEffect 트리거: 결제 승인 처리 시작');
       hasProcessedRef.current = true;
       handleConfirmPayment();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentInfo?.paymentKey, paymentInfo?.orderId, paymentInfo?.amount]);
+  }, []);
   
   return {
     state,

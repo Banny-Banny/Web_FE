@@ -60,6 +60,7 @@ export interface PaymentState {
 export function transformOrderDetailToSummary(order: OrderDetail): OrderSummaryData {
   return {
     orderId: order.order_id,
+    capsuleName: order.capsule_name || undefined,
     headcount: order.headcount,
     timeOption: order.time_option,
     customOpenAt: order.custom_open_at,
