@@ -1,0 +1,361 @@
+/**
+ * 마이페이지 컴포넌트 스타일
+ * 375px 모바일 프레임 기준
+ * Figma 디자인 기반
+ * CSS 변수 기반 디자인 토큰 사용
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-white-50);
+  box-sizing: border-box;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.headerTitle {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.notificationButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.notificationIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-red-500);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-white-50);
+  box-sizing: border-box;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white-50);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.closeIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 프로필 섹션 */
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.profileImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.profileImageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+}
+
+.profileImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-100);
+  border: 1px solid var(--color-grey-300);
+  box-sizing: border-box;
+}
+
+.profileEmoji {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.cameraButtonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -28px;
+  margin-right: -4px;
+}
+
+.cameraButton {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-black-500);
+  border: 2px solid var(--color-white-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.cameraIcon {
+  color: var(--color-white-50);
+  flex-shrink: 0;
+}
+
+.cameraButton:hover {
+  background-color: var(--color-black-600);
+}
+
+.cameraButton:active {
+  background-color: var(--color-black-700);
+}
+
+.profileName {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+  margin: 0 0 var(--spacing-xs) 0;
+  text-align: center;
+}
+
+.profileEmail {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-grey-700);
+  margin: 0;
+  text-align: center;
+}
+
+/* 활동 요약 카드 */
+.activityCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: calc(100% - 32px);
+  margin: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-white-grey-50);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.activityItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.activityItem:hover {
+  opacity: 0.8;
+}
+
+.activityItem:active {
+  opacity: 0.6;
+}
+
+.activityNumber {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+}
+
+.activityLabel {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-grey-700);
+}
+
+.activityDivider {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-grey-300);
+}
+
+/* 내비게이션 카드 */
+.navigationCard {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 32px);
+  margin: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+  background-color: var(--color-white-grey-50);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.navItem:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.navItem:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.navItemText {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+}
+
+.navItemIcon {
+  color: var(--color-grey-500);
+  flex-shrink: 0;
+}
+
+.navDivider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-grey-300);
+  margin: 0 var(--spacing-xl);
+}
+
+/* 로그아웃 버튼 */
+.logoutSection {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 32px);
+  margin: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.logoutButton {
+  width: 100%;
+}
+
+/* 로그아웃 버튼 커스텀 스타일 (회색 배경) */
+.logoutButton :global(.button) {
+  background-color: var(--color-grey-500) !important;
+  color: var(--color-white-50) !important;
+}
+
+.logoutButton :global(.button:hover:not(:disabled)) {
+  background-color: var(--color-grey-600) !important;
+}
+
+.logoutButton :global(.button:active:not(:disabled)) {
+  background-color: var(--color-grey-700) !important;
+}
+
+/* 버전 정보 */
+.versionInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-xl) 0;
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-grey-500);
+  text-align: center;
+  box-sizing: border-box;
+}

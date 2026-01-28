@@ -109,3 +109,55 @@ export function clearTokens(): void {
     console.error('토큰 제거 실패:', error);
   }
 }
+
+/**
+ * JWT 토큰의 만료 시간 확인
+ * 
+ * @param token JWT 토큰
+ * @returns 만료 시간 (밀리초) 또는 null (파싱 실패 시)
+ */
+export function getTokenExpiration(token: string): number | null {
+  try {
+    // JWT는 header.payload.signature 형식
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
+
+    // payload 디코딩
+    const payload = parts[1];
+    const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+    
+    // exp 필드 확인 (초 단위이므로 밀리초로 변환)
+    if (decoded.exp) {
+      return decoded.exp * 1000;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('토큰 파싱 실패:', error);
+    return null;
+  }
+}
+
+/**
+ * 토큰이 만료되었는지 확인
+ * 
+ * @param token JWT 토큰
+ * @param bufferSeconds 만료 전 버퍼 시간 (초) - 기본값 60초
+ * @returns 만료되었거나 만료 예정이면 true
+ */
+export function isTokenExpired(token: string, bufferSeconds: number = 60): boolean {
+  const expiration = getTokenExpiration(token);
+  
+  if (!expiration) {
+    // 파싱 실패 시 만료된 것으로 간주
+    return true;
+  }
+  
+  // 현재 시간 + 버퍼 시간과 비교
+  const now = Date.now();
+  const buffer = bufferSeconds * 1000;
+  
+  return expiration <= (now + buffer);
+}

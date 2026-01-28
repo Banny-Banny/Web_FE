@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
-import { getAccessToken, clearTokens } from '@/commons/utils/auth';
+import { getAccessToken, clearTokens, isTokenExpired } from '@/commons/utils/auth';
 import { localLogin } from '@/commons/apis/auth/login';
 import { verifyAuth } from '@/commons/apis/auth/verify';
 
@@ -29,41 +29,77 @@ export function useAuth(): AuthContextType {
         const token = getAccessToken();
         
         if (!token) {
+          console.log('🔐 [useAuth] 토큰이 없습니다.');
           setUser(null);
           setIsLoading(false);
           return;
         }
 
+        console.log('🔐 [useAuth] 토큰 발견, 검증 시작...');
+
         // 캐시에서 사용자 정보 확인
         const cachedUser = queryClient.getQueryData<User>(['auth', 'user']);
         
         if (cachedUser) {
+          // 캐시된 사용자 정보가 있으면 그대로 사용
+          // 토큰 만료 여부는 API 검증 시 확인
+          console.log('🔐 [useAuth] 캐시된 사용자 정보 사용');
           setUser(cachedUser);
-        } else {
-          // 토큰은 있지만 사용자 정보가 없는 경우
-          // 토큰 검증 API 호출하여 사용자 정보 가져오기
-          try {
-            const verifyResult = await verifyAuth();
-            
-            if (verifyResult.valid && verifyResult.user) {
-              setUser(verifyResult.user);
-              queryClient.setQueryData(['auth', 'user'], verifyResult.user);
-            } else {
-              // 토큰이 유효하지 않은 경우
-              clearTokens();
-              setUser(null);
-            }
-          } catch (err: any) {
-            // 토큰 검증 실패 시 토큰 제거
-            console.error('토큰 검증 실패:', err);
+          setIsLoading(false);
+          return;
+        }
+
+        // 토큰 검증 API 호출하여 사용자 정보 가져오기
+        // 토큰 파싱 실패나 만료 여부는 서버 검증을 통해 확인
+        try {
+          console.log('🔐 [useAuth] API 검증 시작...');
+          const verifyResult = await verifyAuth();
+          console.log('🔐 [useAuth] API 검증 응답:', { valid: verifyResult.valid, hasUser: !!verifyResult.user });
+          
+          if (verifyResult.valid && verifyResult.user) {
+            console.log('✅ [useAuth] 토큰 유효, 사용자 정보 저장');
+            setUser(verifyResult.user);
+            queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+          } else if (verifyResult.valid === false) {
+            // 서버가 명시적으로 토큰이 유효하지 않다고 응답한 경우에만 토큰 제거
+            console.warn('❌ [useAuth] 서버가 토큰을 유효하지 않다고 응답. 토큰 제거.');
             clearTokens();
+            setUser(null);
+          } else {
+            // valid가 undefined이거나 user가 없는 경우
+            // 토큰은 유지하고 사용자 정보만 null로 설정
+            console.warn('⚠️ [useAuth] 검증 응답에 사용자 정보가 없습니다. 토큰은 유지합니다.');
+            setUser(null);
+          }
+        } catch (err: any) {
+          // 토큰 검증 실패 시
+          const errorStatus = err.status || err.statusCode;
+          console.error('❌ [useAuth] 토큰 검증 실패:', {
+            status: errorStatus,
+            message: err.message,
+            error: err,
+          });
+          
+          // 401 에러인 경우에만 토큰이 만료된 것으로 간주하고 제거
+          // 네트워크 오류, 서버 오류(500 등)는 토큰 유지
+          if (errorStatus === 401) {
+            console.warn('❌ [useAuth] 401 에러: 토큰 만료로 간주하고 제거');
+            clearTokens();
+            setUser(null);
+          } else {
+            // 네트워크 오류, 서버 오류 등 다른 에러는 로그만 남기고 토큰 유지
+            console.warn('⚠️ [useAuth] 네트워크/서버 오류. 토큰은 유지합니다.');
+            // 토큰은 유효하므로 사용자 정보만 null로 설정 (토큰은 유지)
             setUser(null);
           }
         }
       } catch (err: any) {
+        console.error('❌ [useAuth] 예상치 못한 오류:', err);
         setError(err.message || '인증 상태 확인 중 오류가 발생했습니다.');
+        // 예상치 못한 오류는 토큰을 유지
         setUser(null);
       } finally {
+        console.log('🔐 [useAuth] 인증 확인 완료');
         setIsLoading(false);
       }
     };
@@ -161,7 +197,12 @@ export function useAuth(): AuthContextType {
   }, []);
 
   // 토큰 기반 인증 상태 확인
-  const isAuthenticated = !!getAccessToken() && !!user;
+  // 토큰이 있으면 인증된 것으로 간주 (실제 유효성은 API 검증을 통해 확인)
+  // 토큰 파싱 실패나 만료 여부는 서버 검증을 통해 확인하므로,
+  // 클라이언트에서는 토큰 존재 여부만 확인
+  // 네트워크 오류 등으로 사용자 정보를 가져오지 못해도 토큰이 있으면 인증된 것으로 간주
+  const token = getAccessToken();
+  const isAuthenticated = !!token;
 
   return {
     user,
