@@ -133,9 +133,16 @@ const nextConfig: NextConfig = {
     return [
       // API 프록시 설정 (개발 환경)
       ...(process.env.NODE_ENV === 'development' ? [
+        // 프론트엔드에서 `/api/*`로 요청하면 백엔드 서버의 `/api/*`로 프록시합니다.
+        // - NEXT_PUBLIC_API_BASE_URL에는 **도메인만** 넣고 `/api`는 포함하지 않습니다.
+        //   예) http://localhost:8080, https://api.timeegg.com
+        // - 실제 호출 URL 예시:
+        //   /api/auth/kakao  ->  https://api.timeegg.com/api/auth/kakao
         {
           source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api'}/:path*`,
+          destination: `${
+            process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8081'
+          }/api/:path*`,
         },
       ] : []),
     ];

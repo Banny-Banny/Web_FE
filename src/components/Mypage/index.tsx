@@ -11,8 +11,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { RiCameraLine, RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/react';
+import { RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/react';
 import { Button } from '@/commons/components/button';
+import { ProfileSection } from './components/profile-section';
 import styles from './styles.module.css';
 import type { MypageProps } from './types';
 
@@ -49,22 +50,7 @@ export function Mypage({ className = '' }: MypageProps) {
       </div>
 
       {/* 프로필 섹션 */}
-      <div className={styles.profileSection}>
-        <div className={styles.profileImageContainer}>
-          <div className={styles.profileImageWrapper}>
-            <div className={styles.profileImage}>
-              <span className={styles.profileEmoji}>🐰</span>
-            </div>
-          </div>
-          <div className={styles.cameraButtonWrapper}>
-            <button className={styles.cameraButton} aria-label="프로필 사진 변경">
-              <RiCameraLine size={14} className={styles.cameraIcon} />
-            </button>
-          </div>
-        </div>
-        <h2 className={styles.profileName}>토끼유저</h2>
-        <p className={styles.profileEmail}>rabbit@example.com</p>
-      </div>
+      <ProfileSection />
 
       {/* 활동 요약 카드 */}
       <div className={styles.activityCard}>

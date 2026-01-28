@@ -60,3 +60,19 @@ export interface VerifyResponse {
   user?: User;            // 사용자 정보 (토큰이 유효한 경우) - 선택적
   expiresAt?: string;    // 토큰 만료 시간 (선택)
 }
+
+/**
+ * 내 프로필 조회 응답 타입
+ */
+export interface MeResponse {
+  id: string;                    // 사용자 ID
+  nickname: string;              // 닉네임
+  name: string;                 // 이름
+  email: string;                // 이메일
+  phoneNumber: string;          // 전화번호
+  profileImg: string | null;    // 프로필 이미지 URL
+  isPushAgreed: boolean;        // 푸시 알림 동의 여부
+  isMarketingAgreed: boolean;  // 마케팅 동의 여부
+  eggSlots: number;             // 이스터에그 슬롯 수
+  createdAt: string;            // 생성일시
+}

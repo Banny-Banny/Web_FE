@@ -2,6 +2,7 @@
  * 온보딩 완료 API 함수
  */
 
+import type { AxiosError } from 'axios';
 import { apiClient } from '@/commons/provider/api-provider/api-client';
 import { ONBOARDING_ENDPOINTS } from '@/commons/apis/endpoints';
 import type { OnboardingCompleteRequest, OnboardingCompleteResponse } from './types';
@@ -31,13 +32,14 @@ export async function completeOnboarding(
     );
 
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     // Axios 에러를 ApiError 형식으로 변환
+    const axiosError = error as AxiosError<{ message?: string; code?: string }>;
     const apiError = {
-      message: error.response?.data?.message || error.message || '온보딩 완료 중 오류가 발생했습니다.',
-      status: error.response?.status || 500,
-      code: error.response?.data?.code || error.code,
-      details: error.response?.data,
+      message: axiosError.response?.data?.message || axiosError.message || '온보딩 완료 중 오류가 발생했습니다.',
+      status: axiosError.response?.status || 500,
+      code: axiosError.response?.data?.code || axiosError.code,
+      details: axiosError.response?.data,
     };
 
     throw apiError;

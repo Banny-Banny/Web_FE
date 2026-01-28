@@ -9,7 +9,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FriendList } from '@/components/Mypage/activity-stats/friend';
+import { Mypage } from '@/components/Mypage';
+import { FriendList } from '@/components/Mypage/components/activity-stats/friend';
 
 export default function FriendsPage() {
   const router = useRouter();
@@ -18,5 +19,10 @@ export default function FriendsPage() {
     router.push('/profile');
   };
 
-  return <FriendList onClose={handleClose} />;
+  return (
+    <>
+      <Mypage />
+      <FriendList onClose={handleClose} />
+    </>
+  );
 }
