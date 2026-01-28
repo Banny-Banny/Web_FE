@@ -1,0 +1,282 @@
+/**
+ * 친구 목록 컴포넌트 스타일
+ * 375px 모바일 프레임 기준
+ * Figma 디자인 기반
+ * CSS 변수 기반 디자인 토큰 사용
+ */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+/* 모달 오버레이 */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: color-mix(in srgb, var(--color-black-500) 50%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+/* 모달 컨테이너 */
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 32px);
+  max-width: 343px;
+  max-height: calc(100vh - 64px);
+  background-color: var(--color-white-50);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--color-black-500) 10%, transparent);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 모달 헤더 */
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.refreshButton,
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.refreshButton:hover,
+.closeButton:hover {
+  background-color: var(--color-white-grey-100);
+}
+
+.refreshButton:active,
+.closeButton:active {
+  background-color: var(--color-white-grey-200);
+}
+
+.refreshIcon,
+.closeIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+/* 정보 섹션 */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
+  box-sizing: border-box;
+}
+
+.friendCount {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-grey-700);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-yellow-50);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.infoIcon {
+  color: var(--color-yellow-700);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.infoText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.infoText p {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-yellow-900);
+  margin: 0;
+}
+
+/* 친구 목록 */
+.friendList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: 0 var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
+  max-height: 400px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.friendItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-white-grey-50);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.friendAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-100);
+  border: 1px solid var(--color-grey-300);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.friendEmoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.friendName {
+  flex: 1;
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+}
+
+.blockButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-white-grey-100);
+  border: 1px solid var(--color-grey-300);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.blockButton:hover {
+  background-color: var(--color-white-grey-200);
+  border-color: var(--color-grey-400);
+}
+
+.blockButton:active {
+  background-color: var(--color-white-grey-300);
+}
+
+.blockIcon {
+  color: var(--color-black-500);
+  flex-shrink: 0;
+}
+
+.blockText {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-black-500);
+}
+
+/* 버전 정보 */
+.versionInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: var(--font-weight-regular, 400);
+  letter-spacing: 0;
+  color: var(--color-grey-500);
+  text-align: center;
+  box-sizing: border-box;
+  border-top: 1px solid var(--color-grey-300);
+}
+
+/* 스크롤바 스타일링 */
+.friendList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.friendList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.friendList::-webkit-scrollbar-thumb {
+  background-color: var(--color-grey-300);
+  border-radius: var(--radius-full);
+}
+
+.friendList::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-grey-400);
+}
