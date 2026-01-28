@@ -157,14 +157,38 @@ export function usePaymentSuccess() {
     } catch (error) {
       const apiError = error as ApiError;
       const errorMessage = apiError.message || '';
+      const errorCode = apiError.code || '';
+
+      // 디버깅: 에러 전체 출력
+      console.error('[usePaymentSuccess] 결제 승인 실패:', {
+        message: errorMessage,
+        messageType: typeof errorMessage,
+        code: errorCode,
+        status: apiError.status,
+        details: apiError.details,
+        fullError: apiError,
+      });
+
+      // 에러 메시지를 문자열로 변환 (혹시 객체인 경우를 대비)
+      const errorString = typeof errorMessage === 'string' 
+        ? errorMessage 
+        : JSON.stringify(errorMessage);
+
+      console.log('[usePaymentSuccess] 에러 문자열:', errorString);
+      console.log('[usePaymentSuccess] S008 포함 여부:', errorString.includes('S008'));
 
       // 토스 "기존 요청을 처리중입니다" 에러 - 결제는 이미 처리됨
       // 주문 상태를 폴링하면서 capsule_id가 생성될 때까지 대기
-      if (errorMessage.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING') ||
-          errorMessage.includes('기존 요청을 처리중입니다') ||
-          errorMessage.includes('ALREADY_PROCESSED') ||
-          errorMessage.includes('S008')) {
-        console.log('[usePaymentSuccess] 결제 처리 중, 주문 상태 폴링 시작...');
+      const isProcessingError = 
+        errorString.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING') ||
+        errorString.includes('기존 요청을 처리중입니다') ||
+        errorString.includes('ALREADY_PROCESSED') ||
+        errorString.includes('S008');
+
+      console.log('[usePaymentSuccess] 처리 중 에러 감지:', isProcessingError);
+
+      if (isProcessingError) {
+        console.log('[usePaymentSuccess] ✅ 결제 처리 중 (S008) 감지! 주문 상태 폴링 시작...');
 
         setState({ status: 'confirming', orderId });
 
