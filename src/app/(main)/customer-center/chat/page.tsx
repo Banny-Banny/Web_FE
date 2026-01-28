@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { ChatRoom } from '@/components/customer-center/components/ChatRoom';
+import { ChatRoom } from '@/components/customer-center/components/chat-room';
 import styles from './page.module.css';
 
 export default function CustomerCenterChatPage() {

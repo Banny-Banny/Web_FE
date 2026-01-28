@@ -16,9 +16,9 @@ import {
   formatFileSize,
   handleFileDownload,
   formatMessageTime,
-} from '../utils/message-utils';
-import type { ChatMessageWithStatus } from '../types';
-import styles from './MessageBubble.module.css';
+} from '../../utils/message-utils';
+import type { ChatMessageWithStatus } from '../../types';
+import styles from './styles.module.css';
 
 interface MessageBubbleProps {
   message: ChatMessageWithStatus;

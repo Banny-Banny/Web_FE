@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageHeader } from '@/commons/components/page-header';
 import { Toast } from '@/commons/components/toast';
-import { InquiryList } from './components/InquiryList';
+import { InquiryList } from './components/inquiry-list';
 import { useInquiries } from './hooks/useInquiries';
 import type { Inquiry } from './types';
 import styles from './styles.module.css';

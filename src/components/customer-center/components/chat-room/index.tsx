@@ -15,13 +15,13 @@ import {
   RiLoader4Line,
 } from '@remixicon/react';
 import { Toast } from '@/commons/components/toast';
-import { ChatMessageList } from './ChatMessageList';
-import { ChatInput } from './ChatInput';
-import { useSocket } from '../hooks/useSocket';
-import { useChatMessages } from '../hooks/useChatMessages';
-import { useChatHistory } from '../hooks/useChatHistory';
-import type { ConnectionStatus } from '../types';
-import styles from './ChatRoom.module.css';
+import { ChatMessageList } from '../chat-message';
+import { ChatInput } from '../chat-input';
+import { useSocket } from '../../hooks/useSocket';
+import { useChatMessages } from '../../hooks/useChatMessages';
+import { useChatHistory } from '../../hooks/useChatHistory';
+import type { ConnectionStatus } from '../../types';
+import styles from './styles.module.css';
 
 interface ChatRoomProps {
   inquiryTitle?: string;

@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { RiSendPlaneFill, RiLoader4Line } from '@remixicon/react';
-import styles from './ChatInput.module.css';
+import styles from './styles.module.css';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;

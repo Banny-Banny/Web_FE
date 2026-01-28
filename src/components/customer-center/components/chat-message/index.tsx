@@ -5,9 +5,9 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { MessageBubble } from './MessageBubble';
-import type { ChatMessageWithStatus } from '../types';
-import styles from './ChatMessageList.module.css';
+import { MessageBubble } from '../message-bubble';
+import type { ChatMessageWithStatus } from '../../types';
+import styles from './styles.module.css';
 
 interface ChatMessageListProps {
   messages: ChatMessageWithStatus[];

@@ -7,8 +7,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/commons/components/button';
-import type { Inquiry } from '../types';
-import styles from './InquiryList.module.css';
+import type { Inquiry } from '../../types';
+import styles from './styles.module.css';
 
 interface InquiryListProps {
   inquiries?: Inquiry[];
