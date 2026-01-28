@@ -16,7 +16,7 @@
 
 import React, { useRef } from 'react';
 import type { VideoUploadProps } from '../../types';
-import { validateFileType, validateFileSize, isVideoFile } from '@/commons/utils/content';
+import { validateFileSize, isVideoFile } from '@/commons/utils/content';
 import styles from './styles.module.css';
 
 /**
@@ -29,7 +29,7 @@ import styles from './styles.module.css';
 export function VideoUpload({
   video,
   onChange,
-  onRemove,
+  onRemove: _onRemove,
 }: VideoUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

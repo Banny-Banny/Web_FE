@@ -24,7 +24,6 @@ import { ParticipantList } from './components/ParticipantList';
 import { ContentWriteBottomSheet } from './components/ContentWriteBottomSheet';
 import { useWaitingRoom } from './hooks/useWaitingRoom';
 import styles from './styles.module.css';
-import type { WaitingRoomPageProps } from './types';
 
 /**
  * WaitingRoom 컴포넌트

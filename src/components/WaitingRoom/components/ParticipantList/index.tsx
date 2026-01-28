@@ -17,6 +17,7 @@
  */
 
 import React from 'react';
+import Image from 'next/image';
 import {
   RiUserLine,
   RiShareLine,
@@ -73,8 +74,6 @@ export function ParticipantList({
     // 내 컨텐츠는 my-content로 계산된 값을 우선 사용 (서버 hasContent가 늦게 반영될 수 있음)
     const isCompleted = isMe ? Boolean(isMyContentSaved) || hasContent : hasContent;
     const isRejected = participant.status === 'REJECTED';
-    // 본인 카드는 항상 클릭 가능 (작성 완료 후에도 조회 가능)
-    const isEditable = isMe && onWriteMyContent && !isRejected;
 
     const statusText = (() => {
       if (isRejected) return '참여 불가';
@@ -121,9 +120,11 @@ export function ParticipantList({
           <div className={styles.participantInfo}>
             <div className={avatarClassName}>
               {participant.userAvatarUrl ? (
-                <img
+                <Image
                   src={participant.userAvatarUrl}
                   alt={participant.userName || '나'}
+                  width={40}
+                  height={40}
                   className={styles.avatarImage}
                 />
               ) : (
@@ -157,9 +158,11 @@ export function ParticipantList({
         <div className={styles.participantInfo}>
           <div className={avatarClassName}>
             {participant.userAvatarUrl ? (
-              <img
+              <Image
                 src={participant.userAvatarUrl}
                 alt={participant.userName || '참여자'}
+                width={40}
+                height={40}
                 className={styles.avatarImage}
               />
             ) : (

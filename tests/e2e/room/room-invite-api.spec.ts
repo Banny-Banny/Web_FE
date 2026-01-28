@@ -10,10 +10,8 @@ import {
   joinRoom,
 } from '../../../src/commons/apis/capsules/step-rooms';
 import type {
-  CreateRoomRequest,
   CreateRoomResponse,
   InviteCodeQueryResponse,
-  JoinRoomRequest,
   JoinRoomResponse,
 } from '../../../src/commons/apis/capsules/step-rooms/types';
 

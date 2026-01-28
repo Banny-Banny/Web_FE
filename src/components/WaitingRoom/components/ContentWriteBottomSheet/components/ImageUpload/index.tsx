@@ -16,7 +16,7 @@
 
 import React, { useRef } from 'react';
 import type { ImageUploadProps } from '../../types';
-import { validateFileType, validateFileSize, isImageFile } from '@/commons/utils/content';
+import { validateFileSize, isImageFile } from '@/commons/utils/content';
 import styles from './styles.module.css';
 
 /**
@@ -32,7 +32,7 @@ export function ImageUpload({
   existingImageUrls = [],
   maxCount,
   onChange,
-  onRemove,
+  onRemove: _onRemove,
   onRemoveExisting,
 }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +81,7 @@ export function ImageUpload({
   };
 
   const handleRemove = (index: number) => {
-    onRemove(index);
+    _onRemove(index);
   };
 
   const handleRemoveExisting = (index: number) => {

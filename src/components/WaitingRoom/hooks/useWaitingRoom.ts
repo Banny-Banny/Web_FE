@@ -34,7 +34,6 @@ export function useWaitingRoom(capsuleId: string | null | undefined) {
   const {
     data: settings,
     isLoading: isLoadingSettings,
-    error: settingsError,
   } = useWaitingRoomSettingsApi(capsuleId);
 
   const isLoading = isLoadingWaitingRoom || isLoadingSettings;

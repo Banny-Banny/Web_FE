@@ -37,7 +37,7 @@ export default function RoomJoinPage() {
   const joinAttemptedRef = useRef(false);
 
   // 초대 코드로 방 정보 조회
-  const { data: roomData, isError: isRoomQueryError, error: roomQueryError } = useInviteCodeQuery(inviteCode);
+  const { data: roomData, isError: isRoomQueryError } = useInviteCodeQuery(inviteCode);
 
   // 방 참여 mutation
   const joinRoomMutation = useJoinRoom();
@@ -54,9 +54,12 @@ export default function RoomJoinPage() {
     // 케이스 1: 내 캡슐에서 입장 (capsuleId 직접 전달)
     if (directCapsuleId) {
       console.log('✅ [RoomJoin] 케이스 1: 내 캡슐에서 입장');
-      setCapsuleId(directCapsuleId);
-      setRole('host');
-      setIsLoading(false);
+      // 상태 업데이트를 다음 렌더 사이클로 지연
+      setTimeout(() => {
+        setCapsuleId(directCapsuleId);
+        setRole('host');
+        setIsLoading(false);
+      }, 0);
       return;
     }
 
@@ -76,8 +79,11 @@ export default function RoomJoinPage() {
     // 케이스 2: 딥링크 초대 (invite_code로 조회)
     if (code) {
       console.log('✅ [RoomJoin] 케이스 2: 초대 코드로 입장:', code);
-      setInviteCode(code);
-      setRole('guest');
+      // 상태 업데이트를 다음 렌더 사이클로 지연
+      setTimeout(() => {
+        setInviteCode(code);
+        setRole('guest');
+      }, 0);
 
       // 인증 로딩이 끝날 때까지 대기
       if (isAuthLoading) {
@@ -104,8 +110,11 @@ export default function RoomJoinPage() {
     // 파라미터가 없는 경우
     if (!isAuthLoading) {
       console.error('❌ [RoomJoin] 초대 코드 또는 캡슐 ID 없음');
-      setError('초대 코드 또는 캡슐 ID가 없습니다.');
-      setIsLoading(false);
+      // 상태 업데이트를 다음 렌더 사이클로 지연
+      setTimeout(() => {
+        setError('초대 코드 또는 캡슐 ID가 없습니다.');
+        setIsLoading(false);
+      }, 0);
     }
   }, [searchParams, isAuthenticated, isAuthLoading, router]);
 
@@ -121,7 +130,7 @@ export default function RoomJoinPage() {
       joinRoomMutation.mutate(
         { capsuleId: foundCapsuleId, invite_code: inviteCode },
         {
-          onSuccess: (data) => {
+          onSuccess: () => {
             // 참여 성공 - 서버 상태 동기화를 위해 짧은 딜레이 후 대기실로 이동
             setCapsuleId(foundCapsuleId);
             setIsLoading(false);
@@ -149,8 +158,11 @@ export default function RoomJoinPage() {
     }
 
     if (isRoomQueryError) {
-      setError('대기실 정보를 불러올 수 없습니다. 초대 코드를 확인해주세요.');
-      setIsLoading(false);
+      // 상태 업데이트를 다음 렌더 사이클로 지연
+      setTimeout(() => {
+        setError('대기실 정보를 불러올 수 없습니다. 초대 코드를 확인해주세요.');
+        setIsLoading(false);
+      }, 0);
     }
   }, [roomData, isRoomQueryError, inviteCode, isAuthenticated, joinRoomMutation, router]);
 

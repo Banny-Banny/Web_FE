@@ -59,10 +59,12 @@ export function useAuth(): AuthContextType {
             console.log('✅ [useAuth] 토큰 유효');
 
             // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
-            const userInfo = verifyResult.user || {
+            const userInfo: User = verifyResult.user || {
               id: verifyResult.userId!,
               email: '',
-              nickname: ''
+              nickname: '',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
             };
 
             setUser(userInfo);
@@ -176,10 +178,12 @@ export function useAuth(): AuthContextType {
 
         if (verifyResult.valid && (verifyResult.user || verifyResult.userId)) {
           // user 객체가 있으면 사용, 없으면 userId로 간단한 객체 생성
-          const userInfo = verifyResult.user || {
+          const userInfo: User = verifyResult.user || {
             id: verifyResult.userId!,
             email: '',
-            nickname: ''
+            nickname: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
 
           setUser(userInfo);

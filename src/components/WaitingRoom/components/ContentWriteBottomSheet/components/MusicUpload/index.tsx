@@ -16,7 +16,7 @@
 
 import React, { useRef } from 'react';
 import type { MusicUploadProps } from '../../types';
-import { validateFileType, validateFileSize, isAudioFile } from '@/commons/utils/content';
+import { validateFileSize, isAudioFile } from '@/commons/utils/content';
 import styles from './styles.module.css';
 
 /**
@@ -29,7 +29,7 @@ import styles from './styles.module.css';
 export function MusicUpload({
   music,
   onChange,
-  onRemove,
+  onRemove: _onRemove,
 }: MusicUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

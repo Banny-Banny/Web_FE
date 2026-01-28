@@ -12,11 +12,10 @@ import type {
  * Mock 대기실 설정값
  */
 export const mockWaitingRoomSettings: WaitingRoomSettingsResponse = {
+  roomId: 'waiting-room-123',
   capsuleName: '강동 불주먹들👊',
   maxHeadcount: 4,
   openDate: '2026-01-16T00:00:00Z',
-  theme: 'classic',
-  design: 'vintage',
 };
 
 /**
@@ -24,14 +23,10 @@ export const mockWaitingRoomSettings: WaitingRoomSettingsResponse = {
  */
 export const mockWaitingRoomDetail: WaitingRoomDetailResponse = {
   waitingRoomId: 'waiting-room-123',
-  orderId: 'order-123',
   capsuleName: '강동 불주먹들👊',
   currentHeadcount: 1,
   maxHeadcount: 4,
   openDate: '2026-01-16T00:00:00Z',
-  theme: 'classic',
-  design: 'vintage',
-  createdAt: '2026-01-27T10:00:00Z',
   status: 'WAITING',
   participants: [
     {
@@ -40,8 +35,8 @@ export const mockWaitingRoomDetail: WaitingRoomDetailResponse = {
       userName: '최홍식',
       userAvatarUrl: undefined,
       slotNumber: 1,
-      joinedAt: '2026-01-27T10:00:00Z',
       role: 'HOST',
+      status: 'ACCEPTED',
     },
   ],
 };

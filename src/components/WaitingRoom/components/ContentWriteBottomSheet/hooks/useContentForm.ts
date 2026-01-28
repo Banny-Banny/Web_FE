@@ -122,16 +122,19 @@ export function useContentForm(capsuleId: string) {
       // 404 에러는 컨텐츠가 없는 것으로 처리 (신규 작성 모드)
       const apiError = contentError as ApiError;
       if (apiError.status === 404) {
-        setHasExistingContent(false);
-        setIsEditMode(false);
-        setOriginalData(null);
-        setFormData({
-          text: '',
-          images: [],
-          existingImageUrls: [],
-          music: null,
-          video: null,
-        });
+        // 상태 업데이트를 다음 렌더 사이클로 지연
+        setTimeout(() => {
+          setHasExistingContent(false);
+          setIsEditMode(false);
+          setOriginalData(null);
+          setFormData({
+            text: '',
+            images: [],
+            existingImageUrls: [],
+            music: null,
+            video: null,
+          });
+        }, 0);
       }
       return;
     }
@@ -145,8 +148,11 @@ export function useContentForm(capsuleId: string) {
         myContent.video
       );
 
-      setHasExistingContent(hasContent);
-      setIsEditMode(hasContent);
+      // 상태 업데이트를 다음 렌더 사이클로 지연
+      setTimeout(() => {
+        setHasExistingContent(hasContent);
+        setIsEditMode(hasContent);
+      }, 0);
 
       // 기존 컨텐츠가 있으면 폼에 채우기
       if (hasContent) {
@@ -158,25 +164,30 @@ export function useContentForm(capsuleId: string) {
           video: null, // 영상도 URL이므로 File 객체로 변환하지 않음
         };
         
-        setFormData(loadedData);
-        
-        // 원본 데이터 저장 (변경 감지용)
-        setOriginalData({
-          text: myContent.text || '',
-          existingImageUrls: myContent.images ?? [],
-          music: myContent.music || null,
-          video: myContent.video || null,
-        });
+        // 상태 업데이트를 다음 렌더 사이클로 지연
+        setTimeout(() => {
+          setFormData(loadedData);
+          // 원본 데이터 저장 (변경 감지용)
+          setOriginalData({
+            text: myContent.text || '',
+            existingImageUrls: myContent.images ?? [],
+            music: myContent.music || null,
+            video: myContent.video || null,
+          });
+        }, 0);
       } else {
         // 신규 작성 모드
-        setOriginalData(null);
-        setFormData({
-          text: '',
-          images: [],
-          existingImageUrls: [],
-          music: null,
-          video: null,
-        });
+        // 상태 업데이트를 다음 렌더 사이클로 지연
+        setTimeout(() => {
+          setOriginalData(null);
+          setFormData({
+            text: '',
+            images: [],
+            existingImageUrls: [],
+            music: null,
+            video: null,
+          });
+        }, 0);
       }
     }
   }, [myContent, isLoadingContent, contentError]);
@@ -225,7 +236,7 @@ export function useContentForm(capsuleId: string) {
       setTimeout(() => {
         setIsAutoSaving(false);
       }, 500);
-    } catch (err) {
+    } catch {
       // 자동 저장 실패는 조용히 처리 (사용자 작업 방해하지 않음)
       setIsAutoSaving(false);
     }
@@ -415,7 +426,7 @@ export function useContentForm(capsuleId: string) {
       }
 
       return true;
-    } catch (err) {
+    } catch {
       // 에러는 mutation의 error 상태로 처리됨
       return false;
     }
@@ -452,7 +463,6 @@ export function useContentForm(capsuleId: string) {
     isSaving: saveContentMutation.isPending || updateContentMutation.isPending,
     isAutoSaving,
     isEditMode,
-    hasExistingContent,
     handleTextChange,
     handleImagesChange,
     handleImageRemove,

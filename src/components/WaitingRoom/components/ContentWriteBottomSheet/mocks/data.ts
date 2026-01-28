@@ -39,6 +39,7 @@ export const mockEmptyContent: MyContentResponse = {
 export const mockContentFormData: ContentFormData = {
   text: '타임캡슐에 담을 메시지입니다.',
   images: [],
+  existingImageUrls: [],
   music: null,
   video: null,
 };

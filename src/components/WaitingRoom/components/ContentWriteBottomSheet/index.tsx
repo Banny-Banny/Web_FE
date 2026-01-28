@@ -47,7 +47,6 @@ export function ContentWriteBottomSheet({
     isSaving,
     isAutoSaving,
     isEditMode,
-    hasExistingContent,
     handleTextChange,
     handleImagesChange,
     handleImageRemove,

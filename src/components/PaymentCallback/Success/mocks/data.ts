@@ -34,12 +34,12 @@ export const mockConfirmPaymentResponseFailed: Partial<ConfirmPaymentResponse> =
  * Mock 대기실 생성 응답 데이터
  */
 export const mockCreateWaitingRoomResponse: CreateWaitingRoomResponse = {
-  waitingRoomId: 'waiting-room-123',
-  orderId: 'mock-order-123',
-  capsuleName: '우리의 추억',
-  headcount: 5,
-  inviteCode: 'ABC123',
-  createdAt: '2026-01-27T10:05:30Z',
+  room_id: 'waiting-room-123',
+  order_id: 'mock-order-123',
+  capsule_name: '우리의 추억',
+  max_participants: 5,
+  invite_code: 'ABC123',
+  created_at: '2026-01-27T10:05:30Z',
 };
 
 /**
