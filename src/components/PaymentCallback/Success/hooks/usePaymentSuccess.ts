@@ -52,11 +52,12 @@ export function usePaymentSuccess() {
   const MAX_RETRY_COUNT = 3;
   const hasProcessedRef = useRef(false);
   
+  // URL에서 orderId를 가져와서 고유 키 생성
+  const paymentInfo = extractPaymentInfoFromUrl(searchParams);
+  const processingKey = paymentInfo?.orderId ? `payment_processing_${paymentInfo.orderId}` : null;
+  
   const confirmPaymentMutation = useConfirmPayment();
   const createWaitingRoomMutation = useCreateWaitingRoom();
-  
-  // URL 파라미터에서 결제 정보 추출
-  const paymentInfo = extractPaymentInfoFromUrl(searchParams);
   
   // 주문 상태 조회 (중복 처리 방지)
   const { data: orderStatus } = useOrderStatus(
@@ -87,6 +88,16 @@ export function usePaymentSuccess() {
       return;
     }
 
+    // sessionStorage로 중복 처리 방지 (Strict Mode 대응)
+    if (processingKey && typeof window !== 'undefined') {
+      const isProcessing = sessionStorage.getItem(processingKey);
+      if (isProcessing === 'true') {
+        console.log('[usePaymentSuccess] 이미 처리 중인 결제 (sessionStorage)');
+        return;
+      }
+      sessionStorage.setItem(processingKey, 'true');
+    }
+
     console.log('[usePaymentSuccess] 결제 승인 시작:', { paymentKey, orderId, amount });
 
     // 이미 결제 완료된 주문인지 확인 (중복 처리 방지)
@@ -97,6 +108,12 @@ export function usePaymentSuccess() {
         const orderDetail = await getOrder(orderId);
         if (orderDetail.order.capsule_id) {
           console.log('[usePaymentSuccess] 대기실로 이동:', orderDetail.order.capsule_id);
+          
+          // sessionStorage 정리
+          if (processingKey && typeof window !== 'undefined') {
+            sessionStorage.removeItem(processingKey);
+          }
+          
           router.push(`/waiting-room/${orderDetail.order.capsule_id}`);
         } else {
           console.log('[usePaymentSuccess] capsule_id 없음, 대기실 생성 필요');
@@ -105,6 +122,11 @@ export function usePaymentSuccess() {
             order_id: orderId,
           });
           if (waitingRoomResult.room_id) {
+            // sessionStorage 정리
+            if (processingKey && typeof window !== 'undefined') {
+              sessionStorage.removeItem(processingKey);
+            }
+            
             router.push(`/waiting-room/${waitingRoomResult.room_id}`);
           }
         }
@@ -138,6 +160,11 @@ export function usePaymentSuccess() {
       // 백엔드 구현에 따라 대기실 생성이 별도로 필요한지 확인 필요
       // 현재는 capsule_id를 사용하여 바로 이동
       if (confirmResult.capsule_id) {
+        // sessionStorage 정리
+        if (processingKey && typeof window !== 'undefined') {
+          sessionStorage.removeItem(processingKey);
+        }
+        
         router.push(`/waiting-room/${confirmResult.capsule_id}`);
         setState({
           status: 'success',
@@ -190,6 +217,12 @@ export function usePaymentSuccess() {
               // capsule_id가 생성되었으면 대기실로 이동
               if (orderDetail.order.capsule_id) {
                 console.log('[usePaymentSuccess] capsule_id 발견, 대기실로 이동:', orderDetail.order.capsule_id);
+                
+                // sessionStorage 정리
+                if (processingKey && typeof window !== 'undefined') {
+                  sessionStorage.removeItem(processingKey);
+                }
+                
                 router.push(`/waiting-room/${orderDetail.order.capsule_id}`);
                 setState({
                   status: 'success',
@@ -210,6 +243,12 @@ export function usePaymentSuccess() {
 
                   if (waitingRoomResult.room_id) {
                     console.log('[usePaymentSuccess] 대기실 생성 성공, 대기실로 이동:', waitingRoomResult.room_id);
+                    
+                    // sessionStorage 정리
+                    if (processingKey && typeof window !== 'undefined') {
+                      sessionStorage.removeItem(processingKey);
+                    }
+                    
                     router.push(`/waiting-room/${waitingRoomResult.room_id}`);
                     setState({
                       status: 'success',
@@ -277,7 +316,7 @@ export function usePaymentSuccess() {
         error: userErrorMessage,
       });
     }
-  }, [paymentInfo, orderStatus, confirmPaymentMutation, router, retryCount]);
+  }, [paymentInfo, orderStatus, confirmPaymentMutation, createWaitingRoomMutation, router, retryCount, processingKey]);
   
   /**
    * 재시도 핸들러
