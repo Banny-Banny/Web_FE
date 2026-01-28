@@ -20,14 +20,19 @@
 
 import React, { useMemo } from 'react';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
 import {
   RiCloseLine,
   RiMapPinLine,
   RiTimeLine,
   RiCalendarLine,
   RiGroupLine,
+  RiImageLine,
+  RiMicLine,
+  RiVidiconLine,
 } from '@remixicon/react';
 import { Modal } from '@/commons/components/modal';
+import { getRoadAddressFromCoord } from '@/commons/apis/kakao-map/address';
 import styles from './styles.module.css';
 
 // 임시 타입 정의 (실제 hook에서 제공될 것으로 예상)
@@ -79,6 +84,11 @@ export interface EasterEggModalProps {
 }
 
 export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose, data }) => {
+  // 미디어 로딩 실패 상태 관리
+  const [imageError, setImageError] = React.useState(false);
+  const [audioError, setAudioError] = React.useState(false);
+  const [videoError, setVideoError] = React.useState(false);
+
   // 화면 높이의 80%를 계산하여 최대 높이 제한
   const maxHeight = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -86,6 +96,32 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose
     }
     return 600;
   }, []);
+
+  // 데이터가 변경되면 에러 상태 초기화
+  React.useEffect(() => {
+    if (data) {
+      setImageError(false);
+      setAudioError(false);
+      setVideoError(false);
+    }
+  }, [data]);
+
+  // 좌표가 있으면 Kakao Maps API로 주소 조회 (React Hooks는 항상 같은 순서로 호출되어야 함)
+  const { data: addressFromCoord } = useQuery({
+    queryKey: ['kakaoAddress', data?.location?.latitude, data?.location?.longitude],
+    queryFn: () => {
+      if (!data?.location?.latitude || !data?.location?.longitude) {
+        return Promise.resolve(null);
+      }
+      return getRoadAddressFromCoord({ 
+        x: data.location.longitude, 
+        y: data.location.latitude 
+      });
+    },
+    enabled: !!data?.location?.latitude && !!data?.location?.longitude && !data?.location?.address,
+    staleTime: 1000 * 60 * 60 * 24, // 24시간 캐시
+    retry: 1,
+  });
 
   // 데이터가 없으면 빈 모달 반환 (항상 같은 구조 유지)
   if (!data) {
@@ -96,7 +132,8 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose
         width={340}
         height="auto"
         padding={0}
-        closeOnBackdropPress>
+        closeOnBackdropPress
+        disableAnimation={true}>
         <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px` }}>
           <button className={styles.closeButton} onClick={onClose} type="button" aria-label="닫기">
             <RiCloseLine size={20} className={styles.closeIcon} />
@@ -111,8 +148,8 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose
   const audioUrl = data.audioObjectKey || (data.audioMediaId ? `/api/media/${data.audioMediaId}` : null);
   const videoUrl = data.videoObjectKey || (data.videoMediaId ? `/api/media/${data.videoMediaId}` : null);
 
-  // 주소
-  const locationAddress = data.location?.address || '위치 정보 없음';
+  // 주소 우선순위: location.address > addressFromCoord > '위치 정보 없음'
+  const locationAddress = data.location?.address || addressFromCoord || '위치 정보 없음';
 
   // 프로필 이미지
   const authorProfileImg = data.author?.profileImg || data.author?.profile_img || null;
@@ -171,36 +208,64 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose
         {/* 이미지 렌더링 */}
         {hasImage && imageUrl && (
           <div className={styles.imageContainer}>
-            <Image
-              src={imageUrl}
-              alt="이스터에그 이미지"
-              width={300}
-              height={300}
-              className={styles.image}
-            />
+            {imageError ? (
+              <div className={styles.mediaErrorContainer}>
+                <RiImageLine size={32} className={styles.mediaErrorIcon} />
+                <p className={styles.mediaErrorMessage}>이미지를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <Image
+                src={imageUrl}
+                alt="이스터에그 이미지"
+                width={300}
+                height={300}
+                className={styles.image}
+                onError={() => setImageError(true)}
+              />
+            )}
           </div>
         )}
 
         {/* 오디오 플레이어 렌더링 */}
         {hasAudio && audioUrl && (
           <div className={styles.audioPlayerWrapper}>
-            <audio controls className={styles.audioPlayer}>
-              <source src={audioUrl} type="audio/mpeg" />
-              <source src={audioUrl} type="audio/mp3" />
-              <source src={audioUrl} type="audio/wav" />
-              오디오를 재생할 수 없습니다.
-            </audio>
+            {audioError ? (
+              <div className={styles.mediaErrorContainer}>
+                <RiMicLine size={32} className={styles.mediaErrorIcon} />
+                <p className={styles.mediaErrorMessage}>오디오를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <audio
+                controls
+                className={styles.audioPlayer}
+                onError={() => setAudioError(true)}>
+                <source src={audioUrl} type="audio/mpeg" />
+                <source src={audioUrl} type="audio/mp3" />
+                <source src={audioUrl} type="audio/wav" />
+                오디오를 재생할 수 없습니다.
+              </audio>
+            )}
           </div>
         )}
 
         {/* 비디오 플레이어 렌더링 */}
         {hasVideo && videoUrl && (
           <div className={styles.videoPlayerWrapper}>
-            <video controls className={styles.videoPlayer}>
-              <source src={videoUrl} type="video/mp4" />
-              <source src={videoUrl} type="video/webm" />
-              비디오를 재생할 수 없습니다.
-            </video>
+            {videoError ? (
+              <div className={styles.mediaErrorContainer}>
+                <RiVidiconLine size={32} className={styles.mediaErrorIcon} />
+                <p className={styles.mediaErrorMessage}>비디오를 불러올 수 없습니다</p>
+              </div>
+            ) : (
+              <video
+                controls
+                className={styles.videoPlayer}
+                onError={() => setVideoError(true)}>
+                <source src={videoUrl} type="video/mp4" />
+                <source src={videoUrl} type="video/webm" />
+                비디오를 재생할 수 없습니다.
+              </video>
+            )}
           </div>
         )}
       </div>
@@ -208,14 +273,14 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({ visible, onClose
   };
 
   return (
-    <Modal
-      visible={visible}
-      onClose={onClose}
-      width={340}
-      height="auto"
-      padding={0}
-      closeOnBackdropPress
-      disableAnimation={false}>
+      <Modal
+        visible={visible}
+        onClose={onClose}
+        width={340}
+        height="auto"
+        padding={0}
+        closeOnBackdropPress
+        disableAnimation={true}>
       <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px` }}>
         {/* 닫기 버튼 (우측 상단) */}
         <button className={styles.closeButton} onClick={onClose} type="button" aria-label="닫기">
