@@ -34,7 +34,7 @@ export function useWaitingRoom(capsuleId: string | null | undefined) {
   const {
     data: settings,
     isLoading: isLoadingSettings,
-    error: settingsError,
+    // error: settingsError는 사용하지 않음 (설정값 조회 실패는 graceful degradation으로 처리)
   } = useWaitingRoomSettingsApi(capsuleId);
 
   const isLoading = isLoadingWaitingRoom || isLoadingSettings;

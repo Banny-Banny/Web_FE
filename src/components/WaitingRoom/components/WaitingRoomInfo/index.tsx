@@ -19,7 +19,6 @@
 import React from 'react';
 import { RiCalendarLine, RiGroupLine } from '@remixicon/react';
 import type { WaitingRoomInfoProps } from './types';
-import { formatOpenDate } from '@/commons/utils/waiting-room';
 import styles from './styles.module.css';
 
 /**

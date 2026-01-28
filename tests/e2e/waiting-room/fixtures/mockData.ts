@@ -13,11 +13,10 @@ import type {
  * Mock 대기실 설정값
  */
 export const mockWaitingRoomSettings: WaitingRoomSettingsResponse = {
+  roomId: 'waiting-room-123',
   capsuleName: '우리의 추억',
   maxHeadcount: 5,
   openDate: '2026-12-31T00:00:00Z',
-  theme: 'classic',
-  design: 'vintage',
 };
 
 /**
@@ -30,8 +29,8 @@ export const mockParticipants: Participant[] = [
     userName: '홍길동',
     userAvatarUrl: 'https://example.com/avatar1.jpg',
     slotNumber: 1,
-    joinedAt: '2026-01-27T10:00:00Z',
     role: 'HOST',
+    status: 'ACCEPTED',
   },
   {
     participantId: 'participant-2',
@@ -39,8 +38,8 @@ export const mockParticipants: Participant[] = [
     userName: '김철수',
     userAvatarUrl: 'https://example.com/avatar2.jpg',
     slotNumber: 2,
-    joinedAt: '2026-01-27T10:05:00Z',
     role: 'PARTICIPANT',
+    status: 'ACCEPTED',
   },
 ];
 
@@ -49,14 +48,10 @@ export const mockParticipants: Participant[] = [
  */
 export const mockWaitingRoomDetail: WaitingRoomDetailResponse = {
   waitingRoomId: 'waiting-room-123',
-  orderId: 'order-123',
   capsuleName: '우리의 추억',
   currentHeadcount: 2,
   maxHeadcount: 5,
   openDate: '2026-12-31T00:00:00Z',
-  theme: 'classic',
-  design: 'vintage',
-  createdAt: '2026-01-27T10:00:00Z',
   status: 'WAITING',
   participants: mockParticipants,
 };
@@ -66,14 +61,10 @@ export const mockWaitingRoomDetail: WaitingRoomDetailResponse = {
  */
 export const mockWaitingRoomDetailEmpty: WaitingRoomDetailResponse = {
   waitingRoomId: 'waiting-room-456',
-  orderId: 'order-456',
   capsuleName: '빈 대기실',
   currentHeadcount: 1,
   maxHeadcount: 3,
   openDate: '2026-12-31T00:00:00Z',
-  theme: 'modern',
-  design: 'minimal',
-  createdAt: '2026-01-27T10:00:00Z',
   status: 'WAITING',
   participants: [
     {
@@ -82,8 +73,8 @@ export const mockWaitingRoomDetailEmpty: WaitingRoomDetailResponse = {
       userName: '방장',
       userAvatarUrl: 'https://example.com/avatar-host.jpg',
       slotNumber: 1,
-      joinedAt: '2026-01-27T10:00:00Z',
       role: 'HOST',
+      status: 'ACCEPTED',
     },
   ],
 };

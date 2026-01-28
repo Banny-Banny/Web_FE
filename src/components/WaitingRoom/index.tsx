@@ -20,7 +20,6 @@ import { WaitingRoomInfo } from './components/WaitingRoomInfo';
 import { ParticipantList } from './components/ParticipantList';
 import { useWaitingRoom } from './hooks/useWaitingRoom';
 import styles from './styles.module.css';
-import type { WaitingRoomPageProps } from './types';
 
 /**
  * WaitingRoom 컴포넌트

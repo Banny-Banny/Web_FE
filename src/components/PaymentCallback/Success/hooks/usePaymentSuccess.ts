@@ -184,7 +184,6 @@ export function usePaymentSuccess() {
     } catch (error) {
       const apiError = error as ApiError;
       const errorMessage = apiError.message || '';
-      const errorCode = apiError.code || '';
 
       // 에러 메시지를 문자열로 변환 (혹시 객체인 경우를 대비)
       const errorString = typeof errorMessage === 'string' 

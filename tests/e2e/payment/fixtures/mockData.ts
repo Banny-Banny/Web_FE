@@ -151,12 +151,12 @@ export const mockConfirmPaymentFailed: ConfirmPaymentResponse = {
  * Mock 타임캡슐 대기실 생성 성공 응답
  */
 export const mockCreateWaitingRoomSuccess: CreateWaitingRoomResponse = {
-  waitingRoomId: 'waiting-room-uuid-123',
-  orderId: 'test-order-123',
-  capsuleName: '우리들의 추억',
-  headcount: 5,
-  inviteCode: 'ABC123',
-  createdAt: '2026-01-27T10:00:00.000Z',
+  room_id: 'waiting-room-uuid-123',
+  order_id: 'test-order-123',
+  capsule_name: '우리들의 추억',
+  max_participants: 5,
+  invite_code: 'ABC123',
+  created_at: '2026-01-27T10:00:00.000Z',
 };
 
 /**
