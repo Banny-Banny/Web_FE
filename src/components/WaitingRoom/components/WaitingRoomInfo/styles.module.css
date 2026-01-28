@@ -1,0 +1,89 @@
+/**
+ * @fileoverview WaitingRoomInfo 컴포넌트 스타일
+ * @description 대기실 정보 표시 컴포넌트의 스타일 (375px 고정 레이아웃)
+ * 
+ * @version 1.0.0
+ * @created 2026-01-28
+ * @updated 2026-01-28 - Figma 디자인 기반으로 재구현
+ * 
+ * 규칙 준수 체크리스트:
+ * - [x] CSS Module 사용
+ * - [x] CSS 변수만 사용 (하드코딩 색상값 없음)
+ * - [x] 인라인 스타일 없음
+ * - [x] 구조와 스타일 분리
+ * - [x] 소수점 값 반올림
+ */
+
+/* 컨테이너 */
+.container {
+  width: 100%;
+  padding: var(--spacing-lg) var(--spacing-md);
+  background-color: var(--color-white-500);
+}
+
+/* 카드 */
+.card {
+  width: 100%;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  border: 1px solid var(--color-grey-200);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white-500);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* 캡슐 이름 레이블 */
+.capsuleNameLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-grey-600);
+}
+
+/* 캡슐 이름 */
+.capsuleName {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-normal);
+  color: var(--color-black-500);
+  margin: 0;
+  padding: 0;
+}
+
+/* 정보 섹션 */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* 정보 아이템 */
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* 정보 아이콘 */
+.infoIcon {
+  flex-shrink: 0;
+  color: var(--color-grey-600);
+}
+
+/* 정보 레이블 */
+.infoLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-grey-600);
+}
+
+/* 정보 값 */
+.infoValue {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  color: var(--color-black-500);
+}

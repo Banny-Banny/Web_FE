@@ -10,6 +10,10 @@ export interface TossPaymentWidgetProps {
   orderId: string;
   /** 결제 금액 */
   amount: number;
+  /** 주문명 (결제창에 표시될 주문명) */
+  orderName?: string;
+  /** 고객명 (캡슐명, 결제창에 표시될 고객명) */
+  customerName?: string;
   /** 결제 성공 콜백 */
   onSuccess?: (paymentId: string) => void;
   /** 결제 실패 콜백 */

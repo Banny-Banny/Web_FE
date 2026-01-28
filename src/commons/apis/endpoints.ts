@@ -210,6 +210,10 @@ export const ONBOARDING_ENDPOINTS = {
 export const CAPSULE_ENDPOINTS = {
   // 타임캡슐 대기실 생성
   CREATE_WAITING_ROOM: `${BASE_PATHS.API}/capsules/step-rooms/create`,
+  // 대기실 설정값 조회
+  WAITING_ROOM_SETTINGS: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/settings`,
+  // 대기실 상세 조회
+  WAITING_ROOM_DETAIL: (capsuleId: string) => `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}`,
 } as const;
 
 /**

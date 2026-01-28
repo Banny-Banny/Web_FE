@@ -315,28 +315,49 @@ apiClient.interceptors.response.use(
         fullURL = requestEndpoint || requestBaseURL || error.request?.responseURL || 'Unknown URL';
       }
 
-      // 상세한 에러 로깅
-      console.error(`❌ API Error: ${method} ${fullURL}`);
-      console.error('Request Details:', {
-        baseURL: requestBaseURL,
-        endpoint: requestEndpoint,
-        fullURL,
-        method,
-        axiosRequestURL: error.request?.responseURL,
-        configURL: error.config?.url,
-        configBaseURL: error.config?.baseURL,
-      });
-      console.error('Error Details:', {
-        statusCode: errorInfo.statusCode,
-        httpStatus: errorInfo.httpStatus,
-        statusText: errorInfo.statusText,
-        message: errorInfo.message,
-        errorCode: errorInfo.errorCode,
-        axiosCode: errorInfo.axiosCode,
-        responseData: errorInfo.errorDetails,
-        hasResponse: errorInfo.hasResponse,
-        hasRequest: errorInfo.hasRequest,
-      });
+      // S008 에러는 정상 처리 흐름이므로 일반 로그로 출력
+      const isS008Error = errorInfo.message?.includes('S008') || 
+                          errorInfo.message?.includes('기존 요청을 처리중입니다') ||
+                          errorInfo.message?.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING');
+
+      if (isS008Error) {
+        // S008: 토스 결제 처리 중 - 정상 상황이므로 info 로그
+        console.log(`⏳ 결제 처리 중: ${method} ${fullURL}`);
+        console.log('토스페이먼츠가 결제를 처리하고 있습니다. 잠시만 기다려주세요...');
+      } else {
+        // 실제 에러인 경우만 error 로그
+        console.error(`❌ API Error: ${method} ${fullURL}`);
+        console.error('Request Details:', {
+          baseURL: requestBaseURL,
+          endpoint: requestEndpoint,
+          fullURL,
+          method,
+          requestData: error.config?.data ? JSON.parse(error.config.data) : undefined,
+          headers: error.config?.headers,
+          axiosRequestURL: error.request?.responseURL,
+          configURL: error.config?.url,
+          configBaseURL: error.config?.baseURL,
+        });
+        console.error('Error Details:', {
+          statusCode: errorInfo.statusCode,
+          httpStatus: errorInfo.httpStatus,
+          statusText: errorInfo.statusText,
+          message: errorInfo.message,
+          errorCode: errorInfo.errorCode,
+          axiosCode: errorInfo.axiosCode,
+          responseData: errorInfo.errorDetails,
+          hasResponse: errorInfo.hasResponse,
+          hasRequest: errorInfo.hasRequest,
+        });
+        
+        // 전체 에러 객체 출력 (디버깅용)
+        console.error('Raw Error Object:', {
+          message: error.message,
+          code: error.code,
+          response: error.response?.data,
+          request: error.request ? 'Request exists' : 'No request',
+        });
+      }
 
       // 에러 객체 표준화
       const apiError: ApiError = {

@@ -56,6 +56,7 @@ export function useTimecapsuleForm() {
 
     return {
       product_id: TIME_CAPSULE_PRODUCT_ID,
+      capsule_title: data.capsuleName || undefined,
       time_option: data.timeOption as TimeOption,
       custom_open_at: customOpenAt,
       headcount: data.participantCount,

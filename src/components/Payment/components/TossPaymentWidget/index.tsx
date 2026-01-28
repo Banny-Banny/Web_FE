@@ -19,6 +19,8 @@ import styles from './styles.module.css';
 export function TossPaymentWidget({
   orderId,
   amount,
+  orderName,
+  customerName,
   onSuccess: _onSuccess,
   onError,
   disabled = false,
@@ -52,7 +54,8 @@ export function TossPaymentWidget({
           value: amount,
         },
         orderId,
-        orderName: `타임캡슐 주문`,
+        orderName: orderName || '타임캡슐 생성',
+        customerName: customerName || undefined,
         successUrl: `${window.location.origin}/payment/success`,
         failUrl: `${window.location.origin}/payment/fail`,
       });
