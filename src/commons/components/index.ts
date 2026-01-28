@@ -39,6 +39,14 @@ export type { ModalProps, ModalConfig, ModalState } from './modal/types';
 export { BottomSheet } from './bottom-sheet';
 export type { BottomSheetProps } from './bottom-sheet/types';
 
+// AudioPlayer 컴포넌트
+export { AudioPlayer } from './audio-player';
+export type { AudioPlayerProps } from './audio-player/types';
+
+// VideoPlayer 컴포넌트
+export { VideoPlayer } from './video-player';
+export type { VideoPlayerProps } from './video-player/types';
+
 // 향후 추가될 컴포넌트들
 // 예: export { Input } from './Input';
 // 예: export { Card } from './Card';

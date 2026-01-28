@@ -83,6 +83,7 @@ function transformFormDataToApiRequest(formData: EasterEggFormData): CreateEaste
     title: formData.title.trim(),
     content: formData.message?.trim() || undefined,
     media_files: media_files.length > 0 ? media_files : undefined,
+    view_limit: 3, // 무조건 3으로 설정
   };
 }
 
