@@ -1,0 +1,96 @@
+/**
+ * @fileoverview ContentWriteBottomSheet 컴포넌트 스타일
+ * @description Figma 디자인 기반 스타일 (375px 고정 레이아웃)
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  background-color: var(--color-white-100);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-2xl); /* 32px */
+  min-height: 200px;
+}
+
+.errorContainer {
+  padding: var(--spacing-lg); /* 24px */
+}
+
+.errorMessage {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-base); /* 16px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  color: var(--color-red-500);
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs); /* 4px */
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md); /* 24px 24px 16px */
+}
+
+.title {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-2xl); /* 24px */
+  font-weight: var(--font-weight-bold); /* 700 */
+  line-height: var(--line-height-tight); /* 32px */
+  color: var(--color-black-500);
+  margin: 0;
+}
+
+.description {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-base); /* 16px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  line-height: var(--line-height-relaxed); /* 24px */
+  color: var(--color-grey-600);
+  margin: 0;
+}
+
+.autoSaveIndicator {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xs); /* 12px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  line-height: var(--line-height-normal); /* 18px */
+  color: var(--color-blue-500);
+  margin: 0;
+  margin-top: var(--spacing-xs); /* 4px */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl); /* 32px */
+  padding-bottom: var(--spacing-xl); /* 32px */
+  overflow-y: auto;
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm); /* 8px */
+  padding: var(--spacing-lg); /* 24px */
+  background-color: var(--color-white-100);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.infoText {
+  font-family: var(--font-pretendard);
+  font-size: var(--font-size-xs); /* 12px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  line-height: var(--line-height-normal); /* 18px */
+  color: var(--color-grey-500);
+  text-align: center;
+  margin: 0;
+}

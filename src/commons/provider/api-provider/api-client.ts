@@ -320,10 +320,17 @@ apiClient.interceptors.response.use(
                           errorInfo.message?.includes('기존 요청을 처리중입니다') ||
                           errorInfo.message?.includes('FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING');
 
+      // /my-content 엔드포인트의 404는 "아직 작성하지 않았습니다"를 의미하는 정상적인 응답
+      const isMyContent404 = errorInfo.statusCode === 404 && 
+                              (fullURL.includes('/my-content') || requestEndpoint.includes('/my-content'));
+
       if (isS008Error) {
         // S008: 토스 결제 처리 중 - 정상 상황이므로 info 로그
         console.log(`⏳ 결제 처리 중: ${method} ${fullURL}`);
         console.log('토스페이먼츠가 결제를 처리하고 있습니다. 잠시만 기다려주세요...');
+      } else if (isMyContent404) {
+        // /my-content 404: 아직 작성하지 않음 - 정상 상황이므로 로그 출력하지 않음
+        // 에러는 그대로 throw하되, 콘솔에는 로그하지 않음
       } else {
         // 실제 에러인 경우만 error 로그
         console.error(`❌ API Error: ${method} ${fullURL}`);

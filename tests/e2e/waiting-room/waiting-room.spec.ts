@@ -8,6 +8,7 @@ import {
   mockWaitingRoomDetail,
   mockWaitingRoomSettings,
   mockWaitingRoomDetailEmpty,
+  mockWaitingRoomSettingsSmall,
   mockErrorResponses,
 } from './fixtures/mockData';
 
@@ -52,6 +53,20 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
     await page.addInitScript((token) => {
       localStorage.setItem('timeEgg_accessToken', token);
     }, MOCK_ACCESS_TOKEN);
+
+    // 본인 컨텐츠 조회는 대기실 화면에서 항상 호출되므로 기본 모킹(404 = 아직 작성 안함)
+    await page.route(
+      `${API_BASE_URL}/capsules/step-rooms/${MOCK_CAPSULE_ID}/my-content`,
+      async (route) => {
+        if (route.request().method() === 'GET') {
+          await route.fulfill({
+            status: 404,
+            contentType: 'application/json',
+            body: JSON.stringify({}),
+          });
+        }
+      }
+    );
   });
 
   test.describe('대기실 진입 플로우', () => {
@@ -84,8 +99,10 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
 
       // 대기실 정보 표시 확인
       await expect(page.getByText('우리의 추억')).toBeVisible();
-      await expect(page.getByText(/참여 인원.*2.*\/.*5/)).toBeVisible();
-      await expect(page.getByText('2026년 12월 31일')).toBeVisible();
+      await expect(page.getByText('참여자', { exact: true })).toBeVisible();
+      await expect(page.getByText('2/5명')).toBeVisible();
+      await expect(page.getByText('개봉일')).toBeVisible();
+      await expect(page.getByText('2026-12-31')).toBeVisible();
     });
 
     test('대기실 페이지 접근 - 로딩 상태 표시', async ({ page }) => {
@@ -154,7 +171,7 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
       // 참여자 목록 표시 확인
       await expect(page.getByText('홍길동')).toBeVisible();
       await expect(page.getByText('김철수')).toBeVisible();
-      await expect(page.getByText(/참여 인원.*2.*\/.*5/)).toBeVisible();
+      await expect(page.getByText('2/5명')).toBeVisible();
     });
 
     test('참여자 목록 표시 - 참여자가 없는 경우 (방장만)', async ({ page }) => {
@@ -177,7 +194,7 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
           await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify(mockWaitingRoomSettings),
+            body: JSON.stringify(mockWaitingRoomSettingsSmall),
           });
         }
       );
@@ -185,7 +202,8 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
       await page.goto(`/waiting-room/${MOCK_CAPSULE_ID}`);
 
       // 빈 상태 안내 표시 확인 (또는 방장만 표시)
-      await expect(page.getByText(/참여 인원.*1.*\/.*3/)).toBeVisible();
+      await expect(page.getByText('참여자', { exact: true })).toBeVisible();
+      await expect(page.getByText('1/3명')).toBeVisible();
     });
   });
 
@@ -310,7 +328,7 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
   });
 
   test.describe('참여자 목록 자동 갱신', () => {
-    test('참여자 목록 자동 갱신 확인', async ({ page }) => {
+    test('자동 폴링을 사용하지 않음 (백엔드 부하 방지)', async ({ page }) => {
       let requestCount = 0;
 
       // 대기실 상세 정보 조회 API 모킹 (요청 횟수 추적)
@@ -344,11 +362,9 @@ test.describe('대기실 진입 및 정보 조회 E2E 테스트', () => {
       await expect(page.getByText('우리의 추억')).toBeVisible();
       expect(requestCount).toBeGreaterThanOrEqual(1);
 
-      // 6초 대기 (5초 refetchInterval + 여유 시간)
+      // 6초 대기 후에도 자동 폴링으로 재요청하지 않아야 함
       await page.waitForTimeout(6000);
-
-      // 자동 갱신 확인 (요청 횟수가 증가했는지 확인)
-      expect(requestCount).toBeGreaterThanOrEqual(2);
+      expect(requestCount).toBe(1);
     });
   });
 });
