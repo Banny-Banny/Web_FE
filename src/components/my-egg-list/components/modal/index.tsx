@@ -235,11 +235,12 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
         padding={0}
         closeOnBackdropPress
         disableAnimation={true}>
-        <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px` }}>
+        <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px`, height: `${maxHeight}px` }}>
           <button className={styles.closeButton} onClick={onClose} type="button" aria-label="닫기">
             <RiCloseLine size={20} className={styles.closeIcon} />
           </button>
-          <div className={styles.modalContent}>
+          <div className={styles.scrollView} style={{ maxHeight: `calc(${maxHeight}px - 0px)` }}>
+            <div className={styles.modalContent}>
             {isLoading ? (
               <div className={styles.loadingContainer}>
                 <Spinner size="large" />
@@ -256,6 +257,7 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
                 </button>
               </div>
             ) : null}
+            </div>
           </div>
         </div>
       </Modal>
@@ -406,12 +408,12 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
         padding={0}
         closeOnBackdropPress
         disableAnimation={true}>
-      <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px` }}>
+      <div className={styles.scrollViewWrapper} style={{ maxHeight: `${maxHeight}px`, height: `${maxHeight}px` }}>
         {/* 닫기 버튼 (우측 상단) */}
         <button className={styles.closeButton} onClick={onClose} type="button" aria-label="닫기">
           <RiCloseLine size={20} className={styles.closeIcon} />
         </button>
-        <div className={styles.scrollView}>
+        <div className={styles.scrollView} style={{ maxHeight: `calc(${maxHeight}px - 0px)` }}>
           <div className={styles.modalContent}>
             {/* 상단 프로필 이미지 */}
             <div className={styles.profileImageContainer}>

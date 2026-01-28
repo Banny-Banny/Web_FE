@@ -18,6 +18,9 @@
   position: relative;
   overflow: hidden;
   align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* ScrollView 컨테이너 */
@@ -27,6 +30,8 @@
   align-self: stretch;
   overflow-y: auto;
   overflow-x: hidden;
+  flex: 1;
+  min-height: 0; /* flexbox에서 스크롤 작동을 위한 필수 속성 */
 }
 
 /* 모달 컨텐츠 컨테이너 */

@@ -72,6 +72,9 @@ function transformEggItemToItemProps(item: MyEggItem & { status?: 'ACTIVE' | 'EX
  * 새로운 데이터 구조에 맞게 변환
  */
 function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEggDetailData {
+  // 디버깅: 전체 API 응답 확인
+  console.log('[transformEggDetailToModalData] 전체 detail 응답:', JSON.stringify(detail, null, 2));
+  
   // message 필드 처리 (content 우선, 없으면 message)
   const message = detail.content || detail.message || '';
 
@@ -79,16 +82,6 @@ function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEg
   // PLANTED: 내가 심은 알 (viewers가 있으면 PLANTED)
   // FOUND: 내가 발견한 알 (viewers가 없거나 비어있으면 FOUND)
   const type = detail.type || (detail.viewers && detail.viewers.length > 0 ? 'PLANTED' : 'FOUND');
-
-  // 미디어 항목에서 이미지/오디오/비디오 추출
-  const imageItem = detail.media_items?.find((item: any) => item.type === 'IMAGE');
-  const audioItem = detail.media_items?.find((item: any) => item.type === 'AUDIO');
-  const videoItem = detail.media_items?.find((item: any) => item.type === 'VIDEO');
-  
-  // 디버깅: 미디어 항목 확인
-  console.log('[transformEggDetailToModalData] detail.media_items:', detail.media_items);
-  console.log('[transformEggDetailToModalData] imageItem:', imageItem);
-  console.log('[transformEggDetailToModalData] imageItem?.media_id:', imageItem?.media_id);
 
   // eggId: id 필드 또는 eggId 필드 사용
   const eggId = detail.id || detail.eggId || '';
@@ -103,18 +96,72 @@ function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEg
   // 발견일: found_at 또는 foundAt 또는 foundDate
   const foundAt = detail.found_at || detail.foundAt || detail.foundDate || null;
 
+  // 미디어 정보 추출
+  // 1. 이미 변환된 데이터인 경우 (imageMediaId, imageObjectKey 등이 이미 있음)
+  // 2. 원본 API 응답인 경우 (media_items 배열에서 추출)
+  let imageMediaId: string | null = null;
+  let imageObjectKey: string | null = null;
+  let audioMediaId: string | null = null;
+  let audioObjectKey: string | null = null;
+  let videoMediaId: string | null = null;
+  let videoObjectKey: string | null = null;
+
+  // 이미 변환된 데이터인지 확인 (imageMediaId, imageObjectKey 등이 이미 있음)
+  if (detail.imageMediaId !== undefined || detail.imageObjectKey !== undefined) {
+    // 이미 변환된 데이터: 직접 사용
+    imageMediaId = detail.imageMediaId ?? null;
+    imageObjectKey = detail.imageObjectKey ?? null;
+    audioMediaId = detail.audioMediaId ?? null;
+    audioObjectKey = detail.audioObjectKey ?? null;
+    videoMediaId = detail.videoMediaId ?? null;
+    videoObjectKey = detail.videoObjectKey ?? null;
+  } else {
+    // 원본 API 응답: media_items 배열에서 추출
+    const mediaItems = detail.media_items || detail.mediaItems || detail.medias || [];
+    
+    // 미디어 항목에서 이미지/오디오/비디오 추출
+    const imageItem = Array.isArray(mediaItems) 
+      ? mediaItems.find((item: any) => item.type === 'IMAGE' || item.media_type === 'IMAGE')
+      : null;
+    const audioItem = Array.isArray(mediaItems)
+      ? mediaItems.find((item: any) => item.type === 'AUDIO' || item.media_type === 'AUDIO')
+      : null;
+    const videoItem = Array.isArray(mediaItems)
+      ? mediaItems.find((item: any) => item.type === 'VIDEO' || item.media_type === 'VIDEO')
+      : null;
+    
+    // media_id 추출 (다양한 필드명 지원: media_id, mediaId, id)
+    const getMediaId = (item: any) => {
+      if (!item) return null;
+      return item.media_id || item.mediaId || item.id || null;
+    };
+    
+    // object_key 추출 (다양한 필드명 지원: object_key, objectKey, key)
+    const getObjectKey = (item: any) => {
+      if (!item) return null;
+      return item.object_key || item.objectKey || item.key || null;
+    };
+
+    imageMediaId = getMediaId(imageItem);
+    imageObjectKey = getObjectKey(imageItem);
+    audioMediaId = getMediaId(audioItem);
+    audioObjectKey = getObjectKey(audioItem);
+    videoMediaId = getMediaId(videoItem);
+    videoObjectKey = getObjectKey(videoItem);
+  }
+
   return {
     eggId,
     type,
     isMine: detail.isMine ?? false, // detail API에서 isMine 정보를 제공할 수도 있음
     title: detail.title || '',
     message,
-    imageMediaId: imageItem?.media_id || null,
-    imageObjectKey: imageItem?.object_key || null,
-    audioMediaId: audioItem?.media_id || null,
-    audioObjectKey: audioItem?.object_key || null,
-    videoMediaId: videoItem?.media_id || null,
-    videoObjectKey: videoItem?.object_key || null,
+    imageMediaId,
+    imageObjectKey,
+    audioMediaId,
+    audioObjectKey,
+    videoMediaId,
+    videoObjectKey,
     location: {
       address: detail.location?.address || detail.address || null, // 주소는 모달에서 Kakao API로 변환
       latitude: latitude, // undefined 허용 (모달에서 처리)
@@ -190,11 +237,14 @@ export function useMyEggList({ onItemPress, onHeaderButtonPress }: UseMyEggListP
     isError: isErrorDetail,
   } = useQuery({
     queryKey: ['eggDetail', selectedEggId],
-    queryFn: () => {
+    queryFn: async () => {
       if (!selectedEggId) {
         throw new Error('Egg ID is required');
       }
-      return getEggDetail(selectedEggId);
+      const response = await getEggDetail(selectedEggId);
+      // 디버깅: 실제 API 응답 확인
+      console.log('[useMyEggList] 실제 API 응답 (getEggDetail):', JSON.stringify(response, null, 2));
+      return response;
     },
     enabled: !!selectedEggId && modalVisible, // 모달이 열려있고 ID가 있을 때만 조회
     staleTime: 0, // 항상 최신 데이터를 가져오기 위해 캐시 사용 안 함
