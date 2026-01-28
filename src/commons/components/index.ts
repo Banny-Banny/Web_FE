@@ -55,6 +55,10 @@ export type { AudioAttachmentModalProps } from './audio-attachment-modal/types';
 export { AudioPreview } from './audio-preview';
 export type { AudioPreviewProps } from './audio-preview/types';
 
+// VideoPreview 컴포넌트
+export { VideoPreview } from './video-preview';
+export type { VideoPreviewProps } from './video-preview/types';
+
 // 향후 추가될 컴포넌트들
 // 예: export { Input } from './Input';
 // 예: export { Card } from './Card';
