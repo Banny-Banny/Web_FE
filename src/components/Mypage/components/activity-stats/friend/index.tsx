@@ -12,7 +12,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { RiRefreshLine, RiCloseLine, RiLightbulbLine, RiUserUnfollowLine, RiUserAddLine } from '@remixicon/react';
+import { RiRefreshLine, RiCloseLine, RiLightbulbLine } from '@remixicon/react';
+import { Button } from '@/commons/components/button';
+import { DualButton } from '@/commons/components/dual-button';
 import { useFriends, useDeleteFriend, useAddFriend } from '@/commons/apis/me/friends/hooks';
 import { isValidPhoneNumber, isValidEmail } from '@/components/Login/utils/validation';
 import styles from './styles.module.css';
@@ -179,14 +181,13 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
         {!isLoading && !error && (
           <div className={styles.addFriendSection}>
             {!showAddForm ? (
-              <button
+              <Button
+                label="친구 추가"
+                variant="outline"
+                size="M"
+                onPress={() => setShowAddForm(true)}
                 className={styles.addFriendButton}
-                onClick={() => setShowAddForm(true)}
-                aria-label="친구 추가"
-              >
-                <RiUserAddLine size={18} className={styles.addIcon} />
-                <span className={styles.addText}>친구 추가</span>
-              </button>
+              />
             ) : (
               <div className={styles.addFriendForm}>
                 <div className={styles.addTypeSelector}>
@@ -233,24 +234,17 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
                     </span>
                   )}
                 </div>
-                <div className={styles.addButtonGroup}>
-                  <button
-                    className={styles.addSubmitButton}
-                    onClick={handleAddFriend}
-                    disabled={isAdding}
-                    aria-label="추가"
-                  >
-                    {isAdding ? '추가 중...' : '추가'}
-                  </button>
-                  <button
-                    className={styles.addCancelButton}
-                    onClick={handleCancelAdd}
-                    disabled={isAdding}
-                    aria-label="취소"
-                  >
-                    취소
-                  </button>
-                </div>
+                <DualButton
+                  cancelLabel="취소"
+                  confirmLabel={isAdding ? '추가 중...' : '추가'}
+                  size="M"
+                  cancelVariant="outline"
+                  confirmVariant="primary"
+                  confirmDisabled={isAdding}
+                  onCancelPress={handleCancelAdd}
+                  onConfirmPress={handleAddFriend}
+                  className={styles.addButtonGroup}
+                />
               </div>
             )}
           </div>
@@ -302,15 +296,14 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
                     )}
                   </div>
                   <span className={styles.friendName}>{friendship.friend.nickname}</span>
-                  <button
-                    className={styles.blockButton}
-                    onClick={() => handleDelete(friendship.id, friendship.friend.nickname)}
+                  <Button
+                    label="삭제"
+                    variant="outline"
+                    size="S"
                     disabled={isDeleting}
-                    aria-label={`${friendship.friend.nickname} 삭제`}
-                  >
-                    <RiUserUnfollowLine size={16} className={styles.blockIcon} />
-                    <span className={styles.blockText}>삭제</span>
-                  </button>
+                    onPress={() => handleDelete(friendship.id, friendship.friend.nickname)}
+                    className={styles.blockButton}
+                  />
                 </div>
               ))
             )}

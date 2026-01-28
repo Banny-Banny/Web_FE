@@ -41,7 +41,8 @@
   border-radius: var(--radius-xl);
   box-shadow: 0 4px 24px color-mix(in srgb, var(--color-black-500) 10%, transparent);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* 모달 헤더 */
@@ -147,13 +148,14 @@
   gap: var(--spacing-md);
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--color-yellow-50);
+  background-color: var(--color-white-grey-50);
+  border: 1px solid var(--color-grey-300);
   border-radius: var(--radius-lg);
   box-sizing: border-box;
 }
 
 .infoIcon {
-  color: var(--color-yellow-700);
+  color: var(--color-black-500);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -171,7 +173,7 @@
   line-height: 18px;
   font-weight: var(--font-weight-regular, 400);
   letter-spacing: 0;
-  color: var(--color-yellow-900);
+  color: var(--color-black-500);
   margin: 0;
 }
 
@@ -182,8 +184,6 @@
   gap: var(--spacing-md);
   width: 100%;
   padding: 0 var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
-  max-height: 400px;
-  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -234,50 +234,9 @@
   color: var(--color-black-500);
 }
 
+/* 공통 Button 컴포넌트 사용 - 추가 스타일 필요시 여기에 정의 */
 .blockButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--color-white-grey-100);
-  border: 1px solid var(--color-grey-300);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.blockButton:hover {
-  background-color: var(--color-white-grey-200);
-  border-color: var(--color-grey-400);
-}
-
-.blockButton:active {
-  background-color: var(--color-white-grey-300);
-}
-
-.blockButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.blockButton:disabled:hover {
-  background-color: var(--color-white-grey-100);
-  border-color: var(--color-grey-300);
-}
-
-.blockIcon {
-  color: var(--color-black-500);
-  flex-shrink: 0;
-}
-
-.blockText {
-  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: var(--font-weight-regular, 400);
-  letter-spacing: 0;
-  color: var(--color-black-500);
+  /* 삭제 버튼은 작은 크기로 표시 */
 }
 
 /* 버전 정보 */
@@ -299,20 +258,20 @@
 }
 
 /* 스크롤바 스타일링 */
-.friendList::-webkit-scrollbar {
+.modal::-webkit-scrollbar {
   width: 4px;
 }
 
-.friendList::-webkit-scrollbar-track {
+.modal::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.friendList::-webkit-scrollbar-thumb {
+.modal::-webkit-scrollbar-thumb {
   background-color: var(--color-grey-300);
   border-radius: var(--radius-full);
 }
 
-.friendList::-webkit-scrollbar-thumb:hover {
+.modal::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-grey-400);
 }
 
@@ -364,27 +323,9 @@
   color: var(--color-red-600);
 }
 
+/* 공통 Button 컴포넌트 사용 - 추가 스타일 필요시 여기에 정의 */
 .retryButton {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  background-color: var(--color-white-grey-100);
-  border: 1px solid var(--color-grey-300);
-  border-radius: var(--radius-md);
-  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: var(--font-weight-regular, 400);
-  color: var(--color-black-500);
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.retryButton:hover {
-  background-color: var(--color-white-grey-200);
-  border-color: var(--color-grey-400);
-}
-
-.retryButton:active {
-  background-color: var(--color-white-grey-300);
+  /* 재시도 버튼 스타일 */
 }
 
 /* 빈 상태 */
@@ -444,43 +385,9 @@
   box-sizing: border-box;
 }
 
+/* 공통 Button 컴포넌트 사용 - 추가 스타일 필요시 여기에 정의 */
 .addFriendButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--color-white-grey-50);
-  border: 1px solid var(--color-grey-300);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
-}
-
-.addFriendButton:hover {
-  background-color: var(--color-white-grey-100);
-  border-color: var(--color-grey-400);
-}
-
-.addFriendButton:active {
-  background-color: var(--color-white-grey-200);
-}
-
-.addIcon {
-  color: var(--color-black-500);
-  flex-shrink: 0;
-}
-
-.addText {
-  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: var(--font-weight-regular, 400);
-  letter-spacing: 0;
-  color: var(--color-black-500);
 }
 
 /* 친구 추가 폼 */
@@ -525,15 +432,15 @@
 }
 
 .typeButtonActive {
-  background-color: var(--color-blue-50);
-  border-color: var(--color-blue-500);
-  color: var(--color-blue-700);
+  background-color: var(--color-black-500);
+  border-color: var(--color-black-500);
+  color: var(--color-white-500);
   font-weight: var(--font-weight-medium, 500);
 }
 
 .typeButtonActive:hover {
-  background-color: var(--color-blue-100);
-  border-color: var(--color-blue-600);
+  background-color: var(--color-black-600);
+  border-color: var(--color-black-600);
 }
 
 .addInputGroup {
@@ -546,6 +453,7 @@
 .addInput {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);
+  min-height: 44px;
   background-color: var(--color-white-50);
   border: 1px solid var(--color-grey-300);
   border-radius: var(--radius-md);
@@ -555,13 +463,13 @@
   font-weight: var(--font-weight-regular, 400);
   color: var(--color-black-500);
   box-sizing: border-box;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
 }
 
 .addInput:focus {
   outline: none;
-  border-color: var(--color-blue-500);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-500) 10%, transparent);
+  border-color: var(--color-black-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-black-500) 10%, transparent);
 }
 
 .addInput:disabled {
@@ -587,62 +495,7 @@
   margin: 0;
 }
 
+/* 공통 DualButton 컴포넌트 사용 - 추가 스타일 필요시 여기에 정의 */
 .addButtonGroup {
-  display: flex;
-  flex-direction: row;
-  gap: var(--spacing-sm);
   width: 100%;
-}
-
-.addSubmitButton,
-.addCancelButton {
-  flex: 1;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-md);
-  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: var(--font-weight-medium, 500);
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
-  border: none;
-}
-
-.addSubmitButton {
-  background-color: var(--color-blue-500);
-  color: var(--color-white-50);
-}
-
-.addSubmitButton:hover:not(:disabled) {
-  background-color: var(--color-blue-600);
-}
-
-.addSubmitButton:active:not(:disabled) {
-  background-color: var(--color-blue-700);
-}
-
-.addSubmitButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.addCancelButton {
-  background-color: var(--color-white-grey-100);
-  border: 1px solid var(--color-grey-300);
-  color: var(--color-black-500);
-}
-
-.addCancelButton:hover:not(:disabled) {
-  background-color: var(--color-white-grey-200);
-  border-color: var(--color-grey-400);
-}
-
-.addCancelButton:active:not(:disabled) {
-  background-color: var(--color-white-grey-300);
-}
-
-.addCancelButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
