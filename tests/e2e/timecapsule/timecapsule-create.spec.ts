@@ -5,13 +5,13 @@
 
 import { test, expect } from '@playwright/test';
 
-// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
-const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
+// 테스트용 토큰 - NEXT_PUBLIC_DEV_TOKEN 환경변수 사용
+const TEST_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
 
 test.describe('타임캡슐 생성 페이지', () => {
   test.beforeEach(async ({ page, context }) => {
     if (!TEST_TOKEN) {
-      console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
+      console.warn('⚠️  NEXT_PUBLIC_DEV_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
       test.skip();
       return;
     }
