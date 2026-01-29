@@ -54,7 +54,7 @@ export function ProfileEditModal({
 
   useEffect(() => {
     if (open && profile) {
-      resetFromProfile();
+      queueMicrotask(() => resetFromProfile());
     }
   }, [open, profile, resetFromProfile]);
 

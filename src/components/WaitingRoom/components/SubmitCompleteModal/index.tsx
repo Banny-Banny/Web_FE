@@ -32,7 +32,7 @@ import styles from './styles.module.css';
 export function SubmitCompleteModal({
   isOpen,
   onClose,
-  capsuleId,
+  capsuleId: _capsuleId,
   openDate,
   isAutoSubmitted,
 }: SubmitCompleteModalProps) {

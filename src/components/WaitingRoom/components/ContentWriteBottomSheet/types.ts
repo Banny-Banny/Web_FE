@@ -15,10 +15,10 @@ export interface ContentFormData {
   images: File[];
   /** 유지할 기존 이미지 URL 배열 (PATCH existing_image_urls 용) */
   existingImageUrls: string[];
-  /** 음악 파일 */
-  music?: File | null;
-  /** 영상 파일 */
-  video?: File | null;
+  /** 음악 파일 (File: 새로 업로드, string: 기존 URL) */
+  music?: File | string | null;
+  /** 영상 파일 (File: 새로 업로드, string: 기존 URL) */
+  video?: File | string | null;
 }
 
 /**

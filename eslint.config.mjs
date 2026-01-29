@@ -30,6 +30,8 @@ const eslintConfig = defineConfig([
     "out/**", 
     "build/**",
     "next-env.d.ts",
+    // 로컬 히스토리 (Cursor/VS Code) - 린트 제외
+    ".history/**",
     // 추가 무시 파일
     "*.config.js",
     "*.config.mjs",

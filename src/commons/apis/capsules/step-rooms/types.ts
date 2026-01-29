@@ -160,15 +160,25 @@ export interface MyContentApiResponse {
 /**
  * 개인 컨텐츠 응답 타입 (프론트엔드 camelCase)
  */
+/**
+ * 미디어 정보 타입
+ */
+export interface MediaInfo {
+  /** 미디어 ID */
+  media_id: string;
+  /** 미디어 URL */
+  url: string;
+}
+
 export interface MyContentResponse {
   /** 텍스트 내용 */
   text?: string;
   /** 이미지 URL 배열 */
   images?: string[];
-  /** 음악 URL */
-  music?: string;
-  /** 영상 URL */
-  video?: string;
+  /** 음악 정보 (객체 형태 또는 URL 문자열) */
+  music?: MediaInfo | string;
+  /** 영상 정보 (객체 형태 또는 URL 문자열) */
+  video?: MediaInfo | string;
   /** 작성 일시 (ISO 8601 형식) */
   createdAt?: string;
   /** 수정 일시 (ISO 8601 형식) */

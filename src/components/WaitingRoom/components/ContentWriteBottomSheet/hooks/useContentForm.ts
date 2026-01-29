@@ -25,6 +25,7 @@ import type { ApiError } from '@/commons/provider/api-provider/api-client';
 interface OriginalFormData {
   text: string;
   existingImageUrls: string[];
+  images: File[];
   music: string | null;
   video: string | null;
 }
@@ -53,28 +54,35 @@ function hasChanges(
     return true;
   }
 
-  // 이미지 변경 확인 (기존 URL + 새 파일)
-  const currentAllImages = [...current.existingImageUrls, ...current.images.map(() => 'new')];
-  const originalAllImages = original.existingImageUrls;
-  if (!arraysEqual(currentAllImages, originalAllImages)) {
+  // 이미지 변경 확인 (기존 URL만 비교)
+  if (!arraysEqual(current.existingImageUrls, original.existingImageUrls)) {
     return true;
   }
 
-  // 음성 변경 확인 (URL vs File)
-  if (current.music !== null && typeof current.music === 'object') {
-    // 새 파일이 있으면 변경됨
-    return true;
-  }
-  if (current.music === null && original.music !== null) {
+  // 새 이미지 파일 추가 확인
+  if (current.images.length !== original.images.length) {
     return true;
   }
 
-  // 비디오 변경 확인 (URL vs File)
-  if (current.video !== null && typeof current.video === 'object') {
-    // 새 파일이 있으면 변경됨
+  // 음성 변경 확인
+  // File 객체면 새로 업로드한 것이므로 변경됨
+  if (current.music instanceof File) {
     return true;
   }
-  if (current.video === null && original.video !== null) {
+  // URL이 변경되었는지 확인
+  const currentMusicUrl = typeof current.music === 'string' ? current.music : null;
+  if (currentMusicUrl !== original.music) {
+    return true;
+  }
+
+  // 비디오 변경 확인
+  // File 객체면 새로 업로드한 것이므로 변경됨
+  if (current.video instanceof File) {
+    return true;
+  }
+  // URL이 변경되었는지 확인
+  const currentVideoUrl = typeof current.video === 'string' ? current.video : null;
+  if (currentVideoUrl !== original.video) {
     return true;
   }
 
@@ -122,8 +130,8 @@ export function useContentForm(capsuleId: string) {
       // 404 에러는 컨텐츠가 없는 것으로 처리 (신규 작성 모드)
       const apiError = contentError as ApiError;
       if (apiError.status === 404) {
-        // 상태 업데이트를 다음 렌더 사이클로 지연
-        setTimeout(() => {
+        // effect 내 동기 setState는 연쇄 렌더를 유발하므로 다음 틱으로 지연
+        queueMicrotask(() => {
           setHasExistingContent(false);
           setIsEditMode(false);
           setOriginalData(null);
@@ -134,7 +142,7 @@ export function useContentForm(capsuleId: string) {
             music: null,
             video: null,
           });
-        }, 0);
+        });
       }
       return;
     }
@@ -148,37 +156,51 @@ export function useContentForm(capsuleId: string) {
         myContent.video
       );
 
-      // 상태 업데이트를 다음 렌더 사이클로 지연
-      setTimeout(() => {
+      // effect 내 동기 setState는 연쇄 렌더를 유발하므로 다음 틱으로 지연
+      queueMicrotask(() => {
         setHasExistingContent(hasContent);
         setIsEditMode(hasContent);
-      }, 0);
+      });
 
       // 기존 컨텐츠가 있으면 폼에 채우기
       if (hasContent) {
+        // 음악 URL 추출 (MediaInfo 객체 또는 문자열)
+        const musicUrl =
+          typeof myContent.music === 'string'
+            ? myContent.music
+            : myContent.music && typeof myContent.music === 'object'
+              ? myContent.music.url
+              : null;
+
+        // 비디오 URL 추출 (MediaInfo 객체 또는 문자열)
+        const videoUrl =
+          typeof myContent.video === 'string'
+            ? myContent.video
+            : myContent.video && typeof myContent.video === 'object'
+              ? myContent.video.url
+              : null;
+
         const loadedData = {
           text: myContent.text || '',
           images: [], // 신규 업로드 파일만 관리
           existingImageUrls: myContent.images ?? [], // 기존 이미지 URL 유지용
-          music: null, // 음악은 URL이므로 File 객체로 변환하지 않음
-          video: null, // 영상도 URL이므로 File 객체로 변환하지 않음
+          music: musicUrl, // 음악 URL 저장
+          video: videoUrl, // 영상 URL 저장
         };
-        
-        // 상태 업데이트를 다음 렌더 사이클로 지연
-        setTimeout(() => {
+
+        queueMicrotask(() => {
           setFormData(loadedData);
-          // 원본 데이터 저장 (변경 감지용)
           setOriginalData({
             text: myContent.text || '',
             existingImageUrls: myContent.images ?? [],
-            music: myContent.music || null,
-            video: myContent.video || null,
+            images: [],
+            music: musicUrl,
+            video: videoUrl,
           });
-        }, 0);
+        });
       } else {
         // 신규 작성 모드
-        // 상태 업데이트를 다음 렌더 사이클로 지연
-        setTimeout(() => {
+        queueMicrotask(() => {
           setOriginalData(null);
           setFormData({
             text: '',
@@ -187,7 +209,7 @@ export function useContentForm(capsuleId: string) {
             music: null,
             video: null,
           });
-        }, 0);
+        });
       }
     }
   }, [myContent, isLoadingContent, contentError]);
@@ -213,11 +235,11 @@ export function useContentForm(capsuleId: string) {
       const updateData: UpdateContentRequest = {
         text: formData.text || undefined,
         images: formData.images.length > 0 ? formData.images : undefined,
-        // 신규 이미지 업로드가 없으면 기존 이미지 URL 유지 (부분 수정 스펙)
-        existingImageUrls:
-          formData.images.length === 0 && formData.existingImageUrls.length > 0
-            ? formData.existingImageUrls
-            : undefined,
+        // ⭐ 기존 이미지 URL 유지 (변경되지 않았더라도 명시적으로 전달)
+        existingImageUrls: formData.existingImageUrls.length > 0
+          ? formData.existingImageUrls
+          : undefined,
+        // File이면 새로 업로드, string이면 기존 URL이므로 전달하지 않음
         music: formData.music instanceof File ? formData.music : undefined,
         video: formData.video instanceof File ? formData.video : undefined,
       };
@@ -228,9 +250,16 @@ export function useContentForm(capsuleId: string) {
       setOriginalData({
         text: formData.text,
         existingImageUrls: formData.existingImageUrls,
-        music: formData.music instanceof File ? null : (formData.music || null),
-        video: formData.video instanceof File ? null : (formData.video || null),
+        images: formData.images,
+        music: typeof formData.music === 'string' ? formData.music : null,
+        video: typeof formData.video === 'string' ? formData.video : null,
       });
+
+      // 신규 업로드 파일은 초기화 (이미 서버에 업로드됨)
+      setFormData((prev) => ({
+        ...prev,
+        images: [],
+      }));
 
       // 자동 저장 완료 후 상태 초기화
       setTimeout(() => {
@@ -246,7 +275,7 @@ export function useContentForm(capsuleId: string) {
     formData,
     originalData,
     isLoadingContent,
-    saveContentMutation.isPending,
+    saveContentMutation,
     updateContentMutation,
   ]);
 
@@ -330,7 +359,7 @@ export function useContentForm(capsuleId: string) {
   };
 
   // 음악 변경 핸들러 (자동 저장 트리거)
-  const handleMusicChange = (music: File | null) => {
+  const handleMusicChange = (music: File | string | null) => {
     setFormData((prev) => ({ ...prev, music }));
     // 수정 모드일 때만 자동 저장 트리거
     if (isEditMode) {
@@ -348,7 +377,7 @@ export function useContentForm(capsuleId: string) {
   };
 
   // 영상 변경 핸들러 (자동 저장 트리거)
-  const handleVideoChange = (video: File | null) => {
+  const handleVideoChange = (video: File | string | null) => {
     setFormData((prev) => ({ ...prev, video }));
     // 수정 모드일 때만 자동 저장 트리거
     if (isEditMode) {
@@ -384,10 +413,11 @@ export function useContentForm(capsuleId: string) {
         const updateData: UpdateContentRequest = {
           text: formData.text || undefined,
           images: formData.images.length > 0 ? formData.images : undefined,
-          existingImageUrls:
-            formData.images.length === 0 && formData.existingImageUrls.length > 0
-              ? formData.existingImageUrls
-              : undefined,
+          // ⭐ 기존 이미지 URL 유지 (변경되지 않았더라도 명시적으로 전달)
+          existingImageUrls: formData.existingImageUrls.length > 0
+            ? formData.existingImageUrls
+            : undefined,
+          // File이면 새로 업로드, string이면 기존 URL이므로 전달하지 않음
           music: formData.music instanceof File ? formData.music : undefined,
           video: formData.video instanceof File ? formData.video : undefined,
         };
@@ -398,14 +428,22 @@ export function useContentForm(capsuleId: string) {
         setOriginalData({
           text: formData.text,
           existingImageUrls: formData.existingImageUrls,
-          music: formData.music instanceof File ? null : (formData.music || null),
-          video: formData.video instanceof File ? null : (formData.video || null),
+          images: [],
+          music: typeof formData.music === 'string' ? formData.music : null,
+          video: typeof formData.video === 'string' ? formData.video : null,
         });
+
+        // 신규 업로드 파일은 초기화 (이미 서버에 업로드됨)
+        setFormData((prev) => ({
+          ...prev,
+          images: [],
+        }));
       } else {
         // 신규 작성 모드: useSaveContent 사용
         const saveData: SaveContentRequest = {
           text: formData.text || undefined,
           images: formData.images.length > 0 ? formData.images : undefined,
+          // File이면 새로 업로드, string은 신규 작성에서는 없어야 함
           music: formData.music instanceof File ? formData.music : undefined,
           video: formData.video instanceof File ? formData.video : undefined,
         };
@@ -415,13 +453,14 @@ export function useContentForm(capsuleId: string) {
         // 저장 성공 시 수정 모드로 전환
         setIsEditMode(true);
         setHasExistingContent(true);
-        
+
         // 원본 데이터 저장
         setOriginalData({
           text: formData.text,
           existingImageUrls: [],
-          music: formData.music instanceof File ? null : (formData.music || null),
-          video: formData.video instanceof File ? null : (formData.video || null),
+          images: [],
+          music: null,
+          video: null,
         });
       }
 

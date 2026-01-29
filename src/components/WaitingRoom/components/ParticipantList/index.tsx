@@ -22,7 +22,6 @@ import {
   RiUserLine,
   RiShareLine,
 } from '@remixicon/react';
-import { Button } from '@/commons/components/button';
 import type { ParticipantListProps } from './types';
 import styles from './styles.module.css';
 
@@ -47,7 +46,7 @@ export function ParticipantList({
   isHost = false,
   onInviteFriend,
   onWriteMyContent,
-  onFinalSubmit,
+  onFinalSubmit: _onFinalSubmit,
 }: ParticipantListProps) {
   // participants가 없으면 빈 배열로 대체
   const safeParticipants = participants ?? [];

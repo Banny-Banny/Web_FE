@@ -26,11 +26,11 @@ if (typeof window === 'undefined') {
     clear: () => {},
   };
   
-  // @ts-ignore - Node.js 환경에서 window와 localStorage 모킹
+  // @ts-expect-error - Node.js 환경에서 window와 localStorage 모킹
   global.window = {
     localStorage: localStorageMock,
   };
-  // @ts-ignore
+  // @ts-expect-error - Node.js 환경에서 localStorage 모킹
   global.localStorage = localStorageMock;
 }
 
@@ -286,7 +286,7 @@ test.describe('타임캡슐 제출 UI 플로우', () => {
   });
 
   test('[US1] 방장이 대기실에서 제출 버튼을 보고 클릭할 수 있다', async ({
-    page,
+    page: _page,
   }) => {
     // Mock 데이터를 사용한 UI 테스트
     // 실제 구현 후 작성
@@ -294,7 +294,7 @@ test.describe('타임캡슐 제출 UI 플로우', () => {
   });
 
   test('[US2] 24시간 타이머가 정상적으로 표시되고 업데이트된다', async ({
-    page,
+    page: _page,
   }) => {
     // Mock 데이터를 사용한 UI 테스트
     // 실제 구현 후 작성
@@ -302,7 +302,7 @@ test.describe('타임캡슐 제출 UI 플로우', () => {
   });
 
   test('[US3] 자동 제출 후 재접속 시 안내 모달이 표시된다', async ({
-    page,
+    page: _page,
   }) => {
     // Mock 데이터를 사용한 UI 테스트
     // 실제 구현 후 작성
@@ -310,7 +310,7 @@ test.describe('타임캡슐 제출 UI 플로우', () => {
   });
 
   test('[US4] 참여자 미완료 시 제출 버튼이 비활성화된다', async ({
-    page,
+    page: _page,
   }) => {
     // Mock 데이터를 사용한 UI 테스트
     // 실제 구현 후 작성
@@ -318,7 +318,7 @@ test.describe('타임캡슐 제출 UI 플로우', () => {
   });
 
   test('[US5] GPS 권한 거부 시 에러 메시지가 표시된다', async ({
-    page,
+    page: _page,
   }) => {
     // Mock 데이터를 사용한 UI 테스트
     // 실제 구현 후 작성

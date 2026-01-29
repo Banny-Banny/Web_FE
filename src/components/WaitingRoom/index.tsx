@@ -50,6 +50,13 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   const [isContentWriteOpen, setIsContentWriteOpen] = useState(false);
   const [isMyContentJustSaved, setIsMyContentJustSaved] = useState(false);
 
+  // 렌더 시 Date.now() 호출 방지 (impure) — 1초마다 갱신
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
   // 제출 관련 상태
   const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
   const [isSubmitCompleteOpen, setIsSubmitCompleteOpen] = useState(false);
@@ -87,7 +94,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
       waitingRoom?.status === 'BURIED' &&
       waitingRoom?.isAutoSubmitted === true
     ) {
-      setIsAutoSubmitModalOpen(true);
+      queueMicrotask(() => setIsAutoSubmitModalOpen(true));
     }
   }, [waitingRoom?.status, waitingRoom?.isAutoSubmitted]);
 
@@ -97,7 +104,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   ) ?? false;
 
   const isTimerExpired = waitingRoom?.createdAt
-    ? new Date(waitingRoom.createdAt).getTime() + 24 * 60 * 60 * 1000 < Date.now()
+    ? new Date(waitingRoom.createdAt).getTime() + 24 * 60 * 60 * 1000 < now
     : false;
 
   const canSubmit =
@@ -145,6 +152,11 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
         alert('초대 링크가 클립보드에 복사되었습니다!');
       }
     } catch (error) {
+      // 사용자가 공유를 취소한 경우 (AbortError)는 조용히 처리
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
+
       console.error('초대 링크 공유 실패:', error);
       // 공유 실패 시 클립보드 복사 시도
       try {
@@ -266,28 +278,28 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
               onWriteMyContent={handleWriteMyContent}
               onFinalSubmit={handleFinalSubmit}
             />
+
+            {/* 제출 버튼 (방장에게만 표시) */}
+            {isHost && waitingRoom?.status !== 'BURIED' && (
+              <div className={styles.submitButtonContainer}>
+                {/* 비활성화 사유 표시 */}
+                {!canSubmit && getDisabledReason() && (
+                  <div className={styles.disabledReason}>{getDisabledReason()}</div>
+                )}
+                <Button
+                  label={isSubmitting ? '제출 중...' : '타임캡슐 묻기'}
+                  variant="primary"
+                  size="M"
+                  fullWidth
+                  disabled={!canSubmit || isSubmitting}
+                  onPress={handleFinalSubmit}
+                  aria-label="타임캡슐 묻기"
+                />
+              </div>
+            )}
           </>
         )}
       </div>
-
-      {/* 제출 버튼 (방장에게만 표시) */}
-      {isHost && waitingRoom?.status !== 'BURIED' && (
-        <div className={styles.submitButtonContainer}>
-          {/* 비활성화 사유 표시 */}
-          {!canSubmit && getDisabledReason() && (
-            <div className={styles.disabledReason}>{getDisabledReason()}</div>
-          )}
-          <Button
-            label={isSubmitting ? '제출 중...' : '타임캡슐 묻기'}
-            variant="primary"
-            size="M"
-            fullWidth
-            disabled={!canSubmit || isSubmitting}
-            onPress={handleFinalSubmit}
-            aria-label="타임캡슐 묻기"
-          />
-        </div>
-      )}
 
       {/* 제출 확인 모달 */}
       {waitingRoom && (
@@ -301,7 +313,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
               ? Math.floor(
                   (new Date(waitingRoom.createdAt).getTime() +
                     24 * 60 * 60 * 1000 -
-                    Date.now()) /
+                    now) /
                     (1000 * 60 * 60)
                 )
               : 0

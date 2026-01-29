@@ -16,7 +16,7 @@
  * - [x] Figma 디자인 1:1 대응
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { RiCalendarLine, RiUser3Line } from '@remixicon/react';
 import { Button } from '@/commons/components/button';
 import type { WaitingRoomInfoProps } from './types';

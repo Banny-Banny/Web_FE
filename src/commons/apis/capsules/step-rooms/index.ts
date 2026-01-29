@@ -17,6 +17,7 @@ import type {
   WaitingRoomDetailApiResponse,
   Participant,
   SlotApiResponse,
+  MediaInfo,
   MyContentApiResponse,
   MyContentResponse,
   SaveContentRequest,
@@ -172,25 +173,35 @@ function transformMyContent(data: MyContentApiResponse): MyContentResponse {
     return undefined;
   })();
 
-  const musicUrl =
-    typeof data.music === 'string'
-      ? data.music
-      : data.music && typeof (data.music as any).url === 'string'
-        ? (data.music as any).url
-        : undefined;
+  // 음악 정보: 객체 형태 또는 URL 문자열
+  const musicInfo = ((): MediaInfo | string | undefined => {
+    if (typeof data.music === 'string') return data.music;
+    if (data.music && typeof (data.music as any).url === 'string') {
+      return {
+        media_id: (data.music as any).media_id || '',
+        url: (data.music as any).url,
+      };
+    }
+    return undefined;
+  })();
 
-  const videoUrl =
-    typeof data.video === 'string'
-      ? data.video
-      : data.video && typeof (data.video as any).url === 'string'
-        ? (data.video as any).url
-        : undefined;
+  // 비디오 정보: 객체 형태 또는 URL 문자열
+  const videoInfo = ((): MediaInfo | string | undefined => {
+    if (typeof data.video === 'string') return data.video;
+    if (data.video && typeof (data.video as any).url === 'string') {
+      return {
+        media_id: (data.video as any).media_id || '',
+        url: (data.video as any).url,
+      };
+    }
+    return undefined;
+  })();
 
   return {
     text: textCandidate,
     images: imageUrls,
-    music: musicUrl,
-    video: videoUrl,
+    music: musicInfo,
+    video: videoInfo,
     createdAt: data.created_at,
     updatedAt: data.updated_at,
   };
