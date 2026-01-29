@@ -15,14 +15,14 @@ import type {
   JoinRoomResponse,
 } from '../../../src/commons/apis/capsules/step-rooms/types';
 
-// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
-const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
+// 테스트용 토큰 - NEXT_PUBLIC_DEV_TOKEN 환경변수 사용
+const TEST_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
 
 test.describe('타임캡슐 대기실 초대/참여 API', () => {
   test.describe('POST /api/capsules/step-rooms/create - 방 생성', () => {
     test.beforeEach(() => {
       if (!TEST_TOKEN) {
-        console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
+        console.warn('⚠️  NEXT_PUBLIC_DEV_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
         test.skip();
       }
     });
@@ -80,7 +80,8 @@ test.describe('타임캡슐 대기실 초대/참여 API', () => {
       // API 클라이언트가 자동으로 토큰을 추가하므로,
       // 토큰이 없는 경우는 환경 변수 설정 문제
       // 실제로는 apiClient 인터셉터에서 처리됨
-      if (!DEV_TOKEN) {
+      if (!TEST_TOKEN) {
+        console.warn('⚠️  NEXT_PUBLIC_DEV_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
         test.skip();
       }
     });
@@ -159,7 +160,8 @@ test.describe('타임캡슐 대기실 초대/참여 API', () => {
 
   test.describe('POST /api/capsules/step-rooms/{capsuleId}/join - 방 참여', () => {
     test.beforeEach(() => {
-      if (!DEV_TOKEN) {
+      if (!TEST_TOKEN) {
+        console.warn('⚠️  NEXT_PUBLIC_DEV_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
         test.skip();
       }
     });

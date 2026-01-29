@@ -35,20 +35,23 @@ export function CapsuleNameInput({
   const isMaxLength = maxLength && currentLength >= maxLength;
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${error ? styles.inputError : ''}`}>
       <label htmlFor="capsuleName" className={styles.label}>
         캡슐 이름
       </label>
-      <input
-        id="capsuleName"
-        type="text"
-        {...register('capsuleName')}
-        maxLength={maxLength}
-        className={`${styles.input} ${error ? styles.inputError : ''}`}
-        aria-label="캡슐 이름"
-        aria-invalid={error ? 'true' : 'false'}
-        aria-describedby={error ? 'capsuleName-error' : undefined}
-      />
+      <div className={styles.inputContainer}>
+        <input
+          id="capsuleName"
+          type="text"
+          {...register('capsuleName')}
+          maxLength={maxLength}
+          className={styles.input}
+          placeholder="예) 2025년의 우리"
+          aria-label="캡슐 이름"
+          aria-invalid={error ? 'true' : 'false'}
+          aria-describedby={error ? 'capsuleName-error' : undefined}
+        />
+      </div>
       {error && (
         <span
           id="capsuleName-error"

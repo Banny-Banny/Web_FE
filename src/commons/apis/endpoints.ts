@@ -230,6 +230,9 @@ export const CAPSULE_ENDPOINTS = {
   // 초대 코드로 방 참여
   JOIN_ROOM: (capsuleId: string) =>
     `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/join`,
+  // 타임캡슐 제출 (방장 전용)
+  SUBMIT_CAPSULE: (roomId: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/${roomId}/submit`,
 } as const;
 
 /**

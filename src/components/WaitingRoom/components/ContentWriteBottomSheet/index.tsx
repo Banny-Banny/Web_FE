@@ -13,15 +13,17 @@
  * - Figma 디자인 기반 pixel-perfect 구현
  */
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { BottomSheet } from '@/commons/components/bottom-sheet';
 import { DualButton } from '@/commons/components/dual-button';
 import { Spinner } from '@/commons/components/spinner';
+import { AudioAttachmentModal } from '@/commons/components/audio-attachment-modal';
+import { AudioPreview } from '@/commons/components/audio-preview';
+import { VideoPreview } from '@/commons/components/video-preview';
+import { validateFileSize, isVideoFile } from '@/commons/utils/content';
 import { MediaLimits } from './components/MediaLimits';
 import { TextInput } from './components/TextInput';
 import { ImageUpload } from './components/ImageUpload';
-import { MusicUpload } from './components/MusicUpload';
-import { VideoUpload } from './components/VideoUpload';
 import { useContentForm } from './hooks/useContentForm';
 import styles from './styles.module.css';
 import type { ContentWriteBottomSheetProps } from './types';
@@ -69,18 +71,100 @@ export function ContentWriteBottomSheet({
     }
   };
 
+  const [isAudioModalVisible, setIsAudioModalVisible] = useState(false);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const [musicObjectUrl, setMusicObjectUrl] = useState<string | null>(null);
+  const [videoObjectUrl, setVideoObjectUrl] = useState<string | null>(null);
+
+  // 음성 파일 URL 관리
+  React.useEffect(() => {
+    if (formData.music) {
+      const url = URL.createObjectURL(formData.music);
+      setMusicObjectUrl(url);
+      return () => {
+        URL.revokeObjectURL(url);
+        setMusicObjectUrl(null);
+      };
+    } else {
+      setMusicObjectUrl(null);
+    }
+  }, [formData.music]);
+
+  // 비디오 파일 URL 관리
+  React.useEffect(() => {
+    if (formData.video) {
+      const url = URL.createObjectURL(formData.video);
+      setVideoObjectUrl(url);
+      return () => {
+        URL.revokeObjectURL(url);
+        setVideoObjectUrl(null);
+      };
+    } else {
+      setVideoObjectUrl(null);
+    }
+  }, [formData.video]);
+
   const handleCancelClick = () => {
     onClose();
   };
 
+  const handleAudioSelect = (file: File) => {
+    handleMusicChange(file);
+    setIsAudioModalVisible(false);
+  };
+
+  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+
+    // 파일 형식 검증
+    if (!isVideoFile(file)) {
+      alert('영상 파일만 업로드할 수 있습니다. (mp4, mov 등)');
+      return;
+    }
+
+    // 파일 크기 검증 (100MB 제한)
+    if (!validateFileSize(file, 100 * 1024 * 1024)) {
+      alert('파일 크기는 100MB 이하여야 합니다.');
+      return;
+    }
+
+    handleVideoChange(file);
+
+    // 파일 입력 초기화
+    if (videoInputRef.current) {
+      videoInputRef.current.value = '';
+    }
+  };
+
+  const renderFooter = () => (
+    <>
+      <DualButton
+        cancelLabel="취소"
+        confirmLabel={isSaving ? (isEditMode ? '수정 중...' : '저장 중...') : (isEditMode ? '수정' : '저장')}
+        size="M"
+        confirmDisabled={isSaving || formData.text.trim().length === 0}
+        onCancelPress={handleCancelClick}
+        onConfirmPress={handleSaveClick}
+      />
+      <p className={styles.hintText}>
+        {isEditMode ? '수정된 내용을 저장합니다' : '저장 후에도 수정할 수 있어요'}
+      </p>
+    </>
+  );
+
   return (
-    <BottomSheet
-      isOpen={isOpen}
-      onClose={onClose}
-      showHandle={true}
-      draggable={true}
-      maxHeight="90vh"
-    >
+    <>
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        showHandle={true}
+        draggable={false}
+        maxHeight="100vh"
+        footer={!isLoading ? renderFooter() : undefined}
+      >
       <div className={styles.container}>
         {isLoading && (
           <div className={styles.loadingContainer}>
@@ -137,39 +221,114 @@ export function ContentWriteBottomSheet({
               )}
 
               {settings?.hasMusic && (
-                <MusicUpload
-                  music={formData.music}
-                  onChange={handleMusicChange}
-                  onRemove={handleMusicRemove}
-                />
+                <div className={styles.section}>
+                  <div className={styles.sectionHeader}>
+                    <svg
+                      className={styles.sectionIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 18V5L21 3V16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="6" cy="18" r="3" stroke="currentColor" strokeWidth="2" />
+                      <circle cx="18" cy="16" r="3" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                    <span className={styles.sectionTitle}>
+                      음성 ({formData.music ? 1 : 0}/1)
+                    </span>
+                  </div>
+
+                  {formData.music && musicObjectUrl ? (
+                    <AudioPreview
+                      audioUrl={musicObjectUrl}
+                      onDelete={handleMusicRemove}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.addButton}
+                      onClick={() => setIsAudioModalVisible(true)}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span className={styles.addText}>음성 추가</span>
+                    </button>
+                  )}
+                </div>
               )}
 
               {settings?.hasVideo && (
-                <VideoUpload
-                  video={formData.video}
-                  onChange={handleVideoChange}
-                  onRemove={handleVideoRemove}
-                />
-              )}
-            </div>
+                <div className={styles.section}>
+                  <div className={styles.sectionHeader}>
+                    <svg
+                      className={styles.sectionIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15 10L19.5528 7.72361C20.2177 7.39116 21 7.87465 21 8.61803V15.382C21 16.1253 20.2177 16.6088 19.5528 16.2764L15 14M5 18H13C14.1046 18 15 17.1046 15 16V8C15 6.89543 14.1046 6 13 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span className={styles.sectionTitle}>
+                      동영상 ({formData.video ? 1 : 0}/1)
+                    </span>
+                  </div>
 
-            <div className={styles.footer}>
-              <DualButton
-                cancelLabel="취소"
-                confirmLabel="저장"
-                size="L"
-                confirmDisabled={isSaving || formData.text.trim().length === 0}
-                onCancelPress={handleCancelClick}
-                onConfirmPress={handleSaveClick}
-              />
-              <p className={styles.infoText}>
-                {isEditMode ? '수정된 내용을 저장합니다' : '저장 후에도 수정할 수 있어요'}
-              </p>
+                  {formData.video && videoObjectUrl ? (
+                    <VideoPreview
+                      videoUrl={videoObjectUrl}
+                      onDelete={handleVideoRemove}
+                    />
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className={styles.addButton}
+                        onClick={() => videoInputRef.current?.click()}
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 5V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className={styles.addText}>동영상 추가</span>
+                      </button>
+                      <input
+                        ref={videoInputRef}
+                        type="file"
+                        accept="video/*"
+                        onChange={handleVideoSelect}
+                        style={{ display: 'none' }}
+                        aria-label="영상 파일 선택"
+                      />
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </>
         )}
       </div>
-    </BottomSheet>
+      </BottomSheet>
+
+      <AudioAttachmentModal
+        visible={isAudioModalVisible}
+        onClose={() => setIsAudioModalVisible(false)}
+        onSelectAudio={handleAudioSelect}
+      />
+    </>
   );
 }
 

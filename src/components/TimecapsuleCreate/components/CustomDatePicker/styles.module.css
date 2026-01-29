@@ -1,52 +1,200 @@
 /**
  * CustomDatePicker 컴포넌트 스타일
- * 
+ *
  * @description
- * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - step-info React Native 바텀시트 스타일 기반 (2024-12-30 디자인)
  * - CSS 변수를 사용한 디자인 토큰 적용
  * - 375px 기준 고정 레이아웃
  */
 
-.container {
-  width: 100%;
+/* React Native calendarBottomSheetOverlay 스타일 기반 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 10, 0.5);
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  margin-top: var(--spacing-md);
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-in-out;
 }
 
-.input {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* React Native calendarBottomSheetContainer 스타일 기반 */
+.modalContainer {
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  background-color: var(--color-white-500);
+  max-width: 375px;
+  background-color: var(--color-white-50);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 20px 24px 40px 24px;
+  max-height: 70vh;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* React Native calendarBottomSheetHeader 스타일 기반 */
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+/* React Native calendarBottomSheetTitle 스타일 기반 */
+.modalTitle {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-black-500);
-  line-height: var(--line-height-normal);
-  outline: none;
-  transition: border-color 0.2s ease;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-dark-grey-900);
+  line-height: 27px;
+  margin: 0;
 }
 
-.input:focus {
-  border-color: var(--color-black-500);
+/* React Native calendarBottomSheetCloseButton 스타일 기반 */
+.closeButton {
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-grey-600);
+  line-height: 24px;
 }
 
-.inputError {
-  border-color: var(--color-red-500);
+.closeButton:hover {
+  opacity: 0.7;
 }
 
-.inputError:focus {
-  border-color: var(--color-red-500);
+/* React Native calendarContainer 스타일 기반 */
+.calendarContainer {
+  margin-bottom: 20px;
+}
+
+/* react-calendar 커스터마이징 */
+.customCalendar {
+  width: 100%;
+  border: none;
+  font-family: var(--font-pretendard);
+}
+
+/* 달력 전체 스타일 */
+.customCalendar :global(.react-calendar__navigation) {
+  margin-bottom: 1em;
+}
+
+.customCalendar :global(.react-calendar__navigation button) {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.customCalendar :global(.react-calendar__navigation button:enabled:hover),
+.customCalendar :global(.react-calendar__navigation button:enabled:focus) {
+  background-color: transparent;
+}
+
+.customCalendar :global(.react-calendar__month-view__weekdays) {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.customCalendar :global(.react-calendar__tile) {
+  padding: 10px;
+  background: none;
+  text-align: center;
+  line-height: 1.5;
+  font-size: 14px;
+  border-radius: 8px;
+  color: #000000;
+}
+
+.customCalendar :global(.react-calendar__tile:enabled:hover),
+.customCalendar :global(.react-calendar__tile:enabled:focus) {
+  background-color: #f0f0f0;
+}
+
+.customCalendar :global(.react-calendar__tile--active) {
+  background-color: #000000 !important;
+  color: white !important;
+}
+
+.customCalendar :global(.react-calendar__tile--now) {
+  background-color: transparent;
+  color: #000000;
+}
+
+.customCalendar :global(.react-calendar__tile--now:enabled:hover),
+.customCalendar :global(.react-calendar__tile--now:enabled:focus) {
+  background-color: #f0f0f0;
+}
+
+.customCalendar :global(.react-calendar__month-view__days__day--neighboringMonth) {
+  color: #999;
+}
+
+.customCalendar :global(.react-calendar__tile:disabled) {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* React Native calendarConfirmButton 스타일 기반 */
+.confirmButton {
+  width: 100%;
+  background-color: var(--color-dark-grey-900);
+  border-radius: 16px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-white-50);
+  line-height: 24px;
+  margin-top: 12px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .error {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
+  font-size: 13px;
+  font-weight: 400;
   color: var(--color-red-500);
-  margin-top: var(--spacing-xs);
-  line-height: var(--line-height-normal);
+  margin-top: 4px;
+  line-height: 20px;
 }

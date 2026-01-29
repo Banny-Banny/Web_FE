@@ -9,11 +9,11 @@
  */
 
 import React, { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { TimeCapsuleHeader } from '@/commons/components/timecapsule-header';
 import { OrderSummary } from './components/OrderSummary';
 import { TossPaymentWidget } from './components/TossPaymentWidget';
 import { PaymentStatus } from './components/PaymentStatus';
-import { PaymentHeader } from './components/PaymentHeader';
 import { AgreementSection } from './components/AgreementSection';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { RetryButton } from './components/RetryButton';
@@ -62,6 +62,7 @@ function getErrorType(error: ApiError | Error | null): 'network' | 'order' | 'ge
  * - 결제 플로우 오케스트레이션
  */
 export function Payment() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
 
@@ -105,6 +106,10 @@ export function Payment() {
   if (isLoadingOrder) {
     return (
       <div className={styles.container}>
+        <TimeCapsuleHeader
+          title="결제하기"
+          onBack={() => router.back()}
+        />
         <div className={styles.loading}>
           <PaymentStatus status="loading" />
         </div>
@@ -119,8 +124,11 @@ export function Payment() {
     const errorType = getErrorType(orderError);
     return (
       <div className={styles.container}>
+        <TimeCapsuleHeader
+          title="결제하기"
+          onBack={() => router.back()}
+        />
         <div className={styles.content}>
-          <PaymentHeader />
           <div className={styles.errorSection}>
             <ErrorDisplay message={errorMessage} type={errorType} />
             <RetryButton
@@ -141,9 +149,12 @@ export function Payment() {
 
   return (
     <div className={styles.container}>
+      {/* 헤더: 뒤로가기 + "결제하기" 제목 */}
+      <TimeCapsuleHeader
+        title="결제하기"
+        onBack={() => router.back()}
+      />
       <div className={styles.content}>
-        {/* 헤더: 뒤로가기 + "결제하기" 제목 */}
-        <PaymentHeader />
 
         {/* 주문 상품 섹션 */}
         <OrderSummary data={orderSummaryData} />
@@ -152,19 +163,6 @@ export function Payment() {
         <AgreementSection
           onAgreementChange={(state) => setAgreementState(state)}
         />
-
-        {/* 결제 완료된 경우 위젯 숨김 */}
-        {!isPaymentCompleted && (
-          <TossPaymentWidget
-            orderId={orderId || ''}
-            amount={orderSummaryData.totalAmount}
-            orderName="타임캡슐 생성"
-            customerName={orderSummaryData.capsuleName}
-            onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
-            disabled={!isAllAgreed}
-          />
-        )}
 
         {/* 결제 상태 표시 */}
         {paymentState.status !== 'idle' && (
@@ -179,6 +177,21 @@ export function Payment() {
           <div className={styles.errorSection}>
             <ErrorDisplay message={paymentState.error} type="payment" />
             <RetryButton onRetry={retry} />
+          </div>
+        )}
+
+        {/* 결제 버튼 */}
+        {!isPaymentCompleted && (
+          <div className={styles.paymentButtonWrapper}>
+            <TossPaymentWidget
+              orderId={orderId || ''}
+              amount={orderSummaryData.totalAmount}
+              orderName="타임캡슐 생성"
+              customerName={orderSummaryData.capsuleName}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+              disabled={!isAllAgreed}
+            />
           </div>
         )}
       </div>

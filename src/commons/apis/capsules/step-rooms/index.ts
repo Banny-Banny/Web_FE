@@ -26,6 +26,8 @@ import type {
   InviteCodeQueryResponse,
   JoinRoomRequest,
   JoinRoomResponse,
+  CapsuleSubmitRequest,
+  CapsuleSubmitResponse,
 } from './types';
 
 /**
@@ -530,4 +532,44 @@ export async function joinRoom(
     data
   );
   return unwrapApiResponse<JoinRoomResponse>(response.data);
+}
+
+/**
+ * 타임캡슐 제출 API (방장 전용)
+ *
+ * POST /api/capsules/step-rooms/:roomId/submit
+ *
+ * 방장이 모든 참여자의 콘텐츠 작성 완료 후 타임캡슐을 최종 제출합니다.
+ * JWT Bearer 토큰이 자동으로 포함됩니다.
+ *
+ * @param {string} roomId - 대기실 ID
+ * @param {CapsuleSubmitRequest} data - 제출 요청 데이터 (GPS 위치)
+ * @returns {Promise<CapsuleSubmitResponse>} 제출 응답
+ *
+ * @throws {400} INCOMPLETE_PARTICIPANTS - 모든 참여자가 콘텐츠를 제출하지 않음
+ * @throws {400} INVALID_LOCATION - 유효하지 않은 위치 정보
+ * @throws {400} PAYMENT_NOT_COMPLETED - 결제가 완료되지 않음
+ * @throws {401} UNAUTHORIZED - 인증되지 않은 사용자
+ * @throws {403} NOT_HOST - 방장이 아닌 사용자
+ * @throws {404} ROOM_NOT_FOUND - 대기실을 찾을 수 없음
+ * @throws {409} ALREADY_SUBMITTED - 이미 제출된 타임캡슐
+ * @throws {500} INTERNAL_SERVER_ERROR - 서버 오류
+ *
+ * @example
+ * ```typescript
+ * const result = await submitCapsule('room-123', {
+ *   latitude: 37.5665,
+ *   longitude: 126.9780,
+ * });
+ * ```
+ */
+export async function submitCapsule(
+  roomId: string,
+  data: CapsuleSubmitRequest
+): Promise<CapsuleSubmitResponse> {
+  const response = await apiClient.post<CapsuleSubmitResponse>(
+    CAPSULE_ENDPOINTS.SUBMIT_CAPSULE(roomId),
+    data
+  );
+  return response.data;
 }

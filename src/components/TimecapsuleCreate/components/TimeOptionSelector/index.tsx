@@ -13,15 +13,15 @@ import styles from './styles.module.css';
 
 /**
  * 타임 옵션 목록
- * 
+ *
  * @note
- * - 커스텀: customOpenDate가 있음 (사용자가 날짜 선택)
+ * - 직접 선택: customOpenDate가 있음 (사용자가 날짜 선택)
  */
 const TIME_OPTIONS: TimeOptionInfo[] = [
-  { value: '1_WEEK', label: '1주 후', price: 1000 },
-  { value: '1_MONTH', label: '1개월 후', price: 3000 },
-  { value: '1_YEAR', label: '1년 후', price: 5000 },
-  { value: 'CUSTOM', label: '커스텀', price: 0 },
+  { value: '1_WEEK', label: '1주일', price: 1000 },
+  { value: '1_MONTH', label: '1개월', price: 5000 },
+  { value: '1_YEAR', label: '1년', price: 10000 },
+  { value: 'CUSTOM', label: '직접 선택', price: 0 },
 ];
 
 /**
@@ -43,25 +43,82 @@ export function TimeOptionSelector({}: Omit<TimeOptionSelectorProps, 'register' 
   const error = errors.timeOption;
   const selectedTimeOption = watch('timeOption');
   
+  const customOpenDate = watch('customOpenDate');
+
   // 선택된 옵션의 가격 계산
   const getSelectedPrice = (): number => {
     if (!selectedTimeOption) return 0;
-    
-    // CUSTOM인 경우: 기본 금액 0원
+
+    // CUSTOM인 경우: 날짜 선택 여부에 따라 가격 계산
     if (selectedTimeOption === 'CUSTOM') {
-      return 0;
+      if (!customOpenDate) return 0;
+
+      // 날짜 차이 계산 (일 단위)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(customOpenDate);
+      selectedDate.setHours(0, 0, 0, 0);
+      const diffTime = selectedDate.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      // 가격 계산: 날짜별 (1일당 100원 가정, React Native 버전 로직 참고)
+      // React Native에서는 datePrice로 관리, 여기서는 간단히 일수 기반 계산
+      return Math.max(0, diffDays * 100);
     }
-    
+
     // 1_WEEK, 1_MONTH, 1_YEAR인 경우
     const option = TIME_OPTIONS.find((opt) => opt.value === selectedTimeOption);
     return option?.price || 0;
   };
-  
+
   const currentPrice = getSelectedPrice();
 
+  // 개봉일자 포맷팅
+  const getFormattedOpenDate = (): string | null => {
+    if (!selectedTimeOption) return null;
+
+    const today = new Date();
+    let openDate: Date;
+
+    switch (selectedTimeOption) {
+      case '1_WEEK':
+        openDate = new Date(today);
+        openDate.setDate(openDate.getDate() + 7);
+        break;
+      case '1_MONTH':
+        openDate = new Date(today);
+        openDate.setMonth(openDate.getMonth() + 1);
+        break;
+      case '1_YEAR':
+        openDate = new Date(today);
+        openDate.setFullYear(openDate.getFullYear() + 1);
+        break;
+      case 'CUSTOM':
+        if (!customOpenDate) return null;
+        openDate = new Date(customOpenDate);
+        break;
+      default:
+        return null;
+    }
+
+    return `개봉일자: ${openDate.getFullYear()}년 ${openDate.getMonth() + 1}월 ${openDate.getDate()}일`;
+  };
+
+  const formattedOpenDate = getFormattedOpenDate();
+
   const handleOptionSelect = (value: '1_WEEK' | '1_MONTH' | '1_YEAR' | 'CUSTOM') => {
-    setValue('timeOption', value, { shouldValidate: true });
-    if (value !== 'CUSTOM') {
+    if (value === 'CUSTOM') {
+      // 직접선택을 누를 때마다 모달이 열리도록 강제로 다시 설정
+      if (selectedTimeOption === 'CUSTOM') {
+        setValue('timeOption', undefined, { shouldValidate: false });
+        setTimeout(() => {
+          setValue('timeOption', 'CUSTOM', { shouldValidate: true });
+        }, 0);
+      } else {
+        setValue('timeOption', value, { shouldValidate: true });
+      }
+    } else {
+      setValue('timeOption', value, { shouldValidate: true });
       setValue('customOpenDate', undefined, { shouldValidate: false });
     }
   };
@@ -113,15 +170,24 @@ export function TimeOptionSelector({}: Omit<TimeOptionSelectorProps, 'register' 
                 aria-label={option.label}
               />
               <span className={styles.optionLabel}>{option.label}</span>
-              {option.price > 0 ? (
-                <span className={styles.optionPrice}>₩{option.price.toLocaleString()}</span>
+              {option.value === 'CUSTOM' ? (
+                customOpenDate ? (
+                  <span className={styles.optionPrice}>
+                    {new Date(customOpenDate).getMonth() + 1}/{new Date(customOpenDate).getDate()}
+                  </span>
+                ) : (
+                  <span className={styles.optionPrice}>날짜별</span>
+                )
               ) : (
-                <span className={styles.optionSubtext}>기본 금액</span>
+                <span className={styles.optionPrice}>₩{option.price.toLocaleString()}</span>
               )}
             </label>
           );
         })}
       </div>
+      {formattedOpenDate && (
+        <p className={styles.openDateText}>{formattedOpenDate}</p>
+      )}
       {error && (
         <span
           id="timeOption-error"

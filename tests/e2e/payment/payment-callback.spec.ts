@@ -15,14 +15,14 @@ import {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`
   : 'http://localhost:3000/api';
-// 테스트용 토큰 - 실제 로그인 후 얻은 토큰을 사용하세요
-const TEST_TOKEN = process.env.TEST_AUTH_TOKEN || '';
+// 테스트용 토큰 - NEXT_PUBLIC_DEV_TOKEN 환경변수 사용
+const TEST_TOKEN = process.env.NEXT_PUBLIC_DEV_TOKEN || '';
 
 test.describe('결제 승인 및 콜백 처리', () => {
   test.beforeEach(() => {
     // 각 테스트 전에 인증 토큰 확인
     if (!TEST_TOKEN) {
-      console.warn('⚠️  TEST_AUTH_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
+      console.warn('⚠️  NEXT_PUBLIC_DEV_TOKEN 환경변수가 설정되지 않았습니다. 테스트를 건너뜁니다.');
       test.skip();
     }
   });

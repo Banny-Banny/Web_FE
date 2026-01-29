@@ -1,9 +1,8 @@
 /**
  * PaymentHeader 컴포넌트 스타일
- * 
+ *
  * @description
  * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
- * - CSS 변수를 사용한 디자인 토큰 적용
  * - 375px 기준 고정 레이아웃
  */
 
@@ -13,7 +12,7 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: var(--spacing-lg) var(--spacing-xl);
+  padding: var(--spacing-lg) 0;
   background-color: var(--color-white-500);
   position: relative;
 }
