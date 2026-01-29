@@ -57,15 +57,6 @@ export function useCapsuleMarkers(
         include_locationless: false,
       });
 
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.log('[useCapsuleMarkers] API 응답:', {
-          center: { lat: centerLat, lng: centerLng },
-          capsules: response.items.length,
-          radius_m,
-        });
-      }
-
       return response;
     },
     enabled: true, // 항상 활성화 (위치가 없어도 기본 위치 기준으로 표시)

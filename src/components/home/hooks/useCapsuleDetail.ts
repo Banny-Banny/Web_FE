@@ -46,19 +46,7 @@ export function useCapsuleDetail(
       }
 
       // 실제 API 호출
-      const response = await getCapsule(id, lat, lng);
-
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.log('[useCapsuleDetail] API 응답:', {
-          id,
-          lat,
-          lng,
-          capsule: response,
-        });
-      }
-
-      return response;
+      return await getCapsule(id, lat, lng);
     },
     enabled: !!id && lat !== null && lng !== null, // id와 위치가 있을 때만 활성화
     staleTime: 5 * 60 * 1000, // 5분

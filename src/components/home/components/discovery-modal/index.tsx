@@ -45,9 +45,8 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
             onDiscoveryRecorded();
           }
         })
-        .catch((error) => {
+        .catch(() => {
           // 에러는 조용히 처리 (이미 훅에서 처리됨)
-          console.warn('발견 기록 저장 실패:', error);
         });
 
       // 기록 완료 표시

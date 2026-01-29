@@ -11,7 +11,7 @@ import { RiTimeLine, RiMapPinLine, RiStarFill } from '@remixicon/react';
 import type { MyCapsuleModalProps } from './types';
 import styles from './styles.module.css';
 
-export function MyCapsuleModal({ isOpen, capsule, onClose }: MyCapsuleModalProps) {
+export function MyCapsuleModal({ isOpen, capsule, onClose, onLocationClick }: MyCapsuleModalProps) {
   // ESC 키로 모달 닫기
   useEffect(() => {
     if (!isOpen) return;
@@ -76,7 +76,23 @@ export function MyCapsuleModal({ isOpen, capsule, onClose }: MyCapsuleModalProps
             </p>
           </div>
 
-          <div className={styles.infoCard}>
+          <div
+            className={styles.infoCard}
+            role={onLocationClick ? 'button' : undefined}
+            tabIndex={onLocationClick ? 0 : undefined}
+            onClick={onLocationClick ? () => onLocationClick(capsule) : undefined}
+            onKeyDown={
+              onLocationClick
+                ? (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onLocationClick(capsule);
+                    }
+                  }
+                : undefined
+            }
+            aria-label={onLocationClick ? '위치 보기' : undefined}
+          >
             <div className={styles.cardHeader}>
               <RiMapPinLine size={12} className={styles.cardIcon} />
               <span className={styles.cardLabel}>위치</span>
