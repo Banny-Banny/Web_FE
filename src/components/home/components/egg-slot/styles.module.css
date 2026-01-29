@@ -53,10 +53,12 @@
   overflow: hidden;
 }
 
+/* 찬 알: 하얀색으로 표시 */
 .eggSlotIcon {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .eggSlotIconEmpty {
