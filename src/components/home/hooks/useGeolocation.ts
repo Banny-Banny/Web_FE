@@ -16,20 +16,45 @@ export interface GeolocationState {
 }
 
 /**
+ * useGeolocation 옵션
+ */
+export interface UseGeolocationOptions {
+  /** true일 때만 위치를 요청 (예: 온보딩에서 위치 권한 허용한 경우). false면 API 호출 안 함. */
+  enabled?: boolean;
+}
+
+/**
  * 사용자의 현재 위치를 가져오는 훅
  * Geolocation API를 사용합니다.
- * 
+ * enabled가 false이면 위치를 요청하지 않고 null을 반환합니다 (위치 동의 미동의 시 사용).
+ *
+ * @param options - enabled: 위치 권한 허용 시에만 요청할 경우 true
  * @returns 현재 위치 정보 및 상태
  */
-export function useGeolocation(): GeolocationState {
+export function useGeolocation(options: UseGeolocationOptions = {}): GeolocationState {
+  const { enabled = true } = options;
+
   const [state, setState] = useState<GeolocationState>({
     latitude: null,
     longitude: null,
-    isLoading: true,
+    isLoading: enabled,
     error: null,
   });
 
   useEffect(() => {
+    if (!enabled) {
+      setState({
+        latitude: null,
+        longitude: null,
+        isLoading: false,
+        error: null,
+      });
+      return;
+    }
+
+    // 위치 요청 시작
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+
     // Geolocation API 지원 확인
     if (!navigator.geolocation) {
       setState({
@@ -79,7 +104,7 @@ export function useGeolocation(): GeolocationState {
         maximumAge: 0,
       }
     );
-  }, []);
+  }, [enabled]);
 
   return state;
 }
