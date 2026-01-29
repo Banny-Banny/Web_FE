@@ -3,14 +3,16 @@
 /**
  * 공지사항 상세 컨테이너 (PageHeader + 본문)
  * useNotice(id)로 상세 조회, 로딩/오류 UI
+ * 있는 데이터만 표시 (작성자·조회수 없음, imageUrl 없으면 이미지 영역 미표시)
  */
 
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { RiCalendarLine } from '@remixicon/react';
 import { PageHeader } from '@/commons/components/page-header';
 import { Spinner } from '@/commons/components/spinner';
 import { useNotice } from './hooks';
-import { formatShortDateWithTime } from '@/commons/utils/date';
+import { formatDate } from '@/commons/utils/date';
 import type { NoticeDetailProps } from './types';
 import styles from './styles.module.css';
 
@@ -65,18 +67,29 @@ export default function NoticeDetail({ id, className = '' }: NoticeDetailProps) 
     <div className={`${styles.container} ${className}`}>
       <PageHeader title="공지사항" onButtonPress={handleClose} />
       <article className={styles.detailContent}>
+        {data.isPinned && (
+          <span className={styles.detailTag} aria-hidden="true">
+            공지
+          </span>
+        )}
         <h1 className={styles.detailTitle}>{data.title}</h1>
-        <time className={styles.detailDate} dateTime={data.createdAt}>
-          {formatShortDateWithTime(data.createdAt)}
-        </time>
+        <div className={styles.detailMeta}>
+          <time className={styles.detailDate} dateTime={data.createdAt}>
+            <RiCalendarLine size={16} className={styles.detailMetaIcon} aria-hidden="true" />
+            {formatDate(data.createdAt)}
+          </time>
+        </div>
+        <div className={styles.detailDivider} />
         <div className={styles.detailBody}>{data.content}</div>
         {data.imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={data.imageUrl}
-            alt=""
-            className={styles.detailImage}
-          />
+          <div className={styles.detailImageWrapper}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={data.imageUrl}
+              alt=""
+              className={styles.detailImage}
+            />
+          </div>
         )}
       </article>
     </div>

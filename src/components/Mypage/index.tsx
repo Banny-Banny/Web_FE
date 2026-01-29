@@ -33,6 +33,10 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/my-eggs');
   };
 
+  const handleNoticeClick = () => {
+    router.push('/notices');
+  };
+
   const handleCustomerCenterClick = () => {
     router.push('/customer-center');
   };
@@ -93,6 +97,16 @@ export function Mypage({ className = '' }: MypageProps) {
         <div className={styles.navDivider}></div>
         <button className={styles.navItem}>
           <span className={styles.navItemText}>결제 내역</span>
+          <RiArrowRightSLine size={20} className={styles.navItemIcon} />
+        </button>
+        <div className={styles.navDivider}></div>
+        <button
+          className={`${styles.navItem} ${styles.navItemNotice}`}
+          onClick={handleNoticeClick}
+          type="button"
+          aria-label="공지사항"
+        >
+          <span className={styles.navItemText}>공지사항</span>
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
         <div className={styles.navDivider}></div>

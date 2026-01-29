@@ -143,31 +143,87 @@
 
 /* 상세 */
 .detailContent {
-  padding: 16px;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.detailTag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 8px;
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-white-50);
+  background-color: var(--color-red-500);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .detailTitle {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-black-500);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.detailMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
 }
 
 .detailDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
   font-size: 13px;
-  color: var(--color-gray-500, #6b7280);
-  margin-bottom: 16px;
+  line-height: 20px;
+  font-weight: var(--font-weight-regular, 400);
+  color: var(--color-grey-600);
+  margin: 0;
+}
+
+.detailMetaIcon {
+  flex-shrink: 0;
+  color: var(--color-grey-500);
+}
+
+.detailDivider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-grey-200);
+  margin: var(--spacing-md) 0 var(--spacing-lg) 0;
 }
 
 .detailBody {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
   font-size: 15px;
   line-height: 1.6;
+  color: var(--color-black-500);
   white-space: pre-wrap;
+  margin: 0;
+}
+
+.detailImageWrapper {
+  margin-top: var(--spacing-lg);
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-grey-100);
 }
 
 .detailImage {
+  display: block;
   width: 100%;
   max-width: 100%;
   height: auto;
-  margin-top: 16px;
-  border-radius: 8px;
+  vertical-align: top;
 }
