@@ -9,10 +9,11 @@
  * - CSS Modules 기반 스타일링
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/react';
 import { Button } from '@/commons/components/button';
+import { useAuth } from '@/commons/hooks/useAuth';
 import { ProfileSection } from './components/profile-section';
 import styles from './styles.module.css';
 import type { MypageProps } from './types';
@@ -24,6 +25,19 @@ import type { MypageProps } from './types';
  */
 export function Mypage({ className = '' }: MypageProps) {
   const router = useRouter();
+  const { logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.push('/login');
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const handleFriendClick = () => {
     router.push('/friends');
@@ -110,12 +124,11 @@ export function Mypage({ className = '' }: MypageProps) {
       {/* 로그아웃 버튼 */}
       <div className={styles.logoutSection}>
         <Button
-          label="로그아웃"
+          label={isLoggingOut ? '로그아웃 중...' : '로그아웃'}
           variant="primary"
           size="L"
-          onPress={() => {
-            // 로그아웃 로직
-          }}
+          onPress={handleLogout}
+          disabled={isLoggingOut}
           className={styles.logoutButton}
         />
       </div>
