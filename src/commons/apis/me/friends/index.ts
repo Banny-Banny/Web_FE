@@ -15,8 +15,9 @@ import type {
 
 /**
  * 친구 목록 조회 API 엔드포인트
+ * 백엔드: GET /api/me/friends (AUTH_ENDPOINTS.ME/friends 아님)
  */
-const FRIENDS_ENDPOINT = `${AUTH_ENDPOINTS.ME}/friends`;
+const FRIENDS_ENDPOINT = AUTH_ENDPOINTS.ME_FRIENDS;
 
 /**
  * 친구 목록 조회
