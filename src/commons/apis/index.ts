@@ -26,6 +26,10 @@ export type * from './media/types';
 export * from './inquiries';
 export type * from './inquiries/types';
 
+// 공지사항 API
+export * from './notices';
+export type * from './notices/types';
+
 // API 클라이언트 및 함수들이 여기에 추가됩니다
 // 예: export { apiClient } from './client';
 // 예: export * from './user';
