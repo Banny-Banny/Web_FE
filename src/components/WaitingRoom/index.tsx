@@ -145,6 +145,11 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
         alert('초대 링크가 클립보드에 복사되었습니다!');
       }
     } catch (error) {
+      // 사용자가 공유를 취소한 경우 (AbortError)는 조용히 처리
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
+
       console.error('초대 링크 공유 실패:', error);
       // 공유 실패 시 클립보드 복사 시도
       try {
@@ -266,28 +271,28 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
               onWriteMyContent={handleWriteMyContent}
               onFinalSubmit={handleFinalSubmit}
             />
+
+            {/* 제출 버튼 (방장에게만 표시) */}
+            {isHost && waitingRoom?.status !== 'BURIED' && (
+              <div className={styles.submitButtonContainer}>
+                {/* 비활성화 사유 표시 */}
+                {!canSubmit && getDisabledReason() && (
+                  <div className={styles.disabledReason}>{getDisabledReason()}</div>
+                )}
+                <Button
+                  label={isSubmitting ? '제출 중...' : '타임캡슐 묻기'}
+                  variant="primary"
+                  size="M"
+                  fullWidth
+                  disabled={!canSubmit || isSubmitting}
+                  onPress={handleFinalSubmit}
+                  aria-label="타임캡슐 묻기"
+                />
+              </div>
+            )}
           </>
         )}
       </div>
-
-      {/* 제출 버튼 (방장에게만 표시) */}
-      {isHost && waitingRoom?.status !== 'BURIED' && (
-        <div className={styles.submitButtonContainer}>
-          {/* 비활성화 사유 표시 */}
-          {!canSubmit && getDisabledReason() && (
-            <div className={styles.disabledReason}>{getDisabledReason()}</div>
-          )}
-          <Button
-            label={isSubmitting ? '제출 중...' : '타임캡슐 묻기'}
-            variant="primary"
-            size="M"
-            fullWidth
-            disabled={!canSubmit || isSubmitting}
-            onPress={handleFinalSubmit}
-            aria-label="타임캡슐 묻기"
-          />
-        </div>
-      )}
 
       {/* 제출 확인 모달 */}
       {waitingRoom && (
