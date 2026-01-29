@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { RiAddLine, RiSubtractLine } from '@remixicon/react';
 import type { TimecapsuleFormData } from '../../schemas/timecapsuleFormSchema';
 import type { QuantitySelectorProps } from './types';
 import styles from './styles.module.css';
@@ -24,7 +23,7 @@ export function QuantitySelector({
   fieldName,
   label,
   subLabel,
-  unitPrice = 0,
+  unitPrice: _unitPrice = 0,
   min = 0,
   max = 10,
 }: Omit<QuantitySelectorProps, 'register' | 'errors' | 'setValue' | 'watch'>) {

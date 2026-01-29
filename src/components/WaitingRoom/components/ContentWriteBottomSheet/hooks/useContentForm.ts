@@ -16,7 +16,7 @@ import { useMyContent } from '@/commons/apis/capsules/step-rooms/hooks/useMyCont
 import { useSaveContent } from '@/commons/apis/capsules/step-rooms/hooks/useSaveContent';
 import { useUpdateContent } from '@/commons/apis/capsules/step-rooms/hooks/useUpdateContent';
 import type { ContentFormData } from '../types';
-import type { SaveContentRequest, UpdateContentRequest, MediaInfo } from '@/commons/apis/capsules/step-rooms/types';
+import type { SaveContentRequest, UpdateContentRequest } from '@/commons/apis/capsules/step-rooms/types';
 import type { ApiError } from '@/commons/provider/api-provider/api-client';
 
 /**
@@ -130,15 +130,18 @@ export function useContentForm(capsuleId: string) {
       // 404 에러는 컨텐츠가 없는 것으로 처리 (신규 작성 모드)
       const apiError = contentError as ApiError;
       if (apiError.status === 404) {
-        setHasExistingContent(false);
-        setIsEditMode(false);
-        setOriginalData(null);
-        setFormData({
-          text: '',
-          images: [],
-          existingImageUrls: [],
-          music: null,
-          video: null,
+        // effect 내 동기 setState는 연쇄 렌더를 유발하므로 다음 틱으로 지연
+        queueMicrotask(() => {
+          setHasExistingContent(false);
+          setIsEditMode(false);
+          setOriginalData(null);
+          setFormData({
+            text: '',
+            images: [],
+            existingImageUrls: [],
+            music: null,
+            video: null,
+          });
         });
       }
       return;
@@ -153,8 +156,11 @@ export function useContentForm(capsuleId: string) {
         myContent.video
       );
 
-      setHasExistingContent(hasContent);
-      setIsEditMode(hasContent);
+      // effect 내 동기 setState는 연쇄 렌더를 유발하므로 다음 틱으로 지연
+      queueMicrotask(() => {
+        setHasExistingContent(hasContent);
+        setIsEditMode(hasContent);
+      });
 
       // 기존 컨텐츠가 있으면 폼에 채우기
       if (hasContent) {
@@ -182,24 +188,27 @@ export function useContentForm(capsuleId: string) {
           video: videoUrl, // 영상 URL 저장
         };
 
-        setFormData(loadedData);
-        // 원본 데이터 저장 (변경 감지용)
-        setOriginalData({
-          text: myContent.text || '',
-          existingImageUrls: myContent.images ?? [],
-          images: [],
-          music: musicUrl,
-          video: videoUrl,
+        queueMicrotask(() => {
+          setFormData(loadedData);
+          setOriginalData({
+            text: myContent.text || '',
+            existingImageUrls: myContent.images ?? [],
+            images: [],
+            music: musicUrl,
+            video: videoUrl,
+          });
         });
       } else {
         // 신규 작성 모드
-        setOriginalData(null);
-        setFormData({
-          text: '',
-          images: [],
-          existingImageUrls: [],
-          music: null,
-          video: null,
+        queueMicrotask(() => {
+          setOriginalData(null);
+          setFormData({
+            text: '',
+            images: [],
+            existingImageUrls: [],
+            music: null,
+            video: null,
+          });
         });
       }
     }

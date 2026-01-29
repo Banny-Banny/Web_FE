@@ -35,24 +35,27 @@ export function CustomDatePicker({}: Omit<CustomDatePickerProps, 'register' | 'e
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempDate, setTempDate] = useState<Date | null>(null);
-  const [lastTimeOptionChange, setLastTimeOptionChange] = useState<number>(0);
+  const [, setLastTimeOptionChange] = useState<number>(0);
 
   // 직접 선택 클릭 시 항상 모달 오픈
   useEffect(() => {
     if (timeOption === 'CUSTOM') {
-      // 이미 선택한 날짜가 있으면 그 날짜로 초기화
-      if (customOpenDate) {
-        setTempDate(new Date(customOpenDate));
-      }
-      setIsModalOpen(true);
-      setLastTimeOptionChange(Date.now());
+      queueMicrotask(() => {
+        if (customOpenDate) {
+          setTempDate(new Date(customOpenDate));
+        }
+        setIsModalOpen(true);
+        setLastTimeOptionChange(Date.now());
+      });
     } else {
-      setIsModalOpen(false);
-      if (customOpenDate) {
-        setValue('customOpenDate', undefined, { shouldValidate: false });
-      }
+      queueMicrotask(() => {
+        setIsModalOpen(false);
+        if (customOpenDate) {
+          setValue('customOpenDate', undefined, { shouldValidate: false });
+        }
+      });
     }
-  }, [timeOption]);
+  }, [timeOption, customOpenDate, setValue]);
 
   // 오늘 이후 날짜만 선택 가능
   const today = new Date();

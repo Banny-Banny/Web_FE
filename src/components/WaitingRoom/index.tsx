@@ -50,6 +50,13 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   const [isContentWriteOpen, setIsContentWriteOpen] = useState(false);
   const [isMyContentJustSaved, setIsMyContentJustSaved] = useState(false);
 
+  // 렌더 시 Date.now() 호출 방지 (impure) — 1초마다 갱신
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
   // 제출 관련 상태
   const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
   const [isSubmitCompleteOpen, setIsSubmitCompleteOpen] = useState(false);
@@ -87,7 +94,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
       waitingRoom?.status === 'BURIED' &&
       waitingRoom?.isAutoSubmitted === true
     ) {
-      setIsAutoSubmitModalOpen(true);
+      queueMicrotask(() => setIsAutoSubmitModalOpen(true));
     }
   }, [waitingRoom?.status, waitingRoom?.isAutoSubmitted]);
 
@@ -97,7 +104,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   ) ?? false;
 
   const isTimerExpired = waitingRoom?.createdAt
-    ? new Date(waitingRoom.createdAt).getTime() + 24 * 60 * 60 * 1000 < Date.now()
+    ? new Date(waitingRoom.createdAt).getTime() + 24 * 60 * 60 * 1000 < now
     : false;
 
   const canSubmit =
@@ -306,7 +313,7 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
               ? Math.floor(
                   (new Date(waitingRoom.createdAt).getTime() +
                     24 * 60 * 60 * 1000 -
-                    Date.now()) /
+                    now) /
                     (1000 * 60 * 60)
                 )
               : 0

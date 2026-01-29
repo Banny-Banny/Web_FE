@@ -110,7 +110,8 @@ export function TimeOptionSelector({}: Omit<TimeOptionSelectorProps, 'register' 
     if (value === 'CUSTOM') {
       // 직접선택을 누를 때마다 모달이 열리도록 강제로 다시 설정
       if (selectedTimeOption === 'CUSTOM') {
-        setValue('timeOption', undefined, { shouldValidate: false });
+        // 직접선택 재오픈을 위해 중간값으로 리셋 후 CUSTOM 재설정
+        setValue('timeOption', '1_WEEK', { shouldValidate: false });
         setTimeout(() => {
           setValue('timeOption', 'CUSTOM', { shouldValidate: true });
         }, 0);

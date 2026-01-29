@@ -17,6 +17,7 @@ import type {
   WaitingRoomDetailApiResponse,
   Participant,
   SlotApiResponse,
+  MediaInfo,
   MyContentApiResponse,
   MyContentResponse,
   SaveContentRequest,
