@@ -11,7 +11,6 @@ import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useLocationTracking } from './hooks/useLocationTracking';
-import { useProfile } from '@/components/Mypage/components/profile-section/hooks/useProfile';
 import { useAutoDiscovery } from './hooks/useAutoDiscovery';
 import { useCapsuleDetail } from './hooks/useCapsuleDetail';
 import { useRecordCapsuleView } from './hooks/useRecordCapsuleView';
@@ -85,12 +84,8 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     visible: false,
   });
 
-  // 프로필(온보딩 동의 여부) — 위치 권한 허용 시에만 현재 위치 요청
-  const { data: profile } = useProfile();
-  const locationConsent = profile?.locationConsent === true;
 
-  const geolocation = useGeolocation({ enabled: locationConsent });
-  
+  const geolocation = useGeolocation();
   // 슬롯 관리 훅
   const { slotInfo, isLoading: isSlotLoading } = useSlotManagement();
   
@@ -144,7 +139,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         locationTracking.stopTracking();
       }
     };
-  }, [map, locationConsent, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]);
+  }, [map, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]);
 
   // 지도 진입 시 30m 이내 친구 이스터에그를 가까운 순으로 발견 모달 순차 표시 (한 번만)
   useEffect(() => {
@@ -178,11 +173,11 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     markAsDiscovered(queue.map((c) => c.id));
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setDiscoveryQueue(queue);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setDiscoveryQueueIndex(0);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setSelectedCapsuleId(queue[0].id);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setSelectedCapsule(queue[0]);
   }, [
     map,
@@ -214,15 +209,15 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowHintModal(false);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setShowMyCapsuleModal(false);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setDiscoveryQueue([discoveredCapsule]);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setDiscoveryQueueIndex(0);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setSelectedCapsule(discoveredCapsule);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setSelectedCapsuleId(discoveredCapsule.id);
   }, [discoveredCapsule]);
 
@@ -235,9 +230,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       // 내 캡슐: 발견자 목록 표시 (발견 큐 초기화)
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDiscoveryQueue([]);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setDiscoveryQueueIndex(0);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setShowMyCapsuleModal(true);
     } else {
       // 친구 캡슐: 거리에 따라 분기
@@ -248,20 +243,20 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         if (discoveryQueue.length > 0 &&
             discoveryQueue[discoveryQueueIndex]?.id === selectedCapsule.id &&
             capsuleDetail.id === selectedCapsule.id) {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
+           
           setShowDiscoveryModal(true);
         } else if (discoveryQueue.length === 0) {
           // 마커 클릭으로 열린 경우: 해당 캡슐만 발견 모달 표시
-          // eslint-disable-next-line react-hooks/set-state-in-effect
+           
           setShowDiscoveryModal(true);
         }
       } else {
         // 30m 밖: 힌트 모달 표시 (발견 큐 초기화)
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setDiscoveryQueue([]);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setDiscoveryQueueIndex(0);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setShowHintModal(true);
       }
     }
@@ -282,11 +277,11 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     });
     
     // 모든 모달 닫기
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setShowMyCapsuleModal(false);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setShowDiscoveryModal(false);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setShowHintModal(false);
     
     // 상태 초기화는 별도 함수로 처리

@@ -79,6 +79,14 @@ export interface MeUpdateRequest {
 }
 
 /**
+ * 프로필 이미지 업로드 응답 타입 (POST /api/auth/me/profile-image)
+ */
+export interface ProfileImageUploadResponse {
+  profileImageUrl?: string;
+  url?: string;
+}
+
+/**
  * 내 프로필 조회 응답 타입
  */
 export interface MeResponse {

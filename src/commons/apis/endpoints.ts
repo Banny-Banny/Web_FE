@@ -39,6 +39,7 @@ export const AUTH_ENDPOINTS = {
   
   // 프로필 관리
   ME: `${BASE_PATHS.AUTH}/me`, // 로그인한 사용자 프로필 조회 (내 정보 + summary)
+  ME_PROFILE_IMAGE: `${BASE_PATHS.AUTH}/me/profile-image`, // 프로필 이미지 업로드 (POST, multipart)
   ME_UPDATE: `/api/me/update`, // 내 프로필 수정 (POST, 닉네임·이메일)
   ME_NOTIFICATIONS_UNREAD_COUNT: `/api/me/notifications/unread-count`, // 읽지 않은 알림 개수 조회 (GET)
   ME_FRIENDS: `/api/me/friends`, // 내 친구 목록 조회 (GET)
