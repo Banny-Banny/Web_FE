@@ -62,6 +62,20 @@ export interface VerifyResponse {
 }
 
 /**
+ * 프로필 수정 요청 (닉네임만 전송, 이메일은 UI에서 미제공)
+ */
+export interface MeUpdateRequest {
+  nickname: string;
+}
+
+/**
+ * 프로필 이미지 업로드 성공 응답 (201 Created)
+ */
+export interface ProfileImageUploadResponse {
+  profileImageUrl: string;
+}
+
+/**
  * 내 프로필 조회 응답 타입
  */
 export interface MeResponse {
@@ -75,4 +89,8 @@ export interface MeResponse {
   isMarketingAgreed: boolean;  // 마케팅 동의 여부
   eggSlots: number;             // 이스터에그 슬롯 수
   createdAt: string;            // 생성일시
+  /** 친구 연동 허용 동의 (온보딩 선택, API가 snake_case로 주면 getMe에서 매핑) */
+  friendConsent?: boolean;
+  /** 위치 권한 허용 동의 (온보딩 선택) */
+  locationConsent?: boolean;
 }

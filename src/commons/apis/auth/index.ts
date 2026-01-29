@@ -5,6 +5,7 @@
 export { localLogin } from './login';
 export { localSignup } from './signup';
 export { verifyAuth } from './verify';
+export { logoutApi } from './logout';
 export type { 
   LocalLoginRequest, 
   LocalLoginResponse, 

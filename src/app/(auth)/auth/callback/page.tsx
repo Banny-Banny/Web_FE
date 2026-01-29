@@ -46,23 +46,20 @@ export default function KakaoAuthCallbackPage() {
         // 토큰으로 사용자 정보 조회
         try {
           const verifyResult = await verifyAuth();
-          
-          if (verifyResult.valid && verifyResult.user) {
-            // 사용자 정보를 React Query 캐시에 저장
-            queryClient.setQueryData(['auth', 'user'], verifyResult.user);
-            
-            // 온보딩 완료 여부 확인
+
+          // valid가 true면 로그인 성공. user는 백엔드가 선택적으로만 줄 수 있음.
+          if (verifyResult.valid) {
+            if (verifyResult.user) {
+              queryClient.setQueryData(['auth', 'user'], verifyResult.user);
+            }
             const onboardingStatus = queryClient.getQueryData<{ completed: boolean }>(['onboarding', 'status']);
             const isOnboardingCompleted = onboardingStatus?.completed === true;
-
-            // 온보딩이 완료되지 않았다면 온보딩 페이지로, 완료되었다면 홈으로 리다이렉트
             if (!isOnboardingCompleted) {
               router.push('/onboarding');
             } else {
               router.push('/');
             }
           } else {
-            // 토큰이 유효하지 않은 경우
             setError('인증에 실패했습니다.');
             setTimeout(() => {
               router.push('/login');

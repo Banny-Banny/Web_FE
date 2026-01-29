@@ -9,26 +9,39 @@ import type { GetFriendsParams, GetFriendsResponse } from '../types';
 import type { ApiError } from '@/commons/provider/api-provider/api-client';
 
 /**
+ * useFriends 옵션
+ */
+export interface UseFriendsOptions {
+  /** true일 때만 친구 목록을 조회 (예: 온보딩에서 친구 연동 허용한 경우) */
+  enabled?: boolean;
+}
+
+/**
  * 친구 목록 조회 훅
  * 
  * 사용자의 친구 목록을 페이지네이션을 통해 조회합니다.
+ * enabled가 false이면 API를 호출하지 않습니다 (친구 연동 미동의 시 사용).
  * 
  * @param params - 조회 파라미터 (limit, offset)
+ * @param options - enabled: 친구 연동 허용 시에만 조회할 경우 true
  * @returns {UseQueryResult<GetFriendsResponse, ApiError>} React Query 결과
  * 
  * @example
  * ```typescript
- * const { data, isLoading, error, refetch } = useFriends({ limit: 20, offset: 0 });
- * 
- * if (isLoading) return <div>로딩 중...</div>;
- * if (error) return <div>에러: {error.message}</div>;
- * if (data) return <div>친구 수: {data.total}</div>;
+ * const { data: profile } = useProfile();
+ * const { data, isLoading, error, refetch } = useFriends(
+ *   { limit: 20, offset: 0 },
+ *   { enabled: profile?.friendConsent === true }
+ * );
  * ```
  */
-export function useFriends(params: GetFriendsParams = {}) {
+export function useFriends(params: GetFriendsParams = {}, options: UseFriendsOptions = {}) {
+  const { enabled = true } = options;
+
   return useQuery<GetFriendsResponse, ApiError>({
     queryKey: ['friends', 'list', params.limit, params.offset],
     queryFn: () => getFriends(params),
+    enabled,
     staleTime: 1000 * 60 * 1, // 1분간 캐시 유지
     gcTime: 1000 * 60 * 5, // 5분간 가비지 컬렉션 방지
     retry: (failureCount, error) => {
