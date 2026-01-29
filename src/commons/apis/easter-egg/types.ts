@@ -175,6 +175,10 @@ export interface GetCapsuleResponse {
   viewers?: ViewerInfo[];
   created_at?: string;
   location_name?: string;
+  /** 위도 (주소 변환용) */
+  latitude?: number | string;
+  /** 경도 (주소 변환용) */
+  longitude?: number | string;
   // 기타 서버 응답 필드
 }
 
