@@ -62,6 +62,20 @@ export interface VerifyResponse {
 }
 
 /**
+ * 프로필 수정 요청 (닉네임만 전송, 이메일은 UI에서 미제공)
+ */
+export interface MeUpdateRequest {
+  nickname: string;
+}
+
+/**
+ * 프로필 이미지 업로드 성공 응답 (201 Created)
+ */
+export interface ProfileImageUploadResponse {
+  profileImageUrl: string;
+}
+
+/**
  * 내 프로필 조회 응답 타입
  */
 export interface MeResponse {
