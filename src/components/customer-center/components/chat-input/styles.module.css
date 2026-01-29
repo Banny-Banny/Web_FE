@@ -1,0 +1,91 @@
+/**
+ * 채팅 입력창 스타일 (CSS 변수 기반)
+ */
+
+.wrapper {
+  background-color: var(--color-white-50);
+  border-top: 1px solid var(--color-grey-200);
+}
+
+.errorContainer {
+  background-color: var(--color-red-50);
+  padding: var(--spacing-md) var(--spacing-md);
+  border-top: 1px solid var(--color-red-200);
+}
+
+.errorText {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-red-500);
+  text-align: center;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.input {
+  flex: 1;
+  min-height: 40px;
+  max-height: 120px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-whiteGrey-100);
+  border: 1px solid var(--color-grey-200);
+  border-radius: var(--radius-xl);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-black-500);
+}
+
+.input::placeholder {
+  color: var(--color-grey-500);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-blue-500);
+}
+
+.input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.sendButton {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-blue-500);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-white-50);
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: var(--color-blue-600);
+}
+
+.sendButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.sendButton:disabled {
+  background-color: var(--color-grey-300);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.sendIcon {
+  flex-shrink: 0;
+}

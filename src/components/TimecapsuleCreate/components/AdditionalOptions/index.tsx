@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { RiMicLine, RiVideoOnLine } from '@remixicon/react';
 import type { TimecapsuleFormData } from '../../schemas/timecapsuleFormSchema';
 import type { AdditionalOptionsProps, AdditionalOptionInfo } from './types';
 import styles from './styles.module.css';
@@ -68,14 +69,16 @@ export function AdditionalOptions({}: Omit<AdditionalOptionsProps, 'register' | 
                 className={styles.hiddenInput}
                 aria-label={option.label}
               />
-              {option.icon && (
-                <div className={styles.optionIcon}>
-                  {/* 아이콘은 추후 추가 */}
-                </div>
-              )}
+              <div className={styles.optionIcon}>
+                {option.fieldName === 'addMusic' ? (
+                  <RiMicLine size={24} color={isSelected ? '#FFFFFF' : '#000000'} />
+                ) : (
+                  <RiVideoOnLine size={24} color={isSelected ? '#FFFFFF' : '#000000'} />
+                )}
+              </div>
               <span className={styles.optionLabel}>{option.label}</span>
               <span className={styles.optionPrice}>
-                +₩{option.price.toLocaleString()}/인
+                +₩{option.price.toLocaleString()}
               </span>
             </label>
           );

@@ -57,6 +57,13 @@
 - **번들 크기**: ~13KB (gzipped)
 - **대안**: Fetch API (네이티브)
 
+#### socket.io-client (v4.8.3) 🆕
+- **도입 목적**: 고객센터 1:1 채팅 실시간 메시지 송수신
+- **주요 사용처**: `src/components/customer-center/hooks/useSocket.ts`, `useChatMessages.ts`
+- **주요 기능**: WebSocket 기반 실시간 양방향 통신, join_room/send_message/receive_message/read_alert 이벤트
+- **번들 크기**: ~15KB (gzipped)
+- **대안**: 네이티브 WebSocket API (이벤트 네이밍·재연결 등 직접 구현 필요)
+
 ---
 
 ### 서버 사이드 유틸리티 & 미들웨어

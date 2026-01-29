@@ -93,9 +93,15 @@ export interface WaitingRoomDetailApiResponse {
   capsule_name: string;
   open_date: string;
   deadline?: string;
-  status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED';
+  status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ACTIVE' | 'BURIED';
   slots?: SlotApiResponse[];
   invite_code?: string;
+  /** 방 생성 시각 (ISO 8601) */
+  created_at?: string;
+  /** 자동 제출 마감 시각 (ISO 8601, created_at + 24시간) */
+  deadline_at?: string;
+  /** 자동 제출 여부 (BURIED 상태일 때만) */
+  is_auto_submitted?: boolean;
 }
 
 /**
@@ -111,7 +117,7 @@ export interface WaitingRoomDetailResponse {
   /** 마감일 (ISO 8601 형식) */
   deadline?: string;
   /** 대기실 상태 */
-  status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED';
+  status: 'WAITING' | 'IN_PROGRESS' | 'COMPLETED' | 'ACTIVE' | 'BURIED';
   /** 현재 참여 인원수 */
   currentHeadcount: number;
   /** 최대 참여 인원수 (설정값에서 가져옴) */
@@ -120,6 +126,12 @@ export interface WaitingRoomDetailResponse {
   participants: Participant[];
   /** 초대 코드 (6자리 영숫자) */
   inviteCode?: string;
+  /** 방 생성 시각 (ISO 8601) */
+  createdAt?: string;
+  /** 자동 제출 마감 시각 (ISO 8601, createdAt + 24시간) */
+  deadlineAt?: string;
+  /** 자동 제출 여부 (BURIED 상태일 때만) */
+  isAutoSubmitted?: boolean;
 }
 
 /**
@@ -371,5 +383,84 @@ export interface AlreadyJoinedResponse {
   error: 'ALREADY_JOINED';
   data: {
     slot_number: number;
+  };
+}
+
+/**
+ * 타임캡슐 제출 요청 타입
+ *
+ * POST /api/capsules/step-rooms/:roomId/submit
+ */
+export interface CapsuleSubmitRequest {
+  /** 위도 (-90 ~ 90) */
+  latitude: number;
+  /** 경도 (-180 ~ 180) */
+  longitude: number;
+}
+
+/**
+ * 타임캡슐 제출 응답 타입
+ *
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "capsule_id": "caps_abc123def456",
+ *     "status": "BURIED",
+ *     "location": {
+ *       "latitude": 37.5665,
+ *       "longitude": 126.9780,
+ *       "address": "서울특별시 중구 세종대로 110"
+ *     },
+ *     "buried_at": "2026-01-29T14:30:00Z",
+ *     "open_date": "2026-12-31T00:00:00Z",
+ *     "participants": 5,
+ *     "is_auto_submitted": false
+ *   }
+ * }
+ */
+export interface CapsuleSubmitResponse {
+  success: boolean;
+  data: {
+    /** 타임캡슐 ID */
+    capsule_id: string;
+    /** 제출 완료 상태 */
+    status: 'BURIED';
+    /** 위치 정보 */
+    location: {
+      latitude: number;
+      longitude: number;
+      address?: string;
+    };
+    /** 제출 시각 (ISO 8601) */
+    buried_at: string;
+    /** 개봉 예정일 (ISO 8601) */
+    open_date: string;
+    /** 총 참여자 수 */
+    participants: number;
+    /** 자동 제출 여부 */
+    is_auto_submitted: boolean;
+  };
+}
+
+/**
+ * 타임캡슐 제출 에러 응답 타입
+ */
+export interface CapsuleSubmitError {
+  success: false;
+  error: {
+    code:
+      | 'INCOMPLETE_PARTICIPANTS'
+      | 'INVALID_LOCATION'
+      | 'PAYMENT_NOT_COMPLETED'
+      | 'UNAUTHORIZED'
+      | 'NOT_HOST'
+      | 'ROOM_NOT_FOUND'
+      | 'ALREADY_SUBMITTED'
+      | 'INTERNAL_SERVER_ERROR';
+    message: string;
+    details?: {
+      is_auto_submitted?: boolean;
+      [key: string]: any;
+    };
   };
 }

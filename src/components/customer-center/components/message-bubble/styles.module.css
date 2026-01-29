@@ -1,0 +1,216 @@
+/**
+ * 메시지 버블 스타일 (CSS 변수 기반)
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xs);
+}
+
+.containerUser {
+  align-items: flex-end;
+}
+
+.bubble {
+  max-width: 75%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.bubbleUser {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+}
+
+.bubbleAdmin {
+  background-color: var(--color-whiteGrey-100);
+  border-color: var(--color-grey-200);
+}
+
+.text {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.15px;
+  margin: 0;
+}
+
+.textUser {
+  color: var(--color-white-50);
+}
+
+.textAdmin {
+  color: var(--color-black-500);
+}
+
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.attachmentsWithText {
+  margin-top: var(--spacing-sm);
+}
+
+.imageAttachment {
+  display: block;
+  width: 192px;
+  height: 192px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-whiteGrey-200);
+}
+
+.imageImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fileAttachment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  background-color: var(--color-whiteGrey-200);
+  gap: var(--spacing-sm);
+  min-width: 192px;
+  max-width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.fileAttachment:hover {
+  opacity: 0.9;
+}
+
+.fileAttachmentUser {
+  background-color: var(--color-blue-400);
+}
+
+.fileIcon {
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-white-50);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fileIconUser {
+  color: var(--color-white-50);
+}
+
+.fileIconAdmin {
+  color: var(--color-blue-500);
+}
+
+.fileAttachmentUser .fileIcon {
+  background-color: var(--color-blue-300);
+}
+
+.fileContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.fileName {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileNameUser {
+  color: var(--color-white-50);
+}
+
+.fileNameAdmin {
+  color: var(--color-black-500);
+}
+
+.fileSize {
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.fileSizeUser {
+  color: var(--color-white-50);
+  opacity: 0.8;
+}
+
+.fileSizeAdmin {
+  color: var(--color-grey-600);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: 2px;
+  padding-right: var(--spacing-xs);
+}
+
+.footerAdmin {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 2px;
+  padding-left: var(--spacing-xs);
+}
+
+.time {
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-grey-600);
+}
+
+.status {
+  display: inline-flex;
+}
+
+.statusIcon,
+.statusIconRead {
+  color: var(--color-grey-500);
+}
+
+.statusIconRead {
+  color: var(--color-blue-500);
+}
+
+.statusIconFailed {
+  color: var(--color-red-500);
+}
+
+.retryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-red-500);
+  font-weight: 500;
+}
+
+.retryButton:hover {
+  text-decoration: underline;
+}
+
+.retryText {
+  margin: 0;
+}

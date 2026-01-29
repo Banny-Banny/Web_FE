@@ -1,0 +1,119 @@
+/**
+ * 채팅방 스타일 (CSS 변수 기반)
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background-color: var(--color-white-50);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-white-50);
+  border-bottom: 1px solid var(--color-grey-200);
+  padding: var(--spacing-md);
+  min-height: 56px;
+  flex-shrink: 0;
+}
+
+.backButton {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-black-500);
+  border-radius: var(--radius-md);
+}
+
+.backButton:hover {
+  background-color: var(--color-whiteGrey-100);
+}
+
+.backButton:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.backIcon {
+  flex-shrink: 0;
+}
+
+.headerTitleSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: var(--spacing-sm);
+}
+
+.headerTitle {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 700;
+  color: var(--color-black-500);
+  margin: 0;
+}
+
+.connectionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-whiteGrey-100);
+  font-size: 11px;
+  line-height: 14px;
+  margin-top: 2px;
+}
+
+.statusConnecting {
+  color: var(--color-grey-500);
+}
+
+.statusConnected {
+  color: var(--color-green-500);
+}
+
+.statusDisconnected {
+  color: var(--color-grey-500);
+}
+
+.statusError {
+  color: var(--color-red-500);
+}
+
+.reconnectButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-blue-500);
+  font-weight: 600;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.reconnectButton:hover {
+  text-decoration: underline;
+}
+
+.messageListWrapper {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}

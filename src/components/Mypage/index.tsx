@@ -9,10 +9,11 @@
  * - CSS Modules 기반 스타일링
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/react';
 import { Button } from '@/commons/components/button';
+import { useAuth } from '@/commons/hooks/useAuth';
 import { ProfileSection } from './components/profile-section';
 import { useProfile } from './components/profile-section/hooks/useProfile';
 import { useAuthActions } from '@/commons/hooks/useAuth';
@@ -101,7 +102,22 @@ export function Mypage({ className = '' }: MypageProps) {
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
         <div className={styles.navDivider}></div>
-        <button className={styles.navItem}>
+        <button
+          className={`${styles.navItem} ${styles.navItemNotice}`}
+          onClick={handleNoticeClick}
+          type="button"
+          aria-label="공지사항"
+        >
+          <span className={styles.navItemText}>공지사항</span>
+          <RiArrowRightSLine size={20} className={styles.navItemIcon} />
+        </button>
+        <div className={styles.navDivider}></div>
+        <button
+          className={styles.navItem}
+          onClick={handleCustomerCenterClick}
+          type="button"
+          aria-label="고객 센터"
+        >
           <span className={styles.navItemText}>고객 센터</span>
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
@@ -110,7 +126,7 @@ export function Mypage({ className = '' }: MypageProps) {
       {/* 로그아웃 버튼 */}
       <div className={styles.logoutSection}>
         <Button
-          label="로그아웃"
+          label={isLoggingOut ? '로그아웃 중...' : '로그아웃'}
           variant="primary"
           size="L"
           onPress={async () => {

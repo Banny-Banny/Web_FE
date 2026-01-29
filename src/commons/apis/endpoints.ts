@@ -228,6 +228,9 @@ export const CAPSULE_ENDPOINTS = {
   // 초대 코드로 방 참여
   JOIN_ROOM: (capsuleId: string) =>
     `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/join`,
+  // 타임캡슐 제출 (방장 전용)
+  SUBMIT_CAPSULE: (roomId: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/${roomId}/submit`,
 } as const;
 
 /**
@@ -236,6 +239,26 @@ export const CAPSULE_ENDPOINTS = {
 export const MEDIA_ENDPOINTS = {
   // 미디어 URL 조회
   GET_MEDIA_URL: (id: string) => `${BASE_PATHS.API}/media/${id}/url`,
+} as const;
+
+/**
+ * 문의(고객센터) 관련 엔드포인트
+ */
+export const INQUIRY_ENDPOINTS = {
+  // 내 문의 목록 조회
+  LIST: `${AUTH_ENDPOINTS.ME}/inquiries`,
+  // 문의별 채팅 내역 조회
+  CHAT_HISTORY: (inquiryId: string) => `${AUTH_ENDPOINTS.ME}/inquiries/${inquiryId}`,
+} as const;
+
+/**
+ * 공지사항 관련 엔드포인트
+ */
+export const NOTICE_ENDPOINTS = {
+  // 공지사항 목록 조회
+  LIST: `${BASE_PATHS.API}/notices`,
+  // 공지사항 상세 조회
+  DETAIL: (id: string) => `${BASE_PATHS.API}/notices/${id}`,
 } as const;
 
 /**
@@ -254,6 +277,8 @@ export const ENDPOINTS = {
   EXTERNAL: EXTERNAL_ENDPOINTS,
   HEALTH: HEALTH_ENDPOINTS,
   ONBOARDING: ONBOARDING_ENDPOINTS,
+  INQUIRY: INQUIRY_ENDPOINTS,
+  NOTICE: NOTICE_ENDPOINTS,
 } as const;
 
 /**

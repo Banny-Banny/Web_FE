@@ -1,0 +1,176 @@
+/**
+ * 문의 내역 리스트 스타일 (CSS 변수 기반)
+ */
+
+.container {
+  flex: 1;
+  width: 100%;
+  background-color: var(--color-white-500);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.listItem {
+  margin: 0;
+}
+
+.item {
+  width: 100%;
+  display: block;
+  text-align: left;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-grey-100);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  min-height: 44px;
+}
+
+.item:hover {
+  background-color: var(--color-whiteGrey-50);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.itemClosed {
+  background-color: var(--color-whiteGrey-100);
+  border-color: var(--color-grey-200);
+  opacity: 0.6;
+}
+
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px;
+  gap: 16px;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.itemTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+  color: var(--color-black-500);
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--color-black-500);
+}
+
+.statusPending {
+  background-color: var(--color-blue-50);
+  color: var(--color-blue-700);
+}
+
+.statusInProgress {
+  background-color: var(--color-yellow-50);
+  color: var(--color-yellow-800);
+}
+
+.statusResolved {
+  background-color: var(--color-green-50);
+  color: var(--color-green-700);
+}
+
+.statusClosed {
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-700);
+}
+
+.preview {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--color-darkGrey-600);
+  letter-spacing: -0.2px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.itemFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-grey-200);
+}
+
+.time {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--color-darkGrey-600);
+}
+
+.unreadBadge {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: var(--color-red-500);
+  color: var(--color-white-50);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.emptyText {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-darkGrey-600);
+  text-align: center;
+  margin: 0 0 var(--spacing-xl) 0;
+}
+
+.emptyButton {
+  width: 100%;
+  max-width: 300px;
+  margin-top: var(--spacing-lg);
+}

@@ -1,24 +1,24 @@
 /**
  * @fileoverview ParticipantList 컴포넌트 스타일
- * @description 참여자 목록 컴포넌트의 스타일 (앱 버전 기준)
- * 
- * @version 1.0.0
+ * @description 참여자 목록 컴포넌트의 스타일 (모바일 앱 기준)
+ *
+ * @version 2.0.0
  * @created 2026-01-28
- * @updated 2026-01-28 - 앱 버전 기준으로 스타일 수정
- * 
+ * @updated 2026-01-29 - 모바일 앱 디자인 시스템 적용
+ *
  * 규칙 준수 체크리스트:
  * - [x] CSS Module 사용
  * - [x] CSS 변수만 사용 (하드코딩 색상값 없음)
  * - [x] 인라인 스타일 없음
  * - [x] 구조와 스타일 분리
- * - [x] 소수점 값 반올림
+ * - [x] Figma 디자인 1:1 대응
  */
 
 /* 컨테이너 */
 .container {
   width: 100%;
-  padding: var(--spacing-lg);
-  background-color: var(--color-white-500);
+  margin-top: var(--spacing-md);
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -43,6 +43,7 @@
 
 /* 참여자 카드 (본인) */
 .participantCardMe {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,6 +61,10 @@
   cursor: default;
 }
 
+.participantCardMe:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
 .participantCardMe:focus {
   outline: 2px solid var(--color-blue-500);
   outline-offset: 2px;
@@ -67,6 +72,7 @@
 
 /* 참여자 카드 (다른 사람) - 클릭 불가 */
 .participantCardOther {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -132,6 +138,7 @@
 
 /* 참여자 이름 */
 .participantName {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
@@ -160,12 +167,15 @@
 
 /* 빈 슬롯 */
 .emptySlot {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   height: 78px;
   padding: 0 21px;
+  background-color: var(--color-white-grey-200);
+  border-radius: 16px;
 }
 
 /* 빈 슬롯 텍스트 */
@@ -173,7 +183,7 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: var(--font-weight-normal);
-  color: var(--color-grey-600);
+  color: var(--color-dark-grey-500);
 }
 
 /* 초대 버튼 */
@@ -215,7 +225,7 @@
 }
 
 .checkboxActive {
-  border-color: var(--color-grey-600);
+  border-color: var(--color-dark-grey-500);
 }
 
 .checkboxInactive {
@@ -224,14 +234,82 @@
 }
 
 .checkboxChecked {
-  border-color: var(--color-grey-600);
+  background-color: var(--color-white-100);
+  border-color: var(--color-dark-grey-500);
+  border-width: 1px;
 }
 
 .checkboxCheckmark {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   line-height: 14px;
   font-weight: 700;
   color: var(--color-green-500);
+}
+
+/* 하단 정보 영역 */
+.bottomSection {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* 데드라인 컨테이너 */
+.deadlineContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deadlineContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  min-width: 300px;
+}
+
+.deadlineIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.deadlineTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 240px;
+  align-items: center;
+}
+
+.deadlineText {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: -0.150390625px;
+  color: var(--color-grey-500);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 버튼 섹션 */
+.buttonSection {
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.buttonHint {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--color-grey-500);
+  text-align: center;
 }
 
 /* 최종 제출 버튼 컨테이너 */

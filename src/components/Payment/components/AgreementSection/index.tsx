@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { RiCheckboxBlankCircleLine, RiCheckboxCircleFill } from '@remixicon/react';
 import { Colors } from '@/commons/styles/color';
+import { AgreementDetailModal } from '../AgreementDetailModal';
 import type { AgreementSectionProps } from './types';
 import styles from './styles.module.css';
 
@@ -27,6 +28,7 @@ export function AgreementSection({
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [paymentAgreed, setPaymentAgreed] = useState(false);
+  const [selectedAgreementIndex, setSelectedAgreementIndex] = useState<number | null>(null);
 
   const handleAllAgree = (checked: boolean) => {
     setAllAgreed(checked);
@@ -97,69 +99,103 @@ export function AgreementSection({
       </div>
 
       <div className={styles.agreements}>
-        <label className={styles.agreementItem}>
-          <input
-            type="checkbox"
-            checked={termsAgreed}
-            onChange={(e) => handleIndividualAgree('terms', e.target.checked)}
-            className={styles.checkboxInput}
-            aria-label="이용약관 동의"
-          />
-          <span className={styles.checkboxIcon}>
-            {termsAgreed ? (
-              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
-            ) : (
-              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
-            )}
-          </span>
-          <span className={styles.agreementText}>
-            <span className={styles.agreementTextBold}>이용약관 동의</span> <span className={styles.required}>(필수)</span>
-          </span>
-          <span className={styles.chevron}>›</span>
-        </label>
+        <div className={styles.agreementItem}>
+          <label className={styles.agreementLabel}>
+            <input
+              type="checkbox"
+              checked={termsAgreed}
+              onChange={(e) => handleIndividualAgree('terms', e.target.checked)}
+              className={styles.checkboxInput}
+              aria-label="이용약관 동의"
+            />
+            <span className={styles.checkboxIcon}>
+              {termsAgreed ? (
+                <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
+              ) : (
+                <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
+              )}
+            </span>
+            <span className={styles.agreementText}>
+              <span className={styles.agreementTextBold}>이용약관 동의</span> <span className={styles.required}>(필수)</span>
+            </span>
+          </label>
+          <button
+            type="button"
+            className={styles.chevronButton}
+            onClick={() => setSelectedAgreementIndex(0)}
+            aria-label="이용약관 상세보기"
+          >
+            <span className={styles.chevron}>›</span>
+          </button>
+        </div>
 
-        <label className={styles.agreementItem}>
-          <input
-            type="checkbox"
-            checked={privacyAgreed}
-            onChange={(e) => handleIndividualAgree('privacy', e.target.checked)}
-            className={styles.checkboxInput}
-            aria-label="개인정보 처리방침 동의"
-          />
-          <span className={styles.checkboxIcon}>
-            {privacyAgreed ? (
-              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
-            ) : (
-              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
-            )}
-          </span>
-          <span className={styles.agreementText}>
-            <span className={styles.agreementTextBold}>개인정보 처리방침 동의</span> <span className={styles.required}>(필수)</span>
-          </span>
-          <span className={styles.chevron}>›</span>
-        </label>
+        <div className={styles.agreementItem}>
+          <label className={styles.agreementLabel}>
+            <input
+              type="checkbox"
+              checked={privacyAgreed}
+              onChange={(e) => handleIndividualAgree('privacy', e.target.checked)}
+              className={styles.checkboxInput}
+              aria-label="개인정보 처리방침 동의"
+            />
+            <span className={styles.checkboxIcon}>
+              {privacyAgreed ? (
+                <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
+              ) : (
+                <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
+              )}
+            </span>
+            <span className={styles.agreementText}>
+              <span className={styles.agreementTextBold}>개인정보 처리방침 동의</span> <span className={styles.required}>(필수)</span>
+            </span>
+          </label>
+          <button
+            type="button"
+            className={styles.chevronButton}
+            onClick={() => setSelectedAgreementIndex(1)}
+            aria-label="개인정보 처리방침 상세보기"
+          >
+            <span className={styles.chevron}>›</span>
+          </button>
+        </div>
 
-        <label className={styles.agreementItem}>
-          <input
-            type="checkbox"
-            checked={paymentAgreed}
-            onChange={(e) => handleIndividualAgree('payment', e.target.checked)}
-            className={styles.checkboxInput}
-            aria-label="결제 진행 동의"
-          />
-          <span className={styles.checkboxIcon}>
-            {paymentAgreed ? (
-              <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
-            ) : (
-              <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
-            )}
-          </span>
-          <span className={styles.agreementText}>
-            <span className={styles.agreementTextBold}>결제 진행 동의</span> <span className={styles.required}>(필수)</span>
-          </span>
-          <span className={styles.chevron}>›</span>
-        </label>
+        <div className={styles.agreementItem}>
+          <label className={styles.agreementLabel}>
+            <input
+              type="checkbox"
+              checked={paymentAgreed}
+              onChange={(e) => handleIndividualAgree('payment', e.target.checked)}
+              className={styles.checkboxInput}
+              aria-label="결제 진행 동의"
+            />
+            <span className={styles.checkboxIcon}>
+              {paymentAgreed ? (
+                <RiCheckboxCircleFill size={20} color={Colors.black[500]} />
+              ) : (
+                <RiCheckboxBlankCircleLine size={20} color={Colors.grey[500]} />
+              )}
+            </span>
+            <span className={styles.agreementText}>
+              <span className={styles.agreementTextBold}>결제 진행 동의</span> <span className={styles.required}>(필수)</span>
+            </span>
+          </label>
+          <button
+            type="button"
+            className={styles.chevronButton}
+            onClick={() => setSelectedAgreementIndex(2)}
+            aria-label="결제 진행 동의 상세보기"
+          >
+            <span className={styles.chevron}>›</span>
+          </button>
+        </div>
       </div>
+
+      {/* 약관 상세 모달 */}
+      <AgreementDetailModal
+        visible={selectedAgreementIndex !== null}
+        selectedIndex={selectedAgreementIndex}
+        onClose={() => setSelectedAgreementIndex(null)}
+      />
     </div>
   );
 }

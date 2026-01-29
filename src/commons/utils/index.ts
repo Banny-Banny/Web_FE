@@ -35,6 +35,7 @@ export {
   formatDate,
   formatShortDateWithTime,
   formatLocaleDateShort,
+  formatRelativeTime,
 } from './date';
 // 컨텐츠 관련 유틸리티
 export {

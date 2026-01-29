@@ -9,6 +9,8 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   onboardingCompleted?: boolean;  // 온보딩 완료 여부 (서버에서 제공하는 경우)
+  friendConsent?: boolean;       // 친구 연동 허용 동의 (온보딩 선택, 서버에서 제공하는 경우)
+  locationConsent?: boolean;     // 위치 권한 허용 동의 (온보딩 선택, 서버에서 제공하는 경우)
 }
 
 /**
@@ -47,7 +49,7 @@ export interface SignupRequest {
 export interface AuthActions {
   login: (credentials: LoginRequest) => Promise<void>;
   signup: (userData: SignupRequest) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refreshAuth: () => Promise<void>;
   clearError: () => void;
 }

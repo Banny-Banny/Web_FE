@@ -16,4 +16,6 @@ export interface WaitingRoomInfoProps {
   waitingRoom: WaitingRoomDetailResponse;
   /** 대기실 설정값 (optional - 조회 실패 시 대기실 정보로 fallback) */
   settings?: WaitingRoomSettingsResponse;
+  /** 친구 초대하기 버튼 클릭 핸들러 */
+  onInviteFriend?: () => void;
 }

@@ -291,6 +291,10 @@
   background-color: var(--color-white-grey-100);
 }
 
+.navItemNotice:hover {
+  background-color: var(--color-white-grey-200);
+}
+
 .navItem:active {
   background-color: var(--color-white-grey-200);
 }

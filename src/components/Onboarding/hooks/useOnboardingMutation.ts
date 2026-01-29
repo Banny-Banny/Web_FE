@@ -23,6 +23,8 @@ export function useOnboardingMutation() {
     onSuccess: () => {
       // 온보딩 완료 상태 업데이트 (필요시)
       queryClient.setQueryData(['onboarding', 'status'], { completed: true });
+      // 프로필(동의 값) 갱신을 위해 GET /me 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
 
       // 초대 코드가 저장되어 있으면 대기실 참여 페이지로 리다이렉트
       const pendingInviteCode = typeof window !== 'undefined'

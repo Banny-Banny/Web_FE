@@ -1,0 +1,13 @@
+/**
+ * 고객센터 문의 목록 컨테이너 스타일 (CSS 변수 기반)
+ */
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white-500);
+}

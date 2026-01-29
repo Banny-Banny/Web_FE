@@ -1,26 +1,43 @@
 /**
  * 로그아웃 API 함수
+ * 현재 토큰을 서버에서 무효화하여 재사용을 막습니다.
  */
 
 import type { AxiosError } from 'axios';
-import { apiClient, ApiResponse } from '@/commons/provider/api-provider/api-client';
+import { apiClient } from '@/commons/provider/api-provider/api-client';
 import { AUTH_ENDPOINTS } from '@/commons/apis/endpoints';
 
 /**
  * 로그아웃 API 호출
  *
- * 서버에 로그아웃 요청을 보내 세션/리프레시 토큰을 무효화합니다.
- * 실패해도 클라이언트에서는 토큰을 제거하므로 에러는 던지지 않고 무시합니다.
+ * POST /api/auth/logout
+ * - 성공(200): 로그아웃 성공
+ * - 401: 유효하지 않은 토큰 (이미 무효인 경우이므로 로컬 정리만 진행하면 됨)
+ *
+ * @throws ApiError 서버 오류(500 등) 시
  */
 export async function logoutApi(): Promise<void> {
   try {
-    await apiClient.post<ApiResponse<unknown>>(AUTH_ENDPOINTS.LOGOUT);
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message?: string }>;
-    console.warn(
-      '로그아웃 API 실패 (클라이언트 토큰은 제거됨):',
-      axiosError.response?.data?.message ?? axiosError.message
-    );
-    // 서버 오류/네트워크 오류 시에도 클라이언트는 정리하므로 throw 하지 않음
+    await apiClient.post(AUTH_ENDPOINTS.LOGOUT);
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message?: string; code?: string }>;
+    const status = axiosError.response?.status;
+
+    // 401(유효하지 않은 토큰)은 로그아웃 의도와 동일하므로 예외로 던지지 않음
+    if (status === 401) {
+      return;
+    }
+
+    const apiError = {
+      message:
+        axiosError.response?.data?.message ||
+        axiosError.message ||
+        '로그아웃 중 오류가 발생했습니다.',
+      status: status ?? 500,
+      code: axiosError.response?.data?.code ?? axiosError.code,
+      details: axiosError.response?.data,
+    };
+
+    throw apiError;
   }
 }

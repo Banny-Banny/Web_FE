@@ -11,6 +11,8 @@
     "analyze:server": "BUNDLE_ANALYZE=server next build --webpack",
     "analyze:browser": "BUNDLE_ANALYZE=browser next build --webpack",
     "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:e2e:health": "playwright test tests/e2e/health",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug"
@@ -30,8 +32,10 @@
     "next": "16.1.4",
     "qs": "^6.14.1",
     "react": "19.2.3",
+    "react-calendar": "^6.0.0",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
+    "socket.io-client": "^4.8.3",
     "web-vitals": "^5.1.0",
     "zod": "^4.3.6"
   },
@@ -42,6 +46,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
+    "@types/react-calendar": "^4.1.0",
     "@types/react-dom": "^19",
     "dotenv": "^17.2.3",
     "eslint": "^9",
