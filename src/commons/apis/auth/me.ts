@@ -28,13 +28,26 @@ import type { MeResponse } from './types';
  * }
  * ```
  */
+/** API가 { success, data } 형태로 감싸서 반환하는 경우의 응답 타입 */
+interface MeWrappedResponse {
+  success?: boolean;
+  data?: MeResponse;
+}
+
 export async function getMe(): Promise<MeResponse> {
   try {
-    const response = await apiClient.get<MeResponse>(
+    const response = await apiClient.get<MeResponse | MeWrappedResponse>(
       AUTH_ENDPOINTS.ME
     );
 
-    return response.data;
+    const raw = response.data;
+    // GET /api/auth/me 문서: { success, data: { nickname, name, email, profileImageUrl, summary } } 형태 지원
+    const data = raw && 'data' in raw && raw.data != null ? raw.data : (raw as MeResponse);
+    const profile: MeResponse = {
+      ...data,
+      profileImg: data.profileImg ?? data.profileImageUrl ?? null,
+    };
+    return profile;
   } catch (error) {
     // Axios 에러를 ApiError 형식으로 변환
     const axiosError = error as AxiosError<{ message?: string; code?: string }>;
