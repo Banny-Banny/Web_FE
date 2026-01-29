@@ -4,25 +4,30 @@
  * @fileoverview WaitingRoom 메인 컨테이너 컴포넌트
  * @description 대기실 페이지의 최상위 컨테이너
  * 
- * @version 1.0.0
+ * @version 1.2.0
  * @created 2026-01-28
- * @updated 2026-01-28 - Figma 디자인 기반으로 재구현, ParticipantList 통합
- * 
- * @note
- * Phase 6에서 실제 API 호출로 교체됩니다.
+ * @updated 2026-01-29 - 타임캡슐 제출 기능 추가 (방장 전용)
+ * @updated 2026-01-29 - 실제 API 연결 및 에러 처리 강화 (Phase 9 완료)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TimeCapsuleHeader } from '@/commons/components/timecapsule-header';
 import { Spinner } from '@/commons/components/spinner';
 import { useAuthState } from '@/commons/hooks/useAuth';
 import { useMyContent } from '@/commons/apis/capsules/step-rooms/hooks/useMyContent';
 import { generateInviteLink } from '@/commons/utils/invite';
+import { useToast } from '@/commons/provider/toast-provider';
 import { WaitingRoomInfo } from './components/WaitingRoomInfo';
 import { ParticipantList } from './components/ParticipantList';
 import { ContentWriteBottomSheet } from './components/ContentWriteBottomSheet';
+import { SubmitTimer } from './components/SubmitTimer';
+import { SubmitButton } from './components/SubmitButton';
+import { SubmitConfirmModal } from './components/SubmitConfirmModal';
+import { SubmitCompleteModal } from './components/SubmitCompleteModal';
+import { AutoSubmitModal } from './components/AutoSubmitModal';
 import { useWaitingRoom } from './hooks/useWaitingRoom';
+import { useCapsuleSubmit } from './hooks/useCapsuleSubmit';
 import styles from './styles.module.css';
 
 /**
@@ -41,8 +46,14 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   const { state, waitingRoom, settings, isLoading, error } =
     useWaitingRoom(capsuleId);
   const { user } = useAuthState();
+  const { showError, showSuccess } = useToast();
   const [isContentWriteOpen, setIsContentWriteOpen] = useState(false);
   const [isMyContentJustSaved, setIsMyContentJustSaved] = useState(false);
+
+  // 제출 관련 상태
+  const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
+  const [isSubmitCompleteOpen, setIsSubmitCompleteOpen] = useState(false);
+  const [isAutoSubmitModalOpen, setIsAutoSubmitModalOpen] = useState(false);
 
   const { data: myContent } = useMyContent(user?.id ? capsuleId : null);
   const isMyContentSavedFromServer = Boolean(
@@ -65,6 +76,44 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
       return isCurrentUser && p.role === 'HOST';
     }
   ) ?? false;
+
+  // 제출 훅 (실제 API 연결)
+  const { submitCapsule, isSubmitting, error: submitError, submitResult } =
+    useCapsuleSubmit(capsuleId);
+
+  // 자동 제출 감지 (방 상태가 BURIED이고 is_auto_submitted가 true인 경우)
+  useEffect(() => {
+    if (
+      waitingRoom?.status === 'BURIED' &&
+      waitingRoom?.isAutoSubmitted === true
+    ) {
+      setIsAutoSubmitModalOpen(true);
+    }
+  }, [waitingRoom?.status, waitingRoom?.isAutoSubmitted]);
+
+  // 제출 조건 확인
+  const allParticipantsCompleted = waitingRoom?.participants.every(
+    (p) => p.hasContent === true
+  ) ?? false;
+
+  const isTimerExpired = waitingRoom?.createdAt
+    ? new Date(waitingRoom.createdAt).getTime() + 24 * 60 * 60 * 1000 < Date.now()
+    : false;
+
+  const canSubmit =
+    isHost &&
+    allParticipantsCompleted &&
+    !isTimerExpired &&
+    waitingRoom?.status !== 'BURIED';
+
+  // 비활성화 사유
+  const getDisabledReason = (): string | undefined => {
+    if (!isHost) return undefined; // 방장이 아니면 버튼 자체를 숨김
+    if (waitingRoom?.status === 'BURIED') return '이미 제출된 타임캡슐입니다';
+    if (isTimerExpired) return '자동 제출 시간이 경과했습니다';
+    if (!allParticipantsCompleted) return '모든 참여자가 콘텐츠를 제출해야 합니다';
+    return undefined;
+  };
 
   const handleBack = () => {
     router.back();
@@ -114,8 +163,48 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
   };
 
   const handleFinalSubmit = () => {
-    // TODO: 대기실 이후 단계(타임캡슐 최종 생성/제출) 연결 시 구현
-    console.log('최종제출');
+    // 제출 확인 모달 표시
+    setIsSubmitConfirmOpen(true);
+  };
+
+  const handleSubmitConfirm = async () => {
+    try {
+      // 실제 API 호출 (GPS 수집 + 제출)
+      await submitCapsule();
+      
+      // 확인 모달 닫기
+      setIsSubmitConfirmOpen(false);
+      
+      // 성공 메시지 표시
+      showSuccess('타임캡슐이 성공적으로 제출되었습니다');
+      
+      // 완료 모달 표시 (submitResult는 mutation 성공 후 자동으로 설정됨)
+      setIsSubmitCompleteOpen(true);
+    } catch (error: any) {
+      console.error('제출 실패:', error);
+      
+      // 확인 모달은 유지 (사용자가 재시도할 수 있도록)
+      
+      // 에러 메시지 표시
+      const errorMessage = submitError || error?.message || '제출에 실패했습니다. 다시 시도해주세요';
+      showError(errorMessage);
+    }
+  };
+
+  const handleSubmitCompleteClose = () => {
+    setIsSubmitCompleteOpen(false);
+    // 홈 화면으로 이동
+    router.push('/');
+  };
+
+  const handleAutoSubmitModalClose = () => {
+    setIsAutoSubmitModalOpen(false);
+  };
+
+  const handleNavigateToVault = () => {
+    setIsAutoSubmitModalOpen(false);
+    // TODO: 보관함 페이지로 이동
+    router.push('/vault');
   };
 
   const handleContentWriteClose = () => {
@@ -141,6 +230,11 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
         ]}
         titleAlign="left"
       />
+
+      {/* 24시간 타이머 (방장에게만 표시) */}
+      {isHost && waitingRoom?.createdAt && waitingRoom.status !== 'BURIED' && (
+        <SubmitTimer createdAt={waitingRoom.createdAt} />
+      )}
 
       <div className={styles.content}>
         {isLoading && <Spinner size="large" fullScreen={true} />}
@@ -171,6 +265,59 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
           </>
         )}
       </div>
+
+      {/* 제출 버튼 (방장에게만 표시) */}
+      {isHost && waitingRoom?.status !== 'BURIED' && (
+        <SubmitButton
+          disabled={!canSubmit}
+          disabledReason={getDisabledReason()}
+          onClick={handleFinalSubmit}
+          isLoading={isSubmitting}
+        />
+      )}
+
+      {/* 제출 확인 모달 */}
+      {waitingRoom && (
+        <SubmitConfirmModal
+          isOpen={isSubmitConfirmOpen}
+          onClose={() => setIsSubmitConfirmOpen(false)}
+          onConfirm={handleSubmitConfirm}
+          openDate={waitingRoom.openDate}
+          remainingHours={
+            waitingRoom.createdAt
+              ? Math.floor(
+                  (new Date(waitingRoom.createdAt).getTime() +
+                    24 * 60 * 60 * 1000 -
+                    Date.now()) /
+                    (1000 * 60 * 60)
+                )
+              : 0
+          }
+          isLoading={isSubmitting}
+        />
+      )}
+
+      {/* 제출 완료 모달 */}
+      {isSubmitCompleteOpen && submitResult && (
+        <SubmitCompleteModal
+          isOpen={isSubmitCompleteOpen}
+          onClose={handleSubmitCompleteClose}
+          capsuleId={submitResult.data.capsule_id}
+          openDate={submitResult.data.open_date}
+          isAutoSubmitted={submitResult.data.is_auto_submitted}
+        />
+      )}
+
+      {/* 자동 제출 안내 모달 */}
+      {waitingRoom?.isAutoSubmitted && (
+        <AutoSubmitModal
+          isOpen={isAutoSubmitModalOpen}
+          onClose={handleAutoSubmitModalClose}
+          buriedAt={waitingRoom.createdAt || new Date().toISOString()}
+          openDate={waitingRoom.openDate}
+          onNavigateToVault={handleNavigateToVault}
+        />
+      )}
 
       {state.status === 'success' && (
         <ContentWriteBottomSheet
