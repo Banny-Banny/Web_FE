@@ -90,8 +90,10 @@
 }
 
 .badgeIcon {
-  width: var(--spacing-lg);
-  height: var(--spacing-lg);
+  width: 18px;
+  height: 18px;
+  color: var(--color-light-black-800);
+  flex-shrink: 0;
 }
 
 .badgeText {
@@ -129,7 +131,16 @@
   gap: var(--spacing-sm);
 }
 
-.authorEmoji {
+.authorProfileImg {
+  width: 36px;
+  height: 36px;
+  background: var(--color-white-500);
+  border: 0.76px solid var(--color-white-grey-400);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.authorIconWrap {
   width: 36px;
   height: 36px;
   background: var(--color-white-500);
@@ -138,7 +149,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-base);
+  color: var(--color-grey-500);
 }
 
 .authorName {
@@ -158,6 +169,11 @@
   border: 0.76px solid var(--color-white-grey-300);
   border-radius: var(--radius-full);
   height: 20px;
+}
+
+.dateInfoIcon {
+  color: var(--color-grey-500);
+  flex-shrink: 0;
 }
 
 .dateText {
