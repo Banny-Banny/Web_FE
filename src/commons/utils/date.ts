@@ -92,6 +92,9 @@ export function formatDateTimeKorean(dateString: string): string {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+}
+
+/**
  * ISO 날짜 문자열을 상대 시간으로 포맷 (예: "N일 전", "방금", "N시간 전")
  */
 export function formatRelativeTime(dateString: string): string {
