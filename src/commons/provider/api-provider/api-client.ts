@@ -332,8 +332,10 @@ apiClient.interceptors.response.use(
         // 대기실 참여 409: 이미 참여 중 - 정상 상황이므로 간단한 로그만
         console.log(`✅ 이미 대기실에 참여 중입니다.`);
       } else {
-        // 실제 에러인 경우만 error 로그
-        console.error(`❌ API Error: ${method} ${fullURL}`);
+        // 실제 에러인 경우만 error 로그 (상태 코드·메시지를 한 줄에 포함)
+        const statusPart = errorInfo.statusCode ?? errorInfo.httpStatus ?? '—';
+        const msgPart = errorInfo.message ? ` ${errorInfo.message}` : '';
+        console.error(`❌ API Error: ${method} ${fullURL} (${statusPart})${msgPart}`);
         const rawData = error.config?.data;
         const requestDataForLog =
           rawData == null

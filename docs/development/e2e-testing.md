@@ -33,6 +33,9 @@ npx playwright test tests/e2e/login
 
 # 친구 관리 E2E만
 npx playwright test tests/e2e/friend-management
+
+# 마이페이지·로그아웃 E2E만
+npx playwright test tests/e2e/mypage
 ```
 
 ### UI 모드 / 디버그
@@ -55,6 +58,7 @@ npm run test:headed  # 브라우저 창 보이면서 실행
 | `health/` | API Health Check | ❌ |
 | `login/` | 로그인 API·플로우 | ❌ (API 테스트) / ✅ (플로우) |
 | `friend-management/` | 친구 목록·추가·삭제 | ✅ |
+| `mypage/` | 마이페이지(/profile)·로그아웃 | ❌ (비로그인 리다이렉트) / ✅ (UI·로그아웃) |
 | `kakao-map/` | 지도 렌더·FAB·슬롯 | ✅ |
 | `easter-egg/` | 이스터에그 폼 제출 | ✅ |
 | `easter-egg-map-display/` | 지도 캡슐 마커·모달 | ✅ |
@@ -78,7 +82,7 @@ npm run test:headed  # 브라우저 창 보이면서 실행
 
 - **로그인 실패 (401 "비밀번호가 일치하지 않습니다.")**
   - `login-flow.e2e.spec.ts`: 전화번호 `01012345678` / 비밀번호 `Password123!` 사용
-  - `friend-management`, `my-egg-list`, `easter-egg-map-display` 등: `.env.local`의  
+  - `friend-management`, `mypage`, `my-egg-list`, `easter-egg-map-display` 등: `.env.local`의  
     `NEXT_PUBLIC_PHONE_NUMBER`, `NEXT_PUBLIC_PASSWORD` 사용
   - 백엔드에 해당 계정이 없거나, 비밀번호가 다르면 401로 실패합니다.
 

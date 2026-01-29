@@ -71,6 +71,14 @@ export interface MeSummary {
 }
 
 /**
+ * 내 프로필 수정 요청 타입 (POST /api/me/update)
+ */
+export interface MeUpdateRequest {
+  nickname: string;
+  email?: string;
+}
+
+/**
  * 내 프로필 조회 응답 타입
  */
 export interface MeResponse {
