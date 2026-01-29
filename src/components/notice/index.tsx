@@ -54,7 +54,11 @@ export default function NoticeList() {
   );
 
   const subtitle =
-    total >= 0 ? `총 ${total}개의 공지사항` : undefined;
+    total >= 0
+      ? submittedSearch
+        ? `검색 결과 ${total}개`
+        : `총 ${total}개의 공지사항`
+      : undefined;
 
   return (
     <div className={styles.container}>

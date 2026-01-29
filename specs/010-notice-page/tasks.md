@@ -110,10 +110,10 @@
 
 **목표**: 디자인된 UI에 검색·메뉴 등 데이터/상호작용 연동.
 
-- [ ] T013 [US2] `src/components/notice/index.tsx` 검색 연동
+- [x] T013 [US2] `src/components/notice/index.tsx` 검색 연동
   - 검색어 입력 시 디바운싱(버튼 없음)으로 useNotices(search) 호출, offset 0, 검색 결과 개수/빈 결과 안내
 
-- [ ] T015 `src/components/Mypage/index.tsx` 수정
+- [x] T015 `src/components/Mypage/index.tsx` 수정
   - 내비게이션 카드에 "공지사항" 메뉴 버튼 추가 (고객 센터 버튼 **위**에 배치)
   - 클릭 시 router.push('/notices')
 
@@ -123,7 +123,7 @@
 
 **목표**: UI 테스트는 **마지막에** 수행.
 
-- [ ] T017 [P] (선택) `tests/ui/notice/notice.ui.spec.ts` UI 테스트
+- [x] T017 [P] (선택) `tests/ui/notice/notice.ui.spec.ts` UI 테스트
   - 목록: 로딩, 빈 목록, 오류 상태, 공지 라벨·상대 시간
   - 상세: 로딩, 오류, 본문·이미지
 
