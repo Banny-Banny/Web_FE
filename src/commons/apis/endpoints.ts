@@ -38,9 +38,7 @@ export const AUTH_ENDPOINTS = {
   CHANGE_PASSWORD: `${BASE_PATHS.AUTH}/change-password`,
   
   // 프로필 관리
-  ME: `${BASE_PATHS.API}/me`, // 로그인한 사용자 프로필 조회
-  ME_UPDATE: `${BASE_PATHS.API}/me/update`,
-  ME_PROFILE_IMAGE: `${BASE_PATHS.API}/me/profile-image`,
+  ME: `${BASE_PATHS.AUTH}/me`, // 로그인한 사용자 프로필 조회 (내 정보 + summary)
   PROFILE: `${BASE_PATHS.AUTH}/profile`,
   UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
   DELETE_ACCOUNT: `${BASE_PATHS.AUTH}/delete-account`,

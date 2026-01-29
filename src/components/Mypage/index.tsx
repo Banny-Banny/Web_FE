@@ -15,6 +15,8 @@ import { RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/r
 import { Button } from '@/commons/components/button';
 import { useAuth } from '@/commons/hooks/useAuth';
 import { ProfileSection } from './components/profile-section';
+import { useProfile } from './components/profile-section/hooks/useProfile';
+import { useAuthActions } from '@/commons/hooks/useAuth';
 import styles from './styles.module.css';
 import type { MypageProps } from './types';
 
@@ -25,19 +27,9 @@ import type { MypageProps } from './types';
  */
 export function Mypage({ className = '' }: MypageProps) {
   const router = useRouter();
-  const { logout } = useAuth();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  const handleLogout = async () => {
-    if (isLoggingOut) return;
-    setIsLoggingOut(true);
-    try {
-      await logout();
-      router.push('/login');
-    } finally {
-      setIsLoggingOut(false);
-    }
-  };
+  const { logout } = useAuthActions();
+  const { data: profile } = useProfile();
+  const summary = profile?.summary;
 
   const handleFriendClick = () => {
     router.push('/friends');
@@ -47,13 +39,9 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/my-eggs');
   };
 
-  const handleNoticeClick = () => {
-    router.push('/notices');
-  };
-
-  const handleCustomerCenterClick = () => {
-    router.push('/customer-center');
-  };
+  const timeCapsuleCount = summary?.timeCapsuleCount ?? 0;
+  const easterEggCount = summary?.easterEggCount ?? 0;
+  const friendCount = summary?.friendCount ?? 0;
 
   return (
     <div className={`${styles.container} ${className}`}>
@@ -74,10 +62,10 @@ export function Mypage({ className = '' }: MypageProps) {
       {/* 프로필 섹션 */}
       <ProfileSection />
 
-      {/* 활동 요약 카드 */}
+      {/* 활동 요약 카드 (GET /api/auth/me data.summary 사용) */}
       <div className={styles.activityCard}>
         <div className={styles.activityItem}>
-          <div className={styles.activityNumber}>3</div>
+          <div className={styles.activityNumber}>{timeCapsuleCount}</div>
           <div className={styles.activityLabel}>캡슐</div>
         </div>
         <div className={styles.activityDivider}></div>
@@ -87,7 +75,7 @@ export function Mypage({ className = '' }: MypageProps) {
           type="button"
           aria-label="이스터에그 목록 보기"
         >
-          <div className={styles.activityNumber}>12</div>
+          <div className={styles.activityNumber}>{easterEggCount}</div>
           <div className={styles.activityLabel}>이스터에그</div>
         </button>
         <div className={styles.activityDivider}></div>
@@ -97,7 +85,7 @@ export function Mypage({ className = '' }: MypageProps) {
           type="button"
           aria-label="친구 목록 보기"
         >
-          <div className={styles.activityNumber}>8</div>
+          <div className={styles.activityNumber}>{friendCount}</div>
           <div className={styles.activityLabel}>친구</div>
         </button>
       </div>
@@ -141,8 +129,10 @@ export function Mypage({ className = '' }: MypageProps) {
           label={isLoggingOut ? '로그아웃 중...' : '로그아웃'}
           variant="primary"
           size="L"
-          onPress={handleLogout}
-          disabled={isLoggingOut}
+          onPress={async () => {
+            await logout();
+            router.push('/');
+          }}
           className={styles.logoutButton}
         />
       </div>

@@ -149,18 +149,17 @@ export function useAuth(): AuthContextType {
 
   /**
    * 로그아웃 함수
-   * 서버에 로그아웃 요청 후 로컬 토큰/캐시를 정리합니다.
+   * 서버 로그아웃 API 호출 후 클라이언트 토큰/상태를 정리합니다.
    */
   const logout = useCallback(async () => {
     try {
       await logoutApi();
     } catch {
-      // 네트워크/서버 오류 시에도 로컬에서는 로그아웃 처리
-    } finally {
-      clearTokens();
-      setUser(null);
-      queryClient.removeQueries({ queryKey: ['auth'] });
+      // API 실패해도 클라이언트는 정리 (logoutApi 내부에서 throw 안 함)
     }
+    clearTokens();
+    setUser(null);
+    queryClient.removeQueries({ queryKey: ['auth'] });
   }, [queryClient]);
 
   /**
