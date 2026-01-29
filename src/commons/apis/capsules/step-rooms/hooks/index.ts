@@ -12,3 +12,4 @@ export { useUpdateContent } from './useUpdateContent';
 export { useCreateRoom } from './useCreateRoom';
 export { useInviteCodeQuery } from './useInviteCodeQuery';
 export { useJoinRoom } from './useJoinRoom';
+export { useCapsuleSubmit } from './useCapsuleSubmit';
