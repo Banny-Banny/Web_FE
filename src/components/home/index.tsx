@@ -11,6 +11,7 @@ import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useLocationTracking } from './hooks/useLocationTracking';
+import { useProfile } from '@/components/Mypage/components/profile-section/hooks/useProfile';
 import { useAutoDiscovery } from './hooks/useAutoDiscovery';
 import { useCapsuleDetail } from './hooks/useCapsuleDetail';
 import { MapView } from './components/map-view';
@@ -78,8 +79,12 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     type: 'info',
     visible: false,
   });
-  
-  const geolocation = useGeolocation();
+
+  // 프로필(온보딩 동의 여부) — 위치 권한 허용 시에만 현재 위치 요청
+  const { data: profile } = useProfile();
+  const locationConsent = profile?.locationConsent === true;
+
+  const geolocation = useGeolocation({ enabled: locationConsent });
   
   // 슬롯 관리 훅
   const { slotInfo, isLoading: isSlotLoading } = useSlotManagement();
@@ -129,9 +134,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     }
   }, [isCapsulesLoading, capsules]);
 
-  // 지도 로드 시 위치 추적 시작
+  // 지도 로드 시 위치 추적 시작 (위치 권한 허용한 경우에만)
   useEffect(() => {
-    if (map && !locationTracking.isTracking) {
+    if (map && locationConsent && !locationTracking.isTracking) {
       if (process.env.NODE_ENV === 'development') {
         console.warn('[HomeFeature] 지도 로드 완료 - 위치 추적 시작');
       }
@@ -144,7 +149,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         locationTracking.stopTracking();
       }
     };
-  }, [map, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]); // startTracking, stopTracking은 useCallback으로 메모이제이션됨
+  }, [map, locationConsent, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]);
 
   // 지도 진입 시 초기 위치로 즉시 자동 발견 감지
   // 위치 업데이트를 기다리지 않고 초기 위치(geolocation)로 바로 체크

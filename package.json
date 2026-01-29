@@ -11,6 +11,8 @@
     "analyze:server": "BUNDLE_ANALYZE=server next build --webpack",
     "analyze:browser": "BUNDLE_ANALYZE=browser next build --webpack",
     "test": "playwright test",
+    "test:e2e": "playwright test tests/e2e",
+    "test:e2e:health": "playwright test tests/e2e/health",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug"

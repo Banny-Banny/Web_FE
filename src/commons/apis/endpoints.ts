@@ -39,6 +39,8 @@ export const AUTH_ENDPOINTS = {
   
   // 프로필 관리
   ME: `${BASE_PATHS.API}/me`, // 로그인한 사용자 프로필 조회
+  ME_UPDATE: `${BASE_PATHS.API}/me/update`,
+  ME_PROFILE_IMAGE: `${BASE_PATHS.API}/me/profile-image`,
   PROFILE: `${BASE_PATHS.AUTH}/profile`,
   UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
   DELETE_ACCOUNT: `${BASE_PATHS.AUTH}/delete-account`,
@@ -252,6 +254,16 @@ export const INQUIRY_ENDPOINTS = {
 } as const;
 
 /**
+ * 공지사항 관련 엔드포인트
+ */
+export const NOTICE_ENDPOINTS = {
+  // 공지사항 목록 조회
+  LIST: `${BASE_PATHS.API}/notices`,
+  // 공지사항 상세 조회
+  DETAIL: (id: string) => `${BASE_PATHS.API}/notices/${id}`,
+} as const;
+
+/**
  * 모든 엔드포인트를 통합한 객체
  */
 export const ENDPOINTS = {
@@ -268,6 +280,7 @@ export const ENDPOINTS = {
   HEALTH: HEALTH_ENDPOINTS,
   ONBOARDING: ONBOARDING_ENDPOINTS,
   INQUIRY: INQUIRY_ENDPOINTS,
+  NOTICE: NOTICE_ENDPOINTS,
 } as const;
 
 /**

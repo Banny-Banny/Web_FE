@@ -1,0 +1,199 @@
+/**
+ * 프로필 수정 모달 스타일
+ * 375px 모바일 프레임 기준, Figma 노드 161-24140 기준
+ * CSS 변수(디자인 토큰) 사용
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.modal {
+  width: 100%;
+  max-width: 375px;
+  background-color: var(--color-white-500);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.title {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-black-500);
+  margin: 0;
+  align-self: flex-start;
+}
+
+.profilePreviewWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.profilePreview {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-100);
+  border: 1px solid var(--color-grey-300);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.profilePreviewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}
+
+.profileEmoji {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.photoChangeButton {
+  width: 100%;
+  max-width: 200px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-grey-400);
+  background-color: var(--color-white-500);
+  color: var(--color-grey-700);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.photoChangeButton:hover {
+  background-color: var(--color-grey-100);
+}
+
+.photoChangeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nicknameField {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-self: stretch;
+}
+
+.nicknameLabel {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-black-500);
+}
+
+.nicknameInput {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-grey-400);
+  background-color: var(--color-white-500);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-black-500);
+  box-sizing: border-box;
+}
+
+.nicknameInput::placeholder {
+  color: var(--color-grey-500);
+}
+
+.nicknameInput:focus {
+  outline: none;
+  border-color: var(--color-grey-600);
+}
+
+.errorMessage {
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-red-500, #ef4444);
+  margin: 0;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.cancelButton {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-grey-400);
+  background-color: var(--color-white-500);
+  color: var(--color-grey-700);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.cancelButton:hover {
+  background-color: var(--color-grey-100);
+}
+
+.saveButton {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: none;
+  background-color: var(--color-black-500);
+  color: var(--color-white-50);
+  font-family: var(--font-pretendard, 'Pretendard Variable', sans-serif);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: var(--color-black-600);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
