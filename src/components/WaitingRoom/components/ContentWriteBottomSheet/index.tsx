@@ -79,12 +79,18 @@ export function ContentWriteBottomSheet({
   // 음성 파일 URL 관리
   React.useEffect(() => {
     if (formData.music) {
-      const url = URL.createObjectURL(formData.music);
-      setMusicObjectUrl(url);
-      return () => {
-        URL.revokeObjectURL(url);
-        setMusicObjectUrl(null);
-      };
+      if (typeof formData.music === 'string') {
+        // 기존 URL인 경우 그대로 사용
+        setMusicObjectUrl(formData.music);
+      } else {
+        // File 객체인 경우 URL 생성
+        const url = URL.createObjectURL(formData.music);
+        setMusicObjectUrl(url);
+        return () => {
+          URL.revokeObjectURL(url);
+          setMusicObjectUrl(null);
+        };
+      }
     } else {
       setMusicObjectUrl(null);
     }
@@ -93,12 +99,18 @@ export function ContentWriteBottomSheet({
   // 비디오 파일 URL 관리
   React.useEffect(() => {
     if (formData.video) {
-      const url = URL.createObjectURL(formData.video);
-      setVideoObjectUrl(url);
-      return () => {
-        URL.revokeObjectURL(url);
-        setVideoObjectUrl(null);
-      };
+      if (typeof formData.video === 'string') {
+        // 기존 URL인 경우 그대로 사용
+        setVideoObjectUrl(formData.video);
+      } else {
+        // File 객체인 경우 URL 생성
+        const url = URL.createObjectURL(formData.video);
+        setVideoObjectUrl(url);
+        return () => {
+          URL.revokeObjectURL(url);
+          setVideoObjectUrl(null);
+        };
+      }
     } else {
       setVideoObjectUrl(null);
     }
