@@ -112,23 +112,11 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
       });
       overlaysRef.current.clear();
 
-      // 개발 환경에서 마커 생성 시작 로그
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[CapsuleMarkers] 마커 생성 시작: ${validCapsules.length}개 유효한 캡슐`);
-      }
-
-      let createdCount = 0;
-
       // 각 유효한 캡슐에 대해 마커 생성
       validCapsules.forEach((capsule) => {
         try {
           // Kakao Maps API가 로드되었는지 확인
-          if (!window.kakao?.maps) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('[CapsuleMarkers] Kakao Maps API가 로드되지 않음');
-            }
-            return;
-          }
+          if (!window.kakao?.maps) return;
 
           // 위치 좌표 생성
           const position = new window.kakao.maps.LatLng(
@@ -151,24 +139,10 @@ export const CapsuleMarkers = memo(function CapsuleMarkers({
 
           // 오버레이 맵에 저장
           overlaysRef.current.set(capsule.id, customOverlay);
-          createdCount++;
-
-          // 개발 환경에서 개별 마커 생성 로그
-          if (process.env.NODE_ENV === 'development') {
-            console.log(`[CapsuleMarkers] 마커 생성 완료: ${capsule.id} (${capsule.type})`, {
-              position: { lat: capsule.latitude, lng: capsule.longitude },
-              title: capsule.title,
-            });
-          }
         } catch (err) {
           console.error(`[CapsuleMarkers] 마커 생성 실패 (${capsule.id}):`, err);
         }
       });
-
-      // 개발 환경에서 마커 생성 완료 로그
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[CapsuleMarkers] 마커 생성 완료: ${createdCount}개 생성`);
-      }
     } catch (err) {
       console.error('[CapsuleMarkers] 마커 생성 중 오류:', err);
     }

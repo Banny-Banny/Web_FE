@@ -2,22 +2,28 @@
  * 발견 성공 모달
  * 30m 이내에서 친구 이스터에그를 발견했을 때 표시되는 모달
  * Figma 디자인: node-id=599-6755
+ *
+ * 모달이 뜰 때 POST /api/.../record-view (recordCapsuleView) 요청이 나가며,
+ * 발견 기록이 저장되고 캡슐의 view_count가 갱신됩니다.
  */
 
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { RiCalendarLine, RiMedalFill, RiUserLine } from '@remixicon/react';
 import type { DiscoveryModalProps } from './types';
 import styles from './styles.module.css';
 import { useRecordCapsuleView } from '../../hooks/useRecordCapsuleView';
 import { useGeolocation } from '../../hooks/useGeolocation';
+import { useAuth } from '@/commons/hooks/useAuth';
 
 export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }: DiscoveryModalProps) {
   const { recordView } = useRecordCapsuleView();
   const geolocation = useGeolocation();
+  const { user } = useAuth();
   const hasRecordedRef = useRef<Set<string>>(new Set());
 
-  // 모달 진입 시점에 발견 기록 저장
+  // 모달 진입 시점에 발견 기록 저장 (POST record view 요청)
   useEffect(() => {
     if (!isOpen || !capsule) return;
 
@@ -39,9 +45,8 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
             onDiscoveryRecorded();
           }
         })
-        .catch((error) => {
+        .catch(() => {
           // 에러는 조용히 처리 (이미 훅에서 처리됨)
-          console.warn('발견 기록 저장 실패:', error);
         });
 
       // 기록 완료 표시
@@ -69,6 +74,22 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
   // 미디어 타입 확인
   const hasImage = capsule.media_types?.includes('image') || false;
 
+  const viewers = capsule.viewers ?? [];
+  const myIndex = user?.id ? viewers.findIndex((v) => v.id === user.id) : -1;
+  const discovererOrder = myIndex >= 0 ? myIndex + 1 : viewers.length + 1;
+
+  const isInViewers = myIndex >= 0;
+  const displayViewCount = isInViewers ? viewers.length : viewers.length + 1;
+  const limitDisplay =
+    capsule.view_limit === 0 ? '∞' : String(capsule.view_limit ?? 0);
+
+  const createdDateDisplay = capsule.created_at
+    ? (() => {
+        const d = new Date(capsule.created_at);
+        return `${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+      })()
+    : '—';
+
   // 모달 배경 클릭 시 닫기
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -79,7 +100,7 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
   return (
     <div className={styles.backdrop} onClick={handleBackdropClick}>
       <div className={styles.modal}>
-        {/* 상단 이모지 아이콘 */}
+        {/* 상단 이스터에그 알 (제외 대상이라 이모지 유지) */}
         <div className={styles.iconContainer}>
           <div className={styles.iconCircle}>
             <span className={styles.icon}>🥚</span>
@@ -92,30 +113,38 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
         {/* 서브 타이틀 */}
         <p className={styles.subtitle}>누군가의 소중한 추억을 찾으셨군요!</p>
 
-        {/* 첫 번째 발견자 뱃지 */}
+        {/* N번째 발견자 뱃지 */}
         <div className={styles.badge}>
-          <svg className={styles.badgeIcon} width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1L10.09 5.26L14.8 5.91L11.4 9.19L12.18 13.88L8 11.67L3.82 13.88L4.6 9.19L1.2 5.91L5.91 5.26L8 1Z" fill="#1E2939" stroke="#1E2939" strokeWidth="1.5"/>
-          </svg>
-          <span className={styles.badgeText}>첫 번째 발견자</span>
+          <RiMedalFill size={18} className={styles.badgeIcon} aria-hidden />
+          <span className={styles.badgeText}>
+            {discovererOrder}번째 발견자
+          </span>
         </div>
 
         {/* 콘텐츠 카드 */}
         <div className={styles.contentCard}>
-          {/* 작성자 정보 */}
+          {/* 작성자 정보 (프로필 이미지 유지, 없으면 아이콘) */}
           {capsule.author && (
             <div className={styles.authorHeader}>
               <div className={styles.authorInfo}>
-                <div className={styles.authorEmoji}>☕️</div>
+                {capsule.author.profile_img ? (
+                  <img
+                    src={capsule.author.profile_img}
+                    alt=""
+                    className={styles.authorProfileImg}
+                  />
+                ) : (
+                  <div className={styles.authorIconWrap}>
+                    <RiUserLine size={18} aria-hidden />
+                  </div>
+                )}
                 <span className={styles.authorName}>
                   {capsule.author.nickname || '알 수 없음'}
                 </span>
               </div>
               <div className={styles.dateInfo}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M6 1V6L9 9" stroke="#99A1AF" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-                <span className={styles.dateText}>03.15</span>
+                <RiCalendarLine size={12} className={styles.dateInfoIcon} aria-hidden />
+                <span className={styles.dateText}>{createdDateDisplay}</span>
               </div>
             </div>
           )}
@@ -141,15 +170,13 @@ export function DiscoveryModal({ isOpen, capsule, onClose, onDiscoveryRecorded }
             </div>
           )}
 
-          {/* 열람 횟수 */}
-          {capsule.view_limit && (
-            <div className={styles.viewCount}>
-              <span className={styles.viewLabel}>열람 횟수</span>
-              <span className={styles.viewValue}>
-                {capsule.view_count ?? 0}/{capsule.view_limit}
-              </span>
-            </div>
-          )}
+          {/* 발견(열람) 횟수: view_count/view_limit, 내가 viewers에 없으면 +1, limit 0이면 ∞ */}
+          <div className={styles.viewCount}>
+            <span className={styles.viewLabel}>열람 횟수</span>
+            <span className={styles.viewValue}>
+              {displayViewCount}/{limitDisplay}
+            </span>
+          </div>
         </div>
 
         {/* 확인 버튼 */}

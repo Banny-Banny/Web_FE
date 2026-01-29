@@ -97,6 +97,14 @@ export const useAutoDiscovery = () => {
   }, []);
 
   /**
+   * 이미 발견 처리할 ID 목록 등록 (지도 진입 시 큐로 순차 표시한 캡슐 등)
+   * 같은 캡슐이 위치 업데이트 시 다시 발견되지 않도록 함
+   */
+  const markAsDiscovered = useCallback((ids: string[]) => {
+    ids.forEach((id) => discoveredIdsRef.current.add(id));
+  }, []);
+
+  /**
    * 발견 기록 초기화 (테스트 또는 리셋 용도)
    */
   const resetDiscoveryHistory = useCallback(() => {
@@ -108,6 +116,7 @@ export const useAutoDiscovery = () => {
     isChecking,
     checkDiscovery,
     clearDiscovery,
+    markAsDiscovered,
     resetDiscoveryHistory,
   };
 };

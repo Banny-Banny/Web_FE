@@ -141,8 +141,8 @@ export function EggSlotModal({ isOpen, onClose }: EggSlotModalProps) {
                         <Image
                           src={eggSrc}
                           alt=""
-                          width={64}
-                          height={64}
+                          width={48}
+                          height={48}
                           className={isFilled ? styles.eggIcon : styles.eggIconEmpty}
                           aria-hidden="true"
                         />
@@ -205,7 +205,7 @@ export function EggSlotModal({ isOpen, onClose }: EggSlotModalProps) {
                   disabled={isResetting}
                   data-testid="reset-button"
                 >
-                  {isResetting ? '초기화 중...' : '🔄 슬롯 초기화'}
+                  {isResetting ? '초기화 중...' : '슬롯 초기화'}
                 </button>
 
                 {/* 확인 버튼 */}

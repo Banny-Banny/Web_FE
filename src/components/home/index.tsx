@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
@@ -14,6 +14,7 @@ import { useLocationTracking } from './hooks/useLocationTracking';
 import { useProfile } from '@/components/Mypage/components/profile-section/hooks/useProfile';
 import { useAutoDiscovery } from './hooks/useAutoDiscovery';
 import { useCapsuleDetail } from './hooks/useCapsuleDetail';
+import { useRecordCapsuleView } from './hooks/useRecordCapsuleView';
 import { MapView } from './components/map-view';
 import { MapControls } from './components/map-controls';
 import { LocationDisplay } from './components/location-display';
@@ -29,7 +30,7 @@ import { Toast } from '@/commons/components/toast';
 import type { HomeFeatureProps } from './types';
 import { useSlotManagement } from './hooks/useSlotManagement';
 import { useCapsuleMarkers } from './hooks/useCapsuleMarkers';
-import type { CapsuleItem } from '@/commons/apis/easter-egg/types';
+import type { CapsuleItem, GetCapsuleResponse } from '@/commons/apis/easter-egg/types';
 
 /**
  * 두 지점 간의 방향(각도)을 계산합니다.
@@ -68,6 +69,10 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const [showMyCapsuleModal, setShowMyCapsuleModal] = useState(false);
   const [showDiscoveryModal, setShowDiscoveryModal] = useState(false);
   const [showHintModal, setShowHintModal] = useState(false);
+
+  // 30m 이내 발견 모달 순차 표시용 큐 (가까운 순)
+  const [discoveryQueue, setDiscoveryQueue] = useState<CapsuleItem[]>([]);
+  const [discoveryQueueIndex, setDiscoveryQueueIndex] = useState(0);
   
   // Toast 상태 관리 (단일 객체로 통합)
   const [toast, setToast] = useState<{
@@ -93,7 +98,15 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   const locationTracking = useLocationTracking();
   
   // 자동 발견 감지 훅
-  const { discoveredCapsule, checkDiscovery, clearDiscovery } = useAutoDiscovery();
+  const {
+    discoveredCapsule,
+    checkDiscovery,
+    clearDiscovery,
+    markAsDiscovered,
+  } = useAutoDiscovery();
+
+  // 지도 진입 시 30m 이내 발견 큐는 한 번만 트리거 (재실행 방지)
+  const entryDiscoveryTriggeredRef = useRef(false);
   
   // 캡슐 상세 정보 조회 훅
   const { capsule: capsuleDetail, error: capsuleDetailError } = useCapsuleDetail({
@@ -101,6 +114,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     lat: geolocation.latitude,
     lng: geolocation.longitude,
   });
+
+  // 발견 기록 저장 (내 캡슐 모달에서 위치 클릭 시 호출)
+  const { recordView } = useRecordCapsuleView();
   
   // Geolocation 값을 useKakaoMap에 전달
   const { map, isLoading, error, initializeMap } = useKakaoMap({
@@ -116,30 +132,9 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     radius_m: 300,
   });
 
-  // 개발 환경에서 캡슐 로딩 상태 로그
+  // 지도 로드 시 위치 추적 시작
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      if (isCapsulesLoading) {
-        console.warn('[HomeFeature] 캡슐 목록 로딩 중...');
-      } else if (capsules.length > 0) {
-        console.warn('[HomeFeature] 캡슐 목록 로드 완료:', {
-          count: capsules.length,
-          types: {
-            easter_egg: capsules.filter(c => c.type === 'EASTER_EGG').length,
-            time_capsule: capsules.filter(c => c.type === 'TIME_CAPSULE').length,
-          },
-          mine: capsules.filter(c => c.is_mine).length,
-        });
-      }
-    }
-  }, [isCapsulesLoading, capsules]);
-
-  // 지도 로드 시 위치 추적 시작 (위치 권한 허용한 경우에만)
-  useEffect(() => {
-    if (map && locationConsent && !locationTracking.isTracking) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[HomeFeature] 지도 로드 완료 - 위치 추적 시작');
-      }
+    if (map && !locationTracking.isTracking) {
       locationTracking.startTracking();
     }
 
@@ -151,30 +146,52 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     };
   }, [map, locationConsent, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]);
 
-  // 지도 진입 시 초기 위치로 즉시 자동 발견 감지
-  // 위치 업데이트를 기다리지 않고 초기 위치(geolocation)로 바로 체크
+  // 지도 진입 시 30m 이내 친구 이스터에그를 가까운 순으로 발견 모달 순차 표시 (한 번만)
   useEffect(() => {
     if (
-      map && // 지도 로드 완료
-      !isCapsulesLoading && // 캡슐 목록 로드 완료
-      capsules.length > 0 && // 캡슐이 있음
-      geolocation.latitude !== null && // 초기 위치 있음
-      geolocation.longitude !== null
+      !map ||
+      isCapsulesLoading ||
+      capsules.length === 0 ||
+      geolocation.latitude === null ||
+      geolocation.longitude === null ||
+      entryDiscoveryTriggeredRef.current
     ) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[HomeFeature] 지도 진입 시 초기 위치로 자동 발견 체크:', {
-          lat: geolocation.latitude,
-          lng: geolocation.longitude,
-          capsuleCount: capsules.length,
-        });
-      }
-      checkDiscovery(
-        geolocation.latitude,
-        geolocation.longitude,
-        capsules
-      );
+      return;
     }
-  }, [map, isCapsulesLoading, capsules, geolocation.latitude, geolocation.longitude, checkDiscovery]);
+
+    entryDiscoveryTriggeredRef.current = true;
+
+    const queue = capsules
+      .filter(
+        (c) =>
+          !c.is_mine &&
+          c.type === 'EASTER_EGG' &&
+          (c.distance_m ?? Infinity) <= 30
+      )
+      .sort(
+        (a, b) =>
+          (a.distance_m ?? Infinity) - (b.distance_m ?? Infinity)
+      );
+
+    if (queue.length === 0) return;
+
+    markAsDiscovered(queue.map((c) => c.id));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDiscoveryQueue(queue);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDiscoveryQueueIndex(0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedCapsuleId(queue[0].id);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedCapsule(queue[0]);
+  }, [
+    map,
+    isCapsulesLoading,
+    capsules,
+    geolocation.latitude,
+    geolocation.longitude,
+    markAsDiscovered,
+  ]);
 
   // 위치 추적 업데이트 시 자동 발견 감지 (지속적인 감지)
   useEffect(() => {
@@ -183,12 +200,6 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
       locationTracking.longitude !== null &&
       capsules.length > 0
     ) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[HomeFeature] 위치 업데이트로 자동 발견 체크:', {
-          lat: locationTracking.latitude,
-          lng: locationTracking.longitude,
-        });
-      }
       checkDiscovery(
         locationTracking.latitude,
         locationTracking.longitude,
@@ -197,90 +208,71 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     }
   }, [locationTracking.latitude, locationTracking.longitude, capsules, checkDiscovery]);
 
-  // 자동 발견된 캡슐이 있을 때 처리
+  // 위치 업데이트로 자동 발견된 캡슐이 있을 때 처리 (큐 1개로 표시)
   useEffect(() => {
-    if (discoveredCapsule) {
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.warn('[HomeFeature] 자동 발견:', {
-          id: discoveredCapsule.id,
-          title: discoveredCapsule.title,
-          distance_m: discoveredCapsule.distance_m,
-        });
-      }
+    if (!discoveredCapsule) return;
 
-      // 자동 발견 시 바로 발견 모달 표시
-      // 마커 클릭과 동일한 로직 적용
-      // 기존에 열려있는 모달 모두 닫기
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setShowHintModal(false);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setShowMyCapsuleModal(false);
-
-      // 캡슐 정보 설정 (상세 조회는 자동으로 트리거됨)
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedCapsule(discoveredCapsule);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedCapsuleId(discoveredCapsule.id);
-
-      // 발견 상태는 모달 닫을 때 초기화
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowHintModal(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setShowMyCapsuleModal(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDiscoveryQueue([discoveredCapsule]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDiscoveryQueueIndex(0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedCapsule(discoveredCapsule);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedCapsuleId(discoveredCapsule.id);
   }, [discoveredCapsule]);
 
   // 캡슐 상세 정보 조회 완료 시 조건별 모달 표시
   useEffect(() => {
     if (!capsuleDetail || !selectedCapsule) return;
 
-    if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.warn('[HomeFeature] 캡슐 정보 조회 완료:', {
-        id: capsuleDetail.id,
-        is_mine: selectedCapsule.is_mine,
-        distance_m: selectedCapsule.distance_m,
-      });
-    }
-
     // 조건별 모달 표시 로직
     if (selectedCapsule.is_mine) {
-      // 내 캡슐: 발견자 목록 표시
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.warn('[HomeFeature] 내 캡슐 모달 표시');
-      }
+      // 내 캡슐: 발견자 목록 표시 (발견 큐 초기화)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDiscoveryQueue([]);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDiscoveryQueueIndex(0);
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowMyCapsuleModal(true);
     } else {
       // 친구 캡슐: 거리에 따라 분기
       const distance = selectedCapsule.distance_m ?? Number.MAX_VALUE;
-      
+
       if (distance <= 30) {
-        // 30m 이내: 발견 성공 모달 표시
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.warn('[HomeFeature] 발견 성공 모달 표시');
+        // 30m 이내: 큐가 있으면 순차 표시(지도 진입/위치 업데이트), 없으면 단일 모달(마커 클릭)
+        if (discoveryQueue.length > 0 &&
+            discoveryQueue[discoveryQueueIndex]?.id === selectedCapsule.id &&
+            capsuleDetail.id === selectedCapsule.id) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setShowDiscoveryModal(true);
+        } else if (discoveryQueue.length === 0) {
+          // 마커 클릭으로 열린 경우: 해당 캡슐만 발견 모달 표시
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setShowDiscoveryModal(true);
         }
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setShowDiscoveryModal(true);
       } else {
-        // 30m 밖: 힌트 모달 표시
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.warn('[HomeFeature] 힌트 모달 표시');
-        }
+        // 30m 밖: 힌트 모달 표시 (발견 큐 초기화)
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setDiscoveryQueue([]);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setDiscoveryQueueIndex(0);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setShowHintModal(true);
       }
     }
+  // capsuleDetail/selectedCapsule 변경 시에만 실행 (discoveryQueue 등은 내부에서 참조만 하고
+  // 여기서 setState하면 의존성 변경 → 재실행 → 무한 루프 방지)
   }, [capsuleDetail, selectedCapsule]);
 
   // 캡슐 상세 정보 조회 에러 처리
   useEffect(() => {
     if (!capsuleDetailError) return;
 
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[HomeFeature] 캡슐 정보 조회 실패:', capsuleDetailError);
-    }
-    
     // Toast로 에러 메시지 표시
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setToast({
@@ -309,28 +301,14 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   // ⚠️ 참고: 이 task 내 기능은 이스터에그만 대상입니다. 타임캡슐은 마커 표시만 됩니다.
   const handleMarkerClick = useCallback((capsule: CapsuleItem) => {
     // 타임캡슐은 기능 대상이 아니므로 무시
-    if (capsule.type === 'TIME_CAPSULE') {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[HomeFeature] 타임캡슐은 이 task에서 기능 대상이 아닙니다.');
-      }
-      return;
-    }
-    
-    if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.warn('[HomeFeature] 마커 클릭:', {
-        id: capsule.id,
-        title: capsule.title,
-        type: capsule.type,
-        is_mine: capsule.is_mine,
-        distance_m: capsule.distance_m,
-      });
-    }
+    if (capsule.type === 'TIME_CAPSULE') return;
 
     // 기존에 열려있는 모달 모두 닫기
     setShowHintModal(false);
     setShowDiscoveryModal(false);
     setShowMyCapsuleModal(false);
+    setDiscoveryQueue([]);
+    setDiscoveryQueueIndex(0);
 
     // 캡슐 정보 조회 시작
     setSelectedCapsule(capsule);
@@ -383,14 +361,41 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     setSelectedCapsule(null);
   }, []);
 
-  // 발견 성공 모달 닫기 핸들러
+  // 내 캡슐 모달에서 위치 클릭 시 recordView 한 번만 호출
+  const handleMyCapsuleLocationClick = useCallback(
+    (capsule: GetCapsuleResponse) => {
+      if (geolocation.latitude !== null && geolocation.longitude !== null) {
+        recordView(capsule.id, {
+          lat: geolocation.latitude,
+          lng: geolocation.longitude,
+        });
+      }
+    },
+    [geolocation.latitude, geolocation.longitude, recordView]
+  );
+
+  // 발견 성공 모달 닫기 핸들러 (다음 30m 이내 캡슐이 있으면 순차 표시)
   const handleDiscoveryModalClose = useCallback(() => {
     setShowDiscoveryModal(false);
-    setSelectedCapsuleId(null);
-    setSelectedCapsule(null);
-    // 자동 발견 상태도 초기화
-    clearDiscovery();
-  }, [clearDiscovery]);
+
+    const nextIndex = discoveryQueueIndex + 1;
+    if (nextIndex < discoveryQueue.length) {
+      const nextCapsule = discoveryQueue[nextIndex];
+      setDiscoveryQueueIndex(nextIndex);
+      setSelectedCapsuleId(nextCapsule.id);
+      setSelectedCapsule(nextCapsule);
+    } else {
+      setDiscoveryQueue([]);
+      setDiscoveryQueueIndex(0);
+      setSelectedCapsuleId(null);
+      setSelectedCapsule(null);
+      clearDiscovery();
+    }
+  }, [
+    clearDiscovery,
+    discoveryQueue,
+    discoveryQueueIndex,
+  ]);
 
   // 힌트 모달 닫기 핸들러
   const handleHintModalClose = useCallback(() => {
@@ -572,6 +577,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         isOpen={showMyCapsuleModal}
         capsule={capsuleDetail}
         onClose={handleMyCapsuleModalClose}
+        onLocationClick={handleMyCapsuleLocationClick}
       />
 
       {/* 발견 성공 모달 */}

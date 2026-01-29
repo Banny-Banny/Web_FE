@@ -18,7 +18,7 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -80,11 +80,11 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
     }
   }, [data]);
 
-  // 좌표 추출
-  const latitude = data?.location?.latitude;
-  const longitude = data?.location?.longitude;
+  // 좌표 추출 (문자열로 올 수 있으므로 숫자로 통일)
+  const latitude = data?.location?.latitude != null ? Number(data.location.latitude) : undefined;
+  const longitude = data?.location?.longitude != null ? Number(data.location.longitude) : undefined;
 
-  // 카카오 주소 조회 훅 사용
+  // 카카오 주소 조회 훅 사용 (REST API로 address_name 조회)
   const { address: addressFromCoord, isLoading: isLoadingAddress } = useKakaoAddress({
     lat: latitude,
     lng: longitude,
@@ -218,16 +218,26 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
     return '위치 정보 없음';
   }, [data, addressFromCoord, isLoadingAddress, hasLocation]);
 
-  // 프로필 이미지 URL 처리 (React Compiler: 의존성은 data로 통일)
+  // 프로필 이미지 URL 처리. null/빈 문자열/문자열 "null" 시 플레이스홀더 (React Compiler: 의존성은 data로 통일)
   const authorProfileImg = useMemo(() => {
-    if (!data?.author?.profileImg) return null;
-    const profileImg = data.author.profileImg;
-    // 이미 전체 URL이면 그대로 사용, 아니면 상대 경로 처리
+    const raw = data?.author?.profileImg;
+    if (raw == null || raw === 'null' || String(raw).trim() === '') return null;
+    const profileImg = String(raw).trim();
     if (profileImg.startsWith('http://') || profileImg.startsWith('https://')) {
       return profileImg;
     }
-    // 상대 경로인 경우 기본 URL 추가 (필요시)
     return profileImg;
+  }, [data]);
+
+  const [failedAuthorProfileImgUrl, setFailedAuthorProfileImgUrl] = useState<string | null>(null);
+  const showAuthorProfilePlaceholder = !authorProfileImg || failedAuthorProfileImgUrl === authorProfileImg;
+
+  // 발견 기록: 빨리 발견한 순서대로 정렬 (viewed_at 오름차순) — 훅 규칙을 위해 early return 이전에 선언
+  const sortedViewers = useMemo(() => {
+    if (!data?.viewers?.length) return [];
+    return [...data.viewers].sort(
+      (a, b) => new Date(a.viewedAt).getTime() - new Date(b.viewedAt).getTime()
+    );
   }, [data]);
 
   // 데이터가 없으면 로딩 또는 에러 상태 표시
@@ -404,22 +414,22 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
         </button>
         <div className={styles.scrollView} style={{ maxHeight: `calc(${maxHeight}px - 0px)` }}>
           <div className={styles.modalContent}>
-            {/* 상단 프로필 이미지 */}
+            {/* 상단 프로필 이미지 (null/로드 실패 시 플레이스홀더) */}
             <div className={styles.profileImageContainer}>
-              {authorProfileImg ? (
-                // 외부 프로필 이미지는 unoptimized로 직접 로드
+              {showAuthorProfilePlaceholder ? (
+                <div className={styles.profileImagePlaceholder} aria-hidden="true">
+                  <RiGroupLine size={40} className={styles.profilePlaceholderIcon} />
+                </div>
+              ) : (
                 <img
-                  src={authorProfileImg}
+                  src={authorProfileImg!}
                   alt={`${data.author?.nickname || ''} 프로필 이미지`}
                   width={128}
                   height={128}
                   className={styles.profileImage}
                   aria-hidden="false"
+                  onError={() => setFailedAuthorProfileImgUrl(authorProfileImg ?? null)}
                 />
-              ) : (
-                <div className={styles.profileImagePlaceholder} aria-hidden="true">
-                  <RiGroupLine size={40} className={styles.profilePlaceholderIcon} />
-                </div>
               )}
             </div>
 
@@ -477,44 +487,49 @@ export const EasterEggModal: React.FC<EasterEggModalProps> = ({
               {/* 미디어 렌더링 */}
               {renderMedia()}
 
-              {/* 발견한 사람들 목록 (PLANTED 타입일 때만, 0명일 때도 공간 유지) */}
+              {/* 발견 기록 (PLANTED 타입일 때만, n = viewers.length, 빨리 발견한 순) */}
               {data.type === 'PLANTED' && (
-                <div className={styles.viewersSection} role="region" aria-label="발견한 사람 목록">
+                <div className={styles.viewersSection} role="region" aria-label="발견 기록">
                   <div className={styles.viewersHeader}>
                     <RiGroupLine size={16} className={styles.viewersIcon} aria-hidden="true" />
                     <h3 className={styles.viewersTitle}>
-                      발견한 사람 ({data.viewers?.length || 0})
+                      발견 기록 ({data.viewers?.length ?? 0})
                     </h3>
                   </div>
-                  <div className={styles.viewersList} role="list" aria-label={`${data.viewers?.length || 0}명이 발견함`}>
-                    {data.viewers && data.viewers.length > 0 ? (
-                      data.viewers.map((viewer) => {
-                        const viewerProfileImg = viewer.profileImg || null;
+                  <div className={styles.viewersList} role="list" aria-label={`${data.viewers?.length ?? 0}명이 발견함`}>
+                    {sortedViewers.length > 0 ? (
+                      sortedViewers.map((viewer, index) => {
+                        const raw = viewer.profileImg;
+                        const viewerProfileImg =
+                          raw != null && raw !== 'null' && String(raw).trim() !== ''
+                            ? String(raw).trim()
+                            : null;
                         const viewedDate = formatShortDateWithTime(viewer.viewedAt);
+                        const order = index + 1;
 
                         return (
                           <div 
                             key={viewer.id || viewer.nickname} 
                             className={styles.viewerItem}
                             role="listitem"
-                            aria-label={`${viewer.nickname || ''}님이 ${viewedDate}에 발견함`}>
+                            aria-label={`${order}번째 ${viewer.nickname || ''}님이 ${viewedDate}에 발견함`}>
                             <div className={styles.discovererViewerInfo}>
+                              <span className={styles.viewerOrderBadge} aria-hidden="true">{order}</span>
                               <div className={styles.discovererViewerAvatar}>
                                 {viewerProfileImg ? (
-                                  // 외부 프로필 이미지는 일반 img 태그로 직접 로드
                                   <img
                                     src={viewerProfileImg}
-                                    alt={`${viewer.nickname || ''} 프로필 이미지`}
-                                    width={28}
-                                    height={28}
+                                    alt={`${viewer.nickname || ''} 프로필`}
+                                    width={32}
+                                    height={32}
                                     className={styles.discovererViewerAvatarImage}
                                     aria-hidden="true"
                                   />
                                 ) : (
-                                  <RiGroupLine size={16} className={styles.viewerPlaceholderIcon} aria-hidden="true" />
+                                  <RiGroupLine size={18} className={styles.viewerPlaceholderIcon} aria-hidden="true" />
                                 )}
                               </div>
-                              <span className={styles.viewerName}>{viewer.nickname || ''}</span>
+                              <span className={styles.viewerName}>{viewer.nickname || '알 수 없음'}</span>
                             </div>
                             <div className={styles.viewerDateBadge} aria-label={`발견 시간: ${viewedDate}`}>
                               <RiTimeLine size={12} className={styles.viewerDateIcon} aria-hidden="true" />

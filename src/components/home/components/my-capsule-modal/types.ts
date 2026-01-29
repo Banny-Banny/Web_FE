@@ -14,4 +14,6 @@ export interface MyCapsuleModalProps {
   capsule: GetCapsuleResponse | null;
   /** 모달 닫기 핸들러 */
   onClose: () => void;
+  /** 위치 카드 클릭 시 호출 (한 번만 호출) */
+  onLocationClick?: (capsule: GetCapsuleResponse) => void;
 }

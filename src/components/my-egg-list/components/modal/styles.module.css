@@ -112,7 +112,7 @@
 }
 
 .profilePlaceholderIcon {
-  color: var(--color-grey-400);
+  color: var(--color-dark-grey-500);
 }
 
 /* 서브타이틀 컨테이너 */
@@ -123,38 +123,34 @@
   gap: 0;
 }
 
-/* 서브타이틀 */
+/* 서브타이틀 (블랙·화이트 톤) */
 .subtitle {
   font-family: var(--font-pretendard);
   font-size: 14px;
-  line-height: 20px;
-  color: var(--color-grey-600);
+  line-height: 1.4;
+  color: var(--color-dark-grey-600);
   text-align: center;
   margin: 0;
 }
 
-/* 서브타이틀 bold (닉네임 및 발견 순서 부분) */
 .subtitleBold {
   font-family: var(--font-pretendard);
   font-size: 14px;
-  line-height: 20px;
-  color: var(--color-grey-700);
-  font-weight: var(--font-weight-bold, 700);
+  line-height: 1.4;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-semibold, 600);
 }
 
-/* 발견자 배지 컨테이너 */
+/* 발견자 배지 컨테이너 (블랙·화이트 톤) */
 .badgeContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: var(--spacing-sm);
-  padding-left: 18px;
-  padding-right: 18px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  height: 24px;
-  background-color: var(--color-white-grey-100);
-  border: 1px solid var(--color-white-grey-400);
+  padding: 4px 14px;
+  height: 28px;
+  background-color: var(--color-white-500);
+  border: 1px solid var(--color-white-grey-200);
   border-radius: var(--radius-full);
 }
 
@@ -163,13 +159,12 @@
   flex-shrink: 0;
 }
 
-/* 배지 텍스트 */
 .badgeText {
   font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-dark-grey-800);
-  font-weight: var(--font-weight-extrabold, 800);
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* 발견자 정보 컨테이너 (첫 번째 발견자 등, 카드 밖) */
@@ -183,54 +178,51 @@
 }
 
 .discovererIcon {
-  color: var(--color-grey-600);
+  color: var(--color-dark-grey-600);
   flex-shrink: 0;
 }
 
-/* 발견자 날짜 텍스트 */
 .discovererDateText {
   font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-grey-600);
-  font-weight: var(--font-weight-regular, 400);
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--color-dark-grey-600);
+  font-weight: var(--font-weight-regular);
 }
 
-/* 메인 컨텐츠 카드 */
+/* 메인 컨텐츠 카드 (블랙·화이트 톤) */
 .contentCard {
   width: 100%;
   max-width: 100%;
   flex-shrink: 1;
   background-color: var(--color-white-500);
-  border: 2px solid var(--color-white-grey-300);
-  border-radius: var(--radius-2xl);
-  padding: 20px;
-  gap: 20px;
+  border: 1px solid var(--color-white-grey-200);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  gap: var(--spacing-md);
   min-height: 200px;
   overflow: hidden;
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 4px color-mix(in srgb, var(--color-black-500) 10%, transparent);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-/* 제목 헤더 */
 .titleHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--color-white-grey-300);
+  border-bottom: 1px solid var(--color-white-grey-200);
 }
 
-/* 컨텐츠 제목 */
 .contentTitle {
   font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-dark-grey-900);
-  font-weight: var(--font-weight-bold, 700);
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-semibold);
   flex: 1;
   margin: 0;
 }
@@ -241,35 +233,31 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding-left: 11px;
-  padding-right: 11px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  height: 21px;
-  background-color: var(--color-white-500);
-  border: 2px solid var(--color-white-grey-200);
+  padding: 4px 10px;
+  height: 24px;
+  background-color: var(--color-white-50);
+  border: 1px solid var(--color-white-grey-200);
   border-radius: var(--radius-full);
 }
 
 .dateIcon {
-  color: var(--color-grey-600);
+  color: var(--color-dark-grey-600);
   flex-shrink: 0;
 }
 
 .dateText {
   font-family: var(--font-pretendard);
   font-size: 12px;
-  line-height: 16px;
-  color: var(--color-grey-600);
+  line-height: 1.35;
+  color: var(--color-dark-grey-600);
 }
 
-/* 본문 텍스트 */
 .contentText {
   font-family: var(--font-pretendard);
   font-size: 14px;
-  line-height: 22px;
-  color: var(--color-dark-grey-800);
-  font-weight: var(--font-weight-regular, 400);
+  line-height: 1.5;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-regular);
   margin: 0;
 }
 
@@ -320,17 +308,17 @@
   object-fit: cover;
 }
 
-/* 발견한 사람들 섹션 (PLANTED 타입) */
+/* 발견 기록 섹션 (블랙·화이트 톤) */
 .viewersSection {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   padding-top: var(--spacing-md);
-  border-top: 2px solid var(--color-white-grey-300);
+  margin-top: var(--spacing-md);
+  border-top: 1px solid var(--color-white-grey-200);
 }
 
-/* 발견한 사람들 헤더 */
 .viewersHeader {
   display: flex;
   flex-direction: row;
@@ -343,46 +331,71 @@
   flex-shrink: 0;
 }
 
-/* 발견한 사람들 제목 */
 .viewersTitle {
   font-family: var(--font-pretendard);
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-dark-grey-800);
-  font-weight: var(--font-weight-semibold, 600);
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--color-black-500);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
-/* 발견한 사람들 목록 */
+/* 발견 기록 목록: 통으로 하나의 테두리 */
 .viewersList {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0;
+  border: 1px solid var(--color-white-grey-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-white-500);
+  overflow: hidden;
 }
 
-/* 발견한 사람 아이템 */
 .viewerItem {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-top: var(--spacing-xs);
-  padding-bottom: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: transparent;
+  border-bottom: 1px solid var(--color-white-grey-200);
 }
 
-/* 발견한 사람 정보 (아바타 + 이름) */
+.viewerItem:last-child {
+  border-bottom: none;
+}
+
 .discovererViewerInfo {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: var(--spacing-sm);
+  min-width: 0;
 }
 
-/* 발견한 사람 아바타 */
+.viewerOrderBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-family: var(--font-pretendard);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-black-500);
+  background-color: var(--color-white-grey-200);
+  border: 1px solid var(--color-white-grey-300);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
 .discovererViewerAvatar {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-full);
   background-color: var(--color-white-500);
   border: 1px solid var(--color-white-grey-300);
@@ -390,56 +403,54 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
-/* 발견한 사람 아바타 이미지 */
 .discovererViewerAvatarImage {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-full);
   object-fit: cover;
 }
 
 .viewerPlaceholderIcon {
-  color: var(--color-black-500);
+  color: var(--color-grey-500);
   flex-shrink: 0;
 }
 
-/* 발견한 사람 이름 */
 .viewerName {
   font-family: var(--font-pretendard);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 13px;
+  line-height: 1.35;
   color: var(--color-black-500);
-  font-weight: var(--font-weight-regular, 400);
+  font-weight: var(--font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* 발견한 사람 날짜 배지 */
 .viewerDateBadge {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  background-color: var(--color-white-500);
+  padding: 4px 8px;
+  background-color: var(--color-white-50);
   border: 1px solid var(--color-white-grey-200);
-  border-radius: var(--radius-full);
-}
-
-.viewerDateIcon {
-  color: var(--color-grey-600);
+  border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
 
-/* 발견한 사람 날짜 텍스트 */
+.viewerDateIcon {
+  color: var(--color-dark-grey-600);
+  flex-shrink: 0;
+}
+
 .viewerDateText {
   font-family: var(--font-pretendard);
-  font-size: 12px;
+  font-size: 11px;
   line-height: 14px;
-  color: var(--color-grey-600);
+  color: var(--color-dark-grey-600);
 }
 
 /* 빈 발견자 목록 컨테이너 */
@@ -455,8 +466,8 @@
 .emptyViewersText {
   font-family: var(--font-pretendard);
   font-size: 14px;
-  line-height: 20px;
-  color: var(--color-grey-500);
+  line-height: 1.4;
+  color: var(--color-dark-grey-600);
   text-align: center;
   margin: 0;
 }

@@ -86,9 +86,11 @@ function transformEggDetailToModalData(detail: EggDetailResponse | any): ModalEg
   // eggId: id 필드 또는 eggId 필드 사용
   const eggId = detail.id || detail.eggId || '';
   
-  // 좌표: latitude, longitude 또는 location 객체에서 추출
-  const latitude = detail.latitude ?? detail.location?.latitude ?? undefined;
-  const longitude = detail.longitude ?? detail.location?.longitude ?? undefined;
+  // 좌표: latitude, longitude 또는 location 객체에서 추출 (API가 문자열로 올 수 있으므로 숫자로 변환)
+  const latRaw = detail.latitude ?? detail.location?.latitude ?? undefined;
+  const lngRaw = detail.longitude ?? detail.location?.longitude ?? undefined;
+  const latitude = latRaw != null ? Number(latRaw) : undefined;
+  const longitude = lngRaw != null ? Number(lngRaw) : undefined;
   
   // 생성일: created_at 또는 createdAt 또는 createdDate
   const createdAt = detail.created_at || detail.createdAt || detail.createdDate || '';
