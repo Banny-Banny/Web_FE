@@ -28,13 +28,26 @@ import type { MeResponse } from './types';
  * }
  * ```
  */
+/** 서버가 snake_case로 보낼 수 있는 프로필 응답 */
+interface MeResponseRaw extends Omit<MeResponse, 'friendConsent' | 'locationConsent'> {
+  friend_consent?: boolean;
+  location_consent?: boolean;
+}
+
 export async function getMe(): Promise<MeResponse> {
   try {
-    const response = await apiClient.get<MeResponse>(
+    const response = await apiClient.get<MeResponseRaw>(
       AUTH_ENDPOINTS.ME
     );
 
-    return response.data;
+    const raw = response.data;
+    const { friend_consent, location_consent, ...rest } = raw;
+    const withConsent = rest as Record<string, unknown>;
+    return {
+      ...rest,
+      friendConsent: friend_consent ?? (withConsent.friendConsent as boolean | undefined),
+      locationConsent: location_consent ?? (withConsent.locationConsent as boolean | undefined),
+    } as MeResponse;
   } catch (error) {
     // Axios 에러를 ApiError 형식으로 변환
     const axiosError = error as AxiosError<{ message?: string; code?: string }>;

@@ -75,4 +75,8 @@ export interface MeResponse {
   isMarketingAgreed: boolean;  // 마케팅 동의 여부
   eggSlots: number;             // 이스터에그 슬롯 수
   createdAt: string;            // 생성일시
+  /** 친구 연동 허용 동의 (온보딩 선택, API가 snake_case로 주면 getMe에서 매핑) */
+  friendConsent?: boolean;
+  /** 위치 권한 허용 동의 (온보딩 선택) */
+  locationConsent?: boolean;
 }
