@@ -1,8 +1,8 @@
 /**
  * AdditionalOptions 컴포넌트 스타일
- * 
+ *
  * @description
- * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - step-info React Native 스타일 기반 (2024-12-30 디자인)
  * - CSS 변수를 사용한 디자인 토큰 적용
  * - 375px 기준 고정 레이아웃
  */
@@ -11,87 +11,103 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 12px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 12px;
 }
 
 .label {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  font-weight: 600;
   color: var(--color-black-500);
-  line-height: var(--line-height-normal);
+  line-height: 24px;
 }
 
 .currentCost {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-black-500);
-  line-height: var(--line-height-normal);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-red-500);
+  line-height: 20px;
 }
 
+/* React Native optionsContainer 스타일 기반 */
 .optionsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  display: flex;
+  gap: 12px;
   width: 100%;
 }
 
+/* React Native optionCard 스타일 기반 */
 .optionCard {
   position: relative;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-lg);
-  border: 2px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
+  padding: 32px 18px;
+  border: 2px solid var(--color-grey-200);
+  border-radius: 16px;
   background-color: var(--color-white-500);
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 100px;
+  height: 136px;
+  gap: 8px;
 }
 
 .optionCard:hover {
   border-color: var(--color-black-500);
 }
 
+/* React Native optionCardSelected 스타일 기반 */
 .optionCardSelected {
+  background-color: var(--color-black-500);
   border-color: var(--color-black-500);
-  background-color: var(--color-white-grey-50);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
 }
 
+/* React Native optionIconContainer 스타일 기반 */
 .optionIcon {
-  width: 32px;
-  height: 32px;
-  margin-bottom: var(--spacing-sm);
-  /* 아이콘 스타일은 추후 추가 */
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* React Native optionTitle 스타일 기반 */
 .optionLabel {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: 16px;
+  font-weight: 600;
   color: var(--color-black-500);
   text-align: center;
-  line-height: var(--line-height-normal);
-  margin-bottom: var(--spacing-xs);
+  line-height: 24px;
 }
 
+.optionCardSelected .optionLabel {
+  color: var(--color-white-500);
+}
+
+/* React Native optionPrice 스타일 기반 */
 .optionPrice {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-red-500);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-black-500);
   text-align: center;
-  line-height: var(--line-height-normal);
+  line-height: 20px;
+}
+
+.optionCardSelected .optionPrice {
+  color: var(--color-white-500);
 }
 
 .hiddenInput {
@@ -104,9 +120,9 @@
 
 .error {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
+  font-size: 13px;
+  font-weight: 400;
   color: var(--color-red-500);
-  margin-top: var(--spacing-xs);
-  line-height: var(--line-height-normal);
+  margin-top: 4px;
+  line-height: 20px;
 }

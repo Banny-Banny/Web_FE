@@ -18,11 +18,11 @@ import { useAuthState } from '@/commons/hooks/useAuth';
 import { useMyContent } from '@/commons/apis/capsules/step-rooms/hooks/useMyContent';
 import { generateInviteLink } from '@/commons/utils/invite';
 import { useToast } from '@/commons/provider/toast-provider';
+import { Button } from '@/commons/components/button';
 import { WaitingRoomInfo } from './components/WaitingRoomInfo';
 import { ParticipantList } from './components/ParticipantList';
 import { ContentWriteBottomSheet } from './components/ContentWriteBottomSheet';
 import { SubmitTimer } from './components/SubmitTimer';
-import { SubmitButton } from './components/SubmitButton';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { SubmitCompleteModal } from './components/SubmitCompleteModal';
 import { AutoSubmitModal } from './components/AutoSubmitModal';
@@ -249,7 +249,11 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
 
         {state.status === 'success' && waitingRoom && (
           <>
-            <WaitingRoomInfo waitingRoom={waitingRoom} settings={settings} />
+            <WaitingRoomInfo
+              waitingRoom={waitingRoom}
+              settings={settings}
+              onInviteFriend={handleInviteFriend}
+            />
             <ParticipantList
               participants={waitingRoom.participants}
               currentHeadcount={waitingRoom.currentHeadcount}
@@ -268,12 +272,21 @@ export function WaitingRoom({ capsuleId }: { capsuleId: string }) {
 
       {/* 제출 버튼 (방장에게만 표시) */}
       {isHost && waitingRoom?.status !== 'BURIED' && (
-        <SubmitButton
-          disabled={!canSubmit}
-          disabledReason={getDisabledReason()}
-          onClick={handleFinalSubmit}
-          isLoading={isSubmitting}
-        />
+        <div className={styles.submitButtonContainer}>
+          {/* 비활성화 사유 표시 */}
+          {!canSubmit && getDisabledReason() && (
+            <div className={styles.disabledReason}>{getDisabledReason()}</div>
+          )}
+          <Button
+            label={isSubmitting ? '제출 중...' : '타임캡슐 묻기'}
+            variant="primary"
+            size="M"
+            fullWidth
+            disabled={!canSubmit || isSubmitting}
+            onPress={handleFinalSubmit}
+            aria-label="타임캡슐 묻기"
+          />
+        </div>
       )}
 
       {/* 제출 확인 모달 */}

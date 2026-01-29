@@ -228,19 +228,6 @@ export function ParticipantList({
         ))}
       </div>
 
-      {/* 방장 전용 최종 제출 버튼 */}
-      {isHost && onFinalSubmit && (
-        <div className={styles.submitButtonContainer}>
-          <Button
-            label="최종 제출"
-            variant="primary"
-            size="M"
-            fullWidth
-            onPress={onFinalSubmit}
-            aria-label="최종 제출하기"
-          />
-        </div>
-      )}
     </div>
   );
 }

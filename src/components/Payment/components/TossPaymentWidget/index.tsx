@@ -73,7 +73,7 @@ export function TossPaymentWidget({
   // 버튼 레이블 결정
   const getButtonLabel = () => {
     if (isLoading) return '결제 준비 중...';
-    return '카드로 결제하기';
+    return '결제하기';
   };
 
   return (
