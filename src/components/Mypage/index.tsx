@@ -13,9 +13,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiArrowRightSLine, RiNotificationLine, RiCloseLine } from '@remixicon/react';
 import { Button } from '@/commons/components/button';
-import { useAuth } from '@/commons/hooks/useAuth';
 import { ProfileSection } from './components/profile-section';
+import { Notification } from './components/notification';
 import { useProfile } from './components/profile-section/hooks/useProfile';
+import { useUnreadNotificationCount } from '@/commons/apis/me/notifications/hooks/useUnreadNotificationCount';
 import { useAuthActions } from '@/commons/hooks/useAuth';
 import styles from './styles.module.css';
 import type { MypageProps } from './types';
@@ -29,7 +30,11 @@ export function Mypage({ className = '' }: MypageProps) {
   const router = useRouter();
   const { logout } = useAuthActions();
   const { data: profile } = useProfile();
+  const { data: unreadCount = 0 } = useUnreadNotificationCount();
   const summary = profile?.summary;
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const handleFriendClick = () => {
     router.push('/friends');
@@ -37,6 +42,14 @@ export function Mypage({ className = '' }: MypageProps) {
 
   const handleEasterEggClick = () => {
     router.push('/my-eggs');
+  };
+
+  const handleNoticeClick = () => {
+    router.push('/notice');
+  };
+
+  const handleCustomerCenterClick = () => {
+    router.push('/customer-center');
   };
 
   const timeCapsuleCount = summary?.timeCapsuleCount ?? 0;
@@ -49,9 +62,16 @@ export function Mypage({ className = '' }: MypageProps) {
       <div className={styles.header}>
         <h1 className={styles.headerTitle}>마이페이지</h1>
         <div className={styles.headerRight}>
-          <button className={styles.notificationButton} aria-label="알림">
+          <button
+            className={styles.notificationButton}
+            onClick={() => setShowNotification(true)}
+            type="button"
+            aria-label="알림"
+          >
             <RiNotificationLine size={24} className={styles.notificationIcon} />
-            <span className={styles.notificationBadge}>3</span>
+            {unreadCount > 0 && (
+              <span className={styles.notificationBadge}>{unreadCount}</span>
+            )}
           </button>
           <button className={styles.closeButton} aria-label="닫기">
             <RiCloseLine size={20} className={styles.closeIcon} />
@@ -103,6 +123,16 @@ export function Mypage({ className = '' }: MypageProps) {
         </button>
         <div className={styles.navDivider}></div>
         <button
+          className={styles.navItem}
+          onClick={() => setShowNotification(true)}
+          type="button"
+          aria-label="소식"
+        >
+          <span className={styles.navItemText}>소식</span>
+          <RiArrowRightSLine size={20} className={styles.navItemIcon} />
+        </button>
+        <div className={styles.navDivider}></div>
+        <button
           className={`${styles.navItem} ${styles.navItemNotice}`}
           onClick={handleNoticeClick}
           type="button"
@@ -130,8 +160,13 @@ export function Mypage({ className = '' }: MypageProps) {
           variant="primary"
           size="L"
           onPress={async () => {
-            await logout();
-            router.push('/');
+            setIsLoggingOut(true);
+            try {
+              await logout();
+              router.push('/');
+            } finally {
+              setIsLoggingOut(false);
+            }
           }}
           className={styles.logoutButton}
         />
@@ -141,6 +176,11 @@ export function Mypage({ className = '' }: MypageProps) {
       <div className={styles.versionInfo}>
         VERSION 1.0.0 © 2024
       </div>
+
+      {/* 알림(소식) 패널 — notificationButton 또는 '소식' 메뉴 클릭 시 표시 */}
+      {showNotification && (
+        <Notification onClose={() => setShowNotification(false)} />
+      )}
     </div>
   );
 }
