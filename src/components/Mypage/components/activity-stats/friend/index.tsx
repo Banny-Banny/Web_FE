@@ -41,7 +41,7 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
   const [addError, setAddError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
-  // 친구 목록 조회
+  // 친구 목록 조회 (건너뛰기해도 목록·친구 추가는 가능, 소셜 자동 연동만 미동의 시 제외)
   const {
     data: friendsData,
     isLoading,
@@ -170,7 +170,7 @@ export function FriendList({ className = '', onClose }: FriendListProps) {
             <RiLightbulbLine size={20} className={styles.infoIcon} />
             <div className={styles.infoText}>
               <p>새로고침 시 친구 목록을 최신 상태로 동기화합니다.</p>
-              <p>카카오 소셜 로그인 사용자의 경우 카카오톡 친구 목록도 함께 동기화됩니다.</p>
+              <p>카카오 소셜 로그인 사용자의 경우 카카오톡 친구 연동을 허용하면 친구 목록도 함께 동기화됩니다.</p>
             </div>
           </div>
         </div>

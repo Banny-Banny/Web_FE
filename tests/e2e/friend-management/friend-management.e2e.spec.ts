@@ -15,10 +15,14 @@ import { mockGetFriendsResponse, mockAddFriendResponse, mockEmptyFriendsResponse
 
 /**
  * 테스트 계정 정보
+ * 
+ * ⚠️ 주의: 
+ * - 환경 변수에서 테스트 계정 정보를 가져옵니다.
+ * - .env.local에 NEXT_PUBLIC_PHONE_NUMBER, NEXT_PUBLIC_PASSWORD 설정 필요
  */
 const testLoginRequest = {
-  phoneNumber: '01030728535',
-  password: 'test1234!',
+  phoneNumber: process.env.NEXT_PUBLIC_PHONE_NUMBER || '01030728535',
+  password: process.env.NEXT_PUBLIC_PASSWORD || 'test1234!',
 };
 
 /**

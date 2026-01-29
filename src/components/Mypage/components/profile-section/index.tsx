@@ -10,9 +10,10 @@
  * - CSS Modules 기반 스타일링
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { RiCameraLine } from '@remixicon/react';
 import { useProfile } from './hooks/useProfile';
+import { ProfileEditModal } from './components/ProfileEditModal';
 import styles from './styles.module.css';
 
 /**
@@ -28,7 +29,8 @@ export interface ProfileSectionProps {
  * @param {ProfileSectionProps} props - 컴포넌트 props
  */
 export function ProfileSection({ className = '' }: ProfileSectionProps) {
-  const { data: profile, isLoading, error } = useProfile();
+  const { data: profile, isLoading, error, refetch } = useProfile();
+  const [modalOpen, setModalOpen] = useState(false);
 
   // 로딩 상태
   if (isLoading) {
@@ -122,13 +124,24 @@ export function ProfileSection({ className = '' }: ProfileSectionProps) {
           </div>
         </div>
         <div className={styles.cameraButtonWrapper}>
-          <button className={styles.cameraButton} aria-label="프로필 사진 변경">
+          <button
+            type="button"
+            className={styles.cameraButton}
+            aria-label="프로필 사진 변경"
+            onClick={() => setModalOpen(true)}
+          >
             <RiCameraLine size={14} className={styles.cameraIcon} />
           </button>
         </div>
       </div>
       <h2 className={styles.profileName}>{profile.nickname || profile.name || '사용자'}</h2>
       <p className={styles.profileEmail}>{profile.email || ''}</p>
+      <ProfileEditModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        profile={profile}
+        onSuccess={() => refetch()}
+      />
     </div>
   );
 }

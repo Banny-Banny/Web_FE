@@ -62,17 +62,29 @@ export interface VerifyResponse {
 }
 
 /**
+ * 내 정보 조회 시 반환되는 활동 요약 타입 (GET /api/auth/me data.summary)
+ */
+export interface MeSummary {
+  timeCapsuleCount: number;   // 타임캡슐 수
+  easterEggCount: number;     // 이스터에그 수
+  friendCount: number;        // 친구 수
+}
+
+/**
  * 내 프로필 조회 응답 타입
  */
 export interface MeResponse {
-  id: string;                    // 사용자 ID
-  nickname: string;              // 닉네임
-  name: string;                 // 이름
+  id?: string;                   // 사용자 ID (선택)
+  nickname: string;             // 닉네임
+  name: string;                  // 이름
   email: string;                // 이메일
-  phoneNumber: string;          // 전화번호
-  profileImg: string | null;    // 프로필 이미지 URL
-  isPushAgreed: boolean;        // 푸시 알림 동의 여부
-  isMarketingAgreed: boolean;  // 마케팅 동의 여부
-  eggSlots: number;             // 이스터에그 슬롯 수
-  createdAt: string;            // 생성일시
+  phoneNumber?: string;         // 전화번호 (선택)
+  profileImg?: string | null;    // 프로필 이미지 URL (선택)
+  profileImageUrl?: string | null; // 프로필 이미지 URL - API 문서 필드명 (선택)
+  isPushAgreed?: boolean;        // 푸시 알림 동의 여부 (선택)
+  isMarketingAgreed?: boolean;  // 마케팅 동의 여부 (선택)
+  eggSlots?: number;            // 이스터에그 슬롯 수 (선택)
+  createdAt?: string;           // 생성일시 (선택)
+  /** 활동 통계 요약 (타임캡슐/이스터에그/친구 수) */
+  summary?: MeSummary;
 }

@@ -11,6 +11,7 @@ import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useLocationTracking } from './hooks/useLocationTracking';
+import { useProfile } from '@/components/Mypage/components/profile-section/hooks/useProfile';
 import { useAutoDiscovery } from './hooks/useAutoDiscovery';
 import { useCapsuleDetail } from './hooks/useCapsuleDetail';
 import { useRecordCapsuleView } from './hooks/useRecordCapsuleView';
@@ -83,8 +84,12 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
     type: 'info',
     visible: false,
   });
-  
-  const geolocation = useGeolocation();
+
+  // 프로필(온보딩 동의 여부) — 위치 권한 허용 시에만 현재 위치 요청
+  const { data: profile } = useProfile();
+  const locationConsent = profile?.locationConsent === true;
+
+  const geolocation = useGeolocation({ enabled: locationConsent });
   
   // 슬롯 관리 훅
   const { slotInfo, isLoading: isSlotLoading } = useSlotManagement();
@@ -139,7 +144,7 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
         locationTracking.stopTracking();
       }
     };
-  }, [map, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]); // startTracking, stopTracking은 useCallback으로 메모이제이션됨
+  }, [map, locationConsent, locationTracking.isTracking, locationTracking.startTracking, locationTracking.stopTracking]);
 
   // 지도 진입 시 30m 이내 친구 이스터에그를 가까운 순으로 발견 모달 순차 표시 (한 번만)
   useEffect(() => {

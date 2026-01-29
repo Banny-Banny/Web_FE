@@ -13,10 +13,10 @@ import { Button } from '@/commons/components/button';
 import { useTimecapsuleForm } from './hooks/useTimecapsuleForm';
 import { CapsuleNameInput } from './components/CapsuleNameInput';
 import { TimeOptionSelector } from './components/TimeOptionSelector';
-import { CustomDatePicker } from './components/CustomDatePicker';
 import { QuantitySelector } from './components/QuantitySelector';
 import { AdditionalOptions } from './components/AdditionalOptions';
 import { TotalPrice } from './components/TotalPrice';
+import { CustomDatePicker } from './components/CustomDatePicker';
 import styles from './styles.module.css';
 
 /**
@@ -55,11 +55,11 @@ export function TimecapsuleCreate() {
           title="타임캡슐 만들기"
           onBack={() => router.back()}
         />
+        <CustomDatePicker />
         <div className={styles.content}>
           <form onSubmit={onSubmit} className={styles.form} noValidate>
             <CapsuleNameInput maxLength={50} showCharCount={false} />
             <TimeOptionSelector />
-            <CustomDatePicker />
             <QuantitySelector
               fieldName="participantCount"
               label="PERSONNEL"
@@ -72,8 +72,8 @@ export function TimecapsuleCreate() {
               fieldName="photoCount"
               label="STORAGE"
               subLabel="이미지 슬롯"
-              unitPrice={0}
-              min={0}
+              unitPrice={500}
+              min={1}
               max={5}
             />
             <AdditionalOptions />
@@ -82,16 +82,18 @@ export function TimecapsuleCreate() {
                 {apiError}
               </div>
             )}
-            <TotalPrice />
-            <div className={styles.submitButton}>
-              <Button
-                label={isSubmitting ? '처리 중...' : '결제하기'}
-                variant="primary"
-                size="L"
-                onPress={handleSubmitClick}
-                disabled={isSubmitting || !isRequiredFieldsValid}
-                fullWidth
-              />
+            <div className={styles.paymentSection}>
+              <TotalPrice />
+              <div className={styles.submitButton}>
+                <Button
+                  label={isSubmitting ? '처리 중...' : '결제하기'}
+                  variant="primary"
+                  size="L"
+                  onPress={handleSubmitClick}
+                  disabled={isSubmitting || !isRequiredFieldsValid}
+                  fullWidth
+                />
+              </div>
             </div>
           </form>
         </div>

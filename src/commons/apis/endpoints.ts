@@ -38,7 +38,7 @@ export const AUTH_ENDPOINTS = {
   CHANGE_PASSWORD: `${BASE_PATHS.AUTH}/change-password`,
   
   // 프로필 관리
-  ME: `${BASE_PATHS.API}/me`, // 로그인한 사용자 프로필 조회
+  ME: `${BASE_PATHS.AUTH}/me`, // 로그인한 사용자 프로필 조회 (내 정보 + summary)
   PROFILE: `${BASE_PATHS.AUTH}/profile`,
   UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
   DELETE_ACCOUNT: `${BASE_PATHS.AUTH}/delete-account`,
@@ -228,6 +228,9 @@ export const CAPSULE_ENDPOINTS = {
   // 초대 코드로 방 참여
   JOIN_ROOM: (capsuleId: string) =>
     `${BASE_PATHS.API}/capsules/step-rooms/${capsuleId}/join`,
+  // 타임캡슐 제출 (방장 전용)
+  SUBMIT_CAPSULE: (roomId: string) =>
+    `${BASE_PATHS.API}/capsules/step-rooms/${roomId}/submit`,
 } as const;
 
 /**

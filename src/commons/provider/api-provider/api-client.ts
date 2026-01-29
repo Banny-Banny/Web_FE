@@ -334,12 +334,28 @@ apiClient.interceptors.response.use(
       } else {
         // 실제 에러인 경우만 error 로그
         console.error(`❌ API Error: ${method} ${fullURL}`);
+        const rawData = error.config?.data;
+        const requestDataForLog =
+          rawData == null
+            ? undefined
+            : typeof rawData === 'string'
+              ? (() => {
+                  try {
+                    return JSON.parse(rawData) as unknown;
+                  } catch {
+                    return rawData;
+                  }
+                })()
+              : rawData instanceof FormData
+                ? '[FormData]'
+                : String(rawData);
+
         console.error('Request Details:', {
           baseURL: requestBaseURL,
           endpoint: requestEndpoint,
           fullURL,
           method,
-          requestData: error.config?.data ? JSON.parse(error.config.data) : undefined,
+          requestData: requestDataForLog,
           headers: error.config?.headers,
           axiosRequestURL: error.request?.responseURL,
           configURL: error.config?.url,

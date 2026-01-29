@@ -1,8 +1,8 @@
 /**
  * QuantitySelector 컴포넌트 스타일
- * 
+ *
  * @description
- * - Figma 디자인과 pixel-perfect 수준으로 일치하도록 작성
+ * - step-info React Native 스타일 기반 (2024-12-30 디자인)
  * - CSS 변수를 사용한 디자인 토큰 적용
  * - 375px 기준 고정 레이아웃
  */
@@ -11,111 +11,129 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 16px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
+  align-items: flex-start;
 }
 
 .labelContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 4px;
+  align-items: flex-start;
 }
 
 .label {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  font-weight: 600;
   color: var(--color-black-500);
-  line-height: var(--line-height-normal);
+  line-height: 24px;
 }
 
 .subLabel {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-grey-500);
-  line-height: var(--line-height-normal);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-grey-700);
+  line-height: 20px;
+}
+
+.priceColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.hintText {
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-grey-700);
+  text-align: right;
+  line-height: 20px;
 }
 
 .currentCost {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-black-500);
-  line-height: var(--line-height-normal);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-red-500);
+  text-align: right;
+  line-height: 20px;
 }
 
+/* React Native stepperContainer 스타일 기반 */
 .selectorContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md);
-  background-color: var(--color-white-grey-50);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
+  padding: 0 43px;
+  height: 60px;
+  background-color: var(--color-white-grey-200);
+  border-radius: 16px;
 }
 
+/* React Native stepperButton 스타일 기반 */
 .decreaseButton,
 .increaseButton {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
-  background-color: var(--color-white-500);
+  border: none;
+  background-color: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-black-500);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-grey-900);
+  line-height: 32px;
 }
 
 .decreaseButton:hover:not(:disabled),
 .increaseButton:hover:not(:disabled) {
-  background-color: var(--color-white-grey-100);
-  border-color: var(--color-black-500);
+  opacity: 0.7;
 }
 
 .decreaseButton:disabled,
 .increaseButton:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
+/* React Native stepperValueContainer + stepperValue 스타일 기반 */
 .quantityDisplay {
-  flex: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+  font-size: 28px;
+  font-weight: 700;
   color: var(--color-black-500);
-  line-height: var(--line-height-normal);
+  line-height: 36px;
 }
 
-.hintText {
-  margin-top: var(--spacing-xs);
+.unit {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-grey-500);
-  line-height: var(--line-height-normal);
-  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-grey-700);
+  line-height: 24px;
 }
 
 .error {
   font-family: var(--font-pretendard);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
+  font-size: 13px;
+  font-weight: 400;
   color: var(--color-red-500);
-  margin-top: var(--spacing-xs);
-  line-height: var(--line-height-normal);
+  margin-top: 4px;
+  line-height: 20px;
 }

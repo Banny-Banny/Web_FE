@@ -64,15 +64,12 @@ export function QuantitySelector({
       <div className={styles.header}>
         <div className={styles.labelContainer}>
           <label htmlFor={fieldName} className={styles.label}>
-            {label}
+            {fieldName === 'participantCount' ? '인원수' : '이미지'}
           </label>
-          {subLabel && <span className={styles.subLabel}>{subLabel}</span>}
+          {subLabel && <span className={styles.subLabel}>({subLabel})</span>}
         </div>
-        {fieldName === 'photoCount' && currentCost > 0 && (
+        {fieldName === 'photoCount' && (
           <span className={styles.currentCost}>₩{currentCost.toLocaleString()}</span>
-        )}
-        {fieldName === 'photoCount' && currentCost === 0 && (
-          <span className={styles.currentCost}>₩0</span>
         )}
       </div>
       <div className={styles.selectorContainer}>
@@ -83,11 +80,14 @@ export function QuantitySelector({
           disabled={currentValue <= min}
           aria-label={`${label} 감소`}
         >
-          <RiSubtractLine size={20} />
+          −
         </button>
-        <span className={styles.quantityDisplay}>
-          {currentValue} {fieldName === 'participantCount' ? '명' : fieldName === 'photoCount' ? '개' : ''}
-        </span>
+        <div className={styles.quantityDisplay}>
+          <span>{currentValue}</span>
+          <span className={styles.unit}>
+            {fieldName === 'participantCount' ? '명' : fieldName === 'photoCount' ? '장' : ''}
+          </span>
+        </div>
         <button
           type="button"
           className={styles.increaseButton}
@@ -95,12 +95,9 @@ export function QuantitySelector({
           disabled={currentValue >= (fieldName === 'photoCount' ? maxPhotoCount : max)}
           aria-label={`${label} 증가`}
         >
-          <RiAddLine size={20} />
+          +
         </button>
       </div>
-      {fieldName !== 'photoCount' && unitPrice > 0 && (
-        <p className={styles.hintText}>1EA: ₩{unitPrice.toLocaleString()}</p>
-      )}
       {error && (
         <span
           id={`${fieldName}-error`}

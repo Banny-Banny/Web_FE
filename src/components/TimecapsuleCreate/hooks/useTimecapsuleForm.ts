@@ -32,10 +32,10 @@ export function useTimecapsuleForm() {
     mode: 'onChange', // 실시간 검증
     defaultValues: {
       capsuleName: '',
-      timeOption: undefined,
+      timeOption: '1_WEEK',
       customOpenDate: undefined,
       participantCount: 2,
-      photoCount: 1,
+      photoCount: 3,
       addMusic: false,
       addVideo: false,
     },

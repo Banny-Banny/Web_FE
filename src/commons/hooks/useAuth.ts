@@ -8,6 +8,7 @@ import type { AuthContextType, LoginRequest, User } from '@/commons/types/auth';
 import { getAccessToken, clearTokens } from '@/commons/utils/auth';
 import { localLogin } from '@/commons/apis/auth/login';
 import { verifyAuth } from '@/commons/apis/auth/verify';
+import { logoutApi } from '@/commons/apis/auth/logout';
 
 /**
  * 인증 상태 및 액션에 접근하는 커스텀 훅
@@ -148,8 +149,14 @@ export function useAuth(): AuthContextType {
 
   /**
    * 로그아웃 함수
+   * 서버 로그아웃 API 호출 후 클라이언트 토큰/상태를 정리합니다.
    */
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await logoutApi();
+    } catch {
+      // API 실패해도 클라이언트는 정리 (logoutApi 내부에서 throw 안 함)
+    }
     clearTokens();
     setUser(null);
     queryClient.removeQueries({ queryKey: ['auth'] });
