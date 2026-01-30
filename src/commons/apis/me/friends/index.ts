@@ -20,6 +20,25 @@ import type {
 const FRIENDS_ENDPOINT = AUTH_ENDPOINTS.ME_FRIENDS;
 
 /**
+ * 카카오 친구 목록 연동 (동기화)
+ *
+ * 카카오에서 친구 목록을 가져와 서버 DB에 반영합니다.
+ * 친구 목록 조회 전에 호출하면 최신 카카오 친구가 반영된 목록을 받을 수 있습니다.
+ * 카카오 로그인이 아닌 경우 등 실패 시 에러를 던지지 않고 무시합니다.
+ *
+ * @example
+ * await syncKakaoFriends(); // 연동 시도 (실패해도 예외 없음)
+ * const friends = await getFriends({ limit: 20, offset: 0 });
+ */
+export async function syncKakaoFriends(): Promise<void> {
+  try {
+    await apiClient.post(AUTH_ENDPOINTS.KAKAO_FRIENDS_SYNC);
+  } catch {
+    // 카카오 미연동 사용자 등 실패 시 목록 조회는 그대로 진행
+  }
+}
+
+/**
  * 친구 목록 조회
  * 
  * 사용자의 친구 목록을 페이지네이션을 통해 조회합니다.
