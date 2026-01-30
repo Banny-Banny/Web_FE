@@ -95,6 +95,46 @@ export function formatDateTimeKorean(dateString: string): string {
 }
 
 /**
+ * 대기실 제출 마감 남은 시간 포맷
+ * deadline이 null이거나 과거면 "마감됨", 아니면 "N일 N시간 N분" 또는 "N시간 N분", "N분"
+ */
+export function formatRemainingTime(deadline: string | null): string {
+  if (!deadline) return '마감됨';
+  const now = new Date();
+  const deadlineDate = new Date(deadline);
+  const diffTime = deadlineDate.getTime() - now.getTime();
+  if (diffTime < 0) return '마감됨';
+  const diffMinutes = Math.floor(diffTime / (1000 * 60));
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays > 0) return `${diffDays}일 ${diffHours % 24}시간 ${diffMinutes % 60}분`;
+  if (diffHours > 0) return `${diffHours}시간 ${diffMinutes % 60}분`;
+  return `${diffMinutes}분`;
+}
+
+/**
+ * 잠긴 캡슐 D-day 포맷
+ * openDate가 null이면 "—", 과거면 "개봉됨", 오늘면 "오늘 개봉", 미래면 "D-N일 남음"
+ */
+export function formatDday(openDate: string | null): string {
+  if (!openDate) return '—';
+  const now = new Date();
+  const target = new Date(openDate);
+  const diffTime = target.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays < 0) return '개봉됨';
+  if (diffDays === 0) return '오늘 개봉';
+  return `D-${diffDays}일 남음`;
+}
+
+/**
+ * 캡슐 날짜 표시용 "YYYY년 MM월 DD일"
+ */
+export function formatCapsuleDate(isoString: string): string {
+  return formatDateKorean(isoString);
+}
+
+/**
  * ISO 날짜 문자열을 상대 시간으로 포맷 (예: "N일 전", "방금", "N시간 전")
  */
 export function formatRelativeTime(dateString: string): string {

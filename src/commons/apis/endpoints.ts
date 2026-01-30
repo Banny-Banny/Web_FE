@@ -46,6 +46,7 @@ export const AUTH_ENDPOINTS = {
   ME_NOTIFICATION_READ: (id: string) => `/api/me/notifications/${id}/read`, // 알림 읽음 처리 (POST)
   ME_NOTIFICATION_DELETE: (id: string) => `/api/me/notifications/${id}/delete`, // 알림 삭제 (POST)
   ME_FRIENDS: `/api/me/friends`, // 내 친구 목록 조회 (GET)
+  ME_CAPSULES: `/api/me/capsules`, // 참여 중인 타임캡슐 목록 조회 (GET)
   KAKAO_FRIENDS_SYNC: `${BASE_PATHS.AUTH}/kakao/friends-sync`, // 카카오 친구 목록 연동 (동기화)
   PROFILE: `${BASE_PATHS.AUTH}/profile`,
   UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
@@ -239,6 +240,8 @@ export const CAPSULE_ENDPOINTS = {
   // 타임캡슐 제출 (방장 전용)
   SUBMIT_CAPSULE: (roomId: string) =>
     `${BASE_PATHS.API}/capsules/step-rooms/${roomId}/submit`,
+  // 열린 타임캡슐 상세 조회 (캡슐보관함용, user_id 쿼리)
+  TIMECAPSULE_DETAIL: (id: string) => `${BASE_PATHS.API}/timecapsules/${id}`,
 } as const;
 
 /**

@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--color-white-500);
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+}
