@@ -321,6 +321,11 @@ apiClient.interceptors.response.use(
       const isJoinRoomConflict = errorInfo.statusCode === 409 &&
                                   (fullURL.includes('/join') || requestEndpoint.includes('/join'));
 
+      // 카카오 친구 동기화 400: 카카오 미연동 사용자 등으로 동기화 불가 — 정상적인 경우(호출부에서 무시)
+      const isKakaoFriendsSync400 =
+        errorInfo.statusCode === 400 &&
+        (fullURL.includes('/kakao/friends-sync') || requestEndpoint.includes('/kakao/friends-sync'));
+
       if (isS008Error) {
         // S008: 토스 결제 처리 중 - 정상 상황이므로 info 로그
         console.log(`⏳ 결제 처리 중: ${method} ${fullURL}`);
@@ -331,6 +336,9 @@ apiClient.interceptors.response.use(
       } else if (isJoinRoomConflict) {
         // 대기실 참여 409: 이미 참여 중 - 정상 상황이므로 간단한 로그만
         console.log(`✅ 이미 대기실에 참여 중입니다.`);
+      } else if (isKakaoFriendsSync400) {
+        // 카카오 친구 동기화 400: 카카오 미연동 사용자 등 — 정상 상황이므로 로그 출력하지 않음
+        // syncKakaoFriends에서 catch하여 무시하고 친구 목록 조회는 그대로 진행
       } else {
         // 실제 에러인 경우만 error 로그 (상태 코드·메시지를 한 줄에 포함)
         const statusPart = errorInfo.statusCode ?? errorInfo.httpStatus ?? '—';
