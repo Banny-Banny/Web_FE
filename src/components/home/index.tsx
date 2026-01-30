@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { loadKakaoMapScript } from '@/commons/utils/kakao-map/script-loader';
 import { useKakaoMap } from './hooks/useKakaoMap';
+import { useLocationConsent } from '@/commons/hooks/useLocationConsent';
 import { useGeolocation } from './hooks/useGeolocation';
 import { useLocationTracking } from './hooks/useLocationTracking';
 import { useAutoDiscovery } from './hooks/useAutoDiscovery';
@@ -85,7 +86,11 @@ export function HomeFeature({ className = '' }: HomeFeatureProps) {
   });
 
 
-  const geolocation = useGeolocation();
+  // LocalStorage에 저장된 위치 동의 여부 (null = 미로드/구 사용자 → 위치 요청)
+  const locationConsent = useLocationConsent();
+  const geolocation = useGeolocation({
+    enabled: locationConsent !== false,
+  });
   // 슬롯 관리 훅
   const { slotInfo, isLoading: isSlotLoading } = useSlotManagement();
   

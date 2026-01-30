@@ -42,7 +42,11 @@ export const AUTH_ENDPOINTS = {
   ME_PROFILE_IMAGE: `${BASE_PATHS.AUTH}/me/profile-image`, // 프로필 이미지 업로드 (POST, multipart)
   ME_UPDATE: `/api/me/update`, // 내 프로필 수정 (POST, 닉네임·이메일)
   ME_NOTIFICATIONS_UNREAD_COUNT: `/api/me/notifications/unread-count`, // 읽지 않은 알림 개수 조회 (GET)
+  ME_NOTIFICATIONS: `/api/me/notifications`, // 알림 목록 조회 (GET)
+  ME_NOTIFICATION_READ: (id: string) => `/api/me/notifications/${id}/read`, // 알림 읽음 처리 (POST)
+  ME_NOTIFICATION_DELETE: (id: string) => `/api/me/notifications/${id}/delete`, // 알림 삭제 (POST)
   ME_FRIENDS: `/api/me/friends`, // 내 친구 목록 조회 (GET)
+  KAKAO_FRIENDS_SYNC: `${BASE_PATHS.AUTH}/kakao/friends-sync`, // 카카오 친구 목록 연동 (동기화)
   PROFILE: `${BASE_PATHS.AUTH}/profile`,
   UPDATE_PROFILE: `${BASE_PATHS.AUTH}/profile`,
   DELETE_ACCOUNT: `${BASE_PATHS.AUTH}/delete-account`,

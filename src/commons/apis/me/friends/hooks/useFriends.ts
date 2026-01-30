@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getFriends } from '../index';
+import { getFriends, syncKakaoFriends } from '../index';
 import type { GetFriendsParams, GetFriendsResponse } from '../types';
 import type { ApiError } from '@/commons/provider/api-provider/api-client';
 
@@ -40,7 +40,10 @@ export function useFriends(params: GetFriendsParams = {}, options: UseFriendsOpt
 
   return useQuery<GetFriendsResponse, ApiError>({
     queryKey: ['friends', 'list', params.limit, params.offset],
-    queryFn: () => getFriends(params),
+    queryFn: async () => {
+      await syncKakaoFriends();
+      return getFriends(params);
+    },
     enabled,
     staleTime: 1000 * 60 * 1, // 1분간 캐시 유지
     gcTime: 1000 * 60 * 5, // 5분간 가비지 컬렉션 방지

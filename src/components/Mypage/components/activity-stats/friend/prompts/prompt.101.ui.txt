@@ -13,8 +13,8 @@
 조건-피그마) 활용할MCP: Figma Desktop MCP
 조건-Figma Desktop MCP 링크) https://www.figma.com/design/ChrSWhvkq3f0bWwOzWHKJN/%ED%83%80%EC%9E%84%EC%BA%A1%EC%8A%90---%EC%9D%B4%EC%8A%A4%ED%84%B0%EC%97%90%EA%B7%B8--%EB%B3%B5%EC%82%AC-?node-id=161-25129&t=Y2GkL0RJylNEzjnP-4
 
-조건-파일경로) 구현될 컴포넌트 파일경로: src/components/Mypage/activity-stats/friend/index.tsx
-조건-파일경로) 구현될 CSS 파일경로: src/components/Mypage/activity-stats/friend/styles.module.css
+조건-파일경로) 구현될 컴포넌트 파일경로: src/components/Mypage/components/activity-stats/friend/index.tsx
+조건-파일경로) 구현될 CSS 파일경로: src/components/Mypage/components/activity-stats/friend/styles.module.css
 
 ==============================================
 
@@ -62,11 +62,8 @@
 
 ==============================================
 
-핵심요구사항) MCP를 연동하여 피그마의 디자인을 그대로 구현할 것.
-핵심요구사항) 피그마에 표시된 사이즈, 간격, 색상 그대로 적용
-핵심요구사항) 추가적인 기능이나 애니메이션 넣지 말고 디자인만 완벽히 구현
-핵심요구사항) 친구 목록 컴포넌트는 마이페이지에서 '친구' 영역을 클릭했을 때 표시되는 화면임
-핵심요구사항) 친구 목록은 독립적인 컴포넌트로 구현하되, 마이페이지와 일관된 디자인 시스템을 유지할 것
+핵심요구사항) 친구 목록 컴포넌트는 마이페이지에서 '친구' 영역(활동 요약 카드의 친구)을 클릭했을 때 표시되는 화면임. /friends 라우트로 이동하여 FriendList 표시.
+핵심요구사항) 친구 목록은 독립적인 컴포넌트로 구현하되, 마이페이지와 일관된 디자인 시스템을 유지할 것. useFriends, useDeleteFriend, useAddFriend 훅으로 API 연동된 UI(로딩·에러·빈 목록·추가 폼·삭제 확인) 반영.
 
 ==============================================
 

@@ -13,3 +13,5 @@ export type { UseGNBReturn } from './useGNB';
 
 export { useKakaoAddress } from './useKakaoAddress';
 export type { UseKakaoAddressProps, UseKakaoAddressReturn } from './useKakaoAddress';
+
+export { useLocationConsent } from './useLocationConsent';

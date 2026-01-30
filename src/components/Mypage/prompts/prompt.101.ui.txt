@@ -60,13 +60,15 @@
 기존히스토리-참고만) 피그마에 표시된 사이즈, 간격, 색상 그대로 적용
 기존히스토리-참고만) 추가적인 기능이나 애니메이션 넣지 말고 디자인만 완벽히 구현
 기존히스토리-참고만) **소수점 값 반올림 필수**: 피그마에서 추출한 모든 소수점이 포함된 수치 값(width, height, padding, margin, borderWidth, lineHeight, letterSpacing, opacity, shadowOpacity 등)은 반드시 반올림하여 정수로 변환해야 함. 예: 1.111 → 1, 26.198 → 26, 0.7 → 1, 0.3 → 0
+기존히스토리-참고만) 마이페이지는 라우트 /profile로 접근 가능해야 함 (Next.js App Router 구조)
 
 ==============================================
 
-핵심요구사항) MCP를 연동하여 피그마의 디자인을 그대로 구현할 것.
-핵심요구사항) 피그마에 표시된 사이즈, 간격, 색상 그대로 적용
-핵심요구사항) 추가적인 기능이나 애니메이션 넣지 말고 디자인만 완벽히 구현
-핵심요구사항) 마이페이지는 라우트 /profile로 접근 가능해야 함 (Next.js App Router 구조)
+핵심요구사항) 헤더 알림 버튼에 useUnreadNotificationCount 훅으로 읽지 않은 알림 개수 배지 표시 (unreadCount > 0일 때만).
+핵심요구사항) 알림 버튼(notificationButton) 클릭 시 Notification 모달(패널) 표시, onClose로 닫기.
+핵심요구사항) 내비게이션 카드의 '소식' 메뉴 클릭 시 router.push('/notifications')로 소식(알림) 페이지로 이동.
+핵심요구사항) ProfileSection·활동 요약 카드(캡슐/이스터에그/친구, GET /api/auth/me data.summary 사용)·내비게이션·로그아웃·버전 정보·Notification 패널 구조 유지.
+핵심요구사항) 마이페이지는 라우트 /profile로 접근 가능해야 함 (Next.js App Router 구조).
 
 ==============================================
 

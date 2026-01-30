@@ -59,15 +59,15 @@
 기존히스토리-참고만) 피그마에 표시된 사이즈, 간격, 색상 그대로 적용
 기존히스토리-참고만) 추가적인 기능이나 애니메이션 넣지 말고 디자인만 완벽히 구현
 기존히스토리-참고만) **소수점 값 반올림 필수**: 피그마에서 추출한 모든 소수점이 포함된 수치 값(width, height, padding, margin, borderWidth, lineHeight, letterSpacing, opacity, shadowOpacity 등)은 반드시 반올림하여 정수로 변환해야 함. 예: 1.111 → 1, 26.198 → 26, 0.7 → 1, 0.3 → 0
+기존히스토리-참고만) 알림 화면은 마이페이지 헤더의 notificationButton(알림 버튼)을 눌렀을 때 진입
+기존히스토리-참고만) 알림 화면은 마이페이지 내비게이션 메뉴에서 '소식' 메뉴항목을 눌렀을 때 진입 (또는 /notifications 페이지로 이동)
 
 ==============================================
 
-핵심요구사항) MCP를 연동하여 피그마의 디자인을 그대로 구현할 것.
-핵심요구사항) 피그마에 표시된 사이즈, 간격, 색상 그대로 적용
-핵심요구사항) 추가적인 기능이나 애니메이션 넣지 말고 디자인만 완벽히 구현
-핵심요구사항) 알림 화면은 마이페이지 헤더의 notificationButton(알림 버튼)을 눌렀을 때 진입
-핵심요구사항) 알림 화면은 마이페이지 내비게이션 메뉴에서 '소식' 메뉴항목을 눌렀을 때 진입
-핵심요구사항) 알림 컴포넌트는 독립 컴포넌트로 구현하되, 마이페이지와 일관된 디자인 시스템을 유지할 것
+핵심요구사항) 알림 모달: 새 알림/이전 알림 섹션으로 구분하여 표시. NotificationListContent 컴포넌트 사용 (unread, read, onMarkAllRead, onNewNotificationClick, onDeleteClick, deletingId 등 Props 전달). 알림 타입(type)별로 아이콘 다르게 표시 (SYSTEM→정보, TIME_CAPSULE_INVITE→시간, FRIEND_REQUEST→친구추가, NOTICE→공지, MY_EGGS→선물, PROFILE→프로필 등, 미지원 타입은 기본 알림 아이콘).
+핵심요구사항) useNotifications, useMarkNotificationRead, useDeleteNotification 훅 사용. 새 알림 클릭 시 getNotificationRoute(type, targetId, id)로 path 이동 후 router.push(path), onClose 호출, markRead.mutate(id). 이전 알림은 삭제 버튼으로 deleteNotification.mutate(notificationId), useToast로 성공/실패 메시지.
+핵심요구사항) 헤더에 '새 알림 N개' 표시, 모두읽음 버튼(새 알림이 있을 때만) 제공. 로딩·에러·빈 목록·다시 시도 UI는 NotificationListContent 내부에서 처리.
+핵심요구사항) 알림 컴포넌트는 독립 컴포넌트로 구현하되, 마이페이지와 일관된 디자인 시스템을 유지할 것. 닫기 시 onClose 호출.
 
 ==============================================
 
@@ -122,6 +122,8 @@
 - [ ] 애니메이션 추가 없음 (있는 그대로만 구현)
 - [ ] @remixicon/react 사용 (필요시)
 - [ ] 마이페이지와 일관된 디자인 시스템 유지
-- [ ] notificationButton 또는 '소식' 메뉴 진입 시 알림 화면으로 표시 가능한 구조
+- [ ] notificationButton 또는 '소식' 메뉴(또는 /notifications) 진입 시 알림 화면으로 표시 가능한 구조
+- [ ] NotificationListContent 사용 (새 알림/이전 알림, 모두읽음, 클릭 라우팅·읽음 처리, 삭제)
+- [ ] useNotifications, useMarkNotificationRead, useDeleteNotification, getNotificationRoute, useToast 연동
 
 ==============================================
