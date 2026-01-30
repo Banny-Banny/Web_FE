@@ -1,0 +1,147 @@
+.container {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-black-500);
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  border-radius: var(--radius-full);
+}
+
+.closeButton:hover {
+  background: var(--color-white-grey-100);
+}
+
+.avatars {
+  display: flex;
+  gap: 8px;
+  padding: 12px var(--spacing-lg);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border-lighter);
+  flex-shrink: 0;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-white-500);
+  cursor: pointer;
+  min-width: 64px;
+}
+
+.avatar:hover {
+  background: var(--color-white-grey-100);
+}
+
+.avatarActive {
+  border-color: var(--color-blue-500);
+  background: var(--color-blue-50);
+}
+
+.avatarEmoji {
+  font-size: 24px;
+}
+
+.avatarName {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-black-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.content {
+  padding: 16px var(--spacing-lg);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-black-500);
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+}
+
+.images {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.videoWrap {
+  margin-bottom: 16px;
+}
+
+.audioWrap {
+  margin-bottom: 16px;
+}
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0;
+}
+
+.error {
+  font-size: 14px;
+  color: var(--color-red-500);
+  margin: 0;
+}
+
+.empty {
+  font-size: 14px;
+  color: var(--color-grey-500);
+  margin: 0;
+}

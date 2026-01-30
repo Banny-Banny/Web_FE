@@ -1,0 +1,241 @@
+.section {
+  width: 100%;
+  height: 241px;
+  margin-top: 23px;
+}
+
+.sectionHeader {
+  width: 100%;
+  height: 26px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.sectionTitle {
+  font-family: var(--font-pretendard);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: 0;
+  color: var(--color-black-500);
+  margin: 0;
+  height: 26px;
+}
+
+.count {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-500);
+  height: 20px;
+}
+
+.scrollWrap {
+  width: 100%;
+  height: 203px;
+  margin-top: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding-left: 24px;
+}
+
+.card {
+  flex-shrink: 0;
+  width: 260px;
+  height: 203px;
+  padding: 21px;
+  border-radius: 28px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-white-500);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  background: var(--color-white-grey-100);
+}
+
+.cardHeader {
+  width: 218px;
+  height: 28px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardTitle {
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  color: var(--color-black-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* 진행 상황 섹션 */
+.progressSection {
+  width: 218px;
+  height: 28px;
+  margin-top: 16px;
+}
+
+.progressLabelRow {
+  width: 218px;
+  height: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressLabel {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-grey-500);
+  height: 16px;
+}
+
+.progressValue {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-black-500);
+  height: 16px;
+}
+
+.progressBarContainer {
+  width: 218px;
+  height: 4px;
+  margin-top: 8px;
+}
+
+.progressBar {
+  width: 218px;
+  height: 4px;
+  background: var(--color-white-grey-50);
+  border: 1px solid var(--color-border-light);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 4px;
+  background: var(--color-black-500);
+  border-radius: 9999px;
+  transition: width 0.2s;
+}
+
+/* 참여자 아이콘 섹션 */
+.participantsSection {
+  width: 218px;
+  height: 28px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.participantIconCompleted {
+  width: 24px;
+  height: 24px;
+  background: var(--color-black-500);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.participantIconPending {
+  width: 24px;
+  height: 24px;
+  background: var(--color-white-grey-50);
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconCompleted {
+  color: var(--color-white-500);
+}
+
+.iconPending {
+  color: var(--color-grey-500);
+}
+
+.participantMore {
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.participantMoreText {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grey-500);
+}
+
+/* 남은 시간 섹션 */
+.timeSection {
+  width: 218px;
+  height: 29px;
+  margin-top: 16px;
+  border-top: 1px solid var(--color-border-lighter);
+  padding-top: 13px;
+}
+
+.timeSectionContent {
+  width: 218px;
+  height: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeLabel {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-grey-500);
+  height: 16px;
+}
+
+.timeValue {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-black-500);
+  height: 16px;
+}
+
+.empty {
+  font-size: 14px;
+  color: var(--color-grey-500);
+  margin: 0;
+  padding: 16px 24px;
+}
