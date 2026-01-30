@@ -40,6 +40,10 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/friends');
   };
 
+  const handleCapsuleClick = () => {
+    router.push('/profile/capsules');
+  };
+
   const handleEasterEggClick = () => {
     router.push('/my-eggs');
   };
@@ -84,10 +88,15 @@ export function Mypage({ className = '' }: MypageProps) {
 
       {/* 활동 요약 카드 (GET /api/auth/me data.summary 사용) */}
       <div className={styles.activityCard}>
-        <div className={styles.activityItem}>
+        <button
+          className={styles.activityItem}
+          onClick={handleCapsuleClick}
+          type="button"
+          aria-label="캡슐보관함"
+        >
           <div className={styles.activityNumber}>{timeCapsuleCount}</div>
           <div className={styles.activityLabel}>캡슐</div>
-        </div>
+        </button>
         <div className={styles.activityDivider}></div>
         <button 
           className={styles.activityItem}
