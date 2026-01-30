@@ -314,10 +314,12 @@
 }
 
 .navDivider {
-  width: 100%;
+  width: calc(100% - 2 * var(--spacing-xl));
   height: 1px;
   background-color: var(--color-grey-300);
   margin: 0 var(--spacing-xl);
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* 로그아웃 버튼 */

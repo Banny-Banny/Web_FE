@@ -124,7 +124,7 @@ export function Mypage({ className = '' }: MypageProps) {
         <div className={styles.navDivider}></div>
         <button
           className={styles.navItem}
-          onClick={() => setShowNotification(true)}
+          onClick={() => router.push('/notifications')}
           type="button"
           aria-label="소식"
         >
