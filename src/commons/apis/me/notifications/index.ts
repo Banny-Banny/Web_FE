@@ -5,7 +5,7 @@
 import type { AxiosError } from 'axios';
 import { apiClient } from '@/commons/provider/api-provider/api-client';
 import { AUTH_ENDPOINTS } from '@/commons/apis/endpoints';
-import type { GetNotificationsResponseData } from './types';
+import type { ApiResponse, GetNotificationsResponseData } from './types';
 
 /**
  * 읽지 않은 알림 개수 응답 타입
