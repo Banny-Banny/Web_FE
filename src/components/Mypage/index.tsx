@@ -49,7 +49,7 @@ export function Mypage({ className = '' }: MypageProps) {
   };
 
   const handleNoticeClick = () => {
-    router.push('/notice');
+    router.push('/notices');
   };
 
   const handleCustomerCenterClick = () => {
