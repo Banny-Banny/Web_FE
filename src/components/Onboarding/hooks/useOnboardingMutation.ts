@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { completeOnboarding } from '@/commons/apis/onboarding/complete';
 import type { OnboardingCompleteRequest } from '@/commons/apis/onboarding/types';
+import { setLocationConsent } from '@/commons/utils/location-consent';
 
 /**
  * 온보딩 완료 API 호출 훅
@@ -20,7 +21,10 @@ export function useOnboardingMutation() {
     mutationFn: (request: OnboardingCompleteRequest) => {
       return completeOnboarding(request);
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      // 위치 동의 여부를 LocalStorage에 저장 (프로필 API에 해당 필드 없음)
+      setLocationConsent(variables.location_consent);
+
       // 온보딩 완료 상태 업데이트 (필요시)
       queryClient.setQueryData(['onboarding', 'status'], { completed: true });
       // 프로필(동의 값) 갱신을 위해 GET /me 캐시 무효화
