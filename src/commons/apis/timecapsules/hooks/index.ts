@@ -1,0 +1,1 @@
+export { useCapsuleDetail } from './useCapsuleDetail';
