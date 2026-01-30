@@ -11,7 +11,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { RiCloseLine, RiNotificationLine } from '@remixicon/react';
+import { RiCloseLine } from '@remixicon/react';
 import { useNotifications, useMarkNotificationRead, useDeleteNotification } from '@/commons/apis/me/notifications/hooks';
 import { getNotificationRoute } from '@/commons/utils/notification-route';
 import { useToast } from '@/commons/provider/toast-provider';
@@ -74,14 +74,7 @@ export function Notification({ className = '', onClose }: NotificationProps) {
             )}
           </div>
           <div className={styles.headerRight}>
-            <button
-              type="button"
-              className={styles.headerIconButton}
-              onClick={() => {}}
-              aria-label="알림"
-            >
-              <RiNotificationLine size={20} className={styles.headerIcon} />
-            </button>
+           
             <button
               type="button"
               className={styles.headerIconButton}
