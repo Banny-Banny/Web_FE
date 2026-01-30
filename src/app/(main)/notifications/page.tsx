@@ -44,6 +44,18 @@ export default function NotificationsPage() {
     [markRead, router, showError]
   );
 
+  const handleReadNotificationClick = useCallback(
+    (item: NotificationType) => {
+      const path = getNotificationRoute(item.type, item.targetId ?? null, item.id);
+      if (path) {
+        router.push(path);
+      } else {
+        showError('콘텐츠를 찾을 수 없습니다.');
+      }
+    },
+    [router, showError]
+  );
+
   const handleDeleteClick = useCallback(
     (e: React.MouseEvent, notificationId: string) => {
       e.stopPropagation();
@@ -69,6 +81,7 @@ export default function NotificationsPage() {
         error={error}
         refetch={refetch}
         onNewNotificationClick={handleNewNotificationClick}
+        onReadNotificationClick={handleReadNotificationClick}
         onDeleteClick={handleDeleteClick}
         deletingId={deletingId}
       />

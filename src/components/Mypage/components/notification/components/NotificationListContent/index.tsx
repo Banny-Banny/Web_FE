@@ -69,6 +69,8 @@ export interface NotificationListContentProps {
   error: { message?: string } | null;
   refetch: () => void;
   onNewNotificationClick: (item: NotificationType) => void;
+  /** 이전 알림 항목 클릭 시 라우팅용 (선택). 없으면 클릭 불가 */
+  onReadNotificationClick?: (item: NotificationType) => void;
   onDeleteClick: (e: React.MouseEvent, notificationId: string) => void;
   deletingId: string | null;
   onMarkAllRead?: () => void;
@@ -82,6 +84,7 @@ export function NotificationListContent({
   error,
   refetch,
   onNewNotificationClick,
+  onReadNotificationClick,
   onDeleteClick,
   deletingId,
   onMarkAllRead,
@@ -171,20 +174,52 @@ export function NotificationListContent({
               <ul className={styles.list} role="list">
                 {read.map((item) => {
                   const ItemIcon = getNotificationIcon(item.type);
+                  const handleReadItemClick = () => onReadNotificationClick?.(item);
                   return (
-                    <li key={item.id} className={`${styles.listItem} ${styles.listItemRead}`}>
-                      <span className={styles.itemIconWrap} aria-hidden>
-                        <ItemIcon size={24} className={styles.itemIcon} />
-                      </span>
-                      <div className={styles.itemContent}>
-                        <span className={styles.itemTitle}>{item.title ?? '알림'}</span>
-                        {(item.body ?? item.content) && (
-                          <span className={styles.itemBody}>{item.body ?? item.content}</span>
-                        )}
-                        <span className={styles.itemDate}>
-                          {formatNotificationDate(item.createdAt)}
-                        </span>
-                      </div>
+                    <li
+                      key={item.id}
+                      className={
+                        onReadNotificationClick
+                          ? `${styles.listItem} ${styles.listItemWithDelete}`
+                          : `${styles.listItem} ${styles.listItemRead}`
+                      }
+                    >
+                      {onReadNotificationClick ? (
+                        <button
+                          type="button"
+                          className={styles.itemButton}
+                          onClick={handleReadItemClick}
+                          aria-label={item.title ?? '알림 보기'}
+                        >
+                          <span className={styles.itemIconWrap} aria-hidden>
+                            <ItemIcon size={24} className={styles.itemIcon} />
+                          </span>
+                          <div className={styles.itemContent}>
+                            <span className={styles.itemTitle}>{item.title ?? '알림'}</span>
+                            {(item.body ?? item.content) && (
+                              <span className={styles.itemBody}>{item.body ?? item.content}</span>
+                            )}
+                            <span className={styles.itemDate}>
+                              {formatNotificationDate(item.createdAt)}
+                            </span>
+                          </div>
+                        </button>
+                      ) : (
+                        <>
+                          <span className={styles.itemIconWrap} aria-hidden>
+                            <ItemIcon size={24} className={styles.itemIcon} />
+                          </span>
+                          <div className={styles.itemContent}>
+                            <span className={styles.itemTitle}>{item.title ?? '알림'}</span>
+                            {(item.body ?? item.content) && (
+                              <span className={styles.itemBody}>{item.body ?? item.content}</span>
+                            )}
+                            <span className={styles.itemDate}>
+                              {formatNotificationDate(item.createdAt)}
+                            </span>
+                          </div>
+                        </>
+                      )}
                       <button
                         type="button"
                         className={styles.deleteTextButton}
