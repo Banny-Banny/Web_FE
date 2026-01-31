@@ -32,7 +32,7 @@ interface SnakeSlotContent {
 
 interface SnakeSlot {
   slot_id: string;
-  author: SnakeSlotAuthor;
+  author?: SnakeSlotAuthor | null;
   is_written: boolean;
   content?: SnakeSlotContent;
 }
@@ -46,7 +46,15 @@ interface SnakeDetailResponse {
   stats?: { total_slots: number; filled_slots: number; empty_slots: number };
 }
 
-function toCamelSlotAuthor(s: SnakeSlotAuthor): CapsuleDetailSlotAuthor {
+function toCamelSlotAuthor(s: SnakeSlotAuthor | null | undefined): CapsuleDetailSlotAuthor {
+  // author가 없으면 기본값 반환 (빈 슬롯)
+  if (!s) {
+    return {
+      id: '',
+      name: '빈 슬롯',
+      emoji: '🥚',
+    };
+  }
   return {
     id: s.id,
     name: s.name,
@@ -129,12 +137,29 @@ export async function getCapsuleDetail(
   id: string,
   userId: string
 ): Promise<CapsuleDetailResponse> {
-  const url = `${CAPSULE_ENDPOINTS.TIMECAPSULE_DETAIL(id)}?user_id=${encodeURIComponent(userId)}`;
-  const response = await apiClient.get<CapsuleDetailResponse | SnakeDetailResponse>(url);
-  const raw = response.data;
+  try {
+    const response = await apiClient.get<CapsuleDetailResponse | SnakeDetailResponse>(
+      CAPSULE_ENDPOINTS.TIMECAPSULE_DETAIL(id),
+      {
+        params: { user_id: userId },
+      }
+    );
+    const raw = response.data;
 
-  if (isSnakeResponse(raw)) {
-    return toCamelDetail(raw);
+    if (isSnakeResponse(raw)) {
+      return toCamelDetail(raw);
+    }
+    return raw as CapsuleDetailResponse;
+  } catch (error: any) {
+    if (error.response?.status === 403) {
+      throw new Error('권한이 없어요');
+    }
+    if (error.response?.status === 404) {
+      throw new Error('캡슐을 찾을 수 없어요');
+    }
+    if (error.response?.status === 401) {
+      throw new Error('로그인이 필요해요');
+    }
+    throw new Error('불러오지 못했어요');
   }
-  return raw as CapsuleDetailResponse;
 }
