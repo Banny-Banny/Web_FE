@@ -4,7 +4,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { getCapsuleDetail } from '../detail';
-import type { CapsuleDetailResponse } from '@/commons/apis/me/capsules/types';
+import type { CapsuleDetailResponse, CapsuleDetailSlot } from '@/commons/apis/me/capsules/types';
 import { useAuthState } from '@/commons/hooks/useAuth';
 
 const STALE_TIME = 1000 * 60; // 1분
@@ -15,12 +15,32 @@ const STALE_TIME = 1000 * 60; // 1분
  */
 export function useCapsuleDetail(capsuleId: string | null) {
   const { user } = useAuthState();
-  const userId = user?.id ?? '';
+  const userId = user?.id ?? null;
 
-  return useQuery<CapsuleDetailResponse>({
-    queryKey: ['timecapsules', 'detail', capsuleId],
-    queryFn: () => getCapsuleDetail(capsuleId!, userId),
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['timecapsules', 'detail', capsuleId, userId],
+    queryFn: () => {
+      if (!capsuleId) {
+        throw new Error('캡슐 ID가 필요합니다.');
+      }
+      if (!userId) {
+        throw new Error('사용자 ID가 필요합니다.');
+      }
+      return getCapsuleDetail(capsuleId, userId);
+    },
     enabled: !!capsuleId && !!userId,
     staleTime: STALE_TIME,
+    retry: 1,
   });
+
+  // 작성된 슬롯만 필터링
+  const writtenSlots: CapsuleDetailSlot[] = data?.slots.filter(slot => slot.isWritten) || [];
+
+  return {
+    data: data || null,
+    writtenSlots,
+    isLoading,
+    error: error ? (error as Error).message : null,
+    refetch,
+  };
 }
