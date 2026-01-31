@@ -21,8 +21,8 @@ export function CapsuleDetailModal({
   isLoading = false,
   errorMessage = null,
 }: CapsuleDetailModalProps) {
-  const writtenSlots = slots.filter((s) => s.isWritten);
-  const selectedSlot: CapsuleDetailSlot | undefined = writtenSlots[selectedSlotIndex];
+  // slots는 이미 writtenSlots만 전달받음
+  const selectedSlot: CapsuleDetailSlot | undefined = slots[selectedSlotIndex];
   const content = selectedSlot?.content;
 
   useEffect(() => {
@@ -55,9 +55,9 @@ export function CapsuleDetailModal({
             <RiCloseLine size={24} />
           </button>
         </div>
-        {writtenSlots.length > 0 && (
+        {slots.length > 0 && (
           <div className={styles.avatars}>
-            {writtenSlots.map((slot, index) => (
+            {slots.map((slot, index) => (
               <button
                 key={slot.slotId}
                 type="button"
@@ -76,7 +76,7 @@ export function CapsuleDetailModal({
               <Spinner />
             </div>
           )}
-          {errorMessage && (
+          {!isLoading && errorMessage && (
             <p className={styles.error}>{errorMessage}</p>
           )}
           {!isLoading && !errorMessage && !selectedSlot && (

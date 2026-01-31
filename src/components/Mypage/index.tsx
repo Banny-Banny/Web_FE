@@ -56,6 +56,10 @@ export function Mypage({ className = '' }: MypageProps) {
     router.push('/customer-center');
   };
 
+  const handlePaymentHistoryClick = () => {
+    router.push('/payment-history');
+  };
+
   const timeCapsuleCount = summary?.timeCapsuleCount ?? 0;
   const easterEggCount = summary?.easterEggCount ?? 0;
   const friendCount = summary?.friendCount ?? 0;
@@ -126,7 +130,12 @@ export function Mypage({ className = '' }: MypageProps) {
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
         <div className={styles.navDivider}></div>
-        <button className={styles.navItem}>
+        <button
+          className={styles.navItem}
+          onClick={handlePaymentHistoryClick}
+          type="button"
+          aria-label="결제 내역"
+        >
           <span className={styles.navItemText}>결제 내역</span>
           <RiArrowRightSLine size={20} className={styles.navItemIcon} />
         </button>
