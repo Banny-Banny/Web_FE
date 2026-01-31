@@ -57,3 +57,8 @@ export {
   convertAlreadyJoinedToJoinResponse,
   getInviteErrorMessage,
 } from './invite';
+
+// 포맷팅 관련 유틸리티
+export {
+  formatCurrency,
+} from './format';
