@@ -11,11 +11,13 @@ import { CapsuleDetailModal } from './components/CapsuleDetailModal';
 import type { CapsuleTabType } from './types';
 import { useMyCapsules } from '@/commons/apis/me/capsules/hooks';
 import { useCapsuleDetail } from '@/commons/apis/timecapsules/hooks';
+import { useAuthState } from '@/commons/hooks/useAuth';
 import { Spinner } from '@/commons/components/spinner';
 import styles from './styles.module.css';
 
 export function CapsuleStorage() {
   const router = useRouter();
+  const { user } = useAuthState();
   const {
     waitingRooms,
     openedCapsules,
@@ -31,19 +33,15 @@ export function CapsuleStorage() {
 
   const {
     data: detailData,
+    writtenSlots,
     isLoading: isDetailLoading,
-    isError: isDetailError,
     error: detailError,
   } = useCapsuleDetail(selectedCapsuleId);
 
-  const detailErrorMessage =
-    isDetailError && detailError
-      ? (detailError as { response?: { status?: number } }).response?.status === 403
-        ? '권한이 없어요'
-        : (detailError as { response?: { status?: number } }).response?.status === 404
-          ? '캡슐을 찾을 수 없어요'
-          : '불러오지 못했어요'
-      : null;
+  const selectedSlot = writtenSlots[selectedSlotIndex];
+
+  // 에러 메시지 처리
+  const detailErrorMessage = detailError || (!isDetailLoading && detailData && !selectedSlot ? '작성된 내용이 없어요' : null);
 
   const handleClose = () => {
     router.back();
@@ -141,7 +139,7 @@ export function CapsuleStorage() {
         visible={!!selectedCapsuleId}
         capsuleId={selectedCapsuleId}
         title={detailData?.title ?? ''}
-        slots={detailData?.slots ?? []}
+        slots={writtenSlots}
         selectedSlotIndex={selectedSlotIndex}
         onSelectSlot={setSelectedSlotIndex}
         onClose={handleCloseModal}
