@@ -197,6 +197,12 @@ export const PAYMENT_ENDPOINTS = {
   COMPLETE: `${BASE_PATHS.API}/payment/complete`,
   // 토스페이먼츠 결제 승인 처리
   CONFIRM: `${BASE_PATHS.API}/payments/toss/confirm`,
+  // 내 결제 내역 목록 조회
+  MY_PAYMENTS: `${BASE_PATHS.API}/payments/toss/my-payments`,
+  // 주문번호로 결제 조회
+  GET_BY_ORDER: (orderNo: string) => `${BASE_PATHS.API}/payments/toss/order/${orderNo}`,
+  // 결제키로 결제 조회
+  GET_BY_KEY: (paymentKey: string) => `${BASE_PATHS.API}/payments/toss/${paymentKey}`,
 } as const;
 
 /**
