@@ -1,0 +1,399 @@
+/**
+ * PaymentHistory 컴포넌트 스타일
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #FFFFFF;
+  overflow: hidden;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 12px 24px;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.headerTitle {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 30px;
+  line-height: 33px;
+  font-weight: 800;
+  color: #191919;
+  margin: 0 0 8px 0;
+}
+
+.headerSubtitle {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #808080;
+  margin: 0;
+}
+
+.headerCloseButton {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 8px;
+  color: #191919;
+}
+
+.headerCloseButton:hover {
+  opacity: 0.7;
+}
+
+/* 목록 컨테이너 */
+.listContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 결제 카드 */
+.paymentCard {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #E5E5E5;
+  padding: 24px;
+  min-height: 98px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paymentCard:hover {
+  border-color: #191919;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.orderName {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 19.8px;
+  font-weight: 800;
+  color: #191919;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardArrow {
+  width: 20px;
+  height: 20px;
+  margin-left: 12px;
+  flex-shrink: 0;
+  color: #191919;
+}
+
+.cardBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.cardDate {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #808080;
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  min-height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statusBadgeDone {
+  background-color: #7fb685;
+}
+
+.statusBadgeCanceled {
+  background-color: #B2B2B2;
+}
+
+.statusText {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.cardAmount {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 19.8px;
+  font-weight: 800;
+  color: #FF6B6B;
+}
+
+/* 빈 화면 */
+.emptyContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+  color: #808080;
+}
+
+.emptyIcon {
+  margin-bottom: 16px;
+  color: #CCCCCC;
+}
+
+.emptyText {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  color: #808080;
+  margin: 16px 0 8px 0;
+  text-align: center;
+}
+
+.emptySubText {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #B2B2B2;
+  text-align: center;
+  margin: 0;
+}
+
+/* 모달 오버레이 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 컨텐츠 */
+.modalContent {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 340px;
+  padding: 24px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+  color: #191919;
+}
+
+.modalCloseButton:hover {
+  opacity: 0.7;
+}
+
+.modalHeader {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.modalTitle {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: 800;
+  color: #191919;
+  margin: 0 0 8px 0;
+}
+
+.modalSubtitle {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: #B2B2B2;
+  margin: 0;
+}
+
+.modalDivider {
+  height: 1px;
+  background-color: #D1D1D1;
+  margin: 16px 0;
+}
+
+.modalSection {
+  margin-bottom: 16px;
+}
+
+.modalInfoItem {
+  margin-bottom: 16px;
+}
+
+.modalLabel {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: #B2B2B2;
+  margin: 0 0 8px 0;
+}
+
+.modalValue {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 21px;
+  font-weight: 500;
+  color: #191919;
+  margin: 0;
+}
+
+.modalItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.modalItemRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalItemLabel {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #808080;
+}
+
+.modalItemValue {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #191919;
+}
+
+.modalTotalSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.modalTotalLabel {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 18px;
+  line-height: 19.8px;
+  font-weight: 800;
+  color: #191919;
+}
+
+.modalTotalAmount {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 24px;
+  line-height: 26.4px;
+  font-weight: 800;
+  color: #FF6B6B;
+}
+
+.modalButtonContainer {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.receiptButton {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #191919;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #191919;
+  transition: all 0.2s ease;
+}
+
+.receiptButton:hover {
+  background-color: #F5F5F5;
+}
+
+.modalFooter {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.modalFooterText {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  color: #B2B2B2;
+  margin: 0;
+}
