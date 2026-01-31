@@ -78,3 +78,53 @@ export interface TossPaymentCallbackParams {
   /** 에러 메시지 (실패 시) */
   message?: string;
 }
+
+/**
+ * 결제 목록 아이템 (요약 정보)
+ */
+export interface PaymentListItem {
+  /** 결제 키 */
+  paymentKey: string;
+  /** 주문 번호 */
+  orderNo: string;
+  /** 주문명 */
+  orderName?: string;
+  /** 결제 상태 */
+  tossStatus: 'DONE' | 'CANCELED';
+  /** 결제 수단 */
+  method: string;
+  /** 통화 */
+  currency: string;
+  /** 결제 금액 */
+  amount: number;
+  /** 결제 승인 일시 */
+  approvedAt: string;
+  /** 영수증 URL */
+  receiptUrl: string;
+}
+
+/**
+ * 결제 목록 응답
+ */
+export interface PaymentListResponse {
+  /** 결제 목록 */
+  payments: PaymentListItem[];
+  /** 전체 결제 수 */
+  total: number;
+  /** 현재 페이지 */
+  page: number;
+  /** 페이지당 항목 수 */
+  limit: number;
+}
+
+/**
+ * 결제 목록 조회 파라미터
+ */
+export interface GetMyPaymentsParams {
+  /** 페이지 번호 */
+  page?: number;
+  /** 페이지당 항목 수 */
+  limit?: number;
+  /** 필터 상태 */
+  status?: 'ALL' | 'DONE' | 'CANCELED';
+}
